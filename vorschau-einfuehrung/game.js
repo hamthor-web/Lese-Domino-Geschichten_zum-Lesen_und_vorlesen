@@ -4,6 +4,29 @@ const KEY='silvana-intro-v1';
 let content,phase=0,furthest=0,placed=[],order=[2,0,1],selected=null,solved=false,feedback='',hadError=false,saved=null;
 let audioState='idle',audioToken=0,currentUtterance=null;
 const audioAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
+let buttonSizingFrame=0;
+function scheduleButtonSizing(){
+ if(typeof requestAnimationFrame!=='function')return;
+ cancelAnimationFrame(buttonSizingFrame);
+ buttonSizingFrame=requestAnimationFrame(equalizeButtons);
+}
+function equalizeButtons(){
+ const buttons=[...document.querySelectorAll('button.primary,button.secondary,button.quiet')].filter(b=>b.getClientRects().length);
+ if(!buttons.length)return;
+ // Measure every label at its natural size before choosing the shared size.
+ for(const b of buttons){b.style.width='max-content';b.style.maxWidth='none';b.style.height='auto';b.style.flexShrink='0';}
+ const naturalWidth=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().width)));
+ const limits=[];
+ for(const b of buttons)for(let p=b.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),inner=Math.min(p.clientWidth,p.getBoundingClientRect().width-parseFloat(s.borderLeftWidth)-parseFloat(s.borderRightWidth));limits.push(inner-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight));}
+ const availableWidth=Math.floor(Math.min(...limits));
+ const width=Math.max(1,Math.min(naturalWidth,availableWidth));
+ for(const b of buttons){b.style.width=width+'px';b.style.maxWidth='100%';}
+ const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
+ for(const b of buttons)b.style.height=height+'px';
+}
+if(typeof MutationObserver==='function')new MutationObserver(scheduleButtonSizing).observe(document.body,{childList:true,subtree:true});
+window.addEventListener('resize',scheduleButtonSizing);
+if(document.fonts){document.fonts.ready.then(scheduleButtonSizing);document.fonts.addEventListener('loadingdone',scheduleButtonSizing);}
 function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function loadSaved(){try{const x=JSON.parse(localStorage.getItem(KEY));if(!x)return;const goodIds=a=>Array.isArray(a)&&a.every(i=>Number.isInteger(i)&&i>=0&&i<3)&&new Set(a).size===a.length;if(Number.isInteger(x.phase)&&x.phase>=0&&x.phase<=3&&goodIds(x.placed)&&goodIds(x.order)&&x.order.length===3){saved=x;}if([90,100,110,120,130,140,150,160].includes(x.text))$('textSize').value=x.text;if([80,90,100,110,120,130,140,150,160].includes(x.board))$('boardSize').value=x.board;}catch{}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({phase,furthest,placed,order,solved,text:Number($('textSize').value),board:Number($('boardSize').value)}));}catch{}}
