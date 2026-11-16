@@ -87,4 +87,16 @@ Dieser Eintrag aktualisiert die historischen offenen Uploadhinweise oben.
 - Sprachausgabe-Pause, Fortsetzen, Fehlerfall und verspätete Ereignisse mit simuliertem Sprachdienst geprüft. Keine akustische Bestätigung; keine physischen Android-/iPad-Geräte getestet.
 - Die in der Übergabe genannte Word-Anleitung ist weder in der bereitgestellten Projektbibliothek noch über die Suche verfügbar. Keine neuen literarischen Texte übernommen oder vorhandenen Erzähl-/Lesetexte umgeschrieben.
 
-Live-Prüfung und tatsächlicher Veröffentlichungscommit werden nach Bereitstellung ergänzt.
+### Veröffentlichung und Live-Prüfung
+
+Veröffentlicht auf `main` mit Commit [`91ca6f135ba34d1406ff93de58454f32eec0772c`](https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/commit/91ca6f135ba34d1406ff93de58454f32eec0772c).
+
+- GitHub-Rücklesen: alle sieben geänderten/neuen Dateien stimmen bytegenau mit dem geprüften Stand überein. Die übrigen Kistenassets und die Einführung blieben unverändert.
+- GitHub Pages liefert den neuen Spielcode sowie alle vier Übergabe-Assets erfolgreich und byteidentisch aus; die bereits vorhandene Stoffanimation wurde nur verifiziert.
+- Tatsächliche Live-Browserseiten durchgespielt: Root-Weiterleitung → Einführung lesen → Domino korrekt legen und prüfen → Weiter zu Szene 2 → beide falschen Kisten → Marktplatz → beide Rollen → falsches/richtiges Wetter → Abschluss → Rücknavigation bis Einführung. Szenenmenü wird nach Besuch korrekt freigeschaltet. Tippbedienung im mobilen Chromium-Kontext mit Touch aktiviert.
+- Live-GIF-Nachweis: Bild zwischen 0,2 und 0,6 Sekunden sichtbar verändert; offenes Endbild nach Ende und weiteren 1,6 Sekunden identisch. Genau zwei Rollen vorhanden.
+- Zusätzlich sechs Live-Viewports in Hoch-/Querformat bei Schrift/Spielfeld 160/160 geprüft: kein horizontaler Überlauf.
+- Keine JavaScript-Seitenfehler oder HTTP-Fehler im vollständigen Live-Durchlauf.
+- Einschränkung der Testumgebung: Der separate Chromium-Download vertraut dem Umgebungszertifikat nicht (`ERR_CERT_AUTHORITY_INVALID`). Der Live-Test wurde daher mit `ignore_https_errors=True` ausgeführt. Der HTTP-Client konnte dieselben HTTPS-URLs regulär laden. Das ist kein Nachweis eines Zertifikatfehlers der Website.
+- Keine akustische Hörprüfung oder Prüfung auf physischen Endgeräten. Word-Originalquelle weiterhin nicht verfügbar; bestehende literarische Texte bleiben erhalten.
+
