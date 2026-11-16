@@ -32,3 +32,12 @@ Verbindliche Datei: „Spinnwebenreichtum mit Spielanleitung.docx“, Abschnitt 
 - Die vorhandenen Originalbuttons bleiben über die gemeinsame CSS-Datei eingebunden.
 - Die HTML- und JavaScript-Dateien wurden nach dem Upload erneut aus GitHub gelesen und die JavaScript-Syntax geprüft. Ein echter Browser-/Gerätetest ist noch offen.
 - Die zentrale Masterübersicht im Projekt wurde nicht verändert; bei der nächsten Synchronisierung den Navigationseinbau nachtragen.
+
+
+## Menüdarstellung – bestätigte Entscheidung 16.11.2026
+- Die vorherige großflächige Reihe von Szenenbuttons wurde durch **einen kompakten Aufklappbutton „Menü“** ersetzt. Das Menü überlagert beim Öffnen die Seite, statt dauerhaft Platz einzunehmen.
+- Die Menülinks benutzen die **tatsächlichen Abschnittsüberschriften**: „Die Geschichte beginnt“ und „Die vier Straßen“, keine Nummern als Beschriftung.
+- In der Einführung wird „Die vier Straßen“ nur angezeigt, wenn der zweite Abschnitt zuvor erreicht wurde (lokale Freischaltung). Auf der bereits erreichten zweiten Szene sind beide Einträge sichtbar. Das Menü führt jeweils an den Anfang des ausgewählten Abschnitts.
+- Der eigenständige Zurück-Button bleibt und führt weiterhin zur jeweils vorherigen Unterseite.
+- Originalbuttons für das eigentliche Spiel bleiben unverändert. Die Menüsteuerung ist bewusst kompakter gestaltet und erfüllt weiterhin Mindesthöhe und Lesbarkeit.
+- GitHub-Dateien nach Änderung erneut gelesen; JavaScript-Syntax geprüft. Sichtprüfung auf realen Geräten weiterhin offen.
