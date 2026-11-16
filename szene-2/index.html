@@ -24,22 +24,21 @@
 .crate-preview.asset-missing .crate-label{display:none}
 @media(max-width:760px){.crate-grid{grid-template-columns:1fr}.crate-preview img{max-height:330px}.crate-preview.asset-missing .fallback-label{min-height:110px;padding-top:35px}}
 
-/* Zwei identische Pergamentrollen decken die beiden falschen Kisten ab.
-   Sie öffnen nur einmal; nach dem letzten GIF-Frame wird der Bildinhalt sichtbar. */
-.weather-rolls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:center;margin:24px 0}
-.roll-card{position:relative;width:100%;min-width:0;overflow:hidden}
-.roll-card>img.roll-gif{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain}.roll-card>img.under-crate{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.85}.roll-inner{z-index:2}
-.roll-inner{position:absolute;left:11%;right:11%;top:23%;bottom:23%;display:flex;align-items:center;justify-content:center;min-width:0}
-.roll-inner[hidden]{display:none!important}
-.roll-inner button{background:#fff9e9;border:3px solid #bd9d7c;border-radius:16px;padding:8px;min-height:90px;cursor:pointer;width:100%;font:inherit;font-size:calc(20px * var(--text));font-weight:bold;color:#493e58}
-.roll-inner button img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:9px}
+/* Originalbilder bleiben proportional. Große Spielfelder umbrechen statt abzuschneiden. */
+.crate-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(240px * var(--board))),1fr));max-width:calc(1000px * var(--board));margin:25px auto;gap:calc(20px * var(--board))}
+.weather-rolls{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,.65fr) minmax(0,1fr);gap:16px;align-items:center;max-width:calc(1000px * var(--board));margin:24px auto}
+.roll-card{position:relative;width:100%;min-width:0}
+.roll-card>img.roll-gif{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+.roll-card>img.under-crate{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.roll-inner{position:absolute;z-index:2;left:15%;right:15%;top:31%;bottom:20%;display:flex;align-items:center;justify-content:center;min-width:0}
+.roll-inner button{background:#fff9e9;border:3px solid #bd9d7c;border-radius:10px;padding:3px;min-height:0;cursor:pointer;width:100%;font:inherit;color:#493e58}
+.roll-inner button img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;border-radius:6px}
 .roll-inner button.correct{border-color:#71a48a;background:#e8f7ea}
-.roll-question{text-align:center;font-size:calc(26px * var(--text));font-weight:bold;line-height:1.35;padding:12px;align-self:center}
-.weather-rolls .roll-card:first-child{grid-column:1}
-.weather-rolls .roll-question{grid-column:2}
-.weather-rolls .roll-card:last-child{grid-column:3}
-@media(max-width:820px){.weather-rolls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.weather-rolls .roll-question{grid-column:1/-1;grid-row:1;margin:0}.weather-rolls .roll-card:first-child{grid-column:1;grid-row:2}.weather-rolls .roll-card:last-child{grid-column:2;grid-row:2}.roll-inner{left:6%;right:6%;top:19%;bottom:19%}}
-@media(max-width:440px){.roll-question{font-size:calc(22px * var(--text))}.roll-inner button{font-size:calc(17px * var(--text));padding:5px;border-radius:11px}.roll-inner button img{aspect-ratio:1/1}}
+.roll-inner button:focus-visible{outline:4px solid #8a649f;outline-offset:3px}
+.roll-question{text-align:center;font-size:calc(24px * var(--text));font-weight:bold;line-height:1.5;overflow-wrap:anywhere}
+.roll-card>img.roll-gif{visibility:hidden}.weather-rolls.ready .roll-gif{visibility:visible}
+@media(max-width:820px){.weather-rolls{grid-template-columns:minmax(0,1fr);justify-items:center}.roll-card{max-width:calc(360px * var(--board))}.roll-question{max-width:30ch;margin:10px 0}}
+.s2 .stage,.topbar>*{min-width:0}.s2 h1{overflow-wrap:anywhere}
 </style></head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden><label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label><label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
@@ -51,9 +50,9 @@ const simple="In Silvana gab es nur vier Straßen mit vielen Löchern. Wenn Kuts
 const $=id=>document.getElementById(id);const VISITED_KEY='silvana-visited-scenes-v1';try{localStorage.setItem(VISITED_KEY,'2')}catch{}let phase=0,audioState='idle',voice=null,boxDone=false,pictureDone=false,mistakes=0;
 function sizes(){document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);$('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';}
 $('settingsToggle').onclick=()=>{let isOpen=$('settings').hidden;$('settings').hidden=!isOpen;$('settingsToggle').setAttribute('aria-expanded',String(isOpen));};['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
-function stop(){if('speechSynthesis' in window)speechSynthesis.cancel();audioState='idle';voice=null}
-function speak(){if(!('speechSynthesis' in window)){notice('Die Vorlesestimme ist in diesem Browser nicht verfügbar.');return}if(audioState==='playing'){speechSynthesis.pause();audioState='paused';$('audio').textContent='▶ Weiterhören';return}if(audioState==='paused'){speechSynthesis.resume();audioState='playing';$('audio').textContent='Ⅱ Pause';return}stop();voice=new SpeechSynthesisUtterance(original);voice.lang='de-DE';voice.rate=.85;let v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('de'));if(v)voice.voice=v;voice.onend=()=>{audioState='ended';if($('audio'))$('audio').textContent='↻ Noch einmal hören'};speechSynthesis.speak(voice);audioState='playing';$('audio').textContent='Ⅱ Pause'}
-function go(n){stop();phase=n;render();scrollTo(0,0)}
+function stop(){voice=null;audioState='idle';if('speechSynthesis' in window)speechSynthesis.cancel()}
+function speak(){if(!('speechSynthesis' in window)){notice('Die Vorlesestimme ist in diesem Browser nicht verfügbar.');return}if(audioState==='playing'){speechSynthesis.pause();audioState='paused';$('audio').textContent='▶ Weiterhören';return}if(audioState==='paused'){speechSynthesis.resume();audioState='playing';$('audio').textContent='Ⅱ Pause';return}stop();voice=new SpeechSynthesisUtterance(original);voice.lang='de-DE';voice.rate=.85;let v=speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('de'));if(v)voice.voice=v;const utterance=voice;voice.onend=()=>{if(voice!==utterance)return;audioState='ended';if($('audio'))$('audio').textContent='↻ Noch einmal hören'};voice.onerror=()=>{if(voice!==utterance)return;audioState='idle';voice=null;if($('audio'))$('audio').textContent='▶ Geschichte anhören';notice('Die Vorlesestimme konnte nicht starten. Du kannst den Originaltext aufklappen und dir vorlesen lassen.');};speechSynthesis.speak(voice);audioState='playing';$('audio').textContent='Ⅱ Pause'}
+function go(n){clearPhase();stop();phase=n;render();scrollTo(0,0)}
 function notice(x){if($('feedback'))$('feedback').textContent=x}
 function city(rain){let drops='';if(rain){for(let i=0;i<24;i++){let x=25+i*23,y=75+(i*47)%125;drops+='<path d="M'+x+' '+y+'l-7 14" stroke="#407b9b" stroke-width="4"/>'}}return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Stadt '+(rain?'bei Regen':'bei Sonnenschein')+'"><rect width="600" height="400" fill="'+(rain?'#bdcddd':'#a8ddf6')+'"/>'+(rain?'<g fill="#8fa3b4"><ellipse cx="140" cy="70" rx="125" ry="45"/><ellipse cx="350" cy="61" rx="155" ry="46"/><ellipse cx="520" cy="90" rx="110" ry="42"/></g>':'<circle cx="510" cy="74" r="48" fill="#ffdf78"/><g fill="#fff"><ellipse cx="155" cy="74" rx="95" ry="26"/></g>')+'<path d="M0 280Q180 240 320 280T600 280V400H0" fill="'+(rain?'#9faea3':'#bad68c')+'"/><g stroke="#877384" stroke-width="4"><path d="M32 325V180h142v145Z" fill="#f1d6b4"/><path d="m20 182 81-80 87 80Z" fill="#ad8298"/><path d="M196 325V163h142v162Z" fill="#edd0b8"/><path d="m183 164 84-82 84 82Z" fill="#9c8cad"/><path d="M364 326V185h124v141Z" fill="#f0dfbf"/><path d="m350 186 76-73 76 73Z" fill="#ba8981"/><path d="M502 329V215h89v114Z" fill="#e0c0a4"/><path d="m492 215 55-62 54 62Z" fill="#a88aa9"/></g><g fill="#a6d5e2" stroke="#776d83" stroke-width="4"><rect x="58" y="208" width="38" height="45"/><rect x="119" y="208" width="35" height="45"/><rect x="226" y="195" width="37" height="44"/><rect x="279" y="195" width="38" height="44"/><rect x="392" y="216" width="31" height="42"/><rect x="447" y="216" width="31" height="42"/><rect x="527" y="240" width="33" height="37"/></g><g fill="#84677a"><rect x="90" y="270" width="38" height="55"/><rect x="249" y="256" width="39" height="69"/><rect x="411" y="277" width="38" height="49"/><rect x="531" y="285" width="34" height="44"/></g><path d="M0 353H600V400H0Z" fill="'+(rain?'#8999ab':'#b7a99a')+'"/><path d="M0 364Q160 326 300 360T600 357" stroke="#eee5d2" stroke-width="10" fill="none"/>'+drops+'</svg>'}
 const boxAssets={
@@ -61,39 +60,66 @@ const boxAssets={
  Stoff:{still:'../assets/kiste-stoff.png',gif:'../assets/kiste-stoff-animation.gif',duration:960},
  Wege:{still:'../assets/kiste-wege.png',gif:'../assets/kiste-wege-animation.gif',duration:960}
 };
-let boxOpening=false;
+let boxOpening=false, phaseToken=0;
+const timers=new Set();
+function later(fn,ms){const token=phaseToken;const timer=setTimeout(()=>{timers.delete(timer);if(token===phaseToken)fn()},ms);timers.add(timer)}
+function clearPhase(){phaseToken++;timers.forEach(clearTimeout);timers.clear();boxOpening=false}
+async function decoded(src){const img=new Image();img.src=src;await img.decode();return img}
+const assetReady=new Map();
+function prepare(src){if(!assetReady.has(src))assetReady.set(src,decoded(src).catch(()=>null));return assetReady.get(src)}
+Object.values(boxAssets).forEach(a=>prepare(a.gif));
+['rolle-oeffnet.gif','marktplatz-sonne.png','marktplatz-regen.png'].forEach(a=>prepare('../assets/'+a));
 function crateMarkup(word){const file=boxAssets[word];return '<button class="crate-preview" data-answer="'+word+'" aria-label="Kiste '+word+' öffnen"><img src="'+file.still+'" alt="Geschlossene Kiste mit Aufschrift '+word+'" onerror="this.parentElement.classList.add(\'asset-missing\')"><span class="fallback-label" aria-hidden="true">'+word+'</span><span class="crate-label">'+word+'</span></button>'}
-function openCrate(button){
+async function openCrate(button){
  if(boxOpening)return;
  boxOpening=true;
  const word=button.dataset.answer,asset=boxAssets[word];
  document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=true);
+ const token=phaseToken;await prepare(asset.gif);if(token!==phaseToken)return;
  const image=button.querySelector('img'),fallback=button.classList.contains('asset-missing');
- if(!fallback){image.onerror=()=>{button.classList.add('asset-missing')};image.src=asset.gif+'?play='+Date.now()}
+ if(!fallback)image.src=asset.gif+'?play='+Date.now()
  notice(word==='Marktplatz'?'Die Kiste öffnet sich.':'Schau genau hin, was in der Kiste passiert.');
- setTimeout(()=>{
-  boxOpening=false;
-  if(word==='Marktplatz'){button.classList.add('correct');go(3)}
-  else{mistakes++;notice(mistakes===1?'Das Wort steht nicht im Text. Schau noch einmal nach.':'Suche im Text das Wort, das dort wirklich vorkommt.');
+ let finished=false;
+ image.onload=()=>later(finish,asset.duration);
+ function finish(){
+  if(finished)return;finished=true;boxOpening=false;
+  if(word==='Marktplatz'){boxDone=true;pictureDone=false;button.classList.add('correct');go(3)}
+  else{mistakes++;notice(mistakes===1?'Schau noch einmal im Lesetext nach. Welche Kiste passt?':'Vergleiche die Wörter auf den Kisten mit dem Lesetext.');
    image.src=asset.still;document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=false)}
- },fallback?500:asset.duration+180)
+ }
+ if(fallback)later(finish,500);else if(image.complete&&image.naturalWidth)image.onload();
+ image.onerror=()=>{button.classList.add('asset-missing');later(finish,500)}
 }
-function rollChoice(type,label){return '<div class="roll-card"><img class="under-crate" src="../assets/kiste-'+(type==='sun'?'stoff':'wege')+'.png" alt=""><img class="roll-gif" src="../assets/rolle-oeffnet.gif?roll='+Date.now()+'&which='+type+'" alt="Eine Pergamentrolle öffnet sich"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"><span>'+label+'</span></button></div></div>'}
-function revealScrollPictures(){document.querySelectorAll('.roll-inner').forEach(x=>{x.hidden=false});document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){pictureDone=true;b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');$('next').disabled=false}else notice('Lies noch einmal genau: Welches Wetter kommt in der Geschichte vor?')})}
+function rollChoice(type,label){return '<div class="roll-card"><img class="under-crate" src="../assets/kiste-'+(type==='sun'?'stoff':'wege')+'.png" alt="Kiste '+(type==='sun'?'Stoff':'Wege')+'"><img class="roll-gif" alt="Offene Pergamentrolle"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'" aria-label="Marktplatz bei '+label+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"></button></div></div>'}
+async function startRolls(){
+ const token=phaseToken;
+ const ready=await Promise.all(['rolle-oeffnet.gif','marktplatz-sonne.png','marktplatz-regen.png'].map(a=>prepare('../assets/'+a)));
+ if(token!==phaseToken)return;
+ if(ready.some(x=>!x)){notice('Ein Bild konnte nicht geladen werden. Bitte versuche es noch einmal.');return}
+ // Beide Elemente benutzen dieselbe neu geladene GIF-Ressource und starten gemeinsam.
+ const src='../assets/rolle-oeffnet.gif?play='+Date.now();
+ const frames=await decoded(src).catch(()=>null);
+ if(token!==phaseToken)return;
+ if(!frames){notice('Die Rollen konnten nicht geladen werden. Bitte versuche es noch einmal.');return}
+ document.querySelectorAll('.roll-gif').forEach(img=>img.src=src);
+ document.querySelector('.weather-rolls').classList.add('ready');
+ later(revealScrollPictures,1440);
+}
+function revealScrollPictures(){document.querySelectorAll('.roll-inner').forEach(x=>{x.hidden=false});document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){pictureDone=true;b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');$('next').disabled=false}else notice('Schau noch einmal genau hin: Welches Wetter kam in der Geschichte vor?')})}
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 $('sceneBack').onclick=()=>{if(phase===0)location.href='../vorschau-einfuehrung/?abschnitt=abschluss';else go(phase-1)};
 function render(){const labels=['Zuhören','Selbst lesen','Kiste öffnen','Bild wählen','Geschafft'];$('crumbs').textContent='Schritt '+(phase+1)+' von 5 · '+labels[phase];let out='';
 if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><h1>Silvana und die vier Straßen</h1><p>Höre die Geschichte an.</p><div class="controls"><button class="primary" id="audio">▶ Geschichte anhören</button><button class="secondary" id="repeat">↻ Von vorn hören</button></div><p class="feedback" id="feedback" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><p class="original">'+original+'</p></details><div class="controls"><button class="primary" id="next">Weiter</button></div>');
 else if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next">Weiter</button></div>');
 else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Marktplatz','Stoff','Wege'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
-else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<p class="roll-question">Von welchem Wetter war in der Geschichte die Rede?</p>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next" '+(pictureDone?'':'disabled')+'>Weiter</button></div>');
+else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<p class="roll-question">Von welchem Wetter war in der Geschichte die Rede?</p>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next" '+'disabled'+'>Weiter</button></div>');
 else out=panel('<span class="eyebrow">Szene 2 geschafft</span><h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div>');
 $('game').innerHTML=out;
 if(phase===0){$('audio').onclick=speak;$('repeat').onclick=()=>{stop();speak()};$('next').onclick=()=>go(1)}
 if(phase===1){$('back').onclick=()=>go(0);$('next').onclick=()=>go(2)}
 if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
-if(phase===3){$('back').onclick=()=>go(2);$('next').onclick=()=>go(4);if(pictureDone)revealScrollPictures();else setTimeout(revealScrollPictures,1440)}
-if(phase===4){$('again').onclick=()=>{mistakes=0;pictureDone=false;go(0)};$('intro').onclick=()=>location.href='../vorschau-einfuehrung/'}
+if(phase===3){$('back').onclick=()=>go(2);$('next').onclick=()=>go(4);startRolls()}
+if(phase===4){$('again').onclick=()=>{mistakes=0;boxDone=false;pictureDone=false;go(0)};$('intro').onclick=()=>location.href='../vorschau-einfuehrung/'}
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&'speechSynthesis' in window){speechSynthesis.pause();audioState='paused';if($('audio'))$('audio').textContent='▶ Weiterhören'}});window.addEventListener('pagehide',stop);render();
 </script></body></html>

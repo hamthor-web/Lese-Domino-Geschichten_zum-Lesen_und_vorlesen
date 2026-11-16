@@ -1,5 +1,9 @@
 # Lese-Domino „Das Land der glitzernden Spinnweben“
 
+Aktueller Bearbeitungsstand: 17. November 2026. Die Einführung und Szene 2 „Die vier Straßen“ sind als eigenständige GitHub-Pages-Ansichten umgesetzt. Szene 2 ergänzt die Originalkisten, zwei einmalig öffnende Rollen, Wetterbildauswahl und Abschluss; responsiver Ablauf und unabhängige Größenregler wurden im Chromium-Browser geprüft. Veröffentlichung und Live-Prüfprotokoll: `SPIELAKTE_NACHTRAG_SZENE2_2026-11-16.md`. Weitere Szenen bleiben außerhalb dieses Abschlussauftrags. Reale Geräte- und akustische Hörprüfung sind offen.
+
+Die nachfolgenden Angaben vom 27. Oktober beschreiben den älteren Prototyp und bleiben als Verlauf erhalten.
+
 Stand: 27. Oktober 2026. Übergabe für die Fortsetzung im Cloud-Chat und auf dem Handy.
 
 ## Ziel und Rahmen

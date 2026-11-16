@@ -62,3 +62,29 @@ Verbindliche Datei: „Spinnwebenreichtum mit Spielanleitung.docx“, Abschnitt 
 - Die korrigierte Darstellung und Interaktionslogik wurden in `szene-2/index.html` auf GitHub aktualisiert. Der Bildinhalt wird nach 1,44 s freigegeben, die GIF-Datei `rolle-oeffnet.gif` muss selbst ebenfalls auf einmaliges Abspielen eingestellt sein.
 - **Noch nicht erledigt:** Upload der drei neuen Binärdateien (`rolle-oeffnet.gif`, `marktplatz-sonne.png`, `marktplatz-regen.png`) und gegebenenfalls der sechs ursprünglichen Kistenassets. Das Repository kann hier über die verfügbare GitHub-Verbindung nur für Textdateien sicher bearbeitet werden; Grafikdateien nicht auf GitHub übertragen. Daher noch kein visueller Live-Test möglich.
 - Originalillustrationen bleiben unverändert, es wird keine neue Rolle generiert.
+
+
+## Abschluss und Browserprüfung – 17.11.2026
+
+Dieser Eintrag aktualisiert die historischen offenen Uploadhinweise oben.
+
+- Übergabe `ARBEITSAUFTRAG.md` vollständig gelesen. Aktueller main-Stand vor Beginn: `fce8faa0b51b8a9f7360dd3c6a4b02a400a60126`.
+- `kiste-stoff-animation.gif` war inzwischen bereits vorhanden und bytegleich zur Übergabe. Nicht erneut überschrieben. Neu ergänzt werden ausschließlich `rolle-oeffnet.gif`, `marktplatz-sonne.png` und `marktplatz-regen.png`, unverändert aus der Übergabe. Alle übrigen vorhandenen Originalassets bleiben erhalten.
+- Nach Marktplatz-Animation öffnen zwei Exemplare desselben Original-Rollen-GIFs gemeinsam über den Originalkisten Stoff und Wege. Erst nach 1,44 Sekunden erscheinen die beiden unverzerrten Wetterbilder. Das einmalige GIF bleibt auf seinem offenen Endbild stehen.
+- Laden/Decodieren vor Animationsstart verhindert, dass langsames Laden die Öffnungszeit verkürzt. Kistenanimationen warten auf das Ladeereignis. Alte Übergänge werden bei Zurück/Weiter abgebrochen; verspätete Timer können keine andere Unterseite mehr verändern.
+- Spielfeldzoom wirkt auf Bildbereich und Abstände; Schriftzoom bleibt unabhängig. Auf schmalen Bildschirmen stehen Rollen und Frage untereinander, die Frage zwischen beiden Bildangeboten. Original-Spinnwebenbuttons und Schrift bleiben erhalten.
+- Falsche Auswahl bleibt freundlich und verrät die Wetterlösung nicht. Abschluss erst nach Regenauswahl. Erneute Kistenwahl setzt die Bildaufgabe zurück.
+- Sprachausgabe: Pause/Fortsetzen und Neustart erhalten; Fehler beim Start werden verständlich gemeldet. Veraltete Sprachereignisse nach Navigation werden ignoriert.
+
+### Prüfung vor Veröffentlichung
+
+- Dateilesen/-schreiben und echter Headless-Chromium-Klicktest erfolgreich.
+- Browserdurchlauf: beide falschen Kisten, richtige Kiste, zwei Rollen, falsches Wetter, richtiges Wetter, Abschluss, Rücknavigation während laufender Animation und bei offenem Rollenbild.
+- Genau zwei Rollen mit identischer GIF-URL; nach Öffnen und weiteren 1,8 Sekunden unverändertes Endbild im Browser nachgewiesen. GIF-Metadaten: 8 Frames, 1,44 Sekunden, kein Loopblock; Stoff: 8 Frames, 0,96 Sekunden, kein Loopblock.
+- 150 Layoutprüfungen: fünf Spielschritte × sechs Viewports (360×800, 800×360, 412×915, 915×412, 768×1024, 1024×768) × fünf Schrift/Spielfeld-Kombinationen (100/100, 160/100, 100/160, 160/160, 90/80). Kein horizontaler Seitenüberlauf; Wetterbildflächen mindestens 100×75 CSS-Pixel. Desktop und sechs maximale Zoomansichten als Screenshots kontrolliert.
+- Unabhängigkeit beider Regler anhand berechneter Bildbereichsbreite, Abstände und Schriftgröße geprüft. Browserkonsole ohne JavaScript-Fehler.
+- Vorhandene Einführungstests `node tests/logic.cjs` bestehen unverändert.
+- Sprachausgabe-Pause, Fortsetzen, Fehlerfall und verspätete Ereignisse mit simuliertem Sprachdienst geprüft. Keine akustische Bestätigung; keine physischen Android-/iPad-Geräte getestet.
+- Die in der Übergabe genannte Word-Anleitung ist weder in der bereitgestellten Projektbibliothek noch über die Suche verfügbar. Keine neuen literarischen Texte übernommen oder vorhandenen Erzähl-/Lesetexte umgeschrieben.
+
+Live-Prüfung und tatsächlicher Veröffentlichungscommit werden nach Bereitstellung ergänzt.
