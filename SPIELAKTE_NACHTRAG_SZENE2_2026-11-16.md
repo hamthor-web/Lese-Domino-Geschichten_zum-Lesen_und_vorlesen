@@ -100,3 +100,11 @@ Veröffentlicht auf `main` mit Commit [`91ca6f135ba34d1406ff93de58454f32eec0772c
 - Einschränkung der Testumgebung: Der separate Chromium-Download vertraut dem Umgebungszertifikat nicht (`ERR_CERT_AUTHORITY_INVALID`). Der Live-Test wurde daher mit `ignore_https_errors=True` ausgeführt. Der HTTP-Client konnte dieselben HTTPS-URLs regulär laden. Das ist kein Nachweis eines Zertifikatfehlers der Website.
 - Keine akustische Hörprüfung oder Prüfung auf physischen Endgeräten. Word-Originalquelle weiterhin nicht verfügbar; bestehende literarische Texte bleiben erhalten.
 
+
+
+## Animierter Weiter-Button – 17.11.2026
+- Nutzerdatei `Weiter_original_GIF_einmalig.mp4` unverändert als `assets/weiter-einmalig.mp4` ergänzt (H.264, 438×438, 3,6 Sekunden).
+- Nach richtiger Wetterbildwahl erscheint statt des normalen Weiter-Knopfs die stumme Inline-Animation. Einmalige Wiedergabe ohne Loop; bis zum Ende ist die Weiteraktion gesperrt. Nach `ended` bleibt das Video im Endzustand und die gesamte Darstellung ist ein per Touch, Maus oder Tastatur bedienbarer Button.
+- Falsches Wetter blendet den Button nicht ein. Bei Rücknavigation wird die Wiedergabe gestoppt; ein erneuter Durchlauf beginnt frisch. Bei blockiertem Autostart kann das Kind die Animation antippen; bei einem Medienladefehler bleibt ein Weiter-Fallback verfügbar.
+- Ziel bleibt vorerst der vorhandene Szenenabschluss. Die Folgeszene „Die Spinnen im Wald“ existiert noch nicht; es wurde keine leere Zielseite oder erfundene Geschichte angelegt.
+- Im echten Chromium mit MP4-Wiedergabe geprüft: verborgen vor korrekter Antwort, Wiedergabezeit steigt an, kein Loop, Freischaltung erst nach Ende, gleichbleibendes Endbild nach weiterer Wartezeit, Weiterklick zum Abschluss, Abbruch bei Zurück. Vier Smartphone-/Tablet-Viewports bei 160/160 ohne horizontalen Überlauf; quadratische Darstellung ohne Verzerrung. Keine JavaScript-Fehler. Keine physischen Endgeräte getestet.
