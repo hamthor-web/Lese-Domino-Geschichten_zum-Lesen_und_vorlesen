@@ -11,6 +11,18 @@
 .scene-menu a{display:block;padding:13px 14px;min-height:52px;border-radius:10px;color:#493e58;text-decoration:none;font-size:calc(19px * var(--text));overflow-wrap:break-word}
 .scene-menu a:hover,.scene-menu a[aria-current="page"]{background:#efe3f7;font-weight:bold}
 .scene-backbar{display:flex;margin:4px 0 18px}.scene-backbar button{max-width:100%}.scene-backbar[hidden]{display:none!important}
+.crate-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.crate-preview{display:block;position:relative;cursor:pointer;background:#fffaf2;border:4px solid #d7bdd9;border-radius:19px;padding:10px;width:100%;min-width:0;min-height:80px;color:#493e58;font:inherit;font-size:calc(24px * var(--text));font-weight:bold;box-shadow:0 4px 0 #ded2e3}
+.crate-preview img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;border-radius:12px}
+.crate-preview .crate-label{display:block;margin-top:8px}
+.crate-preview:focus-visible{outline:4px solid #8a649f}
+.crate-preview:disabled{cursor:default;opacity:.85}
+.crate-preview.correct{border-color:#72a18b;background:#edf7ef}
+.crate-preview .fallback-label{display:none}
+.crate-preview.asset-missing img{display:none}
+.crate-preview.asset-missing .fallback-label{display:block;min-height:180px;padding-top:60px;background:#f0dcb5;border-radius:13px}
+.crate-preview.asset-missing .crate-label{display:none}
+@media(max-width:760px){.crate-grid{grid-template-columns:1fr}.crate-preview img{max-height:330px}.crate-preview.asset-missing .fallback-label{min-height:110px;padding-top:35px}}
 </style></head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden><label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label><label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
@@ -27,18 +39,40 @@ function speak(){if(!('speechSynthesis' in window)){notice('Die Vorlesestimme is
 function go(n){stop();phase=n;render();scrollTo(0,0)}
 function notice(x){if($('feedback'))$('feedback').textContent=x}
 function city(rain){let drops='';if(rain){for(let i=0;i<24;i++){let x=25+i*23,y=75+(i*47)%125;drops+='<path d="M'+x+' '+y+'l-7 14" stroke="#407b9b" stroke-width="4"/>'}}return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Stadt '+(rain?'bei Regen':'bei Sonnenschein')+'"><rect width="600" height="400" fill="'+(rain?'#bdcddd':'#a8ddf6')+'"/>'+(rain?'<g fill="#8fa3b4"><ellipse cx="140" cy="70" rx="125" ry="45"/><ellipse cx="350" cy="61" rx="155" ry="46"/><ellipse cx="520" cy="90" rx="110" ry="42"/></g>':'<circle cx="510" cy="74" r="48" fill="#ffdf78"/><g fill="#fff"><ellipse cx="155" cy="74" rx="95" ry="26"/></g>')+'<path d="M0 280Q180 240 320 280T600 280V400H0" fill="'+(rain?'#9faea3':'#bad68c')+'"/><g stroke="#877384" stroke-width="4"><path d="M32 325V180h142v145Z" fill="#f1d6b4"/><path d="m20 182 81-80 87 80Z" fill="#ad8298"/><path d="M196 325V163h142v162Z" fill="#edd0b8"/><path d="m183 164 84-82 84 82Z" fill="#9c8cad"/><path d="M364 326V185h124v141Z" fill="#f0dfbf"/><path d="m350 186 76-73 76 73Z" fill="#ba8981"/><path d="M502 329V215h89v114Z" fill="#e0c0a4"/><path d="m492 215 55-62 54 62Z" fill="#a88aa9"/></g><g fill="#a6d5e2" stroke="#776d83" stroke-width="4"><rect x="58" y="208" width="38" height="45"/><rect x="119" y="208" width="35" height="45"/><rect x="226" y="195" width="37" height="44"/><rect x="279" y="195" width="38" height="44"/><rect x="392" y="216" width="31" height="42"/><rect x="447" y="216" width="31" height="42"/><rect x="527" y="240" width="33" height="37"/></g><g fill="#84677a"><rect x="90" y="270" width="38" height="55"/><rect x="249" y="256" width="39" height="69"/><rect x="411" y="277" width="38" height="49"/><rect x="531" y="285" width="34" height="44"/></g><path d="M0 353H600V400H0Z" fill="'+(rain?'#8999ab':'#b7a99a')+'"/><path d="M0 364Q160 326 300 360T600 357" stroke="#eee5d2" stroke-width="10" fill="none"/>'+drops+'</svg>'}
+const boxAssets={
+ Marktplatz:{still:'../assets/kiste-marktplatz.png',gif:'../assets/kiste-marktplatz-oeffnet.gif',duration:1440},
+ Stoff:{still:'../assets/kiste-stoff.png',gif:'../assets/kiste-stoff-animation.gif',duration:960},
+ Wege:{still:'../assets/kiste-wege.png',gif:'../assets/kiste-wege-animation.gif',duration:960}
+};
+let boxOpening=false;
+function crateMarkup(word){const file=boxAssets[word];return '<button class="crate-preview" data-answer="'+word+'" aria-label="Kiste '+word+' öffnen"><img src="'+file.still+'" alt="Geschlossene Kiste mit Aufschrift '+word+'" onerror="this.parentElement.classList.add(\'asset-missing\')"><span class="fallback-label" aria-hidden="true">'+word+'</span><span class="crate-label">'+word+'</span></button>'}
+function openCrate(button){
+ if(boxOpening)return;
+ boxOpening=true;
+ const word=button.dataset.answer,asset=boxAssets[word];
+ document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=true);
+ const image=button.querySelector('img'),fallback=button.classList.contains('asset-missing');
+ if(!fallback){image.onerror=()=>{button.classList.add('asset-missing')};image.src=asset.gif+'?play='+Date.now()}
+ notice(word==='Marktplatz'?'Die Kiste öffnet sich.':'Schau genau hin, was in der Kiste passiert.');
+ setTimeout(()=>{
+  boxOpening=false;
+  if(word==='Marktplatz'){button.classList.add('correct');go(3)}
+  else{mistakes++;notice(mistakes===1?'Das Wort steht nicht im Text. Schau noch einmal nach.':'Suche im Text das Wort, das dort wirklich vorkommt.');
+   image.src=asset.still;document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=false)}
+ },fallback?500:asset.duration+180)
+}
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 $('sceneBack').onclick=()=>{if(phase===0)location.href='../vorschau-einfuehrung/?abschnitt=abschluss';else go(phase-1)};
 function render(){const labels=['Zuhören','Selbst lesen','Kiste öffnen','Bild wählen','Geschafft'];$('crumbs').textContent='Schritt '+(phase+1)+' von 5 · '+labels[phase];let out='';
 if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><h1>Silvana und die vier Straßen</h1><p>Höre die Geschichte an.</p><div class="controls"><button class="primary" id="audio">▶ Geschichte anhören</button><button class="secondary" id="repeat">↻ Von vorn hören</button></div><p class="feedback" id="feedback" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><p class="original">'+original+'</p></details><div class="controls"><button class="primary" id="next">Weiter</button></div>');
 else if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next">Weiter</button></div>');
-else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid"><button class="crate" data-answer="Marktplatz">Marktplatz</button><button class="crate" data-answer="Stoff">Stoff</button><button class="crate" data-answer="Wege">Wege</button></div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
+else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Marktplatz','Stoff','Wege'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
 else if(phase===3)out=panel('<span class="eyebrow">In der richtigen Kiste</span><h1>Welches Bild passt zum Text?</h1><p>Welches Wetter wird im Text beschrieben? Tippe auf das passende Bild.</p><div class="photos"><button class="image-choice" data-answer="sun">'+city(false)+'<span>Stadt im Sonnenschein</span></button><button class="image-choice" data-answer="rain">'+city(true)+'<span>Stadt im Regen</span></button></div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next" '+(pictureDone?'':'disabled')+'>Weiter</button></div>');
 else out=panel('<span class="eyebrow">Szene 2 geschafft</span><h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div>');
 $('game').innerHTML=out;
 if(phase===0){$('audio').onclick=speak;$('repeat').onclick=()=>{stop();speak()};$('next').onclick=()=>go(1)}
 if(phase===1){$('back').onclick=()=>go(0);$('next').onclick=()=>go(2)}
-if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='Marktplatz'){b.classList.add('correct');document.querySelectorAll('.crate').forEach(x=>x.disabled=true);notice('Richtig! Das Wort „Marktplatz“ steht im Text. Die Kiste öffnet sich.');setTimeout(()=>go(3),900)}else{mistakes++;notice(mistakes===1?'Schau noch einmal in den Lesetext.':'Denk an den Satz: „Wenn es regnete, roch der …“')}})}
+if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
 if(phase===3){$('back').onclick=()=>go(2);$('next').onclick=()=>go(4);document.querySelectorAll('.image-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){b.classList.add('correct');document.querySelectorAll('.image-choice').forEach(x=>x.disabled=true);pictureDone=true;$('next').disabled=false;notice('Richtig! Im Text steht, dass es regnete.')}else notice('Im Text steht ein Hinweis zum Wetter. Lies ihn noch einmal.')})}
 if(phase===4){$('again').onclick=()=>{mistakes=0;pictureDone=false;go(0)};$('intro').onclick=()=>location.href='../vorschau-einfuehrung/'}
 }
