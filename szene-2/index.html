@@ -28,7 +28,7 @@
    Sie öffnen nur einmal; nach dem letzten GIF-Frame wird der Bildinhalt sichtbar. */
 .weather-rolls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:center;margin:24px 0}
 .roll-card{position:relative;width:100%;min-width:0;overflow:hidden}
-.roll-card>img.roll-gif{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain}
+.roll-card>img.roll-gif{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain}.roll-card>img.under-crate{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.85}.roll-inner{z-index:2}
 .roll-inner{position:absolute;left:11%;right:11%;top:23%;bottom:23%;display:flex;align-items:center;justify-content:center;min-width:0}
 .roll-inner[hidden]{display:none!important}
 .roll-inner button{background:#fff9e9;border:3px solid #bd9d7c;border-radius:16px;padding:8px;min-height:90px;cursor:pointer;width:100%;font:inherit;font-size:calc(20px * var(--text));font-weight:bold;color:#493e58}
@@ -78,7 +78,7 @@ function openCrate(button){
    image.src=asset.still;document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=false)}
  },fallback?500:asset.duration+180)
 }
-function rollChoice(type,label){return '<div class="roll-card"><img class="roll-gif" src="../assets/rolle-oeffnet.gif?roll='+Date.now()+'&which='+type+'" alt="Eine Pergamentrolle öffnet sich"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"><span>'+label+'</span></button></div></div>'}
+function rollChoice(type,label){return '<div class="roll-card"><img class="under-crate" src="../assets/kiste-'+(type==='sun'?'stoff':'wege')+'.png" alt=""><img class="roll-gif" src="../assets/rolle-oeffnet.gif?roll='+Date.now()+'&which='+type+'" alt="Eine Pergamentrolle öffnet sich"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"><span>'+label+'</span></button></div></div>'}
 function revealScrollPictures(){document.querySelectorAll('.roll-inner').forEach(x=>{x.hidden=false});document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){pictureDone=true;b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');$('next').disabled=false}else notice('Lies noch einmal genau: Welches Wetter kommt in der Geschichte vor?')})}
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 $('sceneBack').onclick=()=>{if(phase===0)location.href='../vorschau-einfuehrung/?abschnitt=abschluss';else go(phase-1)};
