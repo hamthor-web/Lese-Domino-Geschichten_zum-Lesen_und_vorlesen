@@ -4,7 +4,12 @@ const KEY='silvana-intro-v1';
 const VISITED_KEY='silvana-visited-scenes-v1';
 function scene2Visited(){try{return Number(localStorage.getItem(VISITED_KEY))>=2;}catch{return false;}}
 function markScene2Visited(){try{localStorage.setItem(VISITED_KEY,'2');}catch{}}
-function updateSceneMenu(){const next=$('sceneMenu2');if(next)next.hidden=!scene2Visited();$('sceneMenu1').onclick=()=>changePhase(0);if(next)next.onclick=()=>{if(scene2Visited())location.href='../szene-2/';};const back=$('sceneBackbar');if(back){back.hidden=phase===0;$('sceneBack').onclick=()=>changePhase(Math.max(0,phase-1));}}
+function updateSceneMenu(){
+ const next=$('sceneMenu2');
+ if(next)next.hidden=!scene2Visited();
+ const back=$('sceneBackbar');
+ if(back){back.hidden=phase===0;$('sceneBack').onclick=()=>changePhase(Math.max(0,phase-1));}
+}
 
 let content,phase=0,furthest=0,placed=[],order=[2,0,1],selected=null,solved=false,feedback='',hadError=false,saved=null;
 let audioState='idle',audioToken=0,currentUtterance=null;
