@@ -41,3 +41,16 @@ Verbindliche Datei: „Spinnwebenreichtum mit Spielanleitung.docx“, Abschnitt 
 - Der eigenständige Zurück-Button bleibt und führt weiterhin zur jeweils vorherigen Unterseite.
 - Originalbuttons für das eigentliche Spiel bleiben unverändert. Die Menüsteuerung ist bewusst kompakter gestaltet und erfüllt weiterhin Mindesthöhe und Lesbarkeit.
 - GitHub-Dateien nach Änderung erneut gelesen; JavaScript-Syntax geprüft. Sichtprüfung auf realen Geräten weiterhin offen.
+
+
+## Original-Kistenbilder und Öffnungsanimationen – 16.11.2026
+- **Bestätigte Menübeschriftung:** Statt „Menü“ heißt der kleine Aufklappbutton nun „Zurück zu vorherigen Szenen“. Die Titel verlinken nur bereits besuchte Szenen.
+- **Bestätigte Kistenmechanik:** Das Kind sieht zuerst drei anklickbare geschlossene Kistenvorschauen. Erst auf Klick spielt die passende Animation. Marktplatz ist richtig und führt anschließend zur Wetter-Bildaufgabe; Stoff und Wege sind falsch, nach der Animation folgt ein sanfter Hinweis und die Kistenwahl wird wieder möglich.
+- **Exakte vom Benutzer bereitgestellte Dateien** (GIF und PNG) nach Ansicht zugeordnet:
+  - `assets/kiste-marktplatz.png` → `assets/kiste-marktplatz-oeffnet.gif` (mit Würstchen)
+  - `assets/kiste-stoff.png` → `assets/kiste-stoff-animation.gif`
+  - `assets/kiste-wege.png` → `assets/kiste-wege-animation.gif`
+- **GitHub-Stand:** Aufrufpfade und Logik in `szene-2/index.html` implementiert und hochgeladen. Beide Menüs umbenannt.
+- **Noch nicht auf GitHub:** die sechs Binärdateien. Als `Silvana_Szene2_Originalkisten_GitHub_Upload.zip` für den manuellen Upload in den Ordner `/assets` bereitgestellt. Solange diese Dateien fehlen, bleibt der bisherige Textkisten-Fallback sichtbar; die neuen Originalanimationen können noch nicht abgespielt werden.
+- Kein live Browser-/Mobiltest des endgültigen GIF-Ablaufs. Die vorhandenen Spieltexte und Original-Buttonstile wurden nicht geändert.
+- Die zentrale Projekt-Masterübersicht muss bei der nächsten Synchronisierung um diesen Entwicklungsstand ergänzt werden.
