@@ -54,3 +54,11 @@ Verbindliche Datei: „Spinnwebenreichtum mit Spielanleitung.docx“, Abschnitt 
 - **Noch nicht auf GitHub:** die sechs Binärdateien. Als `Silvana_Szene2_Originalkisten_GitHub_Upload.zip` für den manuellen Upload in den Ordner `/assets` bereitgestellt. Solange diese Dateien fehlen, bleibt der bisherige Textkisten-Fallback sichtbar; die neuen Originalanimationen können noch nicht abgespielt werden.
 - Kein live Browser-/Mobiltest des endgültigen GIF-Ablaufs. Die vorhandenen Spieltexte und Original-Buttonstile wurden nicht geändert.
 - Die zentrale Projekt-Masterübersicht muss bei der nächsten Synchronisierung um diesen Entwicklungsstand ergänzt werden.
+
+
+## Korrektur: zwei Pergamentrollen, 17.11.2026
+- Die zuvor angenommene **eine** Rolle war falsch. Die Nutzerin hat ausdrücklich **zwei identische, jeweils einmal öffnende Rollen** über den beiden falschen Kisten (Stoff und Wege) bestätigt.
+- Nach richtiger Marktplatz-Kiste folgt die Ansicht mit zwei Rollen. In jeder Rolle erscheint jeweils eines der beiden Stadtbilder: Sonnenschein bzw. Regen. Zwischen den Rollen steht die kindgerechte Frage „Von welchem Wetter war in der Geschichte die Rede?“
+- Die korrigierte Darstellung und Interaktionslogik wurden in `szene-2/index.html` auf GitHub aktualisiert. Der Bildinhalt wird nach 1,44 s freigegeben, die GIF-Datei `rolle-oeffnet.gif` muss selbst ebenfalls auf einmaliges Abspielen eingestellt sein.
+- **Noch nicht erledigt:** Upload der drei neuen Binärdateien (`rolle-oeffnet.gif`, `marktplatz-sonne.png`, `marktplatz-regen.png`) und gegebenenfalls der sechs ursprünglichen Kistenassets. Das Repository kann hier über die verfügbare GitHub-Verbindung nur für Textdateien sicher bearbeitet werden; Grafikdateien nicht auf GitHub übertragen. Daher noch kein visueller Live-Test möglich.
+- Originalillustrationen bleiben unverändert, es wird keine neue Rolle generiert.
