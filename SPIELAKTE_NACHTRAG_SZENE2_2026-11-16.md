@@ -22,3 +22,13 @@ Verbindliche Datei: „Spinnwebenreichtum mit Spielanleitung.docx“, Abschnitt 
 
 ## Veröffentlicht
 `main`: `szene-2/index.html`, `vorschau-einfuehrung/game.js`, `vorschau-einfuehrung/index.html`.
+
+
+## Navigationsentscheidung vom 16.11.2026 (bestätigt)
+- Jede Unterseite in Szene 1 und Szene 2 besitzt eine Zurück-Schaltfläche zur unmittelbar vorherigen Seite. Zu Beginn von Szene 2 führt Zurück zum Abschluss der Szene 1; bei Szene 1 gibt es vor dem Einstieg keine vorherige Spielseite.
+- Die untere Schaltfläche zur nächsten Aufgabe wird neutral mit „Weiter“ beschriftet. Die anschließende Aufgabe soll eine Überraschung bleiben.
+- Ein Szenenmenü bietet „Szene 1“ und „Szene 2“ an, aber nur wenn das Kind die jeweilige Szene tatsächlich schon erreicht hat. Freischaltung bleibt im Browser lokal gespeichert. Szene 1 ist von Anfang an zugänglich.
+- Vorwegnahme der Kistenaufgabe im Abschluss der Einführung entfernt; ebenso der direkte Wetterhinweis auf der Bildauswahl.
+- Die vorhandenen Originalbuttons bleiben über die gemeinsame CSS-Datei eingebunden.
+- Die HTML- und JavaScript-Dateien wurden nach dem Upload erneut aus GitHub gelesen und die JavaScript-Syntax geprüft. Ein echter Browser-/Gerätetest ist noch offen.
+- Die zentrale Masterübersicht im Projekt wurde nicht verändert; bei der nächsten Synchronisierung den Navigationseinbau nachtragen.
