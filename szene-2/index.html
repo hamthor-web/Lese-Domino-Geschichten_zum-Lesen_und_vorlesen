@@ -23,6 +23,23 @@
 .crate-preview.asset-missing .fallback-label{display:block;min-height:180px;padding-top:60px;background:#f0dcb5;border-radius:13px}
 .crate-preview.asset-missing .crate-label{display:none}
 @media(max-width:760px){.crate-grid{grid-template-columns:1fr}.crate-preview img{max-height:330px}.crate-preview.asset-missing .fallback-label{min-height:110px;padding-top:35px}}
+
+/* Zwei identische Pergamentrollen decken die beiden falschen Kisten ab.
+   Sie öffnen nur einmal; nach dem letzten GIF-Frame wird der Bildinhalt sichtbar. */
+.weather-rolls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:center;margin:24px 0}
+.roll-card{position:relative;width:100%;min-width:0;overflow:hidden}
+.roll-card>img.roll-gif{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain}
+.roll-inner{position:absolute;left:11%;right:11%;top:23%;bottom:23%;display:flex;align-items:center;justify-content:center;min-width:0}
+.roll-inner[hidden]{display:none!important}
+.roll-inner button{background:#fff9e9;border:3px solid #bd9d7c;border-radius:16px;padding:8px;min-height:90px;cursor:pointer;width:100%;font:inherit;font-size:calc(20px * var(--text));font-weight:bold;color:#493e58}
+.roll-inner button img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:9px}
+.roll-inner button.correct{border-color:#71a48a;background:#e8f7ea}
+.roll-question{text-align:center;font-size:calc(26px * var(--text));font-weight:bold;line-height:1.35;padding:12px;align-self:center}
+.weather-rolls .roll-card:first-child{grid-column:1}
+.weather-rolls .roll-question{grid-column:2}
+.weather-rolls .roll-card:last-child{grid-column:3}
+@media(max-width:820px){.weather-rolls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.weather-rolls .roll-question{grid-column:1/-1;grid-row:1;margin:0}.weather-rolls .roll-card:first-child{grid-column:1;grid-row:2}.weather-rolls .roll-card:last-child{grid-column:2;grid-row:2}.roll-inner{left:6%;right:6%;top:19%;bottom:19%}}
+@media(max-width:440px){.roll-question{font-size:calc(22px * var(--text))}.roll-inner button{font-size:calc(17px * var(--text));padding:5px;border-radius:11px}.roll-inner button img{aspect-ratio:1/1}}
 </style></head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden><label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label><label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
@@ -61,19 +78,21 @@ function openCrate(button){
    image.src=asset.still;document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=false)}
  },fallback?500:asset.duration+180)
 }
+function rollChoice(type,label){return '<div class="roll-card"><img class="roll-gif" src="../assets/rolle-oeffnet.gif?roll='+Date.now()+'&which='+type+'" alt="Eine Pergamentrolle öffnet sich"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"><span>'+label+'</span></button></div></div>'}
+function revealScrollPictures(){document.querySelectorAll('.roll-inner').forEach(x=>{x.hidden=false});document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){pictureDone=true;b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');$('next').disabled=false}else notice('Lies noch einmal genau: Welches Wetter kommt in der Geschichte vor?')})}
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 $('sceneBack').onclick=()=>{if(phase===0)location.href='../vorschau-einfuehrung/?abschnitt=abschluss';else go(phase-1)};
 function render(){const labels=['Zuhören','Selbst lesen','Kiste öffnen','Bild wählen','Geschafft'];$('crumbs').textContent='Schritt '+(phase+1)+' von 5 · '+labels[phase];let out='';
 if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><h1>Silvana und die vier Straßen</h1><p>Höre die Geschichte an.</p><div class="controls"><button class="primary" id="audio">▶ Geschichte anhören</button><button class="secondary" id="repeat">↻ Von vorn hören</button></div><p class="feedback" id="feedback" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><p class="original">'+original+'</p></details><div class="controls"><button class="primary" id="next">Weiter</button></div>');
 else if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next">Weiter</button></div>');
 else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Marktplatz','Stoff','Wege'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
-else if(phase===3)out=panel('<span class="eyebrow">In der richtigen Kiste</span><h1>Welches Bild passt zum Text?</h1><p>Welches Wetter wird im Text beschrieben? Tippe auf das passende Bild.</p><div class="photos"><button class="image-choice" data-answer="sun">'+city(false)+'<span>Stadt im Sonnenschein</span></button><button class="image-choice" data-answer="rain">'+city(true)+'<span>Stadt im Regen</span></button></div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next" '+(pictureDone?'':'disabled')+'>Weiter</button></div>');
+else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<p class="roll-question">Von welchem Wetter war in der Geschichte die Rede?</p>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next" '+(pictureDone?'':'disabled')+'>Weiter</button></div>');
 else out=panel('<span class="eyebrow">Szene 2 geschafft</span><h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div>');
 $('game').innerHTML=out;
 if(phase===0){$('audio').onclick=speak;$('repeat').onclick=()=>{stop();speak()};$('next').onclick=()=>go(1)}
 if(phase===1){$('back').onclick=()=>go(0);$('next').onclick=()=>go(2)}
 if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
-if(phase===3){$('back').onclick=()=>go(2);$('next').onclick=()=>go(4);document.querySelectorAll('.image-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){b.classList.add('correct');document.querySelectorAll('.image-choice').forEach(x=>x.disabled=true);pictureDone=true;$('next').disabled=false;notice('Richtig! Im Text steht, dass es regnete.')}else notice('Im Text steht ein Hinweis zum Wetter. Lies ihn noch einmal.')})}
+if(phase===3){$('back').onclick=()=>go(2);$('next').onclick=()=>go(4);if(pictureDone)revealScrollPictures();else setTimeout(revealScrollPictures,1440)}
 if(phase===4){$('again').onclick=()=>{mistakes=0;pictureDone=false;go(0)};$('intro').onclick=()=>location.href='../vorschau-einfuehrung/'}
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&'speechSynthesis' in window){speechSynthesis.pause();audioState='paused';if($('audio'))$('audio').textContent='▶ Weiterhören'}});window.addEventListener('pagehide',stop);render();
