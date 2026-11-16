@@ -47,4 +47,7 @@ button:disabled{opacity:.48}
 @font-face{font-family:Andika;src:url('assets/fonts/Andika-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:Andika;src:url('assets/fonts/Andika-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
 body,button,input,output,summary,.brand,.brand-sub,.chapter,h1,h2,h3,.original{font-family:Andika,Arial,sans-serif}
-.listen>*{min-width:0}h1,h2,h3{overflow-wrap:anywhere;hyphens:auto}
+.listen>*{min-width:0}h1,h2,h3{overflow-wrap:anywhere;hyphens:none}
+
+/* Ganze Wörter bevorzugt in die nächste Zeile; keine automatische Silbentrennung. */
+body{hyphens:none;-webkit-hyphens:none}
