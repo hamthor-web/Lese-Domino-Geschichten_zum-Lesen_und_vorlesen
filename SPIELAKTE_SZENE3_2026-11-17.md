@@ -78,3 +78,18 @@ Die vier zuletzt ergänzten Szene-2-Assets sind im GitHub-Baum vorhanden: Rolle,
 4. Echtes Browserdurchspielen inklusive Rücknavigation, Menüfreischaltung, Hilfe nach 3 Fehlversuchen und Sprachausgabe.
 5. Smartphone/Tablet Hoch-/Querformat und getrennte Zoomwerte (100/100, 160/100, 100/160, 160/160) prüfen, keine abgeschnittenen Inhalte.
 6. Danach aktuelle main-Änderungen abgleichen, Entwicklungszweig zusammenführen, GitHub Pages live prüfen und zentrale Projekt-Masterübersicht synchronisieren.
+
+
+## Bestätigte Korrektur: zwei Antwortfelder – 17.11.2026
+Heike beanstandet, dass das Kind seine erkannte Fehlerantwort „blau“ löschen muss, um im selben Feld „grau“ einzugeben. Bestätigte Vorgabe: Ein zweites Eingabefeld für die richtige Antwort einblenden.
+
+Umsetzung:
+- Erstes Feld bleibt für „Schreibe auf, was falsch ist.“
+- Nach erkannter blauer Spinnenfarbe bleibt die eingegebene Antwort unverändert und lesbar im ersten Feld stehen.
+- Darunter erscheint ein eigenes leeres Feld „Welche Farbe haben die Spinnen im Text?“ mit separater Prüfschaltfläche.
+- Die richtige Farbe „grau“ wird im zweiten Feld geprüft. Drei sachlich falsche Farbkorrekturen (auch erneutes „blau“) zählen zur Buchstabenhilfe.
+- Die Hilfe steht unter dem zweiten Feld; beide Eingaben bleiben bei Rücknavigation erhalten. Eine Szenenwiederholung setzt beide zurück.
+- Wird schon im ersten Feld eindeutig „grau“ genannt, bleibt die bisherige Annahme dieser passenden Antwort erhalten.
+- Texte, Originalbilder, Sprachablauf und vorangehende Animationen bleiben erhalten.
+- Versionierte Skript-/CSS-Aufrufe verhindern das Mischen alter und neuer Dateien.
+Prüfung und Veröffentlichung dieses Nachtrags werden nach erfolgreichem Browserlauf ergänzt.
