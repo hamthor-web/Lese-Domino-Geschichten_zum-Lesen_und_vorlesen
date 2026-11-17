@@ -31,3 +31,20 @@ Automatisierte Prüfung aller Trefferflächen von beiden Bildern aus, aller zwö
 
 ## Vorprüfung: benachbarte kleine Tropfen
 Erster Lauf 44188235337: sämtliche bisherigen Szenenprüfungen bestanden. In Szene 7 überlappten die vergrößerten Touchflächen der zwei obersten benachbarten Tropfen derselben Gruppe. Für diese beiden Stellen gemeinsame Trefferfläche eingerichtet; beide Motive bleiben anklickbar und zählen dieselbe Antwortgruppe. Netz-/Schalfläche nach oben erweitert, um auch die oberen Schalenden zu erfassen. Erneute vollständige Prüfung folgt.
+
+## Veröffentlichung und persönliche Live-Prüfung – 17.11.2026
+- Vorprüfung nach Touchkorrektur erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44188836446
+- Abschließende Vorprüfung einschließlich abgesicherter Menüreihenfolge erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44189002634
+- PR #18 übernommen, Merge `9c762d599a9577df03780fa1b013a9a7013b3125`. GitHub-Pages-Bereitstellung erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44189498869
+- Live-Sichtprüfung im Browser: Hör-/Leseschritt und beide geladenen Bilder; Frage nach Haselnüssen mit beiden Ablenkern, falsche Hausschuhe ohne Freigabe, richtige Antwort mit Markierung beider Bildstellen und genau einem Punkt. Anschließend Schal → Spinnweben sowie winzige Käfer → Tautropfen richtig zugeordnet. Markierungen und große Wortschaltflächen visuell geprüft. Keine Screenshotdateien als Projektquellen abgelegt.
+- Unveränderte Bildbytes durch lokale/entfernte Git-Blob-Hashes bestätigt: Bild 1 `69a64bca88af430126a32894c0609a6f6183c7d8`, Bild 2 `38e0988991274bd009e85a9b935a029e0ffa56cf`. Vollständiger vorbereiteter Dateistand entspricht dem veröffentlichten Merge-Stand.
+- Pro Vorprüfung 144 Layoutprüfungen für Szene 7; alle zwölf Wortrichtungen, sämtliche Trefferflächen beider Bilder, falsche Antworten, Doppelzählung, Freigabe, Zustand, Wiederholung, Vorlesesteuerung und Navigation bestanden. Bestehende Szenen ebenfalls erfolgreich geprüft.
+
+Masterstatus: Szenen 1–7 veröffentlicht. Szene 7 implementiert, vor Veröffentlichung vollständig geprüft und persönlich live geprüft. Automatisierte Abschlussprüfung der Live-Seite folgt unten. Gesamtprojekt weiter in Entwicklung; Szene 8 noch offen.
+
+Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-7/
+
+## Abschließende Live-Prüfung bestanden – 17.11.2026, 23:27 Uhr
+Dieser Eintrag ersetzt die offenen Prüfstände oben. Vollständiger Workflow einschließlich Prüfung der veröffentlichten Live-Seite erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44189499259
+Szene 7 bestand vor Veröffentlichung, im veröffentlichten Programmstand und direkt live sämtliche beschriebenen Funktionen und jeweils 144 Layoutprüfungen. Auch die bisherigen Szenen- und Logikprüfungen bestanden. Keine JavaScript- oder HTTP-Fehler im geprüften vollständigen Durchlauf. Die Menüreihenfolge mit Szene 7 als letztem besuchten Abschnitt wurde in Einführung und Szenen 3–6 kontrolliert. Sprachsteuerung automatisiert simuliert; keine physischen Endgeräte oder akustische Hörprüfung.
+Endgültiger Masterstatus: Szenen 1–7 veröffentlicht und geprüft. Szene 7 abgeschlossen für diesen Auftrag. Gesamtprojekt weiterhin in Entwicklung; Szene 8 noch nicht umgesetzt.

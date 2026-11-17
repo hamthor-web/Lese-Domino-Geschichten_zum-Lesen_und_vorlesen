@@ -109,3 +109,12 @@ Die frühere Querformat-Anordnung neben dem Einführungstext ist durch diese neu
 Prüfung: vollständiger Chrome-Spielablauf und tatsächliche GitHub-Pages-Seite bestanden. 24 Titelansichten prüfen direkt folgende Position nach dem Namenskopf und alle Bedienelemente darunter; zusätzlich Wiederbesuch mit gespeichertem Stand geprüft. Insgesamt je 216 Layoutprüfungen einschließlich vorhandener Domino-/Wetter-/Spinnenprüfungen. Keine physischen Endgeräte oder akustische Hörprüfung.
 Code: `1a00437c26fedd7d8a792d70b700d9bd84952e2f`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44104586483
+
+
+## Szene 7: Der König im Wald – 17.11.2026
+Szenen 1–7 veröffentlicht. Szene 7 mit Original hören → selbst lesen → Bildvergleich umgesetzt. Zwei unveränderte Suchbilder, sechs Unterschiedsgruppen und drei Wörter je Frage; von beiden Bildern aus lösbar, keine Doppelzählung. Drei Tautropfen statt Haselnüssen getrennt vom Netz; große Käfer/Spinnen und winzige Käfer/Tropfen getrennte Gruppen. Getrennte Größenregler, Vorlesesteuerung, Rücknavigation, Wiederholung und Übergang aus Szene 6.
+PR #18, Merge 9c762d599a9577df03780fa1b013a9a7013b3125; Vorprüfung einschließlich 144 Szene-7-Layouts sowie sämtlicher bisheriger Szenen erfolgreich (Lauf 44189002634). Pages-Bereitstellung und persönliche Live-Sichtprüfung erfolgreich. Automatisierter Live-Abschluss wird in der Szene-7-Spielakte nachgetragen.
+Quelle und Details: SPIELAKTE_SZENE7_2026-11-17.md. Gesamtprojekt weiterhin in Entwicklung. Nächster Abschnitt: Szene 8 „Der enttäuschte König“, bisher offen. Original 8 gemäß Bauplan erst gemeinsam mit Original 9 vorlesen.
+
+### Abschluss Szene 7 – 17.11.2026, 23:27 Uhr
+Vollständige Abschlussprüfung einschließlich Live-Seite erfolgreich (Lauf 44189499259). Szene 7: alle Trefferflächen, zwölf Wortrichtungen, Fehler-/Fortschritts-/Navigationsregeln und 144 Layoutprüfungen je Durchlauf bestanden; bestehende Szenen ebenfalls bestanden. Masterstatus: Szenen 1–7 veröffentlicht und geprüft; Szene 8 offen. Einzelheiten und Grenzen stehen in SPIELAKTE_SZENE7_2026-11-17.md.
