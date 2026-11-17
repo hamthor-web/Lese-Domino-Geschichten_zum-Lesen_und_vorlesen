@@ -42,7 +42,7 @@
 .zoom-scroll{overflow:auto;max-width:100%}.zoom-reading{width:max(100%,calc(370px * var(--text)))}
 .zoom-bubble{font-size:calc(30px * var(--text))}
 #closeBubbleZoom{margin-top:16px;min-height:52px;max-width:100%;font-size:calc(22px * var(--text))}
-@media(orientation:portrait),(max-width:850px){.question-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.question-card .prompt-scroll{padding:0}.question-card [id^="promptBubble"]{width:100%}.question-card .large-bubble{font-size:clamp(9px,2.3vw,14px)}.question-card h2{font-size:calc(20px * var(--text))}.selection-label{font-size:calc(18px * var(--text))}}
+@media(orientation:portrait),(max-width:850px){.question-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.question-card .prompt-scroll{padding:0}.question-card [id^="promptBubble"]{width:100%}.question-card .large-bubble{font-size:clamp(7px,1.7vw,13px)}.question-card h2{font-size:calc(20px * var(--text))}.selection-label{font-size:calc(18px * var(--text))}}
 
 .question-card h2,.selection-label{overflow-wrap:anywhere}
 .flying-bubble .large-bubble{font-size:var(--flight-font)}
