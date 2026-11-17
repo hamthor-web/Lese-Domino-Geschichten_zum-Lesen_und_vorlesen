@@ -112,7 +112,7 @@ async function run(){
  await page.locator('#scene3').click();await page.waitForURL('**/szene-3/');
  await page.locator('.brand').click();
  await page.locator('.scene-menu summary').click();
- assert.equal(await page.locator('#sceneMenu3').isVisible(),true);
+ await page.locator('#sceneMenu3').waitFor({state:'visible'});
  console.log('PASS: Rücknavigation zum Szene-2-Abschluss, Wiederbesuch, Menüfreischaltung.');
  assert.deepEqual(errors,[]);
  console.log('PASS: '+checks+' Layoutprüfungen, sechs Smartphone/Tablet-Viewports, vier getrennte Zoomkombinationen. Keine JS- oder HTTP-Fehler.');
