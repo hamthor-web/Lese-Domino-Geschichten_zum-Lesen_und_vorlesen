@@ -8,6 +8,7 @@ on:
       - 'szene-4/**'
       - 'szene-5/**'
       - 'szene-6/**'
+      - 'szene-7/**'
       - 'vorschau-einfuehrung/**'
       - 'assets/**'
       - '.github/workflows/silvana-browser.yml'
@@ -38,10 +39,11 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/silvana-browser" --no-package-lock playwright@1.56.1
           "$RUNNER_TEMP/silvana-browser/node_modules/.bin/playwright" install --with-deps chrome
-      - name: Übergang und Szene 3 im Browser prüfen
+      - name: Szenen im Browser prüfen
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright
         run: |
+          node szene-7/browser.test.cjs
           node vorschau-einfuehrung/tests/browser.cjs
           node szene-3/browser.test.cjs
           node szene-4/browser.test.cjs
@@ -53,6 +55,7 @@ jobs:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright
           SILVANA_BASE_URL: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/
         run: |
+          node szene-7/browser.test.cjs
           node vorschau-einfuehrung/tests/browser.cjs
           node szene-3/browser.test.cjs
           node szene-4/browser.test.cjs

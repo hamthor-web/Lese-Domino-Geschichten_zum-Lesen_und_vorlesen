@@ -6,7 +6,7 @@ function scene2Visited(){try{return Number(localStorage.getItem(VISITED_KEY))>=2
 function markScene2Visited(){try{localStorage.setItem(VISITED_KEY,String(Math.max(2,Number(localStorage.getItem(VISITED_KEY))||0)));}catch{}}
 function updateSceneMenu(){
  const next=$('sceneMenu2');if(next)next.hidden=!scene2Visited();
- try{const highest=Number(localStorage.getItem(VISITED_KEY));for(const [n,title] of [[3,'Die Spinnen im Wald'],[4,'Der Händler'],[5,'Der König'],[6,'Im Dorf']]){if(next&&highest>=n){let a=$('sceneMenu'+n);if(!a){a=document.createElement('a');a.id='sceneMenu'+n;a.href='../szene-'+n+'/';a.textContent=title;}next.parentElement.append(a);}}}catch{}
+ try{const highest=Number(localStorage.getItem(VISITED_KEY));for(const [n,title] of [[3,'Die Spinnen im Wald'],[4,'Der Händler'],[5,'Der König'],[6,'Im Dorf'],[7,'Der König im Wald']]){if(next&&highest>=n){let a=$('sceneMenu'+n);if(!a){a=document.createElement('a');a.id='sceneMenu'+n;a.href='../szene-'+n+'/';a.textContent=title;}next.parentElement.append(a);}}}catch{}
 }
 
 let content,phase=0,furthest=0,placed=[],order=[2,0,1],selected=null,solved=false,feedback='',hadError=false,saved=null;
