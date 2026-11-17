@@ -49,3 +49,6 @@
 
 .question-card [id^="promptBubble"]{width:100%}
 .question-card .large-bubble{font-size:clamp(7px,1.7vw,13px)}
+
+.question-card{container-type:inline-size}
+.question-card .large-bubble{font-size:clamp(7px,5cqw,13px)}
