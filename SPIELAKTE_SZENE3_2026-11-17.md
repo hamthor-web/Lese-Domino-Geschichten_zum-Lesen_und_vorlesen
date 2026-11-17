@@ -230,3 +230,10 @@ Veröffentlicht über PR #7, Merge `c485d20e105df5abd57847ff5e969c4e47803a6a`.
 
 Zusätzliche Live-Sichtprüfung: nach Bildwahl zunächst nur Bild 2; nach „rot“ beide Bilder sichtbar, Bild 2 bleibt ausgewählt und „rot“ steht weiterhin im Feld.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44045215632
+
+
+## Bedienung im Hochformat und direktes Domino-Verschieben – 17.11.2026
+Zurück/Weiter stehen nebeneinander (Zurück links) oder bei notwendigem Umbruch Weiter zuerst. Obere doppelte Zurückbuttons in Einführung und Szene 2 durch die vorhandenen Rückwege unten ersetzt. Im Hochformat Dominosteine untereinander mit „Nach oben“/„Nach unten“. Direktes Ziehen mit Maus/Touch, dünner Einfügelinie und Einsetzen beim Loslassen ergänzt; Scrollen auf Spielfeld-/Vorratsbereich begrenzt. Bisherige Eingaben, Spielstände, Bilder, Texte und Animationen erhalten.
+Vor Veröffentlichung und live vollständiger Browserlauf einschließlich Maus-/Touch-Eingaben sowie je 192 Layoutprüfungen bestanden. Details: [Spielakte Bedienung](SPIELAKTE_BEDIENUNG_DOMINO_2026-11-17.md).
+Code-Merge: `2e7cd93a9dbbbb2d7472ec8c4603bf7f7224e16e`; abschließender Programmstand: `7c5b4ad6e71867c700ab3119dee221f5e4b38848`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44054360463
