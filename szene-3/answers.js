@@ -19,10 +19,11 @@
    ||/\bfarb\w*\s+(?:ist|sind)\s+(?:falsch|anders|verkehrt)\b/.test(s)
    ||/\bnicht\s+(?:(?:die|der|eine|in)\s+){0,2}(?:richtig\w*|gleich\w*)\s+farb\w*\b/.test(s)
    ||/\bfarb\w*\s+(?:ist|sind|stimmt|stimmen|passt|passen)\s+nicht\b/.test(s);
+  const blueInsteadOfGray=/\bblau(?:e|en|er|es)?\s+(?:statt|anstatt)\s+grau(?:e|en|er|es)?\b/.test(s);
   const negatedBlue=/\b(?:nicht|kein|keine|keinen|keiner)\s+(?:(?:wirklich|mehr|richtig|ganz|nur|die|farbe)\s+){0,2}blau\w*\b/.test(s);
-  if(context==='description'&&(negatedGray||wrongColor||(blue&&/\bstatt\b/.test(s))))
+  if(context==='description'&&(negatedGray||wrongColor||blueInsteadOfGray))
    return {kind:'partial',identifiedError:true,feedback:'Richtig erkannt: Die Spinnen im Bild haben eine andere Farbe als im Text.'};
-  if(context==='correction'&&(wrongColor||(blue&&/\bstatt\b/.test(s))))
+  if(context==='correction'&&(wrongColor||blueInsteadOfGray))
    return {kind:'wrong',feedback:'Lies noch einmal nach: Welche Farbe haben die Spinnen im Text?'};
   if(negatedGray||wrongGray)return {kind:'wrong',feedback:'Lies noch einmal nach: Welche Farbe haben die Spinnen im Text?'};
   if(gray)return {kind:'correct',feedback:'Richtig! Im Text sind die Spinnen grau.'};

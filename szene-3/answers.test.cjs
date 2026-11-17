@@ -61,3 +61,7 @@ for(const answer of explanations){
 }
 assert.equal(A.evaluate('Die Spinnen sind nicht blau.').identifiedError,undefined);
 console.log(explanations.length+' sinngleiche Fehlerbeschreibungen und getrennte Farbkorrektur bestanden.');
+
+assert.equal(A.evaluate('grau statt blau').kind,'correct');
+assert.equal(A.evaluate('grau statt blau','correction').kind,'correct');
+assert.equal(A.evaluate('blau statt grau','correction').kind,'wrong');
