@@ -142,3 +142,7 @@ Prüfung:
 Veröffentlichung: PR #6, Merge `f6f915d60ba6d7b31e0a3873844d95aa2913bd93`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44043949323
 Wetteraufgabe: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-2/
+
+
+## Bestätigte Textkorrektur – 17.11.2026
+Heike ersetzt im vereinfachten Lesetext von Szene 2 „Bäckerei“ durch „altem Fett“. Der Satz lautet jetzt: „Wenn es regnete, roch der Marktplatz nach nasser Wolle, Pferdemist und altem Fett.“ Der literarische Originaltext nennt bereits „dem alten Fett aus der Bäckerei“ und bleibt unverändert. Aufgaben, Bilder, Navigation und Animationen bleiben erhalten. Bearbeitungsstatus der Szene unverändert: veröffentlicht.
