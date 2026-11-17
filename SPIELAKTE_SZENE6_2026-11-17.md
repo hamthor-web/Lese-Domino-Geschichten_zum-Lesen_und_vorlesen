@@ -92,3 +92,6 @@ Dieser Eintrag ersetzt den offenen Prüfstatus der vorstehenden Gestaltungskorre
 - Je 288 Layoutprüfungen vor Veröffentlichung und live: sechs Handy-/Tabletformate im Hoch-/Querformat mit vier Schrift-/Spielfeldkombinationen. Zusätzlich tatsächliche Oberkanten von Überschriften, Blasen, Auswahlhinweisen und Lupen je Kartenpaar verglichen; Lupenhöhen ebenfalls abgeglichen. Neue Menütexte auf allen sechs Seiten geprüft. Sämtliche bisherigen Szenen- und Aufgabenprüfungen bestanden.
 - Persönliche Live-Sichtprüfung: neues geöffnetes Szenenmenü mit Hinweis sowie beide bündigen Kartenpaare. Keine physischen Endgeräte; automatisierte Sprachsteuerung weiterhin simuliert.
 Masterstatus: Szenen 1–6 veröffentlicht; Szene 6 gestalterisch aktualisiert, Menübezeichnung in allen sechs Szenen vereinheitlicht. Gesamtprojekt weiterhin in Entwicklung; Szene 7 unverändert offen. Ältere Entscheidungen bleiben im Verlauf erhalten.
+
+## Bestätigte Textkürzung – 17.11.2026
+Heike lässt die doppelte Erfolgsmeldung „Genau! Beide Blasen sind am richtigen Platz.“ ersatzlos entfernen. Nach beiden richtigen Zuordnungen bleiben nur „Beide Blasen passen!“ und der Hinweis zum Anhören. Der leere untere Rückmeldebereich wird ausgeblendet; sonstige Rückmeldungen und Abläufe bleiben erhalten.

@@ -82,6 +82,7 @@
   document.querySelectorAll('.person-cross').forEach((b,i)=>{b.hidden=placed[i];b.disabled=busy||solved;b.onclick=()=>choosePerson(b.dataset.person);});
   placed.slice(0,2).forEach((yes,i)=>{const slot=$('slot'+i);slot.classList.toggle('occupied',yes);const old=slot.querySelector('.parked');if(old)old.remove();if(yes){slot.insertAdjacentHTML('beforeend','<div class="parked" role="group" aria-label="'+esc(content.bubbles[i].text)+' – '+(i?'Bürgermeister':'König')+'">'+bubbleMarkup(i,'small-bubble')+'</div>');}});
   document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>openZoom(Number(b.dataset.zoom),b));
+  $('feedback').hidden=solved;
   if($('next'))$('next').disabled=!solved||busy;scheduleButtons();
  }
  let zoomReturn=null;
@@ -116,7 +117,7 @@
    if(!await animateBubble([{transform:whirl},{transform:'translate(0px,0px) rotate(1440deg) scale(1)'}],650,token))return;
    cancelFlight();feedback=content.bubbles[question].person===null?'Diese Blase passt nicht zum Text. Wähle eine andere Blase.':'Das passt noch nicht. Lies noch einmal und tippe auf das andere Kreuz.';$('feedback').textContent=feedback;renderQuestion();return;
   }
-  placed[question]=true;solved=content.bubbles.every((b,i)=>b.person===null||placed[i]);if(!solved)question=cardOrder.find(i=>!placed[i]);cancelFlight();feedback=solved?'Genau! Beide Blasen sind am richtigen Platz.':'Genau! Hier bleibt die Blase. Wähle jetzt eine weitere passende Blase.';$('feedback').textContent=feedback;renderQuestion();
+  placed[question]=true;solved=content.bubbles.every((b,i)=>b.person===null||placed[i]);if(!solved)question=cardOrder.find(i=>!placed[i]);cancelFlight();feedback=solved?'':'Genau! Hier bleibt die Blase. Wähle jetzt eine weitere passende Blase.';$('feedback').textContent=feedback;renderQuestion();
  }
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
