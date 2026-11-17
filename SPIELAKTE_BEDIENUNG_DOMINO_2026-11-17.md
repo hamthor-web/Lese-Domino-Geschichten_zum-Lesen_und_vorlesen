@@ -43,3 +43,11 @@ Der Prüfschalter wird nun zusammen mit „Kleiner Tipp“ ausgeblendet, sobald 
 Bestehende Logiktests und vollständiger Chrome-Browserlauf einschließlich tatsächlicher GitHub-Pages-Seite bestanden. Sichtbarkeit beider Schaltflächen vor/nach erfolgreicher Prüfung und nach erneutem Verschieben kontrolliert. Keine Originalassets oder weiteren Funktionen verändert.
 Code: `d9db93d5902b6ef880df773398791066621b1477`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44069395241
+
+
+## Titelbild im Hochformat an den Anfang – 17.11.2026
+Heike möchte das Titelbild auf der ersten Seite im Hochformat ganz oben sehen, statt erst unter Text, Hörbutton und Weiter.
+Die Einführung zeigt das unveränderte Originalbild nun im Hochformat als erstes Element ihres Inhaltsbereichs, vor Überschrift und Hörbedienung. Im Querformat bleibt das Bild neben dem Text. Beide Größenregler, Navigation, Schrift und Bildproportionen bleiben erhalten. Die CSS-Version ist erhöht, damit bestehende Browser die Änderung laden.
+Vorhandener vollständiger Chrome-Spielablauf und Live-Test auf GitHub Pages bestanden. Zusätzlich 24 Titelansichten (sechs Smartphone-/Tablet-Viewports, vier getrennte Zoomkombinationen) auf Bildreihenfolge und horizontalen Überlauf geprüft; insgesamt je 216 Layoutprüfungen auf Programmstand und Live-Seite. Keine physischen Geräte geprüft.
+Code: `458d573846ebdc3dae9b3e19c92f32a49ff64b84`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44100554807
