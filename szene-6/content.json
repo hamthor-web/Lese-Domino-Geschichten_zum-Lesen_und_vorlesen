@@ -1,0 +1,17 @@
+{
+  "title": "Im Dorf",
+  "simple": "Beim Abendessen sagte der König dem Bürgermeister: „Ich bezahle mit Gold, wenn die Ware gut ist.“\nDer Bürgermeister zuckte nur mit den Schultern.\nAm nächsten Morgen wurde der König sehr früh geweckt. Er war schlecht gelaunt, denn das Zimmer war kalt und etwas hatte ihn gebissen.",
+  "original": "„Ich bezahle in Gold“, erklärte er beim Abendessen dem Bürgermeister von Silvana. „Wenn die Ware hält, was man mir versprochen hat.“ Der Bürgermeister zuckte nur mit den Schultern.\nAm nächsten Morgen wurde der König geweckt, noch bevor die Hähne lautstark das Ende der Nacht verkündeten. Er war schlecht gelaunt. Die Nacht war kurz gewesen, das Gästezimmer kalt, und offenbar hatte ihn etwas in der Matratze gebissen.",
+  "image": "assets/dorf.webp",
+  "imageAlt": "Links spricht der König am Tisch im Wirtshaus, rechts sitzt der Bürgermeister.",
+  "bubbles": [
+    {
+      "text": "„Ich bezahle mit Gold.“",
+      "person": "king"
+    },
+    {
+      "text": "zuckt mit den Schultern",
+      "person": "mayor"
+    }
+  ]
+}
