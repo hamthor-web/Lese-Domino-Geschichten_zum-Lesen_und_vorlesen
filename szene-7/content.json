@@ -1,0 +1,217 @@
+{
+  "title": "Der König im Wald",
+  "simple": "Die Leute aus Silvana führten den König durch den nassen, matschigen Wald zu einem Strauch.\nDort hing ein Spinnennetz mit glitzernden Tautropfen. Eine alte Frau sagte: „Da ist es.“\nDer König war enttäuscht. Er sah nur ein Spinnennetz. Aber die Leute sagten: „Das ist unser größter Schatz.“",
+  "original": "Die Leute aus Silvana führten ihn in den Wald. Der Boden war weich und matschig. Nasse Zweige schlugen gegen seinen Mantel, irgendwo schrie ein Vogel, und einer der Diener trat in etwas, das ziemlich sicher nicht nur Schlamm war.\nSchließlich blieben sie vor einem Haselstrauch stehen.\nZwischen zwei Zweigen hing ein großes Spinnennetz. Es war nicht vollkommen rund. Auf einer Seite fehlte ein Stück, und nahe der Mitte saß eine graue, ziemlich dicke Spinne. Trotzdem lagen auf jedem Faden Tautropfen. Das Licht fiel schräg durch die Bäume und brachte sie zum Glitzern.\nDer König wartete.\n„Nun?“, fragte er.\n„Da ist es“, sagte eine alte Frau.\n„Wo?“\nSie zeigte auf das Netz.\nDer König sah hin. Dann sah er die Frau an.\n„Das ist ein Spinnennetz.“\n„Ja.“\n„Ich bin drei Tage gereist, weil ihr behauptet, das kostbarste Gut eures Landes zu besitzen.“\n„Das haben wir.“",
+  "differences": [
+    {
+      "id": "nuts",
+      "words": [
+        "Tautropfen",
+        "Haselnüsse"
+      ],
+      "options": [
+        [
+          "Haselnüsse",
+          "Sonnenblumen",
+          "Hausschuhe"
+        ],
+        [
+          "Tautropfen",
+          "Sonnenblumen",
+          "Hausschuhe"
+        ]
+      ],
+      "areas": [
+        [
+          10,
+          0,
+          8,
+          14
+        ]
+      ]
+    },
+    {
+      "id": "web",
+      "words": [
+        "Spinnweben",
+        "Schal"
+      ],
+      "options": [
+        [
+          "Schal",
+          "Sonnenuhr",
+          "Reifen"
+        ],
+        [
+          "Spinnweben",
+          "Sonnenuhr",
+          "Reifen"
+        ]
+      ],
+      "areas": [
+        [
+          29,
+          20,
+          41,
+          38
+        ]
+      ]
+    },
+    {
+      "id": "spiders",
+      "words": [
+        "Spinnen",
+        "Käfer"
+      ],
+      "options": [
+        [
+          "Käfer",
+          "Vögel",
+          "Tautropfen"
+        ],
+        [
+          "Spinnen",
+          "Vögel",
+          "Tautropfen"
+        ]
+      ],
+      "areas": [
+        [
+          26,
+          7,
+          12,
+          11
+        ],
+        [
+          66,
+          10,
+          10,
+          11
+        ]
+      ]
+    },
+    {
+      "id": "tiny",
+      "words": [
+        "Tautropfen",
+        "Käfer"
+      ],
+      "options": [
+        [
+          "Käfer",
+          "Vögel",
+          "Spinnen"
+        ],
+        [
+          "Spinnen",
+          "Vögel",
+          "Tautropfen"
+        ]
+      ],
+      "areas": [
+        [
+          46.7,
+          0,
+          3.2,
+          3.2
+        ],
+        [
+          50,
+          2.5,
+          3.2,
+          3.2
+        ],
+        [
+          65.5,
+          0.7,
+          3.2,
+          3.2
+        ],
+        [
+          20,
+          14.5,
+          3.2,
+          3.2
+        ],
+        [
+          76.3,
+          11.7,
+          3.2,
+          3.2
+        ],
+        [
+          76.5,
+          21.1,
+          3.2,
+          3.2
+        ],
+        [
+          14.3,
+          26.1,
+          3.2,
+          3.2
+        ],
+        [
+          57.8,
+          55,
+          3.2,
+          3.2
+        ]
+      ]
+    },
+    {
+      "id": "person",
+      "words": [
+        "Mädchen",
+        "alte Frau"
+      ],
+      "options": [
+        [
+          "alte Frau",
+          "König",
+          "Mäuschen"
+        ],
+        [
+          "Mädchen",
+          "König",
+          "Mäuschen"
+        ]
+      ],
+      "areas": [
+        [
+          77,
+          27,
+          18,
+          54
+        ]
+      ]
+    },
+    {
+      "id": "shrub",
+      "words": [
+        "Brunnen",
+        "Strauch"
+      ],
+      "options": [
+        [
+          "Strauch",
+          "Sonnenuhr",
+          "Reifen"
+        ],
+        [
+          "Brunnen",
+          "Sonnenuhr",
+          "Reifen"
+        ]
+      ],
+      "areas": [
+        [
+          0,
+          47,
+          31,
+          31
+        ]
+      ]
+    }
+  ]
+}

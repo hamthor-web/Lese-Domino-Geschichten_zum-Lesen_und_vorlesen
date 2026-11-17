@@ -8,6 +8,7 @@ on:
       - 'szene-4/**'
       - 'szene-5/**'
       - 'szene-6/**'
+      - 'szene-7/**'
       - 'vorschau-einfuehrung/**'
       - 'assets/**'
       - '.github/workflows/silvana-browser.yml'
@@ -47,6 +48,7 @@ jobs:
           node szene-4/browser.test.cjs
           node szene-5/browser.test.cjs
           node szene-6/browser.test.cjs
+          node szene-7/browser.test.cjs
       - name: Veröffentlichte GitHub-Pages-Seite prüfen
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
@@ -58,5 +60,6 @@ jobs:
           node szene-4/browser.test.cjs
           node szene-5/browser.test.cjs
           node szene-6/browser.test.cjs
+          node szene-7/browser.test.cjs
 
 

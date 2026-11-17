@@ -148,3 +148,5 @@ if(document.fonts)document.fonts.ready.then(scheduleButtons);
 fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
 })();
 
+
+window.addEventListener('load',()=>{const add=()=>{try{if(Number(localStorage.getItem('silvana-visited-scenes-v1'))>=7&&!document.getElementById('sceneMenu7')){const a=document.createElement('a');a.id='sceneMenu7';a.href='../szene-7/';a.textContent='Der König im Wald';document.querySelector('.scene-menu nav').append(a);}}catch{}};add();});
