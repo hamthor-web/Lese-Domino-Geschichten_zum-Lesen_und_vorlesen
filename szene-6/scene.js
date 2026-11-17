@@ -50,14 +50,14 @@
 
 
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(6,Number(localStorage.getItem(VISITED))||0)));}catch{}}
- function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}
+ function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}
  function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1448" height="1086"></figure>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function render(){
   $('stepStatus').textContent=['Schritt 1 von 3 · Selbst lesen','Schritt 2 von 3 · Zuordnen','Schritt 3 von 3 · Zuhören',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
-  if(phase===1){$('game').innerHTML='<section class="panel"><h1>Wer sagt oder tut das?</h1><p>Tippe auf das passende Kreuz im Bild.</p><div class="village-task"><div class="board-scroll" role="region" aria-label="Wirtshausbild mit zwei Kreuzen"><div id="villageBoard"><img class="village-image" src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900">'+['king','mayor'].map((person,i)=>'<div class="person-slot '+person+'" id="slot'+i+'"><button class="person-cross" data-person="'+person+'" aria-label="Kreuz beim '+(i?'Bürgermeister':'König')+'"><span aria-hidden="true">✕</span></button></div>').join('')+'</div></div><aside class="question-panel"><div id="questionArea"></div><p id="feedback" class="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p></aside></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details>'+nav()+'</section>';renderQuestion();}
+  if(phase===1){$('game').innerHTML='<section class="panel"><h1>Wer sagt oder tut das?</h1><p>Wähle eine Blase. Tippe dann auf das passende Kreuz im Bild.</p><div class="village-task"><div class="board-scroll" role="region" aria-label="Wirtshausbild mit zwei Kreuzen"><div id="villageBoard"><img class="village-image" src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900">'+['king','mayor'].map((person,i)=>'<div class="person-slot '+person+'" id="slot'+i+'"><button class="person-cross" data-person="'+person+'" aria-label="Kreuz beim '+(i?'Bürgermeister':'König')+'"><span aria-hidden="true">✕</span></button></div>').join('')+'</div></div><aside class="question-panel"><div id="questionArea"></div><p id="feedback" class="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p></aside></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details>'+nav()+'</section>';renderQuestion();}
 
   if(phase===2)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===3)$('game').innerHTML='<section class="panel"><h1>Das Gespräch im Dorf</h1><p>Du hast die Worte und die Handlung richtig zugeordnet.</p><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
@@ -68,14 +68,25 @@
   scheduleButtons();
  }
  function bubbleMarkup(i,kind){return '<div class="text-bubble '+kind+'"><img src="assets/sprechblase.webp" alt="" width="900" height="600"><span>'+esc(content.bubbles[i].text)+'</span></div>';}
+ function questionTitle(i){return i===0?'Wer hat gesagt:':'Wer hat mit den Schultern gezuckt?';}
  function renderQuestion(){
   if(!$('questionArea'))return;
-  $('questionArea').innerHTML=solved?'<h2>Beide Blasen passen!</h2><p>Jetzt kannst du diesen Teil der Geschichte hören.</p>':'<p class="note">Frage '+(question+1)+' von 2</p><h2 id="questionTitle">'+(question===0?'Wer hat gesagt:':'Wer hat mit den Schultern gezuckt?')+'</h2><div class="prompt-scroll"><div id="promptBubble" aria-label="'+esc(content.bubbles[question].text)+'">'+bubbleMarkup(question,'large-bubble')+'</div></div>';
-  document.querySelectorAll('.person-cross').forEach(b=>{b.disabled=solved||busy;b.onclick=()=>choosePerson(b.dataset.person);});
-  placed.forEach((yes,i)=>{const slot=$('slot'+i);slot.classList.toggle('occupied',yes);const old=slot.querySelector('.parked');if(old)old.remove();if(yes){slot.insertAdjacentHTML('beforeend','<div class="parked" role="img" aria-label="'+esc(content.bubbles[i].text)+' – '+(i?'Bürgermeister':'König')+'">'+bubbleMarkup(i,'small-bubble')+'</div>');}});
+  $('questionArea').innerHTML='<div class="question-cards">'+content.bubbles.map((b,i)=>'<section class="question-card '+(placed[i]?'done':question===i?'selected':'')+'"><h2>'+questionTitle(i)+'</h2><button class="select-question" data-question="'+i+'" aria-label="Blase '+(i+1)+' auswählen: '+esc(b.text)+'" aria-pressed="'+(question===i&&!placed[i])+'" '+(placed[i]?'disabled':'')+'><div class="prompt-scroll"><div id="promptBubble'+i+'">'+bubbleMarkup(i,'large-bubble')+'</div></div><span class="selection-label">'+(placed[i]?'✓ Zugeordnet':question===i?'Diese Blase ist ausgewählt':'Diese Blase auswählen')+'</span></button><button class="zoom-open" data-zoom="'+i+'" aria-label="Blase '+(i+1)+' groß lesen">🔍 <span>Groß lesen</span></button></section>').join('')+'</div>'+(solved?'<h2>Beide Blasen passen!</h2><p>Jetzt kannst du diesen Teil der Geschichte hören.</p>':'');
+  document.querySelectorAll('.select-question').forEach(b=>b.onclick=()=>{if(busy||placed[Number(b.dataset.question)])return;question=Number(b.dataset.question);feedback='';$('feedback').textContent='';renderQuestion();});
+  document.querySelectorAll('.person-cross').forEach((b,i)=>{b.hidden=placed[i];b.disabled=busy||solved;b.onclick=()=>choosePerson(b.dataset.person);});
+  placed.forEach((yes,i)=>{const slot=$('slot'+i);slot.classList.toggle('occupied',yes);const old=slot.querySelector('.parked');if(old)old.remove();if(yes){slot.insertAdjacentHTML('beforeend','<div class="parked" role="group" aria-label="'+esc(content.bubbles[i].text)+' – '+(i?'Bürgermeister':'König')+'">'+bubbleMarkup(i,'small-bubble')+'</div>');}});
+  document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>openZoom(Number(b.dataset.zoom),b));
   if($('next'))$('next').disabled=!solved||busy;scheduleButtons();
  }
- function cancelFlight(){animationToken++;if(flightAnimation){flightAnimation.cancel();flightAnimation=null;}if(flight){flight.remove();flight=null;}busy=false;const prompt=$('promptBubble');if(prompt)prompt.style.visibility='';document.querySelectorAll('.person-cross').forEach(b=>b.disabled=solved);}
+ let zoomReturn=null;
+ function closeZoom(){const d=$('bubbleZoom');if(d&&d.open)d.close();}
+ function openZoom(i,trigger){
+  if(busy)return;
+  let d=$('bubbleZoom');if(!d){d=document.createElement('dialog');d.id='bubbleZoom';d.setAttribute('aria-labelledby','zoomTitle');document.body.append(d);d.addEventListener('close',()=>{if(zoomReturn&&zoomReturn.isConnected)zoomReturn.focus({preventScroll:true});});}
+  zoomReturn=trigger;d.innerHTML='<h2 id="zoomTitle">'+questionTitle(i)+'</h2><div class="zoom-scroll"><div class="zoom-reading">'+bubbleMarkup(i,'zoom-bubble')+'</div></div><button class="secondary" id="closeBubbleZoom">Schließen</button>';
+  $('closeBubbleZoom').onclick=closeZoom;d.showModal();$('closeBubbleZoom').focus();
+ }
+ function cancelFlight(){animationToken++;if(flightAnimation){flightAnimation.cancel();flightAnimation=null;}if(flight){flight.remove();flight=null;}busy=false;document.querySelectorAll('[id^="promptBubble"]').forEach(e=>e.style.visibility='');document.querySelectorAll('.person-cross').forEach(b=>b.disabled=solved);document.querySelectorAll('.select-question').forEach(b=>b.disabled=placed[Number(b.dataset.question)]);document.querySelectorAll('[data-zoom]').forEach(b=>b.disabled=false);}
  async function animateBubble(frames,duration,token){
   if(token!==animationToken||!flight)return false;
   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return true;
@@ -84,22 +95,22 @@
  }
  async function choosePerson(person){
   if(busy||solved||phase!==1)return;
-  const prompt=$('promptBubble'),target=$('slot'+(person==='king'?0:1));if(!prompt||!target)return;
+  const prompt=$('promptBubble'+question),target=$('slot'+(person==='king'?0:1));if(!prompt||!target)return;
   // Bring the target into view on narrow/short screens, then measure both ends.
   target.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
   const source=prompt.getBoundingClientRect(),dest=target.getBoundingClientRect(),token=++animationToken;
-  busy=true;document.querySelectorAll('.person-cross').forEach(b=>b.disabled=true);$('next').disabled=true;feedback='';$('feedback').textContent='';
-  flight=document.createElement('div');flight.className='flying-bubble';flight.innerHTML=bubbleMarkup(question,'large-bubble');flight.style.cssText='left:'+source.left+'px;top:'+source.top+'px;width:'+source.width+'px;height:'+source.height+'px;';document.body.append(flight);prompt.style.visibility='hidden';
-  const dx=dest.left+dest.width/2-source.left-source.width/2,dy=dest.top+dest.height/2-source.top-source.height/2,scale=dest.width/source.width,angle=person==='king'?8:-8;
+  busy=true;document.querySelectorAll('.person-cross,.select-question,[data-zoom]').forEach(b=>b.disabled=true);$('next').disabled=true;feedback='';$('feedback').textContent='';
+  flight=document.createElement('div');flight.className='flying-bubble';flight.innerHTML=bubbleMarkup(question,'large-bubble');flight.classList.add('points-to-person');flight.style.cssText='left:'+source.left+'px;top:'+source.top+'px;width:'+source.width+'px;height:'+source.height+'px;';flight.style.setProperty('--flight-font',getComputedStyle(prompt.querySelector('.text-bubble')).fontSize);document.body.append(flight);prompt.style.visibility='hidden';
+  const dx=dest.left+dest.width/2-source.left-source.width/2,dy=dest.top+dest.height/2-source.top-source.height/2,scale=dest.width/source.width,angle=0;
   const home='translate(0px,0px) rotate(0deg) scale(1)',at='translate('+dx+'px,'+dy+'px) rotate('+angle+'deg) scale('+scale+')';
-  if(!await animateBubble([{transform:home},{transform:at}],650,token))return;
+  if(!await animateBubble([{transform:home},{transform:'translate('+(dx*.5)+'px,'+(dy*.5)+'px) rotate(-18deg) scale('+((1+scale)/2)+')',offset:.5},{transform:at}],650,token))return;
   if(person!==content.bubbles[question].person){
    const whirl='translate('+dx+'px,'+dy+'px) rotate('+(angle+1080)+'deg) scale('+scale+')';
    if(!await animateBubble([{transform:at},{transform:whirl}],850,token))return;
    if(!await animateBubble([{transform:whirl},{transform:'translate(0px,0px) rotate(1440deg) scale(1)'}],650,token))return;
    cancelFlight();feedback='Das passt noch nicht. Lies noch einmal und tippe auf das andere Kreuz.';$('feedback').textContent=feedback;renderQuestion();return;
   }
-  placed[question]=true;question++;solved=question===content.bubbles.length;cancelFlight();feedback=solved?'Genau! Beide Blasen sind am richtigen Platz.':'Genau! Hier bleibt die Blase. Jetzt kommt die nächste Frage.';$('feedback').textContent=feedback;renderQuestion();
+  placed[question]=true;solved=placed.every(Boolean);if(!solved)question=placed.findIndex(x=>!x);cancelFlight();feedback=solved?'Genau! Beide Blasen sind am richtigen Platz.':'Genau! Hier bleibt die Blase. Wähle jetzt die andere Blase.';$('feedback').textContent=feedback;renderQuestion();
  }
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
