@@ -8,7 +8,7 @@ const server=live?null:spawn('python3',['-m','http.server','8766','--bind','127.
 let browser;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=13'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=14'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
  const page=await context.newPage(),errors=[];
@@ -74,7 +74,13 @@ async function run(){
    assert.match(await page.locator('#left').innerText(),height>width?/oben/:/links/);layouts++;
   }
  }
+ assert.equal(await page.locator('#hint').isVisible(),true);
  await page.locator('#check').click();assert.equal(await page.locator('#finish').isEnabled(),true);
+ assert.equal(await page.locator('#hint').isVisible(),false);
+ await page.locator('#chain [data-id="2"]').click();await page.locator('#left').click();
+ assert.equal(await page.locator('#hint').isVisible(),true);
+ await page.locator('#right').click();await page.locator('#check').click();
+ assert.equal(await page.locator('#hint').isVisible(),false);
  await page.locator('#finish').click();await navigation();
  await page.locator('#back').click();assert.deepEqual(await ids(),[0,1,2]);
  assert.deepEqual(errors,[]);
