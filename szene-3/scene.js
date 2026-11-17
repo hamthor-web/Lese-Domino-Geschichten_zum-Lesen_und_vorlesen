@@ -3,6 +3,7 @@
  const $=id=>document.getElementById(id),A=window.SilvanaSpiderAnswers;
  const VISITED='silvana-visited-scenes-v1';
  let content,phase=0,state=A.initial(),hint=null,draft='',correctionDraft='',firstFeedback='',correctionFeedback='',correctionShown=false,firstAccepted=false,helpValues=['','','',''];
+ let pictureSelected=false,selectionFeedback='';
  let imagesReady=false,loadToken=0,speechToken=0,utterance=null,audioState='idle';
  const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -55,31 +56,33 @@
  function backButton(){return '<button class="secondary" id="back">← Zurück</button>';}
  function simpleDetails(){return '<details><summary>Lesetext ansehen</summary><div class="reading">'+esc(content.simple)+'</div></details>';}
  function render(){
-  $('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören','Szene 3 geschafft'][phase];
+  $('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
+  $('stepStatus').hidden=phase===3;
   let html='';
   if(phase===0){
    html='<section class="panel"><span class="eyebrow">Jetzt bist du dran</span><h1>'+esc(content.title)+'</h1><p>Lies in deinem Tempo.</p><div class="reading">'+esc(content.simple)+'</div><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else if(phase===1){
-   html='<section class="panel"><span class="eyebrow">Schau genau hin</span><h1>Finde den Fehler!</h1><p>Vergleiche beide Bilder mit dem Lesetext.</p>'+simpleDetails()+'<p id="imageStatus" role="status">Die Bilder werden geladen.</p><div class="image-grid" id="images" hidden>'+content.images.map((im,i)=>'<figure><img id="compare'+i+'" alt="Waldbild '+(i+1)+' zum Vergleichen"><figcaption>'+esc(im.label)+'</figcaption></figure>').join('')+'</div><div class="image-error" id="imageError" hidden><p>Die Bilder konnten nicht geladen werden. Bitte versuche es noch einmal.</p><button class="secondary" id="retryImages">Erneut versuchen</button></div><form class="answer-form" id="answerForm"><label id="answerLabel" for="answer">Schreibe auf, was falsch ist.</label><input id="answer" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="feedback" value="'+esc(draft)+'" disabled><div class="actions"><button class="primary" id="check" type="submit" disabled>Antwort prüfen</button></div></form><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(firstFeedback)+'</p><section class="correction-block" id="correctionBlock" hidden><form class="answer-form" id="correctionForm"><label for="correction">Welche Farbe haben die Spinnen im Text?</label><input id="correction" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="correctionFeedback" value="'+esc(correctionDraft)+'" disabled><div class="actions"><button class="primary" id="checkCorrection" type="submit" disabled>Neue Antwort prüfen</button></div></form><p class="feedback" id="correctionFeedback" role="status" aria-live="polite">'+esc(correctionFeedback)+'</p><section class="help-box" id="help" hidden><h2>Deine Schreibhilfe</h2><p>Ein Buchstabe steht schon an der richtigen Stelle. Ergänze die übrigen Buchstaben.</p><form id="helpForm"><div class="letter-row" id="letterRow"></div><button class="secondary" id="checkHelp" type="submit">Wort prüfen</button></form></section></section><div class="actions">'+backButton()+'<button class="primary" id="next" '+(state.done?'':'hidden')+'>Weiter</button></div></section>';
+   html='<section class="panel"><h1>Schau genau: Welches Bild passt nicht zur Geschichte?</h1>'+simpleDetails()+'<p id="imageStatus" role="status">Die Bilder werden geladen.</p><div class="image-grid" id="images" hidden>'+content.images.map((im,i)=>'<figure><button type="button" class="picture-choice" data-picture="'+i+'" aria-label="'+esc(im.label)+' auswählen" aria-pressed="false" disabled><img id="compare'+i+'" alt="Waldbild '+(i+1)+' zum Vergleichen"></button><figcaption>'+esc(im.label)+'</figcaption></figure>').join('')+'</div><div class="image-error" id="imageError" hidden><p>Die Bilder konnten nicht geladen werden. Bitte versuche es noch einmal.</p><button class="secondary" id="retryImages">Erneut versuchen</button></div><p class="feedback" id="selectionFeedback" role="status" aria-live="polite"></p><section id="answerDialog" hidden><form class="answer-form" id="answerForm"><label id="answerLabel" for="answer">Schreibe auf, was falsch ist.</label><input id="answer" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="feedback" value="'+esc(draft)+'" disabled><div class="actions"><button class="primary" id="check" type="submit" disabled>Antwort prüfen</button></div></form><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(firstFeedback)+'</p><section class="correction-block" id="correctionBlock" hidden><form class="answer-form" id="correctionForm"><label for="correction">Welche Farbe haben die Spinnen im Text?</label><input id="correction" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="correctionFeedback" value="'+esc(correctionDraft)+'" disabled><div class="actions"><button class="primary" id="checkCorrection" type="submit" disabled>Neue Antwort prüfen</button></div></form><p class="feedback" id="correctionFeedback" role="status" aria-live="polite">'+esc(correctionFeedback)+'</p><section class="help-box" id="help" hidden><h2>Deine Schreibhilfe</h2><p>Ein Buchstabe steht schon an der richtigen Stelle. Ergänze die übrigen Buchstaben.</p><form id="helpForm"><div class="letter-row" id="letterRow"></div><button class="secondary" id="checkHelp" type="submit">Wort prüfen</button></form></section></section></section><div class="actions">'+backButton()+'<button class="primary" id="next" '+(state.done?'':'hidden')+'>Weiter</button></div></section>';
   }else if(phase===2){
    html='<section class="panel"><span class="eyebrow">Jetzt hörst du die Geschichte</span><h1>Die Spinnen im Wald</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button><button class="secondary" id="restartAudio">↻ Von vorn hören</button></div><p id="audioStatus" class="feedback" role="status" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else{
-   html='<section class="panel"><span class="eyebrow">Szene 3 geschafft</span><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><div class="actions">'+backButton()+'<button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div></section>';
+   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><div class="actions">'+backButton()+'<button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div></section>';
   }
   $('game').innerHTML=html;
   $('back').onclick=()=>phase===0?location.assign('../szene-2/?abschnitt=abschluss'):go(phase-1);
   if($('next'))$('next').onclick=()=>go(phase+1);
   if(phase===1){
+   document.querySelectorAll('.picture-choice').forEach(button=>button.onclick=()=>choosePicture(Number(button.dataset.picture)));
    $('answer').oninput=()=>draft=$('answer').value;
-   $('answerForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done&&!firstAccepted)check($('answer').value,'first');};
+   $('answerForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&pictureSelected&&!state.done&&!firstAccepted)check($('answer').value,'first');};
    $('correction').oninput=()=>correctionDraft=$('correction').value;
-   $('correctionForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done&&correctionShown)check($('correction').value,'correction');};
-   $('helpForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done)check([...$('letterRow').querySelectorAll('input')].map(i=>i.value).join(''),'correction');};
+   $('correctionForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&pictureSelected&&!state.done&&correctionShown)check($('correction').value,'correction');};
+   $('helpForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&pictureSelected&&!state.done)check([...$('letterRow').querySelectorAll('input')].map(i=>i.value).join(''),'correction');};
    $('retryImages').onclick=()=>{loadToken++;loadImages();};
    updateAnswer();loadImages();
   }
   if(phase===2){$('audioToggle').onclick=toggleAudio;$('restartAudio').onclick=startAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;helpValues=['','','',''];go(0);};$('intro').onclick=()=>location.assign('../vorschau-einfuehrung/');}
+  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;selectionFeedback='';helpValues=['','','',''];go(0);};$('intro').onclick=()=>location.assign('../vorschau-einfuehrung/');}
   scheduleButtons();
  }
  async function loadImages(){
@@ -92,6 +95,17 @@
   if(token!==loadToken||phase!==1)return;
   if(result.some(ok=>!ok)){$('imageStatus').hidden=true;$('imageError').hidden=false;scheduleButtons();return;}
   content.images.forEach((im,i)=>$('compare'+i).src=im.src);imagesReady=true;$('images').hidden=false;$('imageStatus').hidden=true;updateAnswer();
+ }
+ function choosePicture(index){
+  if(!imagesReady||pictureSelected||!content.images[index])return;
+  if(content.images[index].matchesText===false){
+   pictureSelected=true;
+   selectionFeedback='Dieses Bild passt nicht zur Geschichte. Schau dir die Spinnen genauer an.';
+   updateAnswer();$('answer').focus();
+  }else{
+   selectionFeedback='Vergleiche das Bild noch einmal mit dem Lesetext.';
+   updateAnswer();
+  }
  }
  function check(value,stage){
   const wasHelp=state.help,wasShown=correctionShown;
@@ -113,14 +127,22 @@
  }
  function updateAnswer(){
   if(!$('answer'))return;
+  $('answerDialog').hidden=!pictureSelected;
+  $('selectionFeedback').textContent=selectionFeedback;
+  document.querySelectorAll('.picture-choice').forEach(button=>{
+   const selected=pictureSelected&&content.images[Number(button.dataset.picture)].matchesText===false;
+   button.disabled=!imagesReady||pictureSelected;
+   button.classList.toggle('selected',selected);
+   button.setAttribute('aria-pressed',String(selected));
+  });
   $('feedback').textContent=firstFeedback;
-  $('answer').disabled=!imagesReady;$('answer').readOnly=firstAccepted||state.done;
-  $('check').disabled=!imagesReady||state.done;$('check').hidden=firstAccepted||state.done;
+  $('answer').disabled=!imagesReady||!pictureSelected;$('answer').readOnly=firstAccepted||state.done;
+  $('check').disabled=!imagesReady||!pictureSelected||state.done;$('check').hidden=firstAccepted||state.done;
   $('correctionBlock').hidden=!correctionShown;
   $('correctionFeedback').textContent=correctionFeedback;
-  $('correction').disabled=!imagesReady||state.done;
-  $('checkCorrection').disabled=!imagesReady||state.done;
-  $('next').hidden=!state.done;$('help').hidden=!state.help;
+  $('correction').disabled=!imagesReady||!pictureSelected||state.done;
+  $('checkCorrection').disabled=!imagesReady||!pictureSelected||state.done;
+  $('next').hidden=!pictureSelected||!state.done;$('help').hidden=!state.help;
   if(state.help&&!$('letterRow').children.length){
    if(!hint)hint=A.letters();
    for(let i=0;i<4;i++){
@@ -141,8 +163,8 @@
  if(document.fonts)document.fonts.ready.then(scheduleButtons);
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&speechAvailable){try{speechSynthesis.pause();audioState='paused';updateAudio();}catch{stopAudio();}}});
  window.addEventListener('pagehide',()=>{loadToken++;stopAudio();});
- fetch('content.json').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
-  if(typeof data.simple!=='string'||typeof data.original!=='string'||!Array.isArray(data.images)||data.images.length!==2)throw Error('Inhalt');
+ fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
+  if(typeof data.simple!=='string'||typeof data.original!=='string'||!Array.isArray(data.images)||data.images.length!==2||data.images.some(im=>typeof im.matchesText!=='boolean')||data.images.filter(im=>im.matchesText===false).length!==1)throw Error('Inhalt');
   content=data;markVisited();render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();

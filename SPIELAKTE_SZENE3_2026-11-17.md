@@ -107,3 +107,18 @@ Vor Zusammenführung echter Chrome-Browserlauf bestanden. Nach Veröffentlichung
 - Zusätzlich persönlich im Live-Browser die Darstellung mit erhaltener erster Eingabe und neuem leeren zweiten Feld angesehen. Keine Screenshots als Datei in die Projektquellen übernommen.
 - Sprachdienst weiterhin simuliert; keine physischen Endgeräte oder akustische Prüfung.
 Bestandener Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/43991015979
+
+
+## Bestätigte Ablauf- und Sprachkorrektur – 17.11.2026
+Heike bestätigt: Zuerst „Schau genau: Welches Bild passt nicht zur Geschichte?“ anzeigen. Das Kind wählt das Bild mit den blauen Spinnen. Erst danach folgt der vorhandene Dialog mit den zwei getrennten Antwortfeldern.
+
+Umgesetzt im Entwicklungszweig:
+- Beide Originalbilder sind große, per Touch/Maus/Tastatur bedienbare Bildschaltflächen.
+- Die Wahl des passenden Bilds mit grauen Spinnen gibt einen sanften Hinweis und schaltet den Dialog nicht frei.
+- Nach Wahl der blauen Spinnen erscheint der unveränderte Frage-/Antwortablauf. Erste Fehlerantwort und zweite Farbkorrektur bleiben getrennt.
+- Zurücknavigation erhält die Bildwahl und beide Antworten; Wiederholung setzt die Auswahl zurück.
+- „Szene … geschafft“ entfällt in Szene 2 und 3, ebenso die entsprechende Einführungsformulierung. Die beschreibende Rückmeldung über das Erlebte bleibt erhalten.
+- Über vorhandenen Weiter-Schaltflächen zum nächsten Abschnitt steht „Jetzt geht das Abenteuer weiter.“ – einschließlich des animierten Weiter-Buttons nach der Wetterwahl.
+- Szene 4 wurde nicht angelegt und kein Weiter-Button zu einem noch nicht vorhandenen Ziel erfunden.
+- Originalbilder, Originaltexte, getrennte Zoomregler und vorhandene Kisten-/Rollen-/Weiteranimationen bleiben erhalten.
+Browserprüfung und Veröffentlichung werden nach erfolgreichem Prüflauf ergänzt.
