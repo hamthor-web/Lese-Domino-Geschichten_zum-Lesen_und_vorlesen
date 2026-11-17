@@ -20,3 +20,25 @@
 #game .scene-navigation>button{width:100%;max-width:100%;box-sizing:border-box}
 #game .panel>.actions:not(.scene-navigation){display:flex;flex-direction:column;align-items:stretch;gap:14px}
 #game .panel>.actions:not(.scene-navigation)>button{width:100%;max-width:100%}
+
+/* Korrektur: gemeinsame Szenen-Navigation hat global flex-basis:250px!important.
+   Bei einer Spalte erzeugte das übergroße, leere Pergamentflächen. */
+#game .actions.scene-navigation {
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
+  gap:14px;
+}
+#game .actions.scene-navigation > button,
+#game .panel > .actions:not(.scene-navigation) > button {
+  flex:0 0 auto !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  height:auto !important;
+  min-height:82px;
+  padding-top:18px;
+  padding-bottom:18px;
+  background-size:100% 100%;
+}
