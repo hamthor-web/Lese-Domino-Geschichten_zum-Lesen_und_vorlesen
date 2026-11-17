@@ -58,10 +58,11 @@
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Der König</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
   if(phase===1){$('game').innerHTML='<section class="panel"><h1>Finde den Fehler</h1><div class="king-layout task-layout">'+illustration()+'<section class="task-content"><div class="parchment question-box"><h2>Welches Wort muss getauscht werden?</h2><p>Tippe das Wort an. Wähle danach ein passendes Wort für die Lücke.</p></div><div id="wordTask"></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details></section></div>'+nav()+'</section>';renderTask();}
   if(phase===2)$('game').innerHTML='<section class="panel"><h1>Der König</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
-  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Der König und die Spinnennetze</h1><p>Du hast herausgefunden, was der König vorhatte.</p><p class="parchment sentence">'+esc(content.sentenceStart)+' '+esc(content.correct)+'.</p><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
+  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Der König und die Spinnennetze</h1><p>Du hast herausgefunden, was der König vorhatte.</p><p class="parchment sentence">'+esc(content.sentenceStart)+' '+esc(content.correct)+'.</p><div class="actions"><button class="primary" id="scene6">Weiter: Im Dorf</button><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
   $('back').onclick=()=>phase===0?location.assign('../szene-4/?abschnitt=abschluss'):go(phase-1);
   if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase+1);}
   if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
+  if($('scene6'))$('scene6').onclick=()=>location.assign('../szene-6/');
   if($('again'))$('again').onclick=()=>{removed=false;solved=false;feedback='';go(0);};
   scheduleButtons();
  }
@@ -102,6 +103,6 @@
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&speechAvailable){speechSynthesis.pause();audioState='paused';updateAudio();}});
  fetch('content.json?v=1').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.options)||data.options.length!==3||!data.options.includes(data.correct))throw Error('Inhalt');
-  content=data;markVisited();render();
+  content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}render();try{if(Number(localStorage.getItem(VISITED))>=6){const a=document.createElement('a');a.href='../szene-6/';a.textContent='Im Dorf';document.querySelector('.scene-menu nav').append(a);}}catch{}
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();
