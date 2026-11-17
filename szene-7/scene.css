@@ -30,3 +30,53 @@
 .scene7-video-next:not(.video-ready) .video-next-fallback{display:block}
 .scene7-video-next:focus-visible{outline:4px solid #7750a0;outline-offset:4px}
 .scene7-video-next:disabled{opacity:1;cursor:default}
+
+/* Kompakte, gleich hohe Abschluss-Schaltflächen.
+   Das Würstchen läuft im Weiter-Button nur nach Antippen. */
+#game .scene7-completion-actions{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+#game .scene7-completion-actions>button{
+  flex:0 0 auto !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  height:auto !important;
+  min-height:90px;
+  box-sizing:border-box;
+}
+#game .scene7-video-next{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  aspect-ratio:auto;
+  min-height:90px;
+  padding:6px 18px;
+  border:2px solid #a8b99c;
+  border-radius:40px;
+  background:#f5edd9 url('../vorschau-einfuehrung/assets/button-parchment.svg') center/100% 100% no-repeat;
+  box-shadow:0 3px 0 #dcd4bf;
+  color:#493e58;
+  overflow:hidden;
+}
+#game .scene7-video-next video,
+#game .scene7-video-next:not(.video-ready) video{
+  display:block;
+  width:80px;
+  height:80px;
+  flex:0 0 80px;
+  object-fit:contain;
+  background:#fff;
+  border-radius:8px;
+}
+#game .scene7-video-next .video-next-fallback,
+#game .scene7-video-next:not(.video-ready) .video-next-fallback{
+  display:block;
+  padding:0;
+  font-family:Andika,Arial,sans-serif;
+  font-size:calc(21px * var(--text));
+  line-height:1.4;
+}
+@media(max-width:380px){
+ #game .scene7-video-next{gap:10px;padding:5px 10px}
+ #game .scene7-video-next video{width:68px;height:68px;flex-basis:68px}
+}
