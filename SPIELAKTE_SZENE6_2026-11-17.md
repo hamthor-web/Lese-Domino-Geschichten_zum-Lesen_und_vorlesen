@@ -52,3 +52,12 @@ Dieser Eintrag ersetzt den offenen Prüfstatus der Überarbeitung. Die vorherige
 - Geprüft: einzelne große Leseblase, zwei Kreuze, automatische Drehung/Verkleinerung, falsche Wahl mit drei Wirbelumdrehungen und Rückkehr, richtige Ablage und nächste Frage, Freigabe nach beiden Lösungen, Rücknavigation/Wiederholung, Abbruch eines Flugs beim Verlassen und reduzierte Bewegung. Alte manuelle Aufgabensteuerung nicht mehr vorhanden. Hörsteuerung mit simuliertem Sprachdienst. Bestehende Szenenprüfungen ebenfalls erfolgreich; keine JavaScript- oder HTTP-Fehler im neuen Durchlauf.
 - Persönliche Live-Sichtprüfung: große Blase neben dem Bild, sichtbare Kreuze, falsche Wahl kehrt zurück, richtige Blase bleibt oben im Bild, nächste Frage wird groß angezeigt; Gesichter nach der Verkleinerung erkennbar. Keine physischen Endgeräte oder akustische Hörprüfung.
 Masterstatus: Szenen 1–6 veröffentlicht; Szene 6 mit der neuen bestätigten Bedienung aktualisiert und geprüft. Gesamtprojekt weiterhin in Entwicklung. Szene 7 unverändert offen.
+
+## Bestätigte Korrektur: Ausrichtung, Kreuze und zwei Fragen mit Lupe – 17.11.2026
+Heike beanstandet im Handy-Screenshot die vorbeizeigenden Zipfel und Kreuze über fertig abgelegten Blasen. Neue Vorgabe ersetzt die vorherige sequenzielle Fragenanzeige und das Stehenlassen belegter Kreuze.
+- Beide Fragen mit ihren Blasen gleichzeitig sichtbar und frei auswählbar. Die ausgewählte Blase ist markiert. Zuordnung durch Antippen eines freien Kreuzes; die Reihenfolge ist frei.
+- Nach richtiger Zuordnung verschwindet das belegte Kreuz vollständig, auch aus Tastatur-/Bedienreihenfolge. Nach beiden Lösungen sind keine Kreuze mehr sichtbar.
+- Blasengrafiken proportional horizontal gespiegelt und im Bild so versetzt, dass die Zipfel zu König bzw. Bürgermeister führen. Nur die Grafik wird gespiegelt; Schrift bleibt normal.
+- Lupenschaltfläche an jeder Fragekarte öffnet deren Blase groß, auch nach der Zuordnung. Schließen/Escape bringt den Fokus zurück. Im Bild liegen keine zusätzlichen Lupenschaltflächen über den Blasen.
+- Flug mit kurzer Drehung und Verkleinerung, falsche Wahl mit Wirbel/Rückflug, getrennte Größenregler, Vorlesen und übrige Szenen bleiben erhalten.
+Masterstatus: Korrektur von Szene 6 implementiert, Prüfung/Veröffentlichung zunächst offen. Gesamtprojekt weiter in Entwicklung; Szene 7 unverändert offen.
