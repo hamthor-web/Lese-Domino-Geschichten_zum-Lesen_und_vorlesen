@@ -39,3 +39,21 @@ Silvana / Lese-Domino bleibt in Entwicklung. Szene 4 ist implementiert; vor Ver�
 ## Prüfung
 
 JavaScript-Syntax lokal geprüft. Der lokale Browserstart ist durch die Ausführungsumgebung blockiert. Die tatsächlichen Browserprüfungen laufen über den vorhandenen GitHub-Actions-Workflow. Ergebnis und Veröffentlichungsstand werden nach Abschluss unten ergänzt. Automatisierte Sprachausgabe verwendet einen simulierten Sprachdienst; keine akustische Prüfung oder Prüfung auf physischen Endgeräten.
+
+## Abgeschlossene Prüfung und Veröffentlichung – 17.11.2026, 15:56 Uhr
+
+Dieser Eintrag ersetzt die oben dokumentierten offenen Prüf- und Veröffentlichungsstände.
+
+- Vor Veröffentlichung vollständiger Chrome-Prüflauf bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44107839383
+- Veröffentlicht über PR #9, Merge `eedc3576f603fac6734fa44ecd5475f591e3e1e3`.
+- GitHub-Pages-Bereitstellung erfolgreich; anschließend vollständige Prüfung auf der echten Live-Seite bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44108179939
+- Neue Szene: je 96 Layoutprüfungen vor Veröffentlichung und live (vier Ansichten × sechs Smartphone-/Tablet-Viewports × vier Schrift-/Spielfeldkombinationen). Kein horizontaler Seitenüberlauf oder abgeschnittene Schaltflächen im geprüften Umfang.
+- Geprüft: falsche Reihenfolge bleibt liegen, Weiter bleibt gesperrt; Pfeile, Maus- und echte Touch-Pointer-Ereignisse, Einfügelinie und Einsetzen; korrekte Reihenfolge; Rücknavigation und Wiederholung; Hin-/Rückweg Szene 3/4 und Menüfreischaltung. Keine JavaScript- oder HTTP-Fehler im vollständigen Durchlauf.
+- Vorhandene Einführung, Bildaufgaben, Rollen/Kisten/MP4 und Domino-Bedienung bestanden ihre bisherigen Prüfungen ebenfalls.
+- Zusätzliche persönliche Live-Sichtprüfung der Leseseite und Kartenansicht; Satzkarten per Verschiebeschaltfläche richtig geordnet und erfolgreiche Prüfung mit freigeschaltetem Weiter bestätigt.
+- Sprachausgabe im automatisierten Lauf simuliert. Keine akustische Prüfung oder physischen Endgeräte. Keine Bildschirmaufnahmen als Projektdateien abgelegt.
+- Erster Prüflauf wartete wegen einer nicht angepassten Versionsabfrage der Einführung vergeblich. Versionsparameter und Testabfrage anschließend konsistent auf Version 17 angehoben; vollständige erneute Läufe erfolgreich.
+
+Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-4/
+
+Masterstatus: Szene 4 implementiert, veröffentlicht und im Browser geprüft. Gesamtprojekt weiterhin in Entwicklung. Nächster Bauabschnitt: Szene 5 „Der König“, noch nicht begonnen. Diese Datei ist der neue Nachtrag zu Spielakte und zentraler Masterübersicht; frühere Dateien bleiben als Verlauf erhalten.
