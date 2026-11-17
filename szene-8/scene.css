@@ -14,3 +14,9 @@
 @media(max-width:600px){.emotion{min-width:84px;min-height:84px;font-size:64px;padding:6px}.answer{padding:14px;font-size:calc(21px * var(--text,1))}.king-picture{border-radius:10px}.video-next{width:200px}}
 
 .transition-panel{text-align:center}.transition-movie{width:min(354px,90vw);margin:18px auto}.transition-movie video{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain}.transition-panel .secondary{min-height:54px}
+
+/* Navigation in sinnvoller Reihenfolge, auch im Hochformat. */
+#game .scene-navigation{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+#game .scene-navigation>button{width:100%;max-width:100%;box-sizing:border-box}
+#game .panel>.actions:not(.scene-navigation){display:flex;flex-direction:column;align-items:stretch;gap:14px}
+#game .panel>.actions:not(.scene-navigation)>button{width:100%;max-width:100%}
