@@ -27,3 +27,11 @@ Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen
 Spiel: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/vorschau-einfuehrung/
 
 Abschließender Programmstand mit begrenztem Randscrollen und stabilisierten Browserprüfungen: `7c5b4ad6e71867c700ab3119dee221f5e4b38848`.
+
+
+## Kleiner Tipp nach richtiger Satzprüfung ausblenden – 17.11.2026
+Heikes Vorgabe: Ist der Satz richtig geordnet, wird „Kleiner Tipp“ nicht mehr gebraucht.
+Umgesetzt: Nach erfolgreicher Satzprüfung ist der Tippbutton ausgeblendet. Wird die Reihenfolge danach wieder verändert, erscheint er erneut. Die bisherige freie Legung und Prüfung per Knopfdruck bleiben erhalten; vor erfolgreicher Prüfung wird keine Lösung vorweggenommen.
+Vorhandene Logiktests und vollständiger Browserdurchlauf einschließlich Live-Prüfung bestanden. Sichtbarkeit vor/nach Satzprüfung und nach erneutem Verschieben geprüft. Übrige Funktionen und Originalassets erhalten.
+Code: `1afe2530d0897af06532b362be5ea47fbd755f0e`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44068339781

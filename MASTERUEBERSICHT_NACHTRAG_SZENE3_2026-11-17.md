@@ -76,3 +76,11 @@ Zurück/Weiter stehen nebeneinander (Zurück links) oder bei notwendigem Umbruch
 Vor Veröffentlichung und live vollständiger Browserlauf einschließlich Maus-/Touch-Eingaben sowie je 192 Layoutprüfungen bestanden. Details: [Spielakte Bedienung](SPIELAKTE_BEDIENUNG_DOMINO_2026-11-17.md).
 Code-Merge: `2e7cd93a9dbbbb2d7472ec8c4603bf7f7224e16e`; abschließender Programmstand: `7c5b4ad6e71867c700ab3119dee221f5e4b38848`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44054360463
+
+
+## Kleiner Tipp nach richtiger Satzprüfung ausblenden – 17.11.2026
+Heikes Vorgabe: Ist der Satz richtig geordnet, wird „Kleiner Tipp“ nicht mehr gebraucht.
+Umgesetzt: Nach erfolgreicher Satzprüfung ist der Tippbutton ausgeblendet. Wird die Reihenfolge danach wieder verändert, erscheint er erneut. Die bisherige freie Legung und Prüfung per Knopfdruck bleiben erhalten; vor erfolgreicher Prüfung wird keine Lösung vorweggenommen.
+Vorhandene Logiktests und vollständiger Browserdurchlauf einschließlich Live-Prüfung bestanden. Sichtbarkeit vor/nach Satzprüfung und nach erneutem Verschieben geprüft. Übrige Funktionen und Originalassets erhalten.
+Code: `1afe2530d0897af06532b362be5ea47fbd755f0e`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44068339781
