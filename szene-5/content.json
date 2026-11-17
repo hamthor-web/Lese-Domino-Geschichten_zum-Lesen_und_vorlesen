@@ -1,0 +1,15 @@
+{
+  "title": "Der König",
+  "original": "Eines Tages kam ein König aus einem Nachbarreich nach Silvana. Er hatte von dem kostbaren Gut gehört und wollte einige der glitzernden Netze für seinen Palast erwerben.\nSechs Pferde begleiteten ihn, zwölf Soldaten und drei Diener, die längliche Kisten trugen. Die Kisten waren innen mit rotem Samt ausgeschlagen. Einer der Diener hatte sich unterwegs den Magen an einer seltsamen Suppe im Dorfkrug verdorben und sah aus, als würde er lieber im nächsten Straßengraben sterben als weiterzuziehen.\nDer König ließ sich davon nicht stören.",
+  "simple": "Eines Tages kam ein König aus einem Nachbarland nach Silvana.\nEr wollte einige glitzernde Spinnennetze für sein Schloss kaufen.\nEr brachte viele Pferde, Soldaten und Diener mit. Die Diener trugen Kisten mit rotem Samt.",
+  "image": "assets/koenig-spinnweben.webp",
+  "imageAlt": "Ein König stellt sich glitzernde Spinnennetze in Kisten mit rotem Samt vor.",
+  "sentenceStart": "Der König wollte Netze für zuhause",
+  "wrong": "stehlen",
+  "options": [
+    "kaufen",
+    "essen",
+    "vergessen"
+  ],
+  "correct": "kaufen"
+}
