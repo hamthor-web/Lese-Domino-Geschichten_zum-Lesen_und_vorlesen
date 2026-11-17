@@ -10,13 +10,15 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=7')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=8')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
 }
 async function sizeCheck(page,label){
  const result=await page.evaluate(()=>({viewport:innerWidth,width:document.documentElement.scrollWidth}));
+ const nav=await page.locator('.scene-navigation').evaluateAll(groups=>groups.map(g=>{const bs=[...g.querySelectorAll('button')].filter(b=>!b.hidden),next=bs.find(b=>b.textContent.trim()==='Weiter'),back=bs.find(b=>/Zurück/.test(b.textContent));if(!next||!back)return true;const n=next.getBoundingClientRect(),r=back.getBoundingClientRect();return Math.abs(n.top-r.top)<2?r.left<n.left:n.top<r.top;}));
+ assert.ok(nav.every(Boolean),label+': Zurück darf nicht über Weiter stehen');
  assert.ok(result.width<=result.viewport+1,label+': horizontaler Überlauf '+JSON.stringify(result));
 }
 async function run(){
