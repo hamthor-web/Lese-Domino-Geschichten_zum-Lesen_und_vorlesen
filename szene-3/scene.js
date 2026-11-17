@@ -3,7 +3,7 @@
  const $=id=>document.getElementById(id),A=window.SilvanaSpiderAnswers;
  const VISITED='silvana-visited-scenes-v1';
  let content,phase=0,state=A.initial(),hint=null,draft='',correctionDraft='',firstFeedback='',correctionFeedback='',correctionShown=false,firstAccepted=false,helpValues=['','','',''];
- let pictureSelected=false,selectionFeedback='';
+ let pictureSelected=false,comparisonVisible=false,selectionFeedback='';
  let imagesReady=false,loadToken=0,speechToken=0,utterance=null,audioState='idle';
  const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -82,7 +82,7 @@
    updateAnswer();loadImages();
   }
   if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
+  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;comparisonVisible=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
   scheduleButtons();
  }
  async function loadImages(){
@@ -109,11 +109,13 @@
  }
  function check(value,stage){
   const wasHelp=state.help,wasShown=correctionShown;
+  const result=A.evaluate(value,stage==='correction'?'correction':'description');
+  if(result.kind!=='empty'&&result.kind!=='correct'&&!result.identifiedError)comparisonVisible=true;
+  if(stage==='correction'&&result.kind==='partial')comparisonVisible=true;
   if(stage==='correction'){
    state=A.submitCorrection(state,value);
    correctionFeedback=state.feedback;correctionDraft=value;$('correction').value=value;
   }else{
-   const result=A.evaluate(value);
    state=A.submit(state,value);
    if(result.identifiedError){
     firstAccepted=true;correctionShown=true;
@@ -130,10 +132,10 @@
   $('answerDialog').hidden=!pictureSelected;
   $('selectionFeedback').textContent=selectionFeedback;
   $('selectionFeedback').hidden=!selectionFeedback;
-  $('images').classList.toggle('has-selection',pictureSelected);
+  $('images').classList.toggle('has-selection',pictureSelected&&!comparisonVisible);
   document.querySelectorAll('.picture-choice').forEach(button=>{
    const selected=pictureSelected&&content.images[Number(button.dataset.picture)].matchesText===false;
-   button.parentElement.hidden=pictureSelected&&!selected;
+   button.parentElement.hidden=pictureSelected&&!selected&&!comparisonVisible;
    button.disabled=!imagesReady||pictureSelected;
    button.classList.toggle('selected',selected);
    button.setAttribute('aria-pressed',String(selected));
