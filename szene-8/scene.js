@@ -31,24 +31,15 @@ function startTransition(){
  if(transitioning)return;
  transitioning=true;
  const game=$('game');
- game.innerHTML='<section class="panel transition-panel"><h1>Weiter zu Elin</h1><div class="transition-movie"><video id="transitionVideo" muted playsinline preload="auto" aria-label="Würstchen zeigt den Weg zur nächsten Szene"><source src="'+esc(content.nextVideo)+'" type="video/mp4"></video></div><p class="scene-feedback" id="transitionStatus" role="status">Das Würstchen zeigt den Weg.</p><button class="secondary" id="skipAnimation">Weiter ohne Animation</button></section>';
- const v=$('transitionVideo');
- let finished=false;
- const finish=async()=>{
-  if(finished)return;finished=true;
-  try{
-   const response=await fetch('../szene-9/index.html',{method:'HEAD',cache:'no-store'});
-   if(response.ok){location.assign('../szene-9/');return;}
-  }catch{}
+ // Die Würstchen-Animation läuft ausschließlich beim Wechsel von Szene 7 zu 8.
+ // Von Szene 8 zu 9 ist keine zweite Animation vorgesehen.
+ fetch('../szene-9/index.html',{method:'HEAD',cache:'no-store'}).then(r=>{
+  if(r.ok){location.assign('../szene-9/');return;}
+  throw Error('Szene 9 noch nicht vorhanden');
+ }).catch(()=>{
   game.innerHTML='<section class="panel"><h1>Elin kommt als Nächstes</h1><p class="king-question">Szene 9 ist noch in Vorbereitung.</p><div class="actions"><button class="primary" id="returnEnd">Zurück zu Szene 8</button></div></section>';
   $('returnEnd').onclick=()=>{transitioning=false;render();};
- };
- $('skipAnimation').onclick=()=>{v.pause();finish();};
- v.loop=false;
- v.addEventListener('ended',finish,{once:true});
- v.addEventListener('error',finish,{once:true});
- const play=v.play();
- if(play&&typeof play.catch==='function')play.catch(finish);
+ });
 }
 $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
 ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
