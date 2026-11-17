@@ -50,15 +50,17 @@ const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in
 function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(4,Number(localStorage.getItem(VISITED))||0)));}catch{}}
 function go(n){if(n<0||n>3||(n===3&&!solved))return;finishTileDrag(false);stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}
 function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
-function render(){
+function updateSceneMenu(){try{if(Number(localStorage.getItem(VISITED))>=5&&!$('sceneMenu5')){const a=document.createElement('a');a.id='sceneMenu5';a.href='../szene-5/';a.textContent='Der König';document.querySelector('.scene-menu nav').append(a);}}catch{}}
+function render(){updateSceneMenu();
 $('stepStatus').textContent=['Schritt 1 von 3 · Zuhören','Schritt 2 von 3 · Selbst lesen','Schritt 3 von 3 · Reihenfolge legen',''][phase];$('stepStatus').hidden=phase===3;
 if(phase===0)$('game').innerHTML='<section class="panel"><span class="eyebrow">Erst einmal zuhören</span><h1>Der Händler</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
 if(phase===1)$('game').innerHTML='<section class="panel"><h1>Der Händler</h1><p>Lies in deinem Tempo.</p><div class="reading">'+esc(content.simple)+'</div>'+nav()+'</section>';
 if(phase===2){$('game').innerHTML='<section class="panel"><h1>Was geschah zuerst?</h1><div class="reading">'+esc(content.simple)+'</div><p>Bringe die drei Satzkarten in die richtige Reihenfolge. Ziehe sie an die passende Stelle oder tippe eine Karte an und verschiebe sie mit den Pfeilen.</p><div id="boardContent"></div></section>';renderBoard();}
-if(phase===3)$('game').innerHTML='<section class="panel"><h1>Die Geschichte des Händlers</h1><p>Du hast geordnet, was mit dem Spinnennetz geschah.</p><ol class="result">'+content.cards.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ol><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
+if(phase===3)$('game').innerHTML='<section class="panel"><h1>Die Geschichte des Händlers</h1><p>Du hast geordnet, was mit dem Spinnennetz geschah.</p><ol class="result">'+content.cards.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ol><p>Jetzt geht das Abenteuer weiter.</p><div class="actions scene-navigation"><button class="primary" id="scene5">Weiter</button><button class="secondary" id="back">← Zurück</button></div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+''+'</section>';
 $('back').onclick=()=>phase===0?location.assign('../szene-3/?abschnitt=abschluss'):go(phase-1);
 if($('next'))$('next').onclick=()=>go(phase+1);
 if(phase===0){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
+if($('scene5'))$('scene5').onclick=()=>location.assign('../szene-5/');
 if($('again'))$('again').onclick=()=>{placed=[2,0,1];selected=null;solved=false;feedback='';go(0);};scheduleButtons();
 }
 function changed(){solved=false;feedback='';renderBoard();}
@@ -143,5 +145,6 @@ window.addEventListener('resize',()=>{scheduleButtons();updateMoveLabels();});
 window.addEventListener('pagehide',()=>{finishTileDrag(false);stopAudio();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&speechAvailable){speechSynthesis.pause();audioState='paused';updateAudio();}});
 if(document.fonts)document.fonts.ready.then(scheduleButtons);
-fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;markVisited();render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
+fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
 })();
+

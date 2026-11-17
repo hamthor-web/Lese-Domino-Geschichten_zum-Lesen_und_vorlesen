@@ -5,15 +5,8 @@ const VISITED_KEY='silvana-visited-scenes-v1';
 function scene2Visited(){try{return Number(localStorage.getItem(VISITED_KEY))>=2;}catch{return false;}}
 function markScene2Visited(){try{localStorage.setItem(VISITED_KEY,String(Math.max(2,Number(localStorage.getItem(VISITED_KEY))||0)));}catch{}}
 function updateSceneMenu(){
- try{if(Number(localStorage.getItem(VISITED_KEY))>=4&&!$('sceneMenu4')){const a=document.createElement('a');a.id='sceneMenu4';a.href='../szene-4/';a.textContent='Der Händler';document.querySelector('.scene-menu nav').append(a);}}catch{}
- const next=$('sceneMenu2');
- if(next)next.hidden=!scene2Visited();
- try{
-  if(next&&Number(localStorage.getItem(VISITED_KEY))>=3&&!$('sceneMenu3')){
-   const link=document.createElement('a');link.id='sceneMenu3';link.href='../szene-3/';link.textContent='Die Spinnen im Wald';next.parentElement.append(link);
-  }
- }catch{}
-
+ const next=$('sceneMenu2');if(next)next.hidden=!scene2Visited();
+ try{const highest=Number(localStorage.getItem(VISITED_KEY));for(const [n,title] of [[3,'Die Spinnen im Wald'],[4,'Der Händler'],[5,'Der König']]){if(next&&highest>=n){let a=$('sceneMenu'+n);if(!a){a=document.createElement('a');a.id='sceneMenu'+n;a.href='../szene-'+n+'/';a.textContent=title;}next.parentElement.append(a);}}}catch{}
 }
 
 let content,phase=0,furthest=0,placed=[],order=[2,0,1],selected=null,solved=false,feedback='',hadError=false,saved=null;
@@ -149,4 +142,5 @@ function render(){$('introTitle').hidden=phase!==0;updateSceneMenu();for(let i=0
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};for(const id of ['textSize','boardSize'])$(id).addEventListener('input',()=>{sizes();if(!saved)persist();});
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&audioAvailable){speechSynthesis.pause();audioState='paused';updateAudio();}});window.addEventListener('pagehide',stopAudio);
  fetch('content.json').then(r=>{if(!r.ok)throw Error('Text nicht gefunden');return r.json();}).then(data=>{content=data;order=shuffle([0,1,2]);loadSaved();sizes();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'&&scene2Visited()){phase=3;furthest=3;saved=null;}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h2>Der Text konnte nicht geladen werden.</h2><p>Bitte lade die Seite noch einmal.</p><button class="primary" onclick="location.reload()">Erneut laden</button></section>';});
+
 

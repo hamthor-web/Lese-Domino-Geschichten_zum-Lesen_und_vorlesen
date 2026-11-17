@@ -8,7 +8,8 @@
  const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(3,Number(localStorage.getItem(VISITED))||0)));}catch{}}
- function updateSceneMenu(){try{if(Number(localStorage.getItem(VISITED))>=4&&!$('sceneMenu4')){const a=document.createElement('a');a.id='sceneMenu4';a.href='../szene-4/';a.textContent='Der Händler';document.querySelector('.scene-menu nav').append(a);}}catch{}}
+ function updateSceneMenu(){try{const highest=Number(localStorage.getItem(VISITED));for(const [n,title] of [[4,'Der Händler'],[5,'Der König']]){if(highest>=n){let a=$('sceneMenu'+n);if(!a){a=document.createElement('a');a.id='sceneMenu'+n;a.href='../szene-'+n+'/';a.textContent=title;}document.querySelector('.scene-menu nav').append(a);}}}catch{}}
+
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
   document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);
@@ -174,4 +175,5 @@
   content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;state.done=true;}render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();
+
 

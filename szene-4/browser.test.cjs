@@ -7,7 +7,7 @@ const base=(live||'http://127.0.0.1:8765/').replace(/\/?$/,'/');
 const server=live?null:spawn('python3',['-m','http.server','8765','--bind','127.0.0.1'],{stdio:'ignore'});
 let browser;const errors=[];
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-4/');if(r.ok&&(await r.text()).includes('scene.js?v=2'))break;}catch{}if(i===179)throw Error('Szene 4 fehlt');await new Promise(r=>setTimeout(r,500));}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-4/');if(r.ok&&(await r.text()).includes('scene.js?v=3'))break;}catch{}if(i===179)throw Error('Szene 4 fehlt');await new Promise(r=>setTimeout(r,500));}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true});
  await context.addInitScript(()=>{
@@ -60,3 +60,4 @@ async function run(){
  assert.deepEqual(errors,[]);console.log('PASS Händler: Audio-Steuerung (simulierte Stimme), Texte, Reihenfolgeprüfung, Bilder gemeinsam mit Satzkarten, Ausblenden der Prüfhilfen, Pfeile, Mausziehen/Einfügelinie, Zustand bei Rücknavigation, Wiederholung, Übergänge und Menü; '+checks+' Layoutprüfungen.');await context.close();
 }
 run().then(async()=>{if(browser)await browser.close();if(server)server.kill();}).catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exitCode=1;});
+
