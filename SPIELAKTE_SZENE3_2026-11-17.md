@@ -161,3 +161,16 @@ Veröffentlicht über PR #4 mit Merge `52b4295400a5112c7ba29acc0924c52009a3cb01`
 - Keine Originalassets ersetzt oder entfernt; keine physischen Endgeräte oder akustische Hörprüfung, automatisierter Sprachdienst simuliert.
 Bestandener Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44040945279
 Spielseite: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-3/?stand=warum
+
+
+## Bestätigte Navigation: Wiederlesemenü statt Einführungsbutton – 17.11.2026
+Heike bestätigt:
+- Den eigenständigen Button „Zur Einführung“ in allen aktuellen Szenen entfernen.
+- Das bisherige Szenenmenü „Zurück zu vorherigen Szenen“ mit „Noch einmal lesen:“ beschriften.
+
+Umsetzung:
+- Menübeschriftung in Einführung, Szene 2 und Szene 3 geändert.
+- Einführungsbutton und zugehörige Klickhandler in den Abschlüssen von Szene 2 und 3 entfernt. In der Einführung gab es keinen entsprechenden eigenständigen Button.
+- Bestehende Rücknavigation, Wiederholung und Menüfreischaltung bleiben erhalten; Menülinks führen weiterhin nur zu den bereits erreichten Abschnitten.
+- Original-Brandlink und alle Originalbilder, Texte und Animationen unverändert.
+Prüfung und Veröffentlichung werden nach erfolgreichem Browserlauf ergänzt.

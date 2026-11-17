@@ -66,7 +66,7 @@
   }else if(phase===2){
    html='<section class="panel"><span class="eyebrow">Jetzt hörst du die Geschichte</span><h1>Die Spinnen im Wald</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button><button class="secondary" id="restartAudio">↻ Von vorn hören</button></div><p id="audioStatus" class="feedback" role="status" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else{
-   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><div class="actions">'+backButton()+'<button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div></section>';
+   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><div class="actions">'+backButton()+'<button class="secondary" id="again">Diese Szene wiederholen</button></div></section>';
   }
   $('game').innerHTML=html;
   $('back').onclick=()=>phase===0?location.assign('../szene-2/?abschnitt=abschluss'):go(phase-1);
@@ -82,7 +82,7 @@
    updateAnswer();loadImages();
   }
   if(phase===2){$('audioToggle').onclick=toggleAudio;$('restartAudio').onclick=startAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;selectionFeedback='';helpValues=['','','',''];go(0);};$('intro').onclick=()=>location.assign('../vorschau-einfuehrung/');}
+  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
   scheduleButtons();
  }
  async function loadImages(){
