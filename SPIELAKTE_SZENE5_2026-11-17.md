@@ -75,3 +75,12 @@ Heike beanstandet, dass „stehlen“ durch seine hervorgehobene Darstellung die
 - Erst „stehlen“ zu finden öffnet wie bisher die Lücke und die drei Ersatzwörter. Bild, Texte, Pergament-Kästchen und restlicher Ablauf bleiben erhalten.
 - Browserprüfung ergänzt um identische sichtbare Wortstile und alle sechs anderen anklickbaren Wörter; bestehende Aufgabe und Zoomprüfungen bleiben erhalten.
 Prüfung und Veröffentlichung dieses Nachtrags zunächst ausstehend; Abschluss folgt unten.
+
+
+### Korrektur veröffentlicht und geprüft – 17.11.2026, 18:09 Uhr
+Vor Veröffentlichung und auf der Live-Seite vollständige Chrome-Prüfung bestanden, einschließlich gleicher sichtbarer Wortstile, aller sechs anderen Wörter, richtiger Fehlerwahl und bisheriger 144 Layoutprüfungen. Keine JavaScript-/HTTP-Fehler im geprüften Durchlauf. Vorhandene Szenenprüfungen ebenfalls erfolgreich.
+- PR #12, Merge: `8a288050797c9b64140dc5b40cd6fd075f0157e6`.
+- Vorprüfung: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44133067826
+- Live-Prüfung: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44133421810
+Zusätzlich Live-Sichtprüfung: „stehlen“ fällt im Satz nicht mehr auf; Antippen von „Netze“ gibt lediglich einen Hinweis, ohne die Ersatzwortauswahl zu öffnen. Keine physischen Endgeräte; Sprachdienst im automatisierten Lauf weiterhin simuliert.
+Masterstatus unverändert: Szenen 1–5 veröffentlicht, Szene 5 mit dieser bestätigten Korrektur aktualisiert; Szene 6 noch nicht begonnen.
