@@ -46,3 +46,22 @@ Gesamtprojekt weiterhin in Entwicklung. Szenen 1–4 veröffentlicht; Szene 5 im
 JavaScript-Syntax lokal geprüft. Echte Chrome-Prüfung über den vorhandenen GitHub-Workflow vorbereitet: Lesen, Bildladen, falsches Wort, Lücke, beide falschen Alternativen, richtige Auswahl, Rücknavigation, Wiederholung, Hörsteuerung, Übergänge und Menü. Sechs Smartphone-/Tablet-Formate mit vier getrennten Schrift-/Spielfeldkombinationen auf sechs Ansichten vorgesehen. Der Sprachdienst wird in automatisierten Prüfungen simuliert. Keine physischen Endgeräte oder akustische Hörprüfung.
 
 Abschließender Veröffentlichungs- und Prüfstand wird unten ergänzt.
+
+## Veröffentlicht und geprüft – 17.11.2026, 17:06 Uhr
+
+Dieser Eintrag ersetzt die zuvor offenen Prüf- und Veröffentlichungsstände.
+
+- Prüfung vor Veröffentlichung erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44120951420
+- Veröffentlichung über PR #11, Merge `6aabd9e1150458bcb6337ae7d77690c66991bd13`.
+- GitHub-Pages-Bereitstellung erfolgreich. Anschließend vollständige Live-Prüfung bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44121376913
+- Je 144 Layoutprüfungen vor Veröffentlichung und live: sechs Ansichten (Lesen, Fehlerwort, Wortauswahl, gelöst, Zuhören, Abschluss), sechs Smartphone-/Tablet-Formate im Hoch-/Querformat, vier getrennte Schrift-/Spielfeldkombinationen.
+- Bild geladen und proportional; keine abgeschnittenen Schaltflächen oder horizontaler Seitenüberlauf im geprüften Umfang. Keine JavaScript- oder HTTP-Fehler im vollständigen Durchlauf.
+- Geprüft: „stehlen“ antippen, Lücke bleibt, beide falschen Wörter geben Hinweise, „kaufen“ wird eingesetzt, Wortauswahl verschwindet, Weiter wird aktiviert. Zustand nach Rücknavigation, Wiederholung, Abbruch der Sprachausgabe und erneutes Hören über denselben Button geprüft.
+- Übergang aus Szene 4, Rückweg zum Händler-Abschluss und dessen gelöster Kartenreihenfolge sowie Menüfreischaltung und Menü-Reihenfolge geprüft. Bestehende Tests für Einführung, Domino, Kisten/Rollen/Video, Spinnenvergleich und Händler-Bildkarten bestanden.
+- Zusätzliche persönliche Live-Sichtprüfung: Königsbild, schlichte Pergamentkästchen, Lücke mit drei Wortangeboten und richtige Auswahl mit freigeschaltetem Weiter.
+- Die hochgeladene WebP-Datei stimmt mit der vorbereiteten Webfassung überein (Git-Blob-Prüfsumme `1a31d2ee8acbf95fe464a39feadab25057f86ec0`). Geliefertes PNG unverändert erhalten.
+- Sprachdienst im automatisierten Lauf simuliert; keine akustische Prüfung oder physischen Endgeräte. Keine Screenshotdateien als Projektquellen abgelegt.
+
+Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-5/
+
+Masterstatus: Szenen 1–5 veröffentlicht und im Browser geprüft; Gesamtprojekt weiterhin in Entwicklung. Nächster inhaltlicher Bauabschnitt ist Szene 6 „Im Dorf“, noch nicht begonnen. Dieser Nachtrag ergänzt die zentrale Masterübersicht und erhält die älteren Stände als Verlauf.
