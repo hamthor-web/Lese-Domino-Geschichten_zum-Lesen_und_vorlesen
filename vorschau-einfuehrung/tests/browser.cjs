@@ -53,7 +53,8 @@ async function run(){
  await drag(2,1,true);assert.deepEqual(await ids(),[0,1,2]);
  await touch('touchStart',a.x+a.width/2,a.y+a.height/2);await touch('touchMove',b.x+b.width/2,b.y+b.height*.2);await touch('touchCancel');
  assert.deepEqual(await ids(),[0,1,2]);assert.equal(await page.locator('#dropLine').count(),0);
- await page.setViewportSize({width:1400,height:1800});
+ await page.setViewportSize({width:2000,height:1600});
+ await page.waitForFunction(()=>document.getElementById('left').textContent.includes('links'));
  assert.match(await page.locator('#left').innerText(),/links/);assert.match(await page.locator('#right').innerText(),/rechts/);
  await drag(2,0);assert.deepEqual(await ids(),[2,0,1]);await drag(2,1,true);assert.deepEqual(await ids(),[0,1,2]);
  await page.locator('#chain [data-id="1"]').click();await page.locator('#return').click();assert.deepEqual(await ids(),[0,2]);
