@@ -65,3 +65,13 @@ Dieser Eintrag ersetzt die zuvor offenen Prüf- und Veröffentlichungsstände.
 Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-5/
 
 Masterstatus: Szenen 1–5 veröffentlicht und im Browser geprüft; Gesamtprojekt weiterhin in Entwicklung. Nächster inhaltlicher Bauabschnitt ist Szene 6 „Im Dorf“, noch nicht begonnen. Dieser Nachtrag ergänzt die zentrale Masterübersicht und erhält die älteren Stände als Verlauf.
+
+
+## Bestätigte Korrektur: Fehlerwort selbst finden – 17.11.2026
+Heike beanstandet, dass „stehlen“ durch seine hervorgehobene Darstellung die Lösung vorwegnimmt. Neue Vorgabe ersetzt die bisherige sichtbare Wortschaltfläche.
+- Alle sieben Wörter im Aufgabensatz sind anklickbar und sehen einheitlich wie normaler Satztext aus: gleiche Schrift, Größe, Stärke, Farbe, Abstände und Zeilenhöhe; keine einzelnen Rahmen, Hintergründe oder Unterstreichungen.
+- Die Tastatur-Fokusmarkierung gilt gleich für jedes Wort und zeigt keine Lösung vorab.
+- Ein anderes Wort anzutippen gibt einen sanften Hinweis. Satz und Aufgabe bleiben unverändert; Wortauswahl und Weiter werden dadurch nicht freigeschaltet.
+- Erst „stehlen“ zu finden öffnet wie bisher die Lücke und die drei Ersatzwörter. Bild, Texte, Pergament-Kästchen und restlicher Ablauf bleiben erhalten.
+- Browserprüfung ergänzt um identische sichtbare Wortstile und alle sechs anderen anklickbaren Wörter; bestehende Aufgabe und Zoomprüfungen bleiben erhalten.
+Prüfung und Veröffentlichung dieses Nachtrags zunächst ausstehend; Abschluss folgt unten.
