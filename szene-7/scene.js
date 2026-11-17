@@ -51,11 +51,29 @@
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Der König im Wald</h1><p>Höre, was der König im Wald entdeckt.</p><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===1)$('game').innerHTML='<section class="panel"><h1>Der König im Wald</h1><p>Lies in deinem Tempo.</p>'+reading()+nav()+'</section>';
   if(phase===2){$('game').innerHTML='<section class="panel"><h1>Was ist auf dem anderen Bild?</h1><p>Vergleiche die Bilder. Tippe auf etwas, das anders ist. Wähle dann das Wort für die gleiche Stelle auf dem anderen Bild.</p><p class="note">Du kannst in beiden Bildern suchen. Mit „Spielfeld“ machst du die Bilder größer und kannst sie seitlich verschieben.</p><p id="progress" role="status"></p>'+pictures()+'<section id="question" class="comparison-question" aria-labelledby="questionTitle" tabindex="-1" hidden></section><p id="feedback" class="feedback" role="status" aria-live="polite"></p><details><summary>Lesetext ansehen</summary>'+reading()+'</details>'+nav()+'</section>';bindPictures();updateProgress();}
-  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Genau hingeschaut!</h1><p>Du hast alle Unterschiede gefunden und die passenden Wörter gelesen.</p><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="scene8">Weiter zu Szene 8</button></div>'+nav(false)+'</section>';
+  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Genau hingeschaut!</h1><p>Du hast alle Unterschiede gefunden und die passenden Wörter gelesen.</p><div class="actions scene7-completion-actions"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="scene7-video-next" id="scene8" type="button" aria-label="Weiter zu Szene 8"><video id="scene7-next-video" muted playsinline preload="auto" aria-hidden="true"><source src="../szene-8/assets/Wuerstchen_Animation.mp4" type="video/mp4"></video><span class="video-next-fallback" aria-hidden="true">Weiter zu Szene 8</span></button><button class="secondary" id="back">← Zurück</button></div></section>';
   $('back').onclick=()=>phase===0?location.assign('../szene-6/?abschnitt=abschluss'):go(phase-1);
   if($('next')){$('next').disabled=phase===2&&!complete();$('next').onclick=()=>go(phase+1);}
   if($('audioToggle')){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if($('again'))$('again').onclick=()=>{solved.clear();go(0);};if($('scene8'))$('scene8').onclick=()=>location.assign('../szene-8/');scheduleButtons();
+  if($('again'))$('again').onclick=()=>{solved.clear();go(0);};
+  if($('scene8')){
+    const button=$('scene8'),movie=$('scene7-next-video');
+    let started=false;
+    const destination=()=>location.assign('../szene-8/');
+    movie.loop=false;
+    movie.addEventListener('loadeddata',()=>{button.classList.add('video-ready');movie.pause();},{once:true});
+    movie.addEventListener('error',()=>{button.classList.remove('video-ready');},{once:true});
+    button.onclick=()=>{
+      if(started)return;
+      started=true;button.disabled=true;
+      movie.currentTime=0;
+      movie.addEventListener('ended',destination,{once:true});
+      movie.addEventListener('error',destination,{once:true});
+      const attempt=movie.play();
+      if(attempt&&typeof attempt.catch==='function')attempt.catch(destination);
+    };
+  }
+  scheduleButtons();
  }
  function updateProgress(){$('progress').textContent=solved.size+' von '+content.differences.length+' Unterschieden gefunden';$('next').disabled=!complete();}
  function bindPictures(){document.querySelectorAll('.hotspot').forEach(b=>b.onclick=()=>select(Number(b.dataset.diff),Number(b.dataset.side)));document.querySelectorAll('.forest-board').forEach(b=>b.onclick=e=>{if(e.target.closest('.hotspot'))return;$('feedback').textContent='Schau, was an der gleichen Stelle auf dem anderen Bild anders ist.';});}
