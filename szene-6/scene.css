@@ -52,3 +52,10 @@
 
 .question-card{container-type:inline-size}
 .question-card .large-bubble{font-size:clamp(7px,5cqw,13px)}
+
+/* Each pair receives matching content heights without limiting text wrapping. */
+.question-card{display:flex;flex-direction:column}
+.question-card h2{flex-shrink:0}
+.question-card .select-question{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;flex:1 0 auto}
+.question-card .prompt-scroll,.question-card .selection-label{flex-shrink:0}
+.question-card>.zoom-open{margin-top:12px;width:100%;flex-shrink:0}
