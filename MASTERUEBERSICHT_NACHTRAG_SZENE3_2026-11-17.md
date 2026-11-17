@@ -1,5 +1,5 @@
 # Masterübersicht – Nachtrag Silvana / Szene 3
-Stand: 17.11.2026 – Bildauswahl und Abenteuerübergänge veröffentlicht
+Stand: 17.11.2026 – Warum-Frage und erweiterter Antwortpool veröffentlicht
 
 | Bereich | Aktueller Stand |
 |---|---|
@@ -8,6 +8,8 @@ Stand: 17.11.2026 – Bildauswahl und Abenteuerübergänge veröffentlicht
 | Bilder | Originale graue und blaue Spinnenbilder vorhanden; beide live geladen, gleiche Abmessungen 1448×1086. Kein pixelgenauer Vergleich behauptet. |
 | Bildauswahl | Zuerst das nicht passende Bild wählen. Blaue Spinnen öffnen den Dialog; graue Spinnen geben einen Hinweis. Wiederholung setzt die Auswahl zurück. |
 | Übergangstexte | „Szene … geschafft“ entfällt. Über Weiter-Schaltflächen zu nächsten Abschnitten steht „Jetzt geht das Abenteuer weiter.“ |
+| Warum-Frage / Einzelbild | Nach Auswahl nur das blaue Bild anzeigen. Feldfrage: „Genau, dieses Bild passt nicht zur Geschichte. Warum?“ |
+| Antwortpool | „Die Spinnen sind nicht grau“, „keine grauen Spinnen“, falsche/andere Farbe und sinngleiche Beschreibungen werden im ersten Feld als richtig erkannt. Zweite Farbkorrektur weiterhin getrennt. |
 | Antwortfelder | Bestätigte Korrektur umgesetzt: erkannter Fehler bleibt im ersten Feld; richtige Farbe und Buchstabenhilfe in separatem zweiten Feld. Beide Eingaben bleiben bei Rücknavigation erhalten. Live geprüft über PR #2. |
 | Navigation | Rücksprung zu Szene-2-Abschluss und Menüfreischaltung nach Besuch live geprüft. Erreichter Höchststand bleibt erhalten. Menüskript mit Versionsparameter 9. |
 | Prüfung | Chrome-Browserdurchlauf vor Veröffentlichung und auf Live-Webseite bestanden; je 96 Layoutprüfungen, 26 Antwortfälle, Einführungstests. Keine JavaScript-/HTTP-Fehler. |
@@ -44,3 +46,8 @@ Code-Merge: `e9fb1e921d3800a274737f7ce6046fc61694c03e`. Details in der Spielakte
 Bestätigte Ablauf- und Sprachkorrektur über PR #3 veröffentlicht. Bestehende Texte, Originalbilder und Animationen erhalten. Vollständiger Chrome-Live-Durchlauf und 120 Layoutprüfungen bestanden.
 Prüfprotokoll: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44034583810
 Code-Merge: `14bf5b2e6dfcaf6ad14ef60856b93bfd80a0da8d`.
+
+## Letzte Aktualisierung: Warum-Frage und Antwortpool
+Bestätigte Änderung über PR #4 veröffentlicht. Kontextabhängige Antwortprüfung, ein verbleibendes Originalbild und genaue Frage live geprüft. Elf zusätzliche sinngleiche Fehlerbeschreibungen sowie je 120 Layoutprüfungen vor Veröffentlichung und live bestanden.
+Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44040945279
+Merge: `52b4295400a5112c7ba29acc0924c52009a3cb01`. Details in der Spielakte Szene 3.

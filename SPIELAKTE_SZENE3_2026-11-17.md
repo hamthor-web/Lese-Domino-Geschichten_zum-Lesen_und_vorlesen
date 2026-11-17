@@ -1,5 +1,5 @@
 # Silvana – Spielakte Szene 3: Die Spinnen im Wald
-Stand: 17.11.2026 – Bildauswahl vor Fragedialog und erfreuliche Übergänge
+Stand: 17.11.2026 – Warum-Frage, gewähltes Einzelbild und erweiterter Antwortpool
 
 ## Veröffentlichung und bestandene Live-Prüfung – 17.11.2026, 01:43 Uhr
 Dieser neuere Eintrag ersetzt die früheren offenen Bild-/Browser-/Veröffentlichungshinweise; die historischen Entwicklungsnotizen bleiben unten erhalten.
@@ -147,4 +147,17 @@ Umsetzung:
 - „nicht grau“, „keine grauen Spinnen“, „falsche/andere Farbe“, „die Farbe stimmt nicht“ und sinngleiche Varianten werden als richtige Fehlerbeschreibung anerkannt, ohne Fehlversuch.
 - Anschließend bleibt die bestätigte zweite Eingabe für die richtige Farbe erhalten. Fehlerbeschreibung und Farbkorrektur werden getrennt bewertet: „nicht grau“ ist eine zutreffende Beschreibung des Bildfehlers, aber keine richtige Antwort auf die Frage nach der Textfarbe. Dort löst „grau“ weiterhin die Aufgabe.
 - Erste Eingabe, Auswahl und zweite Eingabe bleiben bei Rücknavigation erhalten; bestehende Hilfe, Originaltexte, Bilder und Animationen bleiben erhalten.
-Browser- und Live-Prüfung dieses Nachtrags werden nach erfolgreichem Prüflauf ergänzt.
+Browser- und Live-Prüfung dieses Nachtrags erfolgreich abgeschlossen; siehe Prüfprotokoll.
+
+
+### Veröffentlichung und bestandene Prüfung des Warum-Dialogs
+Veröffentlicht über PR #4 mit Merge `52b4295400a5112c7ba29acc0924c52009a3cb01`.
+- Exakter Fragetext, nur noch gewähltes Bild und „Die Spinnen sind nicht grau.“ im echten Chrome-Browser vor Veröffentlichung und auf GitHub Pages erfolgreich geprüft.
+- Elf zusätzliche sinngleiche Fehlerbeschreibungen einschließlich Kontexttrennung getestet. Auch „blau statt grau“ und die umgekehrte Farbkorrektur „grau statt blau“ werden unterschieden.
+- Die zweite Eingabe bleibt getrennt; „nicht grau“ löst dort die Farbfrage nicht irrtümlich.
+- Bestehender Ablauf, zwei Antwortfelder, Hilfe, Rücknavigation, Wiederholung und Szenenübergänge weiterhin bestanden.
+- Je 120 Layoutprüfungen auf Programmstand und Live-Webseite: sechs Smartphone-/Tablet-Viewports, vier Schrift-/Spielfeldkombinationen; keine JavaScript- oder HTTP-Fehler.
+- Zusätzlich persönliche Live-Sichtprüfung: Nur das ausgewählte blaue Bild ist sichtbar; die vollständige Warum-Frage erscheint am ersten Feld. Die Eingabe „Die Spinnen sind nicht grau.“ wird bestätigt und bleibt erhalten, das zweite Feld erscheint leer.
+- Keine Originalassets ersetzt oder entfernt; keine physischen Endgeräte oder akustische Hörprüfung, automatisierter Sprachdienst simuliert.
+Bestandener Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44040945279
+Spielseite: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-3/?stand=warum
