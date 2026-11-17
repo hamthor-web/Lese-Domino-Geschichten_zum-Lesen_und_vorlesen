@@ -62,7 +62,7 @@
   if(phase===0){
    html='<section class="panel"><span class="eyebrow">Jetzt bist du dran</span><h1>'+esc(content.title)+'</h1><p>Lies in deinem Tempo.</p><div class="reading">'+esc(content.simple)+'</div><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else if(phase===1){
-   html='<section class="panel"><h1>Schau genau: Welches Bild passt nicht zur Geschichte?</h1>'+simpleDetails()+'<p id="imageStatus" role="status">Die Bilder werden geladen.</p><div class="image-grid" id="images" hidden>'+content.images.map((im,i)=>'<figure><button type="button" class="picture-choice" data-picture="'+i+'" aria-label="'+esc(im.label)+' auswählen" aria-pressed="false" disabled><img id="compare'+i+'" alt="Waldbild '+(i+1)+' zum Vergleichen"></button><figcaption>'+esc(im.label)+'</figcaption></figure>').join('')+'</div><div class="image-error" id="imageError" hidden><p>Die Bilder konnten nicht geladen werden. Bitte versuche es noch einmal.</p><button class="secondary" id="retryImages">Erneut versuchen</button></div><p class="feedback" id="selectionFeedback" role="status" aria-live="polite"></p><section id="answerDialog" hidden><form class="answer-form" id="answerForm"><label id="answerLabel" for="answer">Schreibe auf, was falsch ist.</label><input id="answer" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="feedback" value="'+esc(draft)+'" disabled><div class="actions"><button class="primary" id="check" type="submit" disabled>Antwort prüfen</button></div></form><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(firstFeedback)+'</p><section class="correction-block" id="correctionBlock" hidden><form class="answer-form" id="correctionForm"><label for="correction">Welche Farbe haben die Spinnen im Text?</label><input id="correction" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="correctionFeedback" value="'+esc(correctionDraft)+'" disabled><div class="actions"><button class="primary" id="checkCorrection" type="submit" disabled>Neue Antwort prüfen</button></div></form><p class="feedback" id="correctionFeedback" role="status" aria-live="polite">'+esc(correctionFeedback)+'</p><section class="help-box" id="help" hidden><h2>Deine Schreibhilfe</h2><p>Ein Buchstabe steht schon an der richtigen Stelle. Ergänze die übrigen Buchstaben.</p><form id="helpForm"><div class="letter-row" id="letterRow"></div><button class="secondary" id="checkHelp" type="submit">Wort prüfen</button></form></section></section></section><div class="actions">'+backButton()+'<button class="primary" id="next" '+(state.done?'':'hidden')+'>Weiter</button></div></section>';
+   html='<section class="panel"><h1>Schau genau: Welches Bild passt nicht zur Geschichte?</h1>'+simpleDetails()+'<p id="imageStatus" role="status">Die Bilder werden geladen.</p><div class="image-grid" id="images" hidden>'+content.images.map((im,i)=>'<figure><button type="button" class="picture-choice" data-picture="'+i+'" aria-label="'+esc(im.label)+' auswählen" aria-pressed="false" disabled><img id="compare'+i+'" alt="Waldbild '+(i+1)+' zum Vergleichen"></button><figcaption>'+esc(im.label)+'</figcaption></figure>').join('')+'</div><div class="image-error" id="imageError" hidden><p>Die Bilder konnten nicht geladen werden. Bitte versuche es noch einmal.</p><button class="secondary" id="retryImages">Erneut versuchen</button></div><p class="feedback" id="selectionFeedback" role="status" aria-live="polite"></p><section id="answerDialog" hidden><form class="answer-form" id="answerForm"><label id="answerLabel" for="answer">Genau, dieses Bild passt nicht zur Geschichte. Warum?</label><input id="answer" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="feedback" value="'+esc(draft)+'" disabled><div class="actions"><button class="primary" id="check" type="submit" disabled>Antwort prüfen</button></div></form><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(firstFeedback)+'</p><section class="correction-block" id="correctionBlock" hidden><form class="answer-form" id="correctionForm"><label for="correction">Welche Farbe haben die Spinnen im Text?</label><input id="correction" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="correctionFeedback" value="'+esc(correctionDraft)+'" disabled><div class="actions"><button class="primary" id="checkCorrection" type="submit" disabled>Neue Antwort prüfen</button></div></form><p class="feedback" id="correctionFeedback" role="status" aria-live="polite">'+esc(correctionFeedback)+'</p><section class="help-box" id="help" hidden><h2>Deine Schreibhilfe</h2><p>Ein Buchstabe steht schon an der richtigen Stelle. Ergänze die übrigen Buchstaben.</p><form id="helpForm"><div class="letter-row" id="letterRow"></div><button class="secondary" id="checkHelp" type="submit">Wort prüfen</button></form></section></section></section><div class="actions">'+backButton()+'<button class="primary" id="next" '+(state.done?'':'hidden')+'>Weiter</button></div></section>';
   }else if(phase===2){
    html='<section class="panel"><span class="eyebrow">Jetzt hörst du die Geschichte</span><h1>Die Spinnen im Wald</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button><button class="secondary" id="restartAudio">↻ Von vorn hören</button></div><p id="audioStatus" class="feedback" role="status" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else{
@@ -100,7 +100,7 @@
   if(!imagesReady||pictureSelected||!content.images[index])return;
   if(content.images[index].matchesText===false){
    pictureSelected=true;
-   selectionFeedback='Dieses Bild passt nicht zur Geschichte. Schau dir die Spinnen genauer an.';
+   selectionFeedback='';
    updateAnswer();$('answer').focus();
   }else{
    selectionFeedback='Vergleiche das Bild noch einmal mit dem Lesetext.';
@@ -115,9 +115,9 @@
   }else{
    const result=A.evaluate(value);
    state=A.submit(state,value);
-   if(result.identifiedBlue){
+   if(result.identifiedError){
     firstAccepted=true;correctionShown=true;
-    firstFeedback='Richtig erkannt: Im falschen Bild sind die Spinnen blau.';
+    firstFeedback=result.feedback;
    }else firstFeedback=state.feedback;
   }
   if(state.help){correctionShown=true;if(!hint)hint=A.letters();}
@@ -129,8 +129,11 @@
   if(!$('answer'))return;
   $('answerDialog').hidden=!pictureSelected;
   $('selectionFeedback').textContent=selectionFeedback;
+  $('selectionFeedback').hidden=!selectionFeedback;
+  $('images').classList.toggle('has-selection',pictureSelected);
   document.querySelectorAll('.picture-choice').forEach(button=>{
    const selected=pictureSelected&&content.images[Number(button.dataset.picture)].matchesText===false;
+   button.parentElement.hidden=pictureSelected&&!selected;
    button.disabled=!imagesReady||pictureSelected;
    button.classList.toggle('selected',selected);
    button.setAttribute('aria-pressed',String(selected));
