@@ -6,5 +6,10 @@
     "Der Händler spannt das Netz",
     "Die Fäden kleben in seinen Haaren",
     "Vom Netz bleibt fast nichts übrig"
+  ],
+  "images": [
+    "assets/haendler-netz.webp",
+    "assets/haendler-faeden.webp",
+    "assets/haendler-rest.webp"
   ]
 }
