@@ -32,3 +32,13 @@ Dieser Eintrag ersetzt die zuvor offenen Prüf- und Veröffentlichungsstände.
 Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-6/
 
 Masterstatus: Szenen 1–6 veröffentlicht und im Browser geprüft. Gesamtprojekt weiterhin in Entwicklung. Nächster inhaltlicher Abschnitt: Szene 7 „Der König im Wald“, noch nicht begonnen. Dieser Nachtrag ergänzt die zentrale Masterübersicht; eine separate zentrale Masterdatei außerhalb der Nachträge wurde nicht verändert.
+
+## Bestätigte Überarbeitung: zwei Kreuze statt Drehregler – 17.11.2026
+Heike verwirft das freie Verschieben mit manueller Drehung als zu kompliziert für Kinder. Diese neue Entscheidung ersetzt die zuvor beschriebene Aufgabenbedienung.
+- Jeweils eine große, gut lesbare Textblase neben dem Bild, im Hochformat darunter.
+- Frage 1: „Wer hat gesagt:“ mit „Ich bezahle mit Gold.“; Frage 2: „Wer hat mit den Schultern gezuckt?“.
+- Zwei sichtbare Kreuze im Bild bei König und Bürgermeister. Das Kind tippt nur ein Kreuz an. Keine Drehregler, kein freies Ziehen, keine separate Prüfschaltfläche oder Personenauswahl.
+- Die Blase fliegt zum gewählten Punkt, dreht und verkleinert sich automatisch. Richtig: sie bleibt dort; nächste Frage erscheint groß. Falsch: drei volle Wirbelumdrehungen, Rückflug und erneut dieselbe Frage.
+- Eingaben während des Flugs gesperrt; Verlassen, Zoom/Formatwechsel und Wiederholung brechen laufende Animationen sicher ab. Rücknavigation erhält fertige Zuordnungen. Reduzierte Bewegung überspringt Flug und Wirbel, mit derselben Rückmeldung und Bewertung.
+- Bild und dekorative Blasen bleiben proportional. Schrift- und Spielfeldregler bleiben getrennt. Bild passt bei Standardgröße ins Smartphone; gezieltes Scrollen nur bei Vergrößerung. Frühere Aufgabenvariante bleibt in der Versionshistorie.
+Masterstatus: Szenen 1–6 veröffentlicht; Überarbeitung von Szene 6 implementiert, Prüfung und Veröffentlichung zunächst ausstehend. Szene 7 unverändert offen.
