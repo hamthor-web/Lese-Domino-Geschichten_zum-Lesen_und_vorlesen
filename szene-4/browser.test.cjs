@@ -40,10 +40,17 @@ async function run(){
  await p.locator('#check').click();assert.equal(await p.locator('#next').isEnabled(),true);
  await p.locator('#back').click();await p.locator('#next').click();assert.deepEqual(await order(),[0,1,2]);
  // True pointer drag with visible insertion line and drop.
+ await p.setViewportSize({width:1024,height:1400});
  const first=p.locator('[data-id="2"]');await first.scrollIntoViewIfNeeded();let a=await first.boundingBox(),b=await p.locator('[data-id="0"]').boundingBox();
  await p.mouse.move(a.x+a.width/2,a.y+a.height/2);await p.mouse.down();await p.mouse.move(b.x+b.width/2,b.y+2,{steps:12});await p.locator('#dropLine').waitFor();await p.mouse.up();assert.deepEqual(await order(),[2,0,1]);
  // Touch-pointer path uses the same captured-pointer handler.
- await p.locator('[data-id="2"]').click();await p.locator('#right').click();await p.locator('#right').click();
+ await p.locator('#right').click();await p.locator('#right').click();
+ const cdp=await context.newCDPSession(p);
+ a=await p.locator('[data-id="2"]').boundingBox();b=await p.locator('[data-id="0"]').boundingBox();
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:a.x+a.width/2,y:a.y+a.height/2}]});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:b.x+b.width/2,y:b.y+2}]});
+ await p.locator('#dropLine').waitFor();await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.deepEqual(await order(),[2,0,1]);
+ await p.locator('#right').click();await p.locator('#right').click();
  await p.locator('#check').click();await p.locator('#next').click();await layout();
  assert.equal(await p.locator('.result li').count(),3);await p.locator('#back').click();assert.deepEqual(await order(),[0,1,2]);
  await p.locator('#next').click();await p.locator('#again').click();await p.locator('#next').click();await p.locator('#next').click();assert.deepEqual(await order(),[2,0,1]);assert.equal(await p.locator('#next').isDisabled(),true);
