@@ -105,7 +105,7 @@ function finishTileDrag(commit){
 function attachTileDrag(button,id){
  button.onpointerdown=e=>{
   if(!e.isPrimary||e.button!==0)return;
-  finishTileDrag(false);
+  finishTileDrag(false);ignoreTileClickUntil=0;
   activeDrag={button,id,pointer:e.pointerId,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,started:false,position:null,frame:0};
   button.setPointerCapture(e.pointerId);
  };
