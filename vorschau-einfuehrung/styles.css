@@ -64,3 +64,12 @@ body{hyphens:none;-webkit-hyphens:none}
 
 /* Das Titelbild eröffnet im Hochformat die Einführung. */
 @media(orientation:portrait){.listen{grid-template-columns:minmax(0,1fr)}.listen-art{grid-row:1;max-width:none}}
+
+/* Auf der ersten Seite folgt das Bild unmittelbar auf den Namenskopf. */
+.intro-title{max-width:1320px;margin:0 auto 20px;padding:0 32px}
+.intro-title figcaption{text-align:center;font-size:calc(18px * var(--text));color:#64526f;margin-top:8px}
+.intro-tools{max-width:1320px;margin:0 auto 18px;padding:0 32px;display:flex;justify-content:flex-end}
+.intro-tools>*{max-width:100%}
+.intro-page .listen{display:block}
+@media(min-width:1550px){.intro-title,.intro-tools{max-width:1500px}}
+@media(max-width:650px){.intro-title,.intro-tools{padding-left:14px;padding-right:14px}.intro-tools .quiet{width:100%;max-width:100%}}

@@ -8,7 +8,7 @@ const server=live?null:spawn('python3',['-m','http.server','8766','--bind','127.
 let browser;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('styles.css?v=7'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=16'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
  const page=await context.newPage(),errors=[];
@@ -21,16 +21,25 @@ async function run(){
   for(const [text,board] of [[100,100],[160,100],[100,160],[160,160]]){
    await page.evaluate(([t,b])=>{for(const [id,v] of [['textSize',t],['boardSize',b]]){const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}},[text,board]);
    await stable();
-   const art=await page.locator('.listen-art').boundingBox(),heading=await page.locator('.listen h1').boundingBox();
-   if(height>width)assert.ok(art.y+art.height<=heading.y,'Titelbild im Hochformat vor Überschrift');
-   else assert.ok(art.x>heading.x&&art.y<heading.y+heading.height,'Titelbild im Querformat neben Text');
+   const art=await page.locator('#introTitle').boundingBox(),brand=await page.locator('.brand').boundingBox();
+   assert.ok(art.y>=brand.y+brand.height,'Titelbild unter dem Namenskopf');
+   assert.equal(await page.locator('.topbar').evaluate(e=>e.nextElementSibling.id),'introTitle');
+   for(const selector of ['#settingsToggle','#sceneMenu','.chapterline','.steps','.listen','.restore']){
+    const element=page.locator(selector);if(await element.count())assert.ok((await element.boundingBox()).y>=art.y+art.height,selector+' muss unter dem Titelbild stehen');
+   }
+   assert.equal(await page.locator('#game img.landscape').count(),0);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Kein horizontaler Überlauf');
   }
  }
- console.log('PASS: Titelbild in 24 Smartphone-/Tablet-Ansichten im Hochformat oben, im Querformat neben dem Text.');
+ // Wiederbesuch mit gespeichertem Stand darf das Bild nicht nach unten schieben.
+ await page.reload();await stable();await page.locator('#resume').waitFor();
+ const hero=await page.locator('#introTitle').boundingBox();
+ assert.ok((await page.locator('.restore').boundingBox()).y>=hero.y+hero.height);
+ assert.ok((await page.locator('#settingsToggle').boundingBox()).y>=hero.y+hero.height);
+ console.log('PASS: Titelbild unmittelbar unter dem Namenskopf vor sämtlichen Bedienelementen; 24 Ansichten und Wiederbesuch mit gespeichertem Stand.');
  await page.setViewportSize({width:412,height:915});
  await page.evaluate(()=>{for(const id of ['textSize','boardSize']){const e=document.getElementById(id);e.value=100;e.dispatchEvent(new Event('input',{bubbles:true}));}});
- await stable();await page.locator('#toRead').click();
+ await stable();await page.locator('#new').click();await page.locator('#toRead').click();
  async function navigation(){
   const r=await page.locator('.scene-navigation').evaluate(g=>{const ns=g.querySelector('.primary').getBoundingClientRect(),bs=g.querySelector('.secondary').getBoundingClientRect();return {next:{x:ns.x,y:ns.y,w:ns.width,h:ns.height},back:{x:bs.x,y:bs.y,w:bs.width,h:bs.height}}});
   assert.ok(Math.abs(r.next.y-r.back.y)<2?r.back.x<r.next.x:r.next.y<r.back.y,'Weiter rechts oder über Zurück');

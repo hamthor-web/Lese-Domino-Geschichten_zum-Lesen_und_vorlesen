@@ -4,8 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f0e5f7"><meta name="description" content="Die Geschichte von Silvana beginnt. Höre zu, lies selbst und lege deinen ersten Domino-Satz.">
 <title>Silvana · Die Geschichte beginnt</title>
-<link rel="stylesheet" href="styles.css?v=7">
-<script src="game.js?v=15" defer></script>
+<link rel="stylesheet" href="styles.css?v=8">
+<script src="game.js?v=16" defer></script>
 <style>
 .scene-menu{position:relative;display:inline-block;margin:4px 0 18px;max-width:100%}
 .scene-menu summary{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:9px 18px;background:#f5edf8;border:2px solid #c8b4d9;border-radius:14px;font-weight:bold;font-size:calc(19px * var(--text));cursor:pointer;list-style:none}
@@ -22,8 +22,10 @@
 .adventure-link p,.adventure-next{font-size:calc(22px * var(--text));font-weight:bold;line-height:1.5;margin:12px 0;text-align:center}
 </style>
 </head>
-<body>
-<header class="topbar"><a class="brand" href="#main"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
+<body class="intro-page">
+<header class="topbar"><a class="brand" href="#main"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a></header>
+<figure class="intro-title" id="introTitle"><img class="landscape" src="assets/silvana-karte.png" width="1536" height="1024" alt="Silvana: zwei Dörfer, eine Stadt und eine Burg zwischen Bergen und einem Wald mit glitzernden Spinnweben."><figcaption>Ein kleines Land voller Geschichten.</figcaption></figure>
+<div class="intro-tools"><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></div>
 <section id="settings" class="settings" aria-label="Größe einstellen" hidden>
 <label for="textSize">Schrift <output id="textOutput" for="textSize">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
 <label for="boardSize">Spielfeld <output id="boardOutput" for="boardSize">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label>
