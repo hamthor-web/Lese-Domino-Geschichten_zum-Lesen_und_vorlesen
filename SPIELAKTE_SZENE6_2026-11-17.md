@@ -17,3 +17,18 @@ Szenen 1–5 veröffentlicht. Szene 6 implementiert; Prüfung und Veröffentlich
 
 ## Prüfung
 Syntaxprüfung bestanden. Browserprüfung für Verschieben, Drehen, falsche/richtige Zuordnung, Rücknavigation, Wiederholung, Übergänge und Hörsteuerung sowie sechs Smartphone-/Tablet-Formate in Hoch-/Querformat mit vier Schrift-/Spielfeldkombinationen vorbereitet. Bestehende Szenentests bleiben im Workflow. Keine physischen Geräte, Sprachdienst im automatisierten Lauf simuliert.
+
+## Veröffentlicht und geprüft – 17.11.2026
+Dieser Eintrag ersetzt die zuvor offenen Prüf- und Veröffentlichungsstände.
+
+- PR #13 veröffentlicht, Merge `2c35941efdba593a3d5a8f4f4742538783ea7f1f`.
+- Vorprüfung bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44143980165
+- GitHub-Pages-Bereitstellung erfolgreich. Abschließende vollständige Browserprüfung einschließlich Live-Seite bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44144323852
+- Je 120 Layoutprüfungen der neuen Szene: Lesen, Zuordnung, gedrehte Blase, Hören, Abschluss; jeweils sechs Smartphone-/Tablet-Formate und vier getrennte Schrift-/Spielfeldkombinationen. Keine horizontal überlaufende Seite oder abgeschnittenen Schaltflächen/Blasentexte im geprüften Umfang. Sprachdienst simuliert; keine physischen Endgeräte oder akustische Hörprüfung.
+- Falsche/richtige Zuordnung, echtes Mausziehen, Antipp-Alternative, beide Drehrichtungen, Drehregler, Zustand nach Rücknavigation, Neu-Legen/Wiederholung, Hörsteuerung, Rückweg zu Szene 5, Weiterweg und Besuchsmenü geprüft. Sämtliche bisherigen Szenentests bestanden. Keine JavaScript- oder HTTP-Fehler im neuen vollständigen Durchlauf.
+- Persönliche Live-Sichtprüfung der gelieferten Illustration und der proportionalen Sprechblasen sowie Antippen, Drehen und Neu-Legen vorgenommen. Blasen starten mittig, ohne vorweggenommene Personenzuordnung.
+- Schrift und Bild/Spielfeld getrennt regelbar. Die Blasen dürfen mit größerer Schrift proportional mitwachsen, damit ihr Text im neutralen Innenraum bleibt; das Spielfeld selbst richtet sich nach seinem eigenen Regler.
+
+Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-6/
+
+Masterstatus: Szenen 1–6 veröffentlicht und im Browser geprüft. Gesamtprojekt weiterhin in Entwicklung. Nächster inhaltlicher Abschnitt: Szene 7 „Der König im Wald“, noch nicht begonnen. Dieser Nachtrag ergänzt die zentrale Masterübersicht; eine separate zentrale Masterdatei außerhalb der Nachträge wurde nicht verändert.
