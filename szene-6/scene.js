@@ -22,8 +22,13 @@
   const width=Math.min(available,Math.max(...buttons.map(b=>b.getBoundingClientRect().width)));
   buttons.forEach(b=>b.style.width=width+'px');
   const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
-  buttons.forEach(b=>b.style.height=height+'px');
+  buttons.forEach(b=>b.style.height=height+'px');alignCardRows();
  });}
+ function alignCardRows(){
+  const cards=[...document.querySelectorAll('.question-card')];
+  for(const card of cards)for(const selector of ['h2','.selection-label','.zoom-open'])card.querySelector(selector).style.minHeight='';
+  for(let i=0;i<cards.length;i+=2){const pair=cards.slice(i,i+2);for(const selector of ['h2','.selection-label','.zoom-open']){const elements=pair.map(card=>card.querySelector(selector));const height=Math.ceil(Math.max(...elements.map(el=>el.getBoundingClientRect().height)));elements.forEach(el=>el.style.minHeight=height+'px');}}
+ }
  function stopAudio(){speechToken++;utterance=null;audioState='idle';if(speechAvailable)speechSynthesis.cancel();}
  function updateAudio(message){
   if(!$('audioToggle'))return;
