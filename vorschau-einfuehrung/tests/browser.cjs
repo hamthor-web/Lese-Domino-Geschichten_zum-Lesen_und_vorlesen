@@ -13,7 +13,9 @@ async function run(){
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
  const page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base+'vorschau-einfuehrung/');await page.locator('#toRead').click();
+ await page.goto(base+'vorschau-einfuehrung/');
+ async function stable(){await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));}
+ await stable();await page.locator('#toRead').click();
  async function navigation(){
   const r=await page.locator('.scene-navigation').evaluate(g=>{const ns=g.querySelector('.primary').getBoundingClientRect(),bs=g.querySelector('.secondary').getBoundingClientRect();return {next:{x:ns.x,y:ns.y,w:ns.width,h:ns.height},back:{x:bs.x,y:bs.y,w:bs.width,h:bs.height}}});
   assert.ok(Math.abs(r.next.y-r.back.y)<2?r.back.x<r.next.x:r.next.y<r.back.y,'Weiter rechts oder über Zurück');
@@ -29,7 +31,7 @@ async function run(){
  await page.locator('#right').click();assert.deepEqual(await ids(),[0,1,2]);
  // Real mouse pointer input exercises the same captured-pointer path as touch.
  async function drag(id,target,after=false,cancel=false){
-  await page.locator('#chain').scrollIntoViewIfNeeded();
+  await stable();await page.locator('#chain').scrollIntoViewIfNeeded();
   const a=await page.locator('#chain [data-id="'+id+'"]').boundingBox(),b=await page.locator('#chain [data-id="'+target+'"]').boundingBox();
   const vertical=await page.locator('#chain').evaluate(e=>getComputedStyle(e).flexDirection==='column');
   const x=vertical?b.x+b.width/2:b.x+b.width*(after?.8:.2),y=vertical?b.y+b.height*(after?.8:.2):b.y+b.height/2;
@@ -43,7 +45,7 @@ async function run(){
  await drag(2,1,true);assert.deepEqual(await ids(),[0,1,2]);
  // Touch events through Chrome's input protocol, with real touch identifiers/capture.
  const cdp=await context.newCDPSession(page);
- await page.locator('#chain').scrollIntoViewIfNeeded();
+ await stable();await page.locator('#chain').scrollIntoViewIfNeeded();
  let a=await page.locator('#chain [data-id="2"]').boundingBox(),b=await page.locator('#chain [data-id="0"]').boundingBox();
  const touch=(type,x,y)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:type==='touchEnd'||type==='touchCancel'?[]:[{x,y,id:3}]});
  await touch('touchStart',a.x+a.width/2,a.y+a.height/2);
