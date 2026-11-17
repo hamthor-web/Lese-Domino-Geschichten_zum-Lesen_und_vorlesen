@@ -20,7 +20,7 @@ function render(){
  document.querySelectorAll('[data-feel]').forEach(b=>b.onclick=()=>{if(b.dataset.feel==='sad'){phase=2;feedback='';render();}else{feedback='Schau dir den König an. Was hat er sich von den Spinnweben erhofft?';render();}});
  document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{if(Number(b.dataset.answer)===content.correct){phase=3;feedback='';render();}else{feedback='Das passt noch nicht. Denke an die glitzernden Tautropfen.';render();}});
  if($('back'))$('back').onclick=()=>{if(phase===0)location.assign('../szene-7/?abschnitt=abschluss');else{phase--;feedback='';render();}};
- if($('next')){$('next').onclick=()=>{phase=1;feedback='';render();}; const video=$('nextMovie');if(video){video.addEventListener('error',()=>{$('next').classList.add('missing-video');});video.play().catch(()=>{});}}
+ if($('next')){$('next').onclick=()=>{phase=1;feedback='';render();}; const video=$('nextMovie');if(video){video.addEventListener('loadeddata',()=>{$('next').classList.add('video-ready');});video.addEventListener('error',()=>{$('next').classList.remove('video-ready');});if(video.readyState>=2)$('next').classList.add('video-ready');video.play().catch(()=>{});}}
  if($('again'))$('again').onclick=()=>{phase=0;feedback='';render();};
 }
 $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
