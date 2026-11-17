@@ -4,7 +4,7 @@
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let content,phase=0,solved=false,feedback='',animationToken=0,selected=0;
  let bubbles=initialBubbles();
- function initialBubbles(){return [{x:.27,y:.80,angle:0,person:null},{x:.73,y:.80,angle:0,person:null}];}
+ function initialBubbles(){return [{x:.5,y:.25,angle:0,person:null},{x:.5,y:.76,angle:0,person:null}];}
  let speechToken=0,utterance=null,audioState='idle';
  const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
  function sizes(){
