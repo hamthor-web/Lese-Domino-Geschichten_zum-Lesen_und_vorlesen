@@ -10,7 +10,7 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=6')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=7')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -115,9 +115,12 @@ async function run(){
  assert.deepEqual(dimensions[0],dimensions[1]);
  console.log('PASS: beide Original-Spinnenbilder geladen, gleiche Abmessungen: '+JSON.stringify(dimensions[0]));
  assert.equal(await page.locator('#correctionBlock').isVisible(),false);
- for(const answer of ['Spinnen','Farbe','BLAU']){
+ for(const answer of ['Netz','rot','Spinnen','Farbe','BLAU']){
   await page.locator('#answer').fill(answer);await page.locator('#check').click();
   assert.equal(await page.locator('#help').isVisible(),false);
+  assert.equal(await page.locator('#images figure:visible').count(),2);
+  assert.equal(await page.locator('[data-picture="1"]').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('#answer').inputValue(),answer);
   assert.equal(await page.locator('#next').isVisible(),false);
  }
  await page.locator('#correction').waitFor({state:'visible'});
@@ -125,7 +128,7 @@ async function run(){
  assert.equal(await page.locator('#answer').evaluate(el=>el.readOnly),true);
  assert.equal(await page.locator('#correction').inputValue(),'');
  assert.equal(await page.locator('#correction').evaluate(el=>el===document.activeElement),true);
- for(const answer of ['rot','blau','gelb']){await page.locator('#correction').fill(answer);await page.locator('#checkCorrection').click();}
+ for(const answer of ['rot','blau']){await page.locator('#correction').fill(answer);await page.locator('#checkCorrection').click();}
  assert.equal(await page.locator('#answer').inputValue(),'BLAU');
  assert.equal(await page.locator('#help').isVisible(),true);
  assert.equal(await page.locator('#letterRow input').count(),4);
@@ -193,12 +196,20 @@ async function run(){
  await page.waitForFunction(()=>!document.getElementById('answer').disabled);
  await page.locator('#answer').fill('Die Spinnen sind nicht grau.');
  await page.locator('#check').click();
+ assert.equal(await page.locator('#images figure:visible').count(),1);
+ await page.locator('#correction').fill('rot');await page.locator('#checkCorrection').click();
+ assert.equal(await page.locator('#images figure:visible').count(),2);
+ assert.equal(await page.locator('#answer').inputValue(),'Die Spinnen sind nicht grau.');
+ await page.locator('#back').click();await page.locator('#next').click();
+ await page.locator('#compare0').waitFor({state:'visible'});
+ assert.equal(await page.locator('#images figure:visible').count(),2);
+ assert.equal(await page.locator('#correction').inputValue(),'rot');
  await page.locator('#correction').fill('GRAU');await page.locator('#checkCorrection').click();
  assert.equal(await page.locator('#answer').inputValue(),'Die Spinnen sind nicht grau.');
  assert.equal(await page.locator('#correction').inputValue(),'GRAU');
  assert.equal(await page.locator('#next').isVisible(),true);
  assert.equal(await page.locator('#help').isVisible(),false);
- console.log('PASS: genaue Warum-Frage, nur gewähltes Bild und „nicht grau“ als Fehlerbeschreibung.');
+ console.log('PASS: zweites Bild erscheint bei Vergleichshinweisen und falscher Farbkorrektur erneut; Auswahl und Eingaben bleiben bei Rücknavigation erhalten.');
  console.log('PASS: zweites Antwortfeld, erste Antwort bleibt erhalten; direkte Korrektur und Hilfe geprüft.');
  console.log('PASS: Rücknavigation zum Szene-2-Abschluss, Wiederbesuch, Menüfreischaltung.');
 
