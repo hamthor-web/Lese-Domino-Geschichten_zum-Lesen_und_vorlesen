@@ -1,5 +1,5 @@
 # Silvana – Spielakte Szene 3: Die Spinnen im Wald
-Stand: 17.11.2026, 01:43 Uhr Europe/Berlin
+Stand: 17.11.2026 – zwei getrennte Antwortfelder veröffentlicht
 
 ## Veröffentlichung und bestandene Live-Prüfung – 17.11.2026, 01:43 Uhr
 Dieser neuere Eintrag ersetzt die früheren offenen Bild-/Browser-/Veröffentlichungshinweise; die historischen Entwicklungsnotizen bleiben unten erhalten.
@@ -92,4 +92,18 @@ Umsetzung:
 - Wird schon im ersten Feld eindeutig „grau“ genannt, bleibt die bisherige Annahme dieser passenden Antwort erhalten.
 - Texte, Originalbilder, Sprachablauf und vorangehende Animationen bleiben erhalten.
 - Versionierte Skript-/CSS-Aufrufe verhindern das Mischen alter und neuer Dateien.
-Prüfung und Veröffentlichung dieses Nachtrags werden nach erfolgreichem Browserlauf ergänzt.
+Prüfung und Veröffentlichung dieses Nachtrags erfolgreich abgeschlossen; Details folgen im Prüfprotokoll.
+
+
+### Prüfung und Veröffentlichung der zwei Felder
+Veröffentlicht über PR #2 / Merge `e9fb1e921d3800a274737f7ce6046fc61694c03e`.
+Vor Zusammenführung echter Chrome-Browserlauf bestanden. Nach Veröffentlichung auch der vollständige Live-Durchlauf auf GitHub Pages erfolgreich:
+- Erste Eingabe mit „blau“ bleibt unverändert und lesbar im ersten Feld stehen; zweites Feld ist zunächst leer und erhält den Fokus.
+- Direkte Korrektur „GRAU“ im zweiten Feld ohne Hilfe erfolgreich.
+- Nach drei falschen Farbkorrekturen im zweiten Feld (einschließlich „blau“) erscheint die Hilfe mit vier Feldern und einem vorgegebenen Buchstaben; das Lösungswort wird in die zweite Eingabe übernommen.
+- Erste und zweite Antwort bleiben beim Zurückgehen erhalten.
+- Je 96 Layoutprüfungen vor Veröffentlichung und auf der Live-Seite, sechs Smartphone-/Tablet-Viewports und vier getrennte Schrift-/Spielfeldwerte. Kein horizontaler Überlauf und keine JavaScript-/HTTP-Fehler.
+- Vorhandene 26 Antwortfälle, zusätzliche Korrekturschritt-Tests und Einführungstests bestehen.
+- Zusätzlich persönlich im Live-Browser die Darstellung mit erhaltener erster Eingabe und neuem leeren zweiten Feld angesehen. Keine Screenshots als Datei in die Projektquellen übernommen.
+- Sprachdienst weiterhin simuliert; keine physischen Endgeräte oder akustische Prüfung.
+Bestandener Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/43991015979
