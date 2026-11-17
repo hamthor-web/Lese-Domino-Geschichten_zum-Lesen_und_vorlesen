@@ -1,0 +1,6 @@
+@import url("../szene-3/scene.css?v=4");
+.story-cards{flex-direction:column;align-items:stretch;list-style-position:outside;padding:calc(24px * var(--board)) calc(24px * var(--board)) calc(24px * var(--board)) calc(48px * var(--board));gap:calc(20px * var(--board));}
+.story-cards li{min-width:0;padding-left:8px;font-size:calc(24px * var(--text));}
+.story-cards .tile{width:100%;touch-action:none;user-select:none;overflow-wrap:break-word;}
+.story-cards .tile.dragging{opacity:.55}
+.result li{margin-bottom:18px}

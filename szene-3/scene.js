@@ -8,6 +8,7 @@
  const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(3,Number(localStorage.getItem(VISITED))||0)));}catch{}}
+ function updateSceneMenu(){try{if(Number(localStorage.getItem(VISITED))>=4&&!$('sceneMenu4')){const a=document.createElement('a');a.id='sceneMenu4';a.href='../szene-4/';a.textContent='Der Händler';document.querySelector('.scene-menu nav').append(a);}}catch{}}
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
   document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);
@@ -56,7 +57,7 @@
  function backButton(){return '<button class="secondary" id="back">← Zurück</button>';}
  function simpleDetails(){return '<details><summary>Lesetext ansehen</summary><div class="reading">'+esc(content.simple)+'</div></details>';}
  function render(){
-  $('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
+  updateSceneMenu();$('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
   $('stepStatus').hidden=phase===3;
   let html='';
   if(phase===0){
@@ -66,7 +67,7 @@
   }else if(phase===2){
    html='<section class="panel"><span class="eyebrow">Jetzt hörst du die Geschichte</span><h1>Die Spinnen im Wald</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details><div class="actions scene-navigation"><button class="primary" id="next">Weiter</button>'+backButton()+'</div></section>';
   }else{
-   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><div class="actions">'+backButton()+'<button class="secondary" id="again">Diese Szene wiederholen</button></div></section>';
+   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><p>Jetzt geht das Abenteuer weiter.</p><div class="actions scene-navigation"><button class="primary" id="scene4">Weiter</button>'+backButton()+'</div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div></section>';
   }
   $('game').innerHTML=html;
   $('back').onclick=()=>phase===0?location.assign('../szene-2/?abschnitt=abschluss'):go(phase-1);
@@ -82,7 +83,7 @@
    updateAnswer();loadImages();
   }
   if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;comparisonVisible=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
+  if(phase===3){$('scene4').onclick=()=>location.assign('../szene-4/');$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;comparisonVisible=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
   scheduleButtons();
  }
  async function loadImages(){
@@ -170,6 +171,7 @@
  window.addEventListener('pagehide',()=>{loadToken++;stopAudio();});
  fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.simple!=='string'||typeof data.original!=='string'||!Array.isArray(data.images)||data.images.length!==2||data.images.some(im=>typeof im.matchesText!=='boolean')||data.images.filter(im=>im.matchesText===false).length!==1)throw Error('Inhalt');
-  content=data;markVisited();render();
+  content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;state.done=true;}render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();
+
