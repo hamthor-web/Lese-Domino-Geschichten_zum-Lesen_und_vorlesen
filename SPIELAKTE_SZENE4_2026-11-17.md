@@ -57,3 +57,19 @@ Dieser Eintrag ersetzt die oben dokumentierten offenen Prüf- und Veröffentlich
 Live-Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-4/
 
 Masterstatus: Szene 4 implementiert, veröffentlicht und im Browser geprüft. Gesamtprojekt weiterhin in Entwicklung. Nächster Bauabschnitt: Szene 5 „Der König“, noch nicht begonnen. Diese Datei ist der neue Nachtrag zu Spielakte und zentraler Masterübersicht; frühere Dateien bleiben als Verlauf erhalten.
+
+## Bestätigter Nachtrag: Bildkarten und Abschlussbedienung
+
+Heike liefert drei Bilder und beauftragt deren Verbindung mit den Satzkarten. Zuordnung:
+
+| Satz | Gelieferte Datei | Webfassung |
+|---|---|---|
+| Der Händler spannt das Netz | der Händler Beginn.png | assets/haendler-netz.webp |
+| Die Fäden kleben in seinen Haaren | Der Händler 2.png | assets/haendler-faeden.webp |
+| Vom Netz bleibt fast nichts übrig | Der Händler 3.png | assets/haendler-rest.webp |
+
+Bild und Satz bilden eine gemeinsame verschiebbare Karte. Die gelieferten Bilder wurden in proportionalen WebP-Fassungen für das Spiel ergänzt; die Originaldateien bleiben unverändert erhalten. Bildinhalte nicht retuschiert oder neu erzeugt. Auf kleinen Bildschirmen steht das Bild über dem Satz, auf größeren daneben. Bilder skalieren mit dem Spielfeldregler; Schrift separat.
+
+Nach erfolgreich geprüfter Reihenfolge werden „Kleiner Tipp“ und „Reihenfolge prüfen“ ausgeblendet. Beim erneuten Umstellen wird die Lösung zurückgesetzt und die Prüfhilfe wieder sichtbar. Bloßes Auswählen einer Karte verändert den Lösungsstatus nicht. Rücknavigation erhält den aktuellen Status; Wiederholung setzt ihn zurück.
+
+Dieser Nachtrag ersetzt den früheren Stand ohne Bildkarten. Vor Veröffentlichung werden Bildladen, feste Zuordnung, Verschieben per Maus/Touch, Aus-/Einblenden der Prüfhilfe und sechs Bildschirmgrößen mit beiden Zoomreglern geprüft.
