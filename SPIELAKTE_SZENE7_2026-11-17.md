@@ -28,3 +28,6 @@ Szenen 1–6 veröffentlicht. Szene 7 implementiert; Browserprüfung und Veröff
 
 ## Prüfplan und Grenzen
 Automatisierte Prüfung aller Trefferflächen von beiden Bildern aus, aller zwölf Wortrichtungen mit falschen Antworten, Verhinderung von Doppelzählung, Weiter-Freigabe, Rücknavigation, Neustart, Vorlesesteuerung, Szene-6-Übergang und Menüs. Sechs Handy-/Tabletformate im Hoch-/Querformat mit vier unabhängigen Schrift-/Spielfeldkombinationen über sechs Ansichten (144 Layoutprüfungen). Vorhandene Szenenprüfungen bleiben im Workflow. Sprachdienst simuliert; keine akustische Hörprüfung und keine physischen Geräte. Lokaler Chrome-Start durch Umgebung blockiert; Browserprüfung läuft vor Veröffentlichung in GitHub Actions. Abschließender Prüfstand folgt als Nachtrag.
+
+## Vorprüfung: benachbarte kleine Tropfen
+Erster Lauf 44188235337: sämtliche bisherigen Szenenprüfungen bestanden. In Szene 7 überlappten die vergrößerten Touchflächen der zwei obersten benachbarten Tropfen derselben Gruppe. Für diese beiden Stellen gemeinsame Trefferfläche eingerichtet; beide Motive bleiben anklickbar und zählen dieselbe Antwortgruppe. Netz-/Schalfläche nach oben erweitert, um auch die oberen Schalenden zu erfassen. Erneute vollständige Prüfung folgt.
