@@ -1,7 +1,11 @@
-# Szene 8 – Bilddatei
+# Szene 8 – Medien und Bauplan (18.11.2026)
 
-Das vom Nutzer am 17.11.2026 bereitgestellte Königsbild gehört nach `szene-8/assets/koenig-enttaeuscht.png`.
+Die Illustration liegt unter `szene-8/assets/koenig-enttaeuscht.png` auf GitHub und wird in Szene 8 verwendet.
 
-**Stand:** Die Bilddatei wurde noch nicht in dieses GitHub-Repository hochgeladen. Bis dahin verwendet die Szene bei fehlender Datei als Übergangslösung das Waldmotiv aus Szene 7. Die Szene ist deshalb bildlich **noch nicht vollständig fertiggestellt**.
+Die von Heike am 18.11.2026 hochgeladene Datei `Wuerstchen_Animation.mp4` zeigt das Würstchen mit dem gestalteten Weiter-Schild. Sie gehört unverändert unter `szene-8/assets/Wuerstchen_Animation.mp4`. **Die Videodatei ist auf GitHub noch nicht vorhanden** und muss als Binärdatei hochgeladen werden. Bis dahin erscheint ein lesbarer Weiter-Ersatzbutton.
 
-Die interaktive Logik ist vorhanden: zuerst Gefühle 😞 😠 😊, erst nach 😞 die drei Begründungssätze; nur der erste Satz ist richtig. Bestehende Dateien und Inhalte nicht löschen.
+Verbindliche Bauanleitung `Spinnwebenreichtum mit Spielanleitung.docx`, Szene 8, und `BAUPLAN_ENTSCHEIDUNGEN_2026-11-16.md`: `Lesen → Aufgabe lösen; Original 8 erst mit Original 9 in Szene 9 anhören`. Der unveränderte vereinfachte Lesetext ist in `content.json` enthalten und wird als erster Schritt präsentiert.
+
+Heikes neuere ausdrückliche Korrektur ersetzt die zunächst falsch programmierte Lösung: Bei den drei Begründungssätzen ist **der zweite Satz richtig**, weil der König die Schönheit der Tautropfen nicht gesehen hat. Das ist eine spätere Entscheidung; im vereinfachten Lesetext heißt es zugleich, der König schnaubte wütend. Smiley-Aufgabe wie beauftragt: 😞 enttäuscht, 😠 wütend, 😊 glücklich. Erst nach 😞 erscheinen die drei Sätze.
+
+Status: Text, Aufgabenschritte und Referenz auf Weiter-Animation programmiert. **MP4-Upload und praktische Browser-/Mobilprüfung noch offen.** Keine Freigabe der gesamten Szene behaupten.
