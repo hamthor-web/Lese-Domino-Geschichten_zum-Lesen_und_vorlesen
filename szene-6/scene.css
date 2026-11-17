@@ -4,8 +4,8 @@
 .board-scroll{width:100%;max-width:100%;overflow:auto;border:2px solid #c7b997;border-radius:16px;background:#ede5d5}
 #villageBoard{position:relative;width:calc(100% * var(--board));min-width:80%;aspect-ratio:4/3}
 .village-image{display:block;width:100%;height:auto;user-select:none}
-.person-slot{position:absolute;width:44%;aspect-ratio:3/2;top:1%;display:grid;place-items:center}
-.person-slot.king{left:2%}.person-slot.mayor{right:2%}
+.person-slot{position:absolute;width:30%;aspect-ratio:3/2;top:1%;display:grid;place-items:center}
+.person-slot.king{left:9%}.person-slot.mayor{right:9%}
 .person-cross{position:relative;z-index:4;display:grid;place-items:center;width:56px;height:56px;min-height:56px;border:3px solid #493359;border-radius:50%;background:#fff9e9;color:#493359;font: bold 34px/1 Arial,sans-serif;box-shadow:0 2px 5px #33253366;cursor:pointer;padding:0}
 .person-cross:disabled{opacity:.5}
 .person-cross:focus-visible{outline:4px solid #6a4189;outline-offset:4px}
