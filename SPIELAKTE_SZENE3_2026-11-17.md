@@ -1,5 +1,29 @@
 # Silvana – Spielakte Szene 3: Die Spinnen im Wald
-Stand: 17.11.2026, 01:09 Uhr Europe/Berlin
+Stand: 17.11.2026, 01:43 Uhr Europe/Berlin
+
+## Veröffentlichung und bestandene Live-Prüfung – 17.11.2026, 01:43 Uhr
+Dieser neuere Eintrag ersetzt die früheren offenen Bild-/Browser-/Veröffentlichungshinweise; die historischen Entwicklungsnotizen bleiben unten erhalten.
+
+- Heikes Originalbilder liegen unverändert unter `assets/spinnen-grau.png` und `assets/spinnen-blau.png`.
+- Beide Bilder wurden im echten Chrome-Browser auf dem geprüften Programmstand und auf der tatsächlichen GitHub-Pages-Webseite geladen; jeweils 1448×1086 Pixel. Die gezeigten Bilder wurden visuell der grauen bzw. blauen Spinnenvariante zugeordnet. Eine pixelgenaue Gleichheit außerhalb der Spinnen wurde nicht nachgewiesen.
+- Der animierte Weiter-Button von Szene 2 führt nach Ende des Original-MP4s auf Klick direkt zu `../szene-3/`. Das Originalvideo spielt weiterhin einmalig; der bisherige Szenenabschluss bleibt für Rücknavigation und Wiederholung erreichbar.
+- Die neue Szene und alle Verbindungen wurden über PR #1 auf main veröffentlicht. Kein Entwicklungszweig oder Originalasset gelöscht.
+- Die Einführung lädt das geänderte Menüskript mit neuem Versionsparameter `game.js?v=9`. Dadurch bekommen Browser mit vorheriger Skriptversion die neue Menülogik.
+- Echter Chrome-Durchlauf: beide falschen Kisten → Marktplatz → zwei Rollen mit gleicher GIF-Quelle → falsches/richtiges Wetter → vollständiges Original-MP4 → Weiter → Szene 3 → beide Bilder → Teilantworten → drei Fehlversuche → vier Buchstabenfelder mit genau einem vorgegebenen Buchstaben → richtige Lösung → Hörschritt → Abschluss → Zurück bis Szene-2-Abschluss → erneuter Besuch → Szenenmenü in der Einführung.
+- Jeweils 96 Layoutprüfungen auf Programmstand und Live-Webseite: sechs Viewports (360×800, 800×360, 412×915, 915×412, 768×1024, 1024×768), vier Zoomkombinationen (100/100, 160/100, 100/160, 160/160), vier Spielansichten. Kein horizontaler Seitenüberlauf.
+- 26 Antwortfälle und vorhandene Einführungstests auch in Node bestanden. Im vollständigen Live-Durchlauf keine JavaScript- oder HTTP-Fehler.
+- Der Sprachdienst ist im automatisierten Browserlauf simuliert (Start/Pause/Fortsetzen/Neustart). Keine akustische Hörprüfung, keine physischen Endgeräte und keine persönliche Screenshot-Sichtprüfung in dieser Sitzung.
+- Die lokale Arbeitsumgebung dieser Chatsitzung bleibt nicht verfügbar. Die echte Browserprüfung lief erfolgreich über den neu ergänzten GitHub-Actions-Workflow.
+
+Spielseite: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/
+Szene 3: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-3/
+Bestandener Prüf- und Live-Lauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/43989573354
+Veröffentlichungsmerge: `e93c2adae4293ec9b5ca062ad7f3dc05363ce74c`.
+Abschließend geprüfter Programmstand (Menüversion / wartender Live-Test): `54c86deacae2c97724297d2e2408be790c852edd`.
+
+Nächster inhaltlicher Bauabschnitt: Szene 4 „Der Händler“, entsprechend bestätigter Bauanleitung. Mit diesem Fehlerbehebungsauftrag nicht begonnen.
+
+## Historisches Entwicklungsprotokoll
 
 ## Auftrag und Quellen
 Heike: „So jetzt ist alles oben. Fang schon mal mit der dritten Szene an.“

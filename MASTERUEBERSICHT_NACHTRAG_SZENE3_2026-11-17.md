@@ -1,4 +1,22 @@
 # Masterübersicht – Nachtrag Silvana / Szene 3
+Stand: 17.11.2026, 01:43 Uhr Europe/Berlin
+
+| Bereich | Aktueller Stand |
+|---|---|
+| Einführung / Szene 2 | Vorhandene Funktionen und Originalassets erhalten. Animierter Weiter-Button führt nach dem Abspielen direkt zu Szene 3. |
+| Szene 3 „Die Spinnen im Wald“ | Auf main und GitHub Pages veröffentlicht: Lesen, Original-Bildvergleich, Farbeingabe, Buchstabenhilfe, Original-Hörteil und Abschluss. |
+| Bilder | Originale graue und blaue Spinnenbilder vorhanden; beide live geladen, gleiche Abmessungen 1448×1086. Kein pixelgenauer Vergleich behauptet. |
+| Navigation | Rücksprung zu Szene-2-Abschluss und Menüfreischaltung nach Besuch live geprüft. Erreichter Höchststand bleibt erhalten. Menüskript mit Versionsparameter 9. |
+| Prüfung | Chrome-Browserdurchlauf vor Veröffentlichung und auf Live-Webseite bestanden; je 96 Layoutprüfungen, 26 Antwortfälle, Einführungstests. Keine JavaScript-/HTTP-Fehler. |
+| Grenzen | Sprachdienst simuliert; keine akustische Prüfung, physischen Geräte oder persönliche Screenshot-Sichtprüfung. |
+| Nächster Bauabschnitt | Szene 4 „Der Händler“; in diesem Auftrag nicht begonnen. |
+
+Prüfprotokoll: `SPIELAKTE_SZENE3_2026-11-17.md`.
+Live-Prüfung: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/43989573354
+Geprüfter Programmstand: `54c86deacae2c97724297d2e2408be790c852edd`.
+Die zentrale Projektdatei außerhalb des Repositories wurde nicht verändert; dieser Repository-Nachtrag steht zur Synchronisierung bereit.
+
+## Vorheriger Entwicklungsstand
 Stand: 17.11.2026
 
 | Bereich | Stand |
@@ -13,3 +31,4 @@ Stand: 17.11.2026
 
 Details: `SPIELAKTE_SZENE3_2026-11-17.md`.
 Dieser Nachtrag liegt im Entwicklungszweig zur späteren Zusammenführung. Die zentrale Projektdatei außerhalb des Repositories wurde nicht verändert.
+

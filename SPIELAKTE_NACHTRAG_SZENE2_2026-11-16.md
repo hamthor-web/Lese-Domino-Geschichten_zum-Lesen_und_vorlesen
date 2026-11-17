@@ -108,3 +108,10 @@ Veröffentlicht auf `main` mit Commit [`91ca6f135ba34d1406ff93de58454f32eec0772c
 - Falsches Wetter blendet den Button nicht ein. Bei Rücknavigation wird die Wiedergabe gestoppt; ein erneuter Durchlauf beginnt frisch. Bei blockiertem Autostart kann das Kind die Animation antippen; bei einem Medienladefehler bleibt ein Weiter-Fallback verfügbar.
 - Ziel bleibt vorerst der vorhandene Szenenabschluss. Die Folgeszene „Die Spinnen im Wald“ existiert noch nicht; es wurde keine leere Zielseite oder erfundene Geschichte angelegt.
 - Im echten Chromium mit MP4-Wiedergabe geprüft: verborgen vor korrekter Antwort, Wiedergabezeit steigt an, kein Loop, Freischaltung erst nach Ende, gleichbleibendes Endbild nach weiterer Wartezeit, Weiterklick zum Abschluss, Abbruch bei Zurück. Vier Smartphone-/Tablet-Viewports bei 160/160 ohne horizontalen Überlauf; quadratische Darstellung ohne Verzerrung. Keine JavaScript-Fehler. Keine physischen Endgeräte getestet.
+
+
+## Verbindung zu Szene 3 – 17.11.2026, 01:43 Uhr
+Nach Ergänzung der Original-Spinnenbilder und bestandenem Chrome-Browserlauf wurde Szene 3 auf main veröffentlicht. Der animierte Weiter-Button der Wetteraufgabe führt nach Abspielende auf Klick direkt dorthin. Sein Original-MP4 bleibt unverändert. Der bisherige Szene-2-Abschluss bleibt über die Rücknavigation von Szene 3 erreichbar und bietet Wiederholung, Einführung und Weiter an.
+Der vollständige Übergang wurde auch auf der tatsächlichen GitHub-Pages-Webseite erfolgreich getestet. Rollen-/Kistenanimationen und Wetterauswahl bestehen weiterhin.
+Details: `SPIELAKTE_SZENE3_2026-11-17.md`.
+Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/43989573354

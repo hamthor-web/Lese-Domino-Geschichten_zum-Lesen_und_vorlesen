@@ -1,6 +1,6 @@
 # Lese-Domino „Das Land der glitzernden Spinnweben“
 
-Aktueller Bearbeitungsstand: 17. November 2026. Die Einführung und Szene 2 „Die vier Straßen“ sind als eigenständige GitHub-Pages-Ansichten umgesetzt. Szene 2 ergänzt die Originalkisten, zwei einmalig öffnende Rollen, Wetterbildauswahl und Abschluss; responsiver Ablauf und unabhängige Größenregler wurden im Chromium-Browser geprüft. Veröffentlichung und Live-Prüfprotokoll: `SPIELAKTE_NACHTRAG_SZENE2_2026-11-16.md`. Weitere Szenen bleiben außerhalb dieses Abschlussauftrags. Reale Geräte- und akustische Hörprüfung sind offen.
+Aktueller Bearbeitungsstand: 17. November 2026, 01:43 Uhr. Einführung, Szene 2 „Die vier Straßen“ und Szene 3 „Die Spinnen im Wald“ sind auf GitHub Pages veröffentlicht. Der animierte Weiter-Button nach der Wetteraufgabe führt direkt zu Szene 3. Original-Spinnenbilder, Farbeingabe mit Nachfragen, Buchstabenhilfe nach drei sachlich falschen Antworten und anschließender Original-Hörteil sind eingebaut. Echter Chrome-Durchlauf vor Veröffentlichung und auf der Live-Seite bestanden, jeweils 96 Layoutprüfungen. Details und Grenzen: `SPIELAKTE_SZENE3_2026-11-17.md`. Keine physischen Geräte oder akustische Hörprüfung. Nächster Bauabschnitt ist Szene 4 „Der Händler“; noch nicht begonnen.
 
 Die nachfolgenden Angaben vom 27. Oktober beschreiben den älteren Prototyp und bleiben als Verlauf erhalten.
 
