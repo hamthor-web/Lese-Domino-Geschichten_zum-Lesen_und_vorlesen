@@ -1,0 +1,16 @@
+{
+  "title": "Die Spinnen im Wald",
+  "simple": "Im Wald lebten kleine graue Spinnen.\nNachts webten sie Netze, und am Morgen glitzerten die Tautropfen darin wie Edelsteine.\nDie Netze waren für die Menschen sehr wertvoll. Aber man konnte sie nicht mit nach Hause nehmen.",
+  "original": "In den Wäldern lebten kleine graue Spinnen. Unauffällige Tiere, kaum größer als ein Fingernagel. Sie saßen unter Farnen, in Brombeerhecken oder zwischen den krummen Zweigen der Haselsträucher. Tags waren sie nicht zu sehen, so gut verbargen sie sich in den Schatten des Waldes. Aber nachts webten sie ihre Netze.\nDas Besondere daran zeigte sich erst am frühen Morgen.\nDann hing der Tau in den Fäden. Hunderte winzige Tropfen. Sobald die Sonne zwischen den Bäumen hervorkam, glitzerten die Netze, als wären sie aus Silber gemacht. Und die Tropfen machten dem Glanz wertvoller Edelsteine den Rang streitig. Manche blitzten blau. Andere rötlich. Einige der Netze leuchteten nur an einer einzigen Stelle, und wenn man den Kopf ein wenig bewegte, war der Zauber schon wieder vorbei.\nDie Menschen in Silvana nannten sie Morgengespinste.\nSie galten als das Kostbarste, was das Land besaß. Man konnte sie allerdings nicht kaufen. Nicht mit nach Hause nehmen.",
+  "images": [
+    {
+      "src": "../assets/spinnen-grau.png",
+      "label": "Bild 1"
+    },
+    {
+      "src": "../assets/spinnen-blau.png",
+      "label": "Bild 2"
+    }
+  ],
+  "source": "Spinnwebenreichtum mit Spielanleitung.docx, Abschnitt 3; bestätigt am 16.11.2026"
+}

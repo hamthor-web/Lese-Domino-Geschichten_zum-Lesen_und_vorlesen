@@ -51,7 +51,7 @@
 'use strict';
 const original="Vier Straßen voller Schlaglöcher hatte Silvana, und wenn die Kutschen darüber holperten, wurden die Einheimischen aus ihrem ohnehin viel zu leichten Schlaf geweckt. Zum Glück kamen nicht allzu viele vorbei.\nWenn es regnete, roch es auf dem Marktplatz nach nasser Wolle, Pferdemist und dem alten Fett aus der Bäckerei. Und ein bisschen nach alten Gewohnheiten, die sich schon viel zu lange in den Ritzen der Stadt eingenistet hatten.\nViel hatte das Land nicht zu bieten. Reich war Silvana trotzdem.";
 const simple="In Silvana gab es nur vier Straßen mit vielen Löchern. Wenn Kutschen darüber holperten, wachten die Leute auf.\nWenn es regnete, roch der Marktplatz nach nasser Wolle, Pferdemist und Bäckerei.\nSilvana hatte nicht viel, aber das Land war trotzdem reich.";
-const $=id=>document.getElementById(id);const VISITED_KEY='silvana-visited-scenes-v1';try{localStorage.setItem(VISITED_KEY,'2')}catch{}let phase=0,audioState='idle',voice=null,boxDone=false,pictureDone=false,mistakes=0;
+const $=id=>document.getElementById(id);const VISITED_KEY='silvana-visited-scenes-v1';try{localStorage.setItem(VISITED_KEY,String(Math.max(2,Number(localStorage.getItem(VISITED_KEY))||0)))}catch{}let phase=0,audioState='idle',voice=null,boxDone=false,pictureDone=false,mistakes=0;
 function sizes(){document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);$('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';}
 $('settingsToggle').onclick=()=>{let isOpen=$('settings').hidden;$('settings').hidden=!isOpen;$('settingsToggle').setAttribute('aria-expanded',String(isOpen));};['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
 function stop(){voice=null;audioState='idle';if('speechSynthesis' in window)speechSynthesis.cancel()}
@@ -114,10 +114,10 @@ function showAnimatedNext(){
  const button=$('next'),video=$('nextAnimation'),token=phaseToken;
  $('weatherQuestion').hidden=true;button.hidden=false;button.disabled=true;
  button.scrollIntoView({block:'center',behavior:'instant'});
- video.onended=()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter zum Szenenabschluss');};
+ video.onended=()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter zu Die Spinnen im Wald');};
  video.onerror=()=>{if(token!==phaseToken)return;video.hidden=true;$('nextFallback').hidden=false;button.disabled=false;button.dataset.fallback='true';};
  button.onclick=()=>{
-  if(video.ended||button.dataset.fallback==='true'){go(4);return}
+  if(video.ended||button.dataset.fallback==='true'){location.href='../szene-3/';return}
   button.disabled=true;video.play().catch(()=>{if(token===phaseToken)button.disabled=false});
  };
  video.play().catch(()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter-Animation starten');notice('Tippe auf die Figur, um die Animation zu starten.');});
@@ -129,13 +129,19 @@ if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><
 else if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next">Weiter</button></div>');
 else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Stoff','Wege','Marktplatz'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
 else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<div class="weather-prompt"><p class="roll-question" id="weatherQuestion">Von welchem Wetter war in der Geschichte die Rede?</p><button class="animated-next" id="next" hidden disabled aria-label="Weiter-Animation läuft"><video id="nextAnimation" src="../assets/weiter-einmalig.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="nextFallback" class="video-fallback" hidden>Weiter</span></button></div>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
-else out=panel('<span class="eyebrow">Szene 2 geschafft</span><h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="intro">Zur Einführung</button></div>');
+else out=panel('<span class="eyebrow">Szene 2 geschafft</span><h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="primary" id="scene3">Weiter</button><button class="primary" id="intro">Zur Einführung</button></div>');
 $('game').innerHTML=out;
 if(phase===0){$('audio').onclick=speak;$('repeat').onclick=()=>{stop();speak()};$('next').onclick=()=>go(1)}
 if(phase===1){$('back').onclick=()=>go(0);$('next').onclick=()=>go(2)}
 if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
 if(phase===3){$('back').onclick=()=>go(2);startRolls()}
-if(phase===4){$('again').onclick=()=>{mistakes=0;boxDone=false;pictureDone=false;go(0)};$('intro').onclick=()=>location.href='../vorschau-einfuehrung/'}
+if(phase===4){$('scene3').onclick=()=>location.href='../szene-3/';$('again').onclick=()=>{mistakes=0;boxDone=false;pictureDone=false;go(0)};$('intro').onclick=()=>location.href='../vorschau-einfuehrung/'}
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&'speechSynthesis' in window){speechSynthesis.pause();audioState='paused';if($('audio'))$('audio').textContent='▶ Weiterhören'}});window.addEventListener('pagehide',stop);render();
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&'speechSynthesis' in window){speechSynthesis.pause();audioState='paused';if($('audio'))$('audio').textContent='▶ Weiterhören'}});window.addEventListener('pagehide',stop);
+try{if(Number(localStorage.getItem(VISITED_KEY))>=3){
+ const link=document.createElement('a');link.href='../szene-3/';link.textContent='Die Spinnen im Wald';
+ document.querySelector('.scene-menu nav').append(link);
+ if(new URLSearchParams(location.search).get('abschnitt')==='abschluss')phase=4;
+}}catch{}
+render();
 </script></body></html>
