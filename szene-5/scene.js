@@ -65,10 +65,20 @@
   if($('again'))$('again').onclick=()=>{removed=false;solved=false;feedback='';go(0);};
   scheduleButtons();
  }
+ function sentenceWords(){
+  if(solved)return esc(content.sentenceStart)+' <span class="answer-word" id="answerWord">'+esc(content.correct)+'</span>';
+  if(removed)return esc(content.sentenceStart)+' <span class="word-gap" id="wordGap" aria-label="Lücke für das passende Wort"></span>';
+  const words=content.sentenceStart.split(' ').concat(content.wrong);
+  return words.map((word,i)=>'<button class="sentence-word" data-token="'+i+'"'+(i===words.length-1?' id="wrongWord"':'')+'>'+esc(word)+'</button>').join(' ');
+ }
  function renderTask(){
   if(!$('wordTask'))return;
-  $('wordTask').innerHTML='<p class="parchment sentence" id="taskSentence">'+esc(content.sentenceStart)+' '+(solved?'<span class="answer-word" id="answerWord">'+esc(content.correct)+'</span>':removed?'<span class="word-gap" id="wordGap" aria-label="Lücke für das passende Wort"></span>':'<button class="word-trigger" id="wrongWord">'+esc(content.wrong)+'</button>')+'.</p><section id="choices" '+(!removed||solved?'hidden':'')+'><p>Welches Wort passt?</p><div class="word-options">'+content.options.map(w=>'<button class="parchment word-option" data-word="'+esc(w)+'">'+esc(w)+'</button>').join('')+'</div></section><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p>';
-  if($('wrongWord'))$('wrongWord').onclick=()=>{removed=true;feedback='Welches Wort passt zur Geschichte?';renderTask();document.querySelector('.word-option').focus();};
+  $('wordTask').innerHTML='<p class="parchment sentence" id="taskSentence">'+sentenceWords()+'.</p><section id="choices" '+(!removed||solved?'hidden':'')+'><p>Welches Wort passt?</p><div class="word-options">'+content.options.map(w=>'<button class="parchment word-option" data-word="'+esc(w)+'">'+esc(w)+'</button>').join('')+'</div></section><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p>';
+  document.querySelectorAll('.sentence-word').forEach(button=>button.onclick=()=>{
+   if(removed||solved)return;
+   if(button.id==='wrongWord'){removed=true;feedback='Welches Wort passt zur Geschichte?';renderTask();document.querySelector('.word-option').focus();}
+   else{feedback='Dieses Wort passt zur Geschichte. Suche das Wort, das nicht zum Lesetext passt.';$('feedback').textContent=feedback;}
+  });
   document.querySelectorAll('.word-option').forEach(b=>b.onclick=()=>choose(b));
   if($('next'))$('next').disabled=!solved;
  }

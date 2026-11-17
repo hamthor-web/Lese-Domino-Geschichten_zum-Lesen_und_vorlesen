@@ -6,7 +6,7 @@ const live=process.env.SILVANA_BASE_URL,base=(live||'http://127.0.0.1:8767/').re
 const server=live?null:spawn('python3',['-m','http.server','8767','--bind','127.0.0.1'],{stdio:'ignore'});
 let browser;const errors=[];
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-5/?test='+Date.now());if(r.ok&&(await r.text()).includes('scene.js?v=1'))break;}catch{}if(i===179)throw Error('Szene 5 fehlt');await new Promise(r=>setTimeout(r,500));}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-5/?test='+Date.now());if(r.ok&&(await r.text()).includes('scene.js?v=2'))break;}catch{}if(i===179)throw Error('Szene 5 fehlt');await new Promise(r=>setTimeout(r,500));}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true});
  await context.addInitScript(()=>{
@@ -37,6 +37,12 @@ async function run(){
  await layout('Lesen');await p.locator('#next').click();
  assert.equal(await p.locator('#wrongWord').innerText(),'stehlen');assert.equal(await p.locator('#choices').isVisible(),false);assert.equal(await p.locator('#next').isDisabled(),true);
  assert.equal(await p.locator('.question-box').evaluate(e=>getComputedStyle(e).borderRadius),'8px');
+ assert.equal(await p.locator('.sentence-word').count(),7);
+ const appearances=await p.locator('.sentence-word').evaluateAll(bs=>bs.map(b=>{const s=getComputedStyle(b);return [s.fontFamily,s.fontSize,s.fontWeight,s.color,s.backgroundColor,s.borderWidth,s.textDecorationLine,s.padding,s.boxShadow];}));
+ assert.ok(appearances.every(s=>JSON.stringify(s)===JSON.stringify(appearances[0])),'all words must look identical');
+ assert.equal(appearances[0][2],'400');assert.equal(appearances[0][6],'none');
+ for(let i=0;i<6;i++){await p.locator('[data-token="'+i+'"]').click();assert.equal(await p.locator('#choices').isVisible(),false);assert.equal(await p.locator('#wordGap').count(),0);assert.equal(await p.locator('#next').isDisabled(),true);}
+ assert.equal(await p.locator('#taskSentence').innerText(),'Der König wollte Netze für zuhause stehlen.');
  await layout('Fehlerwort');await p.locator('#wrongWord').click();assert.equal(await p.locator('#wrongWord').count(),0);assert.equal(await p.locator('#wordGap').isVisible(),true);
  assert.deepEqual(await p.locator('.word-option').allTextContents(),['kaufen','essen','vergessen']);await layout('Wortauswahl');
  for(const wrong of ['essen','vergessen']){await p.locator('[data-word="'+wrong+'"]').click();assert.equal(await p.locator('#wordGap').isVisible(),true);assert.equal(await p.locator('#next').isDisabled(),true);assert.match(await p.locator('#feedback').innerText(),/noch nicht/);}
@@ -52,6 +58,6 @@ async function run(){
  await p.locator('#again').click();await p.locator('#next').click();assert.equal(await p.locator('#wrongWord').isVisible(),true);assert.equal(await p.locator('#next').isDisabled(),true);
  await p.locator('#back').click();await p.locator('#back').click();await p.waitForURL('**/szene-4/?abschnitt=abschluss');await p.locator('#scene5').waitFor();await p.locator('#back').click();assert.equal(await p.locator('#check').isVisible(),false);assert.equal(await p.locator('#next').isEnabled(),true);await p.locator('#next').click();await p.locator('#scene5').click();await p.waitForURL('**/szene-5/');
  await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu5').waitFor({state:'visible'});assert.deepEqual(await p.locator('#sceneMenu3,#sceneMenu4,#sceneMenu5').allTextContents(),['Die Spinnen im Wald','Der Händler','Der König']);
- assert.deepEqual(errors,[]);console.log('PASS König: Illustration, Pergament-Kästchen, Fehlerwort/Lücke, zwei falsche Wörter, richtiges Wort, Rücknavigation, Wiederholung, Übergänge und Menü; '+checks+' Layoutprüfungen. Sprachsteuerung simuliert.');await context.close();
+ assert.deepEqual(errors,[]);console.log('PASS König: Alle sieben Wörter einheitlich und anklickbar, falsche Wortwahl ohne Freigabe; Illustration, Pergament-Kästchen, Fehlerwort/Lücke, zwei falsche Wörter, richtiges Wort, Rücknavigation, Wiederholung, Übergänge und Menü; '+checks+' Layoutprüfungen. Sprachsteuerung simuliert.');await context.close();
 }
 run().then(async()=>{if(browser)await browser.close();if(server)server.kill();}).catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exitCode=1;});
