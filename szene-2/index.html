@@ -114,10 +114,10 @@ function showAnimatedNext(){
  const button=$('next'),video=$('nextAnimation'),token=phaseToken;
  $('weatherQuestion').hidden=true;button.hidden=false;button.disabled=true;
  button.scrollIntoView({block:'center',behavior:'instant'});
- video.onended=()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter zum Szenenabschluss');};
+ video.onended=()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter zu Die Spinnen im Wald');};
  video.onerror=()=>{if(token!==phaseToken)return;video.hidden=true;$('nextFallback').hidden=false;button.disabled=false;button.dataset.fallback='true';};
  button.onclick=()=>{
-  if(video.ended||button.dataset.fallback==='true'){go(4);return}
+  if(video.ended||button.dataset.fallback==='true'){location.href='../szene-3/';return}
   button.disabled=true;video.play().catch(()=>{if(token===phaseToken)button.disabled=false});
  };
  video.play().catch(()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter-Animation starten');notice('Tippe auf die Figur, um die Animation zu starten.');});

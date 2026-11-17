@@ -1,0 +1,41 @@
+name: Silvana Browserprüfung
+on:
+  push:
+    branches: [main, entwicklung/szene-3-spinnen]
+    paths:
+      - 'szene-2/**'
+      - 'szene-3/**'
+      - 'vorschau-einfuehrung/**'
+      - 'assets/**'
+      - '.github/workflows/silvana-browser.yml'
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Vorhandene Logiktests
+        run: |
+          node szene-3/answers.test.cjs
+          node --check szene-3/scene.js
+          node --check vorschau-einfuehrung/game.js
+          cd vorschau-einfuehrung
+          node tests/logic.cjs
+      - name: Browser installieren
+        run: |
+          npm install --prefix "$RUNNER_TEMP/silvana-browser" --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/silvana-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Übergang und Szene 3 im Browser prüfen
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright
+        run: node szene-3/browser.test.cjs
