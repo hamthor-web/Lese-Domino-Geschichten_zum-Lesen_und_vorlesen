@@ -63,3 +63,9 @@ Merge: `043c8d3c03092f41f57a09d81874f9ff41317f45`. Details in der Spielakte Szen
 Vor Veröffentlichung und auf GitHub Pages je 168 Layoutprüfungen sowie vollständiger Spielablauf bestanden. Sprachdienst simuliert; keine physischen Geräte oder akustische Prüfung. Details in beiden aktuellen Spielakten.
 Merge: `f6f915d60ba6d7b31e0a3873844d95aa2913bd93`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44043949323
+
+
+## Letzte Aktualisierung: Vergleichsbilder bei falscher Antwort
+In Szene 3 erscheint das zuvor ausgeblendete Bild erneut, wenn eine falsche Antwort oder ein Vergleichshinweis beide Bilder benötigt. Auch im zweiten Antwortfeld; Auswahl und Eingaben bleiben erhalten. Rücknavigation und Wiederholung geprüft. Vor Veröffentlichung und live vollständiger Chrome-Lauf und je 168 Layoutprüfungen bestanden; Originalassets unverändert.
+Merge: `c485d20e105df5abd57847ff5e969c4e47803a6a`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44045215632

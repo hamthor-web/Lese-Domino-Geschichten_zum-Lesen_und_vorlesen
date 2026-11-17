@@ -212,3 +212,21 @@ Prüfung:
 Veröffentlichung: PR #6, Merge `f6f915d60ba6d7b31e0a3873844d95aa2913bd93`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44043949323
 Wetteraufgabe: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-2/
+
+
+## Vergleichsbilder nach falscher Antwort erneut zeigen – 17.11.2026
+Heike weist darauf hin, dass ein Hinweis zum erneuten Bildvergleich beide Bilder benötigt, obwohl nach der richtigen Bildwahl zunächst nur das ausgewählte Bild stehen bleibt.
+
+Bestätigte Korrektur:
+- Bei falscher Erstantwort sowie Hinweisen zum weiteren Vergleichen erscheint das andere Originalbild wieder.
+- Auch eine falsche Farbkorrektur im zweiten Feld blendet beide Bilder ein.
+- Die richtige Bildauswahl bleibt markiert; beide Eingaben und die bisherige Hilfe bleiben erhalten. Ein erneuter Auswahlklick ist nicht nötig.
+- Rücknavigation erhält die wieder eingeblendeten Vergleichsbilder. Eine Szenenwiederholung setzt Auswahl, Eingaben und Vergleichszustand zurück.
+- Bei der ersten richtigen Bildwahl wird das andere Bild weiterhin wie bestätigt zunächst ausgeblendet. Originaltexte, Originalbilder, Antwortpool und übrige Funktionen bleiben erhalten.
+
+Prüfung: Bestehende Antworttests und vollständiger Chrome-Browserdurchlauf vor Veröffentlichung sowie auf der tatsächlichen GitHub-Pages-Webseite bestanden. Falsche Erst-/Zweitantwort, Vergleichshinweis, Rücknavigation, Hilfe und Wiederholung geprüft. Je 168 Layoutprüfungen inklusive Wetter-/Lupenansichten über sechs Smartphone-/Tablet-Viewports und vier Zoomkombinationen, keine JavaScript-/HTTP-Fehler. Sprachdienst simuliert; keine physischen Geräte oder akustische Prüfung.
+
+Veröffentlicht über PR #7, Merge `c485d20e105df5abd57847ff5e969c4e47803a6a`.
+
+Zusätzliche Live-Sichtprüfung: nach Bildwahl zunächst nur Bild 2; nach „rot“ beide Bilder sichtbar, Bild 2 bleibt ausgewählt und „rot“ steht weiterhin im Feld.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44045215632
