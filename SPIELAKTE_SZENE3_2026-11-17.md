@@ -1,5 +1,5 @@
 # Silvana – Spielakte Szene 3: Die Spinnen im Wald
-Stand: 17.11.2026 – Szenenmenü „Noch einmal lesen:“ ohne zusätzliche Einführungsbuttons
+Stand: 17.11.2026 – Hörbutton, Wetterbild-Lupe und Sonnentag-Rolle veröffentlicht
 
 ## Veröffentlichung und bestandene Live-Prüfung – 17.11.2026, 01:43 Uhr
 Dieser neuere Eintrag ersetzt die früheren offenen Bild-/Browser-/Veröffentlichungshinweise; die historischen Entwicklungsnotizen bleiben unten erhalten.
@@ -185,3 +185,30 @@ Veröffentlicht über PR #5 / Merge `043c8d3c03092f41f57a09d81874f9ff41317f45`.
 - Je 120 Layoutprüfungen auf Programmstand und Live-Seite über sechs Smartphone-/Tablet-Viewports und vier Schrift-/Spielfeldkombinationen bestanden.
 - Originalbilder, Texte und Animationen unverändert. Keine physischen Endgeräte oder akustische Hörprüfung.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44041949854
+
+
+## Bestätigte Bedienung: ein Hörbutton, Lupe und Sonnentag-Rolle – 17.11.2026
+Heikes Vorgaben:
+- „Von vorn hören“ entfernen; Geschichte über denselben Hörbutton erneut anhören können.
+- Wetterbilder nach der Auswahl nicht mehr ausgrauen; mit einem Lupensymbol das ganze Bild vergrößern.
+- Beim Sonnentag soll sich das Pergament zusammenrollen, schütteln und wieder öffnen, danach ist das Bild erneut sichtbar.
+
+Umsetzung:
+- In Einführung, Szene 2 und Szene 3 entfällt der zusätzliche Neustartbutton. Der vorhandene Hörbutton startet, pausiert, setzt fort und startet nach dem Ende erneut.
+- Beide Wetterbilder bleiben auch bei gesperrter Antwortauswahl in voller Deckkraft und Farbe.
+- Eigene Lupenschaltflächen öffnen die vollständigen Originalbilder proportional in einem Dialog. Lupenklick wählt keine Antwort. Schließen über Schaltfläche, Escape oder Außenfläche; Fokus kehrt zur jeweiligen Lupe zurück.
+- Sonnentag: schließen (1,44 s) → schütteln (0,5 s) → Original-Öffnungsanimation (1,44 s) → Wetterbild und Auswahl erneut verfügbar. Währenddessen sind weitere Antwortklicks gesperrt. Rücknavigation verwirft ausstehende Abläufe.
+- `assets/rolle-schliesst.gif` ergänzt: acht Originalframes der vorhandenen Rolle in umgekehrter Reihenfolge; einmalig ohne Loop. Das Original-GIF, sämtliche Bilder, Kistenanimationen und das Weiter-MP4 bleiben unverändert.
+- Hörskripte bekommen neue Versionsparameter, damit frühere Browserstände aktualisiert werden.
+
+Prüfung:
+- Bestehende Antwort-/Hilferegeln und Einführungstests bestanden.
+- Echter Chrome-Durchlauf vor Veröffentlichung und auf der tatsächlichen GitHub-Pages-Webseite bestanden: beide falschen Kisten, richtige Kiste, identische Öffnungsrollen, beide Lupen ohne Antwortwahl, Escape/Fokus, Sonnentag-Sequenz, Regen ohne Ausgrauen, Original-MP4 und Übergang zu Szene 3.
+- Erneutes Anhören über denselben Button in allen drei Abschnitten geprüft; Pause/Fortsetzen weiterhin vorhanden. Sprachdienst im automatisierten Test simuliert, keine akustische Hörprüfung.
+- Je 168 Layoutprüfungen vor Veröffentlichung und live: 120 bestehende Ansichten plus 24 Wetter- und 24 Lupenansichten; sechs Smartphone-/Tablet-Viewports und vier getrennte Zoomkombinationen. Lupendialog innerhalb des Bildschirms, kein horizontaler Seitenüberlauf. Keine JavaScript-/HTTP-Fehler im vollständigen Lauf.
+- Zusätzlich persönlich auf der Live-Seite angesehen: beide Lupensymbole, vollständiges vergrößertes Sonnenbild und erneut sichtbares Wetterbild nach der Rollenwiederholung. Keine Screenshotdateien in Projektquellen gespeichert.
+- Keine Prüfung auf physischen Endgeräten.
+
+Veröffentlichung: PR #6, Merge `f6f915d60ba6d7b31e0a3873844d95aa2913bd93`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44043949323
+Wetteraufgabe: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-2/

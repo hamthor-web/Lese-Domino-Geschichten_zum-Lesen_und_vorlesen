@@ -56,3 +56,10 @@ Merge: `52b4295400a5112c7ba29acc0924c52009a3cb01`. Details in der Spielakte Szen
 Bestätigte Menübeschriftung „Noch einmal lesen:“ veröffentlicht; zusätzliche Einführungsbuttons entfernt. Vollständiger Browser- und Live-Durchlauf sowie 120 Layoutprüfungen bestanden.
 Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44041949854
 Merge: `043c8d3c03092f41f57a09d81874f9ff41317f45`. Details in der Spielakte Szene 3.
+
+
+## Letzte Aktualisierung: Hörbutton, Wetterbild-Lupe und Sonnentag-Rolle
+Über PR #6 veröffentlicht. Ein Hörbutton je Hörschritt mit erneuter Wiedergabe; Wetterbilder bleiben farbig und lassen sich vollständig per Lupe ansehen. Sonnentag rollt das Pergament zusammen, schüttelt es und öffnet es erneut. Originalassets erhalten; rückwärts abgespielte Rollenframes als zusätzliche Datei ergänzt.
+Vor Veröffentlichung und auf GitHub Pages je 168 Layoutprüfungen sowie vollständiger Spielablauf bestanden. Sprachdienst simuliert; keine physischen Geräte oder akustische Prüfung. Details in beiden aktuellen Spielakten.
+Merge: `f6f915d60ba6d7b31e0a3873844d95aa2913bd93`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44043949323
