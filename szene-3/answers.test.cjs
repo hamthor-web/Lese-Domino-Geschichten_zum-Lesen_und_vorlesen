@@ -6,7 +6,7 @@ const cases=[
  ['Die Spinnen müssen grau sein.','correct'],['graun','correct'],['grauh','correct'],
  ['blau','partial'],['BLAUE FARBE','partial'],['Farbe','partial'],['Spinnen','partial'],
  ['Die Spinnen sind blau, sie sollen grau sein.','correct'],
- ['nicht grau','wrong'],['Die Spinnen sind nicht grau.','wrong'],
+ ['nicht grau','partial'],['Die Spinnen sind nicht grau.','partial'],
  ['grau ist falsch','wrong'],['Falsch ist grau','wrong'],
  ['blau oder grau','clarify'],['vielleicht grau oder blau','clarify'],
  ['rot','wrong'],['grün','wrong'],['','empty'],['   ','empty'],
@@ -42,3 +42,26 @@ assert.equal(correction.help,true);
 correction=A.submitCorrection(correction,'GRAU');
 assert.equal(correction.done,true);
 console.log('Zweiter Antwortschritt und Hilfe bestanden.');
+
+const explanations=[
+ 'die Spinnen sind nicht grau','Die Spinnen sind nicht grau.',
+ 'NICHT GRAU','keine grauen Spinnen','die Spinnen haben keine graue Farbe',
+ 'falsche Farbe','eine andere Farbe','die Farbe ist anders',
+ 'die Farbe stimmt nicht','nicht die richtige Farbe',
+ 'die Spinnen sind blau statt grau'
+];
+for(const answer of explanations){
+ const result=A.evaluate(answer);
+ assert.equal(result.identifiedError,true,answer);
+ const first=A.submit(A.initial(),answer);
+ assert.equal(first.done,false,answer+' fragt noch nach der richtigen Farbe');
+ assert.equal(first.mistakes,0,answer+' ist kein Fehlversuch');
+ assert.equal(A.submitCorrection(first,answer).done,false,answer+' ist keine richtige Farbkorrektur');
+ assert.equal(A.submitCorrection(first,'grau').done,true);
+}
+assert.equal(A.evaluate('Die Spinnen sind nicht blau.').identifiedError,undefined);
+console.log(explanations.length+' sinngleiche Fehlerbeschreibungen und getrennte Farbkorrektur bestanden.');
+
+assert.equal(A.evaluate('grau statt blau').kind,'correct');
+assert.equal(A.evaluate('grau statt blau','correction').kind,'correct');
+assert.equal(A.evaluate('blau statt grau','correction').kind,'wrong');

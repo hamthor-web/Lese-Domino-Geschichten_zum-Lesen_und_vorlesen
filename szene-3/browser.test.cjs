@@ -10,7 +10,7 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=3')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("{location.href='../szene-3/';return}"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=4')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("{location.href='../szene-3/';return}"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -67,6 +67,10 @@ async function run(){
  await page.locator('[data-picture="1"]').click();
  await page.waitForFunction(()=>!document.getElementById('answer').disabled);
  assert.equal(await page.locator('#answerDialog').isVisible(),true);
+ assert.equal(await page.locator('#answerLabel').innerText(),'Genau, dieses Bild passt nicht zur Geschichte. Warum?');
+ assert.equal(await page.locator('#images figure:visible').count(),1);
+ assert.equal(await page.locator('#compare0').isVisible(),false);
+ assert.equal(await page.locator('#compare1').isVisible(),true);
  assert.equal(await page.locator('[data-picture="1"]').getAttribute('aria-pressed'),'true');
  console.log('PASS: Fragen erst nach Wahl des nicht passenden Bilds; graue Spinnen schalten nichts frei.');
 
@@ -143,13 +147,14 @@ async function run(){
  await page.locator('#sceneMenu3').click();await page.locator('#next').waitFor();await page.locator('#next').click();
  await page.locator('[data-picture="1"]').click();
  await page.waitForFunction(()=>!document.getElementById('answer').disabled);
- await page.locator('#answer').fill('Die Spinnen sind blau.');
+ await page.locator('#answer').fill('Die Spinnen sind nicht grau.');
  await page.locator('#check').click();
  await page.locator('#correction').fill('GRAU');await page.locator('#checkCorrection').click();
- assert.equal(await page.locator('#answer').inputValue(),'Die Spinnen sind blau.');
+ assert.equal(await page.locator('#answer').inputValue(),'Die Spinnen sind nicht grau.');
  assert.equal(await page.locator('#correction').inputValue(),'GRAU');
  assert.equal(await page.locator('#next').isVisible(),true);
  assert.equal(await page.locator('#help').isVisible(),false);
+ console.log('PASS: genaue Warum-Frage, nur gewähltes Bild und „nicht grau“ als Fehlerbeschreibung.');
  console.log('PASS: zweites Antwortfeld, erste Antwort bleibt erhalten; direkte Korrektur und Hilfe geprüft.');
  console.log('PASS: Rücknavigation zum Szene-2-Abschluss, Wiederbesuch, Menüfreischaltung.');
 

@@ -38,3 +38,5 @@ h1{overflow-wrap:break-word}
 .picture-choice:focus-visible{outline:4px solid #8a649f;outline-offset:3px}
 .picture-choice.selected{border-color:#799c70}
 .picture-choice:disabled{opacity:1;cursor:default}
+
+.image-grid.has-selection{grid-template-columns:minmax(0,1fr);max-width:calc(640px * var(--board))}

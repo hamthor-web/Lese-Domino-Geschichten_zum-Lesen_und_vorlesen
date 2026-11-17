@@ -136,3 +136,15 @@ Browserprüfung und Veröffentlichung erfolgreich abgeschlossen; siehe nachstehe
 - Keine physischen Endgeräte oder akustische Hörprüfung; automatisierter Sprachdienst weiterhin simuliert.
 Bestandener Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44034583810
 Aktuelle Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-3/?stand=bildwahl
+
+
+## Bestätigte Korrektur: Warum-Frage und Antwortpool – 17.11.2026
+Heike: Nach Wahl des unpassenden Bilds soll der Dialog „Genau, dieses Bild passt nicht zur Geschichte. Warum?“ lauten. Das andere Bild darf verschwinden. „Die Spinnen sind nicht grau“ muss als richtige Antwort anerkannt werden; Antwortpool entsprechend erweitern.
+
+Umsetzung:
+- Nach korrekter Bildwahl wird das andere Originalbild ausgeblendet; das gewählte Bild bleibt proportional sichtbar. Wiederholung zeigt beide Bilder erneut.
+- Der bisherige Hinweis und „Schreibe auf, was falsch ist“ sind durch die bestätigte Warum-Frage als Feldbeschriftung ersetzt.
+- „nicht grau“, „keine grauen Spinnen“, „falsche/andere Farbe“, „die Farbe stimmt nicht“ und sinngleiche Varianten werden als richtige Fehlerbeschreibung anerkannt, ohne Fehlversuch.
+- Anschließend bleibt die bestätigte zweite Eingabe für die richtige Farbe erhalten. Fehlerbeschreibung und Farbkorrektur werden getrennt bewertet: „nicht grau“ ist eine zutreffende Beschreibung des Bildfehlers, aber keine richtige Antwort auf die Frage nach der Textfarbe. Dort löst „grau“ weiterhin die Aufgabe.
+- Erste Eingabe, Auswahl und zweite Eingabe bleiben bei Rücknavigation erhalten; bestehende Hilfe, Originaltexte, Bilder und Animationen bleiben erhalten.
+Browser- und Live-Prüfung dieses Nachtrags werden nach erfolgreichem Prüflauf ergänzt.
