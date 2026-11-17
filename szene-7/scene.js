@@ -62,6 +62,8 @@
     const destination=()=>location.assign('../szene-8/');
     movie.loop=false;
     movie.addEventListener('loadeddata',()=>{button.classList.add('video-ready');movie.pause();},{once:true});
+    movie.addEventListener('loadedmetadata',()=>{if(movie.duration>0){try{movie.currentTime=0.04;}catch{}}},{once:true});
+    movie.load();
     movie.addEventListener('error',()=>{button.classList.remove('video-ready');},{once:true});
     button.onclick=()=>{
       if(started)return;
