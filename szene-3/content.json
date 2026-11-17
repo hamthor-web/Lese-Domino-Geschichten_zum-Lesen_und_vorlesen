@@ -5,11 +5,13 @@
   "images": [
     {
       "src": "../assets/spinnen-grau.png",
-      "label": "Bild 1"
+      "label": "Bild 1",
+      "matchesText": true
     },
     {
       "src": "../assets/spinnen-blau.png",
-      "label": "Bild 2"
+      "label": "Bild 2",
+      "matchesText": false
     }
   ],
   "source": "Spinnwebenreichtum mit Spielanleitung.docx, Abschnitt 3; bestätigt am 16.11.2026"

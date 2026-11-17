@@ -33,3 +33,8 @@ h1{overflow-wrap:break-word}
 .correction-block .help-box{background:#fffdf9}
 
 @media(max-width:650px){.correction-block .help-box{padding:12px}.help-box h2{overflow-wrap:break-word}}
+
+.picture-choice{display:block;width:100%;padding:0;background:transparent;border:4px solid transparent;border-radius:14px;line-height:0}
+.picture-choice:focus-visible{outline:4px solid #8a649f;outline-offset:3px}
+.picture-choice.selected{border-color:#799c70}
+.picture-choice:disabled{opacity:1;cursor:default}

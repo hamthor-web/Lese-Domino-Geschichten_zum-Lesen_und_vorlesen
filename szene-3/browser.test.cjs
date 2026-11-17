@@ -10,7 +10,7 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=2')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("{location.href='../szene-3/';return}"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=3')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("{location.href='../szene-3/';return}"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -52,12 +52,24 @@ async function run(){
  await page.locator('[data-answer="rain"]').click();
  try{await page.waitForFunction(()=>document.getElementById('nextAnimation').ended,{},{timeout:20000});}catch(error){console.error('Videozustand:',await page.locator('#nextAnimation').evaluate(v=>({paused:v.paused,ended:v.ended,time:v.currentTime,duration:v.duration,ready:v.readyState,error:v.error&&v.error.message})));throw error;}
  assert.equal(await page.locator('#nextAnimation').evaluate(v=>v.loop),false);
+ assert.equal(await page.locator('#adventureNext').innerText(),'Jetzt geht das Abenteuer weiter.');
  await page.locator('#next').click();
  await page.waitForURL('**/szene-3/');
  await page.locator('#next').waitFor();
  console.log('PASS: echte Kisten/Rollen/MP4 und animierter Weiter-Button führen zu Szene 3.');
  await page.locator('#next').click();
+ await page.locator('.picture-choice').first().waitFor({state:'visible'});
+ assert.equal(await page.locator('#answerDialog').isVisible(),false);
+ assert.equal(await page.locator('#answer').isVisible(),false);
+ await page.locator('[data-picture="0"]').click();
+ assert.equal(await page.locator('#answerDialog').isVisible(),false);
+ assert.equal(await page.locator('#next').isVisible(),false);
+ await page.locator('[data-picture="1"]').click();
  await page.waitForFunction(()=>!document.getElementById('answer').disabled);
+ assert.equal(await page.locator('#answerDialog').isVisible(),true);
+ assert.equal(await page.locator('[data-picture="1"]').getAttribute('aria-pressed'),'true');
+ console.log('PASS: Fragen erst nach Wahl des nicht passenden Bilds; graue Spinnen schalten nichts frei.');
+
  const dimensions=await page.locator('#images img').evaluateAll(images=>images.map(i=>({w:i.naturalWidth,h:i.naturalHeight})));
  assert.equal(dimensions.length,2);assert.ok(dimensions[0].w>0);
  assert.deepEqual(dimensions[0],dimensions[1]);
@@ -113,6 +125,7 @@ async function run(){
  const calls=await page.evaluate(()=>window.__speechCalls);
  assert.ok(calls.includes('speak')&&calls.includes('pause')&&calls.includes('resume'));
  await page.locator('#next').click();await layout();
+ assert.doesNotMatch(await page.locator('body').innerText(),/Szene 3 geschafft/);
  await page.locator('#back').click();await page.locator('#back').click();
  assert.equal(await page.locator('#answer').inputValue(),'BLAU');
  assert.equal(await page.locator('#correction').inputValue(),'grau');
@@ -120,12 +133,15 @@ async function run(){
  await page.locator('#back').click();
  await page.waitForURL('**/szene-2/?abschnitt=abschluss');
  await page.locator('#scene3').waitFor();
+ assert.doesNotMatch(await page.locator('body').innerText(),/Szene 2 geschafft/);
+ assert.equal(await page.locator('.adventure-link p').innerText(),'Jetzt geht das Abenteuer weiter.');
  await page.locator('#scene3').click();await page.waitForURL('**/szene-3/');
  await page.locator('.brand').click();
  await page.locator('.scene-menu summary').click();
  await page.locator('#sceneMenu3').waitFor({state:'visible'});
  // Zweiter Durchlauf: direkte Korrektur im neuen zweiten Feld ohne Hilfe.
  await page.locator('#sceneMenu3').click();await page.locator('#next').waitFor();await page.locator('#next').click();
+ await page.locator('[data-picture="1"]').click();
  await page.waitForFunction(()=>!document.getElementById('answer').disabled);
  await page.locator('#answer').fill('Die Spinnen sind blau.');
  await page.locator('#check').click();
@@ -136,6 +152,15 @@ async function run(){
  assert.equal(await page.locator('#help').isVisible(),false);
  console.log('PASS: zweites Antwortfeld, erste Antwort bleibt erhalten; direkte Korrektur und Hilfe geprüft.');
  console.log('PASS: Rücknavigation zum Szene-2-Abschluss, Wiederbesuch, Menüfreischaltung.');
+
+ // Wiederholung setzt die Auswahl zurück; Eingabefelder sind erneut verborgen.
+ await page.locator('#next').click();await page.locator('#next').click();
+ await page.locator('#again').click();await page.locator('#next').click();
+ assert.equal(await page.locator('#answerDialog').isVisible(),false);
+ await page.locator('.picture-choice').first().waitFor({state:'visible'});
+ await layout();
+ assert.equal(await page.locator('#correctionBlock').isVisible(),false);
+ console.log('PASS: Wiederholung verlangt erneut die Bildauswahl; Abschluss ohne „geschafft“, Abenteuertext an Szenenübergängen.');
  assert.deepEqual(errors,[]);
  console.log('PASS: '+checks+' Layoutprüfungen, sechs Smartphone/Tablet-Viewports, vier getrennte Zoomkombinationen. Keine JS- oder HTTP-Fehler.');
  await context.close();
