@@ -1,5 +1,5 @@
 # Silvana – Spielakte Szene 3: Die Spinnen im Wald
-Stand: 17.11.2026 – zwei getrennte Antwortfelder veröffentlicht
+Stand: 17.11.2026 – Bildauswahl vor Fragedialog und erfreuliche Übergänge
 
 ## Veröffentlichung und bestandene Live-Prüfung – 17.11.2026, 01:43 Uhr
 Dieser neuere Eintrag ersetzt die früheren offenen Bild-/Browser-/Veröffentlichungshinweise; die historischen Entwicklungsnotizen bleiben unten erhalten.
@@ -121,4 +121,18 @@ Umgesetzt im Entwicklungszweig:
 - Über vorhandenen Weiter-Schaltflächen zum nächsten Abschnitt steht „Jetzt geht das Abenteuer weiter.“ – einschließlich des animierten Weiter-Buttons nach der Wetterwahl.
 - Szene 4 wurde nicht angelegt und kein Weiter-Button zu einem noch nicht vorhandenen Ziel erfunden.
 - Originalbilder, Originaltexte, getrennte Zoomregler und vorhandene Kisten-/Rollen-/Weiteranimationen bleiben erhalten.
-Browserprüfung und Veröffentlichung werden nach erfolgreichem Prüflauf ergänzt.
+Browserprüfung und Veröffentlichung erfolgreich abgeschlossen; siehe nachstehendes Prüfprotokoll.
+
+
+### Veröffentlichung und Prüfung der Bildauswahl
+Über PR #3 mit Merge `14bf5b2e6dfcaf6ad14ef60856b93bfd80a0da8d` auf main veröffentlicht.
+- Vollständiger Chrome-Durchlauf vor Veröffentlichung und auf der echten GitHub-Pages-Webseite bestanden.
+- Nach Lesetext erscheinen zuerst nur Bildfrage und beide anklickbaren Bilder. Graue Spinnen geben einen Hinweis, ohne Fragen freizuschalten. Erst blaue Spinnen öffnen den vorhandenen Dialog.
+- Beide Antwortfelder, direkte Farbkorrektur, Hilfe nach drei Fehlversuchen, Rücknavigation und Menüfreischaltung weiterhin geprüft. Eine Wiederholung verlangt erneut die Bildauswahl.
+- „Szene … geschafft“ in den aktuellen Abschlüssen entfernt. Beschreibende Rückmeldungen bleiben stehen. Abenteuertext über vorhandenen Weiter-Schaltflächen zu nächsten Abschnitten geprüft, einschließlich Original-MP4.
+- Je 120 Layoutprüfungen vor Veröffentlichung und live, sechs Smartphone-/Tablet-Viewports und vier Zoomkombinationen. Auch die anfängliche Bildwahl ohne Dialog ist enthalten.
+- Keine JavaScript- oder HTTP-Fehler. Bestehende Antwort-/Hilferegeln und Einführungstests bestehen.
+- Zusätzlich die tatsächliche Bildwahl im Cloud-Browser persönlich angesehen: zwei große Bildflächen, zuerst keine Antwortfelder; Hinweis nach grauer Auswahl, Dialog nach blauer Auswahl. Keine Screenshots in Projektquellen gespeichert.
+- Keine physischen Endgeräte oder akustische Hörprüfung; automatisierter Sprachdienst weiterhin simuliert.
+Bestandener Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44034583810
+Aktuelle Szene: https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-3/?stand=bildwahl
