@@ -61,3 +61,6 @@ Heike beanstandet im Handy-Screenshot die vorbeizeigenden Zipfel und Kreuze übe
 - Lupenschaltfläche an jeder Fragekarte öffnet deren Blase groß, auch nach der Zuordnung. Schließen/Escape bringt den Fokus zurück. Im Bild liegen keine zusätzlichen Lupenschaltflächen über den Blasen.
 - Flug mit kurzer Drehung und Verkleinerung, falsche Wahl mit Wirbel/Rückflug, getrennte Größenregler, Vorlesen und übrige Szenen bleiben erhalten.
 Masterstatus: Korrektur von Szene 6 implementiert, Prüfung/Veröffentlichung zunächst offen. Gesamtprojekt weiter in Entwicklung; Szene 7 unverändert offen.
+
+### Ergänzung: vier Blasen mit zwei Ablenkern
+Heike ergänzt während der Überarbeitung ausdrücklich zwei falsche Texte: „Klar, gerne.“ und „Ich brauche diese Spinnweben.“. Vier Blasen werden gleichzeitig in gemischter Reihenfolge angezeigt; genau zwei passen zum Text. Die Aufgabe lautet entsprechend „Welche zwei Blasen passen zum Text?“. Jede Blase hat eine Lupe. Beide Ablenker werden bei jeder Person mit Wirbel und Rückflug zurückgewiesen. Nur Gold-Aussage beim König und Schulterzucken beim Bürgermeister bleiben liegen und geben Weiter frei. Die beiden falschen Blasen müssen nicht abgelegt werden.
