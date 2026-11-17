@@ -19,3 +19,14 @@
 
 .hotspot{min-width:44px;min-height:44px;transform:translate(-50%,-50%)}
 .hotspot[data-diff="3"]{min-width:24px;min-height:24px}
+
+/* Abschluss von Szene 7: Wiederholen, Würstchen-Weiter, Zurück. */
+.scene7-completion-actions{display:flex;flex-direction:column;align-items:center;gap:14px}
+.scene7-completion-actions>button{width:min(100%,520px);flex:0 0 auto;box-sizing:border-box}
+.scene7-video-next{position:relative;display:block;max-width:354px;min-height:140px;aspect-ratio:1/1;padding:0;border:0;border-radius:18px;background:#f8f1e5;overflow:hidden;cursor:pointer}
+.scene7-video-next video{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.scene7-video-next .video-next-fallback{display:none;font:bold calc(23px * var(--text)) Arial,sans-serif;text-align:center;padding:28px}
+.scene7-video-next:not(.video-ready) video{display:none}
+.scene7-video-next:not(.video-ready) .video-next-fallback{display:block}
+.scene7-video-next:focus-visible{outline:4px solid #7750a0;outline-offset:4px}
+.scene7-video-next:disabled{opacity:1;cursor:default}
