@@ -1,5 +1,5 @@
 # Masterübersicht – Nachtrag Silvana / Szene 3
-Stand: 17.11.2026 – Warum-Frage und erweiterter Antwortpool veröffentlicht
+Stand: 17.11.2026 – Szenenmenü „Noch einmal lesen:“ veröffentlicht
 
 | Bereich | Aktueller Stand |
 |---|---|
@@ -11,7 +11,7 @@ Stand: 17.11.2026 – Warum-Frage und erweiterter Antwortpool veröffentlicht
 | Warum-Frage / Einzelbild | Nach Auswahl nur das blaue Bild anzeigen. Feldfrage: „Genau, dieses Bild passt nicht zur Geschichte. Warum?“ |
 | Antwortpool | „Die Spinnen sind nicht grau“, „keine grauen Spinnen“, falsche/andere Farbe und sinngleiche Beschreibungen werden im ersten Feld als richtig erkannt. Zweite Farbkorrektur weiterhin getrennt. |
 | Antwortfelder | Bestätigte Korrektur umgesetzt: erkannter Fehler bleibt im ersten Feld; richtige Farbe und Buchstabenhilfe in separatem zweiten Feld. Beide Eingaben bleiben bei Rücknavigation erhalten. Live geprüft über PR #2. |
-| Navigation | Rücksprung zu Szene-2-Abschluss und Menüfreischaltung nach Besuch live geprüft. Erreichter Höchststand bleibt erhalten. Menüskript mit Versionsparameter 9. |
+| Navigation | Menü „Noch einmal lesen:“ in Einführung, Szene 2 und Szene 3. Separate Buttons „Zur Einführung“ entfernt; Rücknavigation, Wiederholung und Freischaltung besuchter Szenen erhalten. |
 | Prüfung | Chrome-Browserdurchlauf vor Veröffentlichung und auf Live-Webseite bestanden; je 96 Layoutprüfungen, 26 Antwortfälle, Einführungstests. Keine JavaScript-/HTTP-Fehler. |
 | Grenzen | Sprachdienst simuliert; keine akustische Prüfung, physischen Geräte oder persönliche Screenshot-Sichtprüfung. |
 | Nächster Bauabschnitt | Szene 4 „Der Händler“; in diesem Auftrag nicht begonnen. |
@@ -51,3 +51,8 @@ Code-Merge: `14bf5b2e6dfcaf6ad14ef60856b93bfd80a0da8d`.
 Bestätigte Änderung über PR #4 veröffentlicht. Kontextabhängige Antwortprüfung, ein verbleibendes Originalbild und genaue Frage live geprüft. Elf zusätzliche sinngleiche Fehlerbeschreibungen sowie je 120 Layoutprüfungen vor Veröffentlichung und live bestanden.
 Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44040945279
 Merge: `52b4295400a5112c7ba29acc0924c52009a3cb01`. Details in der Spielakte Szene 3.
+
+## Letzte Aktualisierung: Wiederlesemenü
+Bestätigte Menübeschriftung „Noch einmal lesen:“ veröffentlicht; zusätzliche Einführungsbuttons entfernt. Vollständiger Browser- und Live-Durchlauf sowie 120 Layoutprüfungen bestanden.
+Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44041949854
+Merge: `043c8d3c03092f41f57a09d81874f9ff41317f45`. Details in der Spielakte Szene 3.

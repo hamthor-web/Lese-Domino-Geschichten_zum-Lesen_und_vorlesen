@@ -1,5 +1,5 @@
 # Silvana – Spielakte Szene 3: Die Spinnen im Wald
-Stand: 17.11.2026 – Warum-Frage, gewähltes Einzelbild und erweiterter Antwortpool
+Stand: 17.11.2026 – Szenenmenü „Noch einmal lesen:“ ohne zusätzliche Einführungsbuttons
 
 ## Veröffentlichung und bestandene Live-Prüfung – 17.11.2026, 01:43 Uhr
 Dieser neuere Eintrag ersetzt die früheren offenen Bild-/Browser-/Veröffentlichungshinweise; die historischen Entwicklungsnotizen bleiben unten erhalten.
@@ -173,4 +173,15 @@ Umsetzung:
 - Einführungsbutton und zugehörige Klickhandler in den Abschlüssen von Szene 2 und 3 entfernt. In der Einführung gab es keinen entsprechenden eigenständigen Button.
 - Bestehende Rücknavigation, Wiederholung und Menüfreischaltung bleiben erhalten; Menülinks führen weiterhin nur zu den bereits erreichten Abschnitten.
 - Original-Brandlink und alle Originalbilder, Texte und Animationen unverändert.
-Prüfung und Veröffentlichung werden nach erfolgreichem Browserlauf ergänzt.
+Prüfung und Veröffentlichung erfolgreich abgeschlossen; siehe nachstehendes Protokoll.
+
+
+### Veröffentlichung und Prüfung des Wiederlesemenüs
+Veröffentlicht über PR #5 / Merge `043c8d3c03092f41f57a09d81874f9ff41317f45`.
+- Neue Beschriftung „Noch einmal lesen:“ in allen drei aktuellen Abschnitten aus GitHub zurückgelesen und bestätigt.
+- „Zur Einführung“ und die entsprechenden Klickhandler in Szene 2 und 3 entfernt. Die übrige Navigation funktioniert weiterhin.
+- Bestehende Logiktests, vollständiger Chrome-Browserdurchlauf vor Veröffentlichung und auf der echten GitHub-Pages-Webseite bestanden.
+- Szenenabschlüsse, Rücknavigation zum Abschluss von Szene 2, erneuter Besuch und Menüfreischaltung ohne JavaScript-Fehler geprüft.
+- Je 120 Layoutprüfungen auf Programmstand und Live-Seite über sechs Smartphone-/Tablet-Viewports und vier Schrift-/Spielfeldkombinationen bestanden.
+- Originalbilder, Texte und Animationen unverändert. Keine physischen Endgeräte oder akustische Hörprüfung.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44041949854
