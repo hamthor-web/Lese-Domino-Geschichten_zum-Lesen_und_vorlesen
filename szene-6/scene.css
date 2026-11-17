@@ -52,3 +52,10 @@
 
 .question-card{container-type:inline-size}
 .question-card .large-bubble{font-size:clamp(7px,5cqw,13px)}
+
+/* Shared tracks keep each neighbouring pair calm and aligned, at every text size. */
+.question-card{display:grid;grid-template-rows:subgrid;grid-row:span 3;row-gap:12px}
+.question-card .select-question{display:grid;grid-template-rows:auto 1fr;align-content:start}
+.question-card .selection-label{align-self:start}
+.question-card>.zoom-open{align-self:end;width:100%;height:100%}
+@supports not (grid-template-rows:subgrid){.question-card{display:flex;flex-direction:column}.question-card>.zoom-open{margin-top:auto;height:auto}}
