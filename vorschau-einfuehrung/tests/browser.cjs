@@ -8,7 +8,7 @@ const server=live?null:spawn('python3',['-m','http.server','8766','--bind','127.
 let browser;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=12'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=13'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
  const page=await context.newPage(),errors=[];
@@ -31,12 +31,12 @@ async function run(){
  await page.locator('#right').click();assert.deepEqual(await ids(),[0,1,2]);
  // Real mouse pointer input exercises the same captured-pointer path as touch.
  async function drag(id,target,after=false,cancel=false){
-  await stable();await page.locator('#chain').scrollIntoViewIfNeeded();
+  await stable();await page.locator('#chain').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await stable();
   const a=await page.locator('#chain [data-id="'+id+'"]').boundingBox(),b=await page.locator('#chain [data-id="'+target+'"]').boundingBox();
   const vertical=await page.locator('#chain').evaluate(e=>getComputedStyle(e).flexDirection==='column');
   const x=vertical?b.x+b.width/2:b.x+b.width*(after?.8:.2),y=vertical?b.y+b.height*(after?.8:.2):b.y+b.height/2;
   await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(x,y,{steps:8});
-  await page.locator('#dropLine').waitFor({state:'visible'});
+  try{await page.locator('#dropLine').waitFor({state:'visible',timeout:5000});}catch(e){console.error('Drag-Diagnose:',await page.evaluate(()=>({drag:activeDrag&&{started:activeDrag.started,id:activeDrag.id,x:activeDrag.x,y:activeDrag.y,position:activeDrag.position},chain:document.getElementById('chain').getBoundingClientRect().toJSON(),scroll:scrollY,height:innerHeight})));throw e;}
   if(cancel){await page.dispatchEvent('#chain [data-id="'+id+'"]','pointercancel',{pointerId:1});}
   await page.mouse.up();
   assert.equal(await page.locator('#dropLine').count(),0);
@@ -45,12 +45,12 @@ async function run(){
  await drag(2,1,true);assert.deepEqual(await ids(),[0,1,2]);
  // Touch events through Chrome's input protocol, with real touch identifiers/capture.
  const cdp=await context.newCDPSession(page);
- await stable();await page.locator('#chain').scrollIntoViewIfNeeded();
+ await stable();await page.locator('#chain').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await stable();
  let a=await page.locator('#chain [data-id="2"]').boundingBox(),b=await page.locator('#chain [data-id="0"]').boundingBox();
  const touch=(type,x,y)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:type==='touchEnd'||type==='touchCancel'?[]:[{x,y,id:3}]});
  await touch('touchStart',a.x+a.width/2,a.y+a.height/2);
  await touch('touchMove',b.x+b.width/2,b.y+b.height*.2);
- await page.locator('#dropLine').waitFor({state:'visible'});await touch('touchEnd');
+ try{await page.locator('#dropLine').waitFor({state:'visible',timeout:5000});}catch(e){console.error('Drag-Diagnose:',await page.evaluate(()=>({drag:activeDrag&&{started:activeDrag.started,id:activeDrag.id,x:activeDrag.x,y:activeDrag.y,position:activeDrag.position},chain:document.getElementById('chain').getBoundingClientRect().toJSON(),scroll:scrollY,height:innerHeight})));throw e;}await touch('touchEnd');
  assert.deepEqual(await ids(),[2,0,1]);
  await drag(2,1,true);assert.deepEqual(await ids(),[0,1,2]);
  await touch('touchStart',a.x+a.width/2,a.y+a.height/2);await touch('touchMove',b.x+b.width/2,b.y+b.height*.2);await touch('touchCancel');
@@ -63,7 +63,7 @@ async function run(){
  await page.locator('#bank [data-id="1"]').scrollIntoViewIfNeeded();
  a=await page.locator('#bank [data-id="1"]').boundingBox();b=await page.locator('#chain [data-id="2"]').boundingBox();
  await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width*.2,b.y+b.height/2,{steps:8});
- await page.locator('#dropLine').waitFor({state:'visible'});await page.mouse.up();assert.deepEqual(await ids(),[0,1,2]);
+ try{await page.locator('#dropLine').waitFor({state:'visible',timeout:5000});}catch(e){console.error('Drag-Diagnose:',await page.evaluate(()=>({drag:activeDrag&&{started:activeDrag.started,id:activeDrag.id,x:activeDrag.x,y:activeDrag.y,position:activeDrag.position},chain:document.getElementById('chain').getBoundingClientRect().toJSON(),scroll:scrollY,height:innerHeight})));throw e;}await page.mouse.up();assert.deepEqual(await ids(),[0,1,2]);
  let layouts=0;
  for(const [width,height] of [[360,800],[800,360],[412,915],[915,412],[768,1024],[1024,768]]){
   await page.setViewportSize({width,height});

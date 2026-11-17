@@ -114,7 +114,7 @@ function attachTileDrag(button,id){
   d.x=e.clientX;d.y=e.clientY;
   if(!d.started&&Math.hypot(d.x-d.startX,d.y-d.startY)<8)return;
   if(!d.started){d.started=true;button.classList.add('dragging');
-   const tick=()=>{if(activeDrag!==d)return;const delta=d.y<70?-14:d.y>innerHeight-70?14:0;if(delta)scrollBy(0,delta);dragTarget(d);d.frame=requestAnimationFrame(tick);};
+   const tick=()=>{if(activeDrag!==d)return;const chain=$('chain').getBoundingClientRect(),bank=$('bank').getBoundingClientRect(),top=Math.min(chain.top,bank.top),bottom=Math.max(chain.bottom,bank.bottom);const delta=d.y<70&&top<12?Math.max(-14,top-12):d.y>innerHeight-70&&bottom>innerHeight-12?Math.min(14,bottom-innerHeight+12):0;if(delta)scrollBy(0,delta);dragTarget(d);d.frame=requestAnimationFrame(tick);};
    d.frame=requestAnimationFrame(tick);
   }
   e.preventDefault();dragTarget(d);
