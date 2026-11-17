@@ -100,3 +100,12 @@ Die Einführung zeigt das unveränderte Originalbild nun im Hochformat als erste
 Vorhandener vollständiger Chrome-Spielablauf und Live-Test auf GitHub Pages bestanden. Zusätzlich 24 Titelansichten (sechs Smartphone-/Tablet-Viewports, vier getrennte Zoomkombinationen) auf Bildreihenfolge und horizontalen Überlauf geprüft; insgesamt je 216 Layoutprüfungen auf Programmstand und Live-Seite. Keine physischen Geräte geprüft.
 Code: `458d573846ebdc3dae9b3e19c92f32a49ff64b84`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44100554807
+
+
+## Präzisierte Titelbildposition: direkt unter dem Namenskopf – 17.11.2026
+Heike präzisiert anhand ihrer Screenshots: Das Bild muss unmittelbar unter „Silvana – Geschichten zum Lesen und Vorlesen“ erscheinen. Größenbedienung, Menü, Fortschritt und Fortsetzen-Hinweis gehören darunter. Die bisherige Position nur am Anfang des Einführungskastens genügt nicht.
+Umgesetzt: Das unveränderte Originalbild steht auf der ersten Einführungsseite außerhalb des Spielkastens unmittelbar nach dem Namenskopf, vor allen Bedienelementen. Das gilt in Hoch- und Querformat und bei Wiederbesuch mit gespeichertem Spielstand. Der Größenbutton ist aus dem Namenskopf unter das Bild versetzt; Einstellungen und Fortsetzen/Wiederholung bleiben erhalten. Keine doppelte Darstellung im Spielkasten. Auf den nachfolgenden Leseschritten bleibt das Titelbild ausgeblendet.
+Die frühere Querformat-Anordnung neben dem Einführungstext ist durch diese neuere Vorgabe ersetzt. Bildproportionen, Texte, Originalassets und übrige Funktionen bleiben erhalten.
+Prüfung: vollständiger Chrome-Spielablauf und tatsächliche GitHub-Pages-Seite bestanden. 24 Titelansichten prüfen direkt folgende Position nach dem Namenskopf und alle Bedienelemente darunter; zusätzlich Wiederbesuch mit gespeichertem Stand geprüft. Insgesamt je 216 Layoutprüfungen einschließlich vorhandener Domino-/Wetter-/Spinnenprüfungen. Keine physischen Endgeräte oder akustische Hörprüfung.
+Code: `1a00437c26fedd7d8a792d70b700d9bd84952e2f`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44104586483
