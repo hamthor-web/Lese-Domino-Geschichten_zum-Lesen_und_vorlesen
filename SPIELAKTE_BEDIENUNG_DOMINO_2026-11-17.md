@@ -35,3 +35,11 @@ Umgesetzt: Nach erfolgreicher Satzprüfung ist der Tippbutton ausgeblendet. Wird
 Vorhandene Logiktests und vollständiger Browserdurchlauf einschließlich Live-Prüfung bestanden. Sichtbarkeit vor/nach Satzprüfung und nach erneutem Verschieben geprüft. Übrige Funktionen und Originalassets erhalten.
 Code: `1afe2530d0897af06532b362be5ea47fbd755f0e`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44068339781
+
+
+## Satz prüfen nach richtiger Lösung ausblenden – 17.11.2026
+Heike bestätigt zusätzlich: Nach erfolgreicher Satzprüfung braucht es auch „Satz prüfen“ nicht mehr.
+Der Prüfschalter wird nun zusammen mit „Kleiner Tipp“ ausgeblendet, sobald die richtige Reihenfolge bestätigt ist. Nach einer Veränderung erscheinen beide wieder; die freie Legung und manuelle Prüfung bleiben erhalten.
+Bestehende Logiktests und vollständiger Chrome-Browserlauf einschließlich tatsächlicher GitHub-Pages-Seite bestanden. Sichtbarkeit beider Schaltflächen vor/nach erfolgreicher Prüfung und nach erneutem Verschieben kontrolliert. Keine Originalassets oder weiteren Funktionen verändert.
+Code: `d9db93d5902b6ef880df773398791066621b1477`.
+Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44069395241
