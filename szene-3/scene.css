@@ -27,3 +27,9 @@ h1{overflow-wrap:break-word}
 .image-error{padding:20px;background:#fff4e6;border-radius:14px}
 @media(max-width:650px){.actions>button{flex-basis:100%}.image-grid{grid-template-columns:minmax(0,1fr)}.letter-row{gap:8px}.letter-row input{font-size:calc(24px * var(--text));width:calc(1.65em + 12px)}}
 @media(orientation:landscape) and (max-height:600px){.image-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(290px * var(--board))),1fr))}}
+
+.correction-block{margin-top:22px;padding:clamp(14px,3vw,24px);border:2px solid #d7c2e4;border-radius:18px;background:#f7f1fb}
+.answer-form input[readonly]{background:#eef5eb;border-color:#a1ba95}
+.correction-block .help-box{background:#fffdf9}
+
+@media(max-width:650px){.correction-block .help-box{padding:12px}.help-box h2{overflow-wrap:break-word}}

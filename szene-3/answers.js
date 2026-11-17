@@ -17,7 +17,7 @@
   if(gray&&blue&&/\b(?:oder|vielleicht|eventuell)\b/.test(s))return {kind:'clarify',feedback:'Welche Farbe sollen die Spinnen haben? Entscheide dich für eine Farbe.'};
   if(negatedGray||wrongGray)return {kind:'wrong',feedback:'Lies noch einmal nach: Welche Farbe haben die Spinnen im Text?'};
   if(gray)return {kind:'correct',feedback:'Richtig! Im Text sind die Spinnen grau.'};
-  if(blue)return {kind:'partial',feedback:'Du hast die blaue Farbe bemerkt. Welche Farbe sollen die Spinnen laut Text haben?'};
+  if(blue)return {kind:'partial',identifiedBlue:true,feedback:'Du hast die blaue Farbe bemerkt. Welche Farbe sollen die Spinnen laut Text haben?'};
   if(/\bfarb\w*\b/.test(s))return {kind:'partial',feedback:'Du hast die Farbe entdeckt. Schreibe die richtige Farbe der Spinnen auf.'};
   if(/\bspinn\w*\b/.test(s))return {kind:'partial',feedback:'Du hast die Spinnen entdeckt. Was ist an ihnen anders? Schreibe die richtige Farbe auf.'};
   if(/\b(?:tropfen|tautropfen|glitzern|netz|netze|spinnennetz|spinnennetze)\b/.test(s))return {kind:'clarify',feedback:'Vergleiche die Spinnen in beiden Bildern. Was ist an ihnen anders?'};
@@ -31,6 +31,14 @@
    prompt:result.kind==='empty'?state.prompt:(result.kind==='correct'?'Die richtige Farbe ist gefunden.':'Welche Farbe sollen die Spinnen laut Text haben?'),
    feedback:result.feedback};
  }
+ function submitCorrection(state,value){
+  if(state.done)return {...state};
+  const result=evaluate(value);
+  const isWrong=!['correct','empty','clarify'].includes(result.kind);
+  const mistakes=state.mistakes+(isWrong?1:0);
+  return {...state,mistakes,help:state.help||mistakes>=3,done:result.kind==='correct',
+   feedback:result.identifiedBlue?'Blau ist die Farbe im falschen Bild. Welche Farbe steht im Text?':result.feedback};
+ }
  function letters(random){return {word:'grau',fixed:Math.min(3,Math.max(0,Math.floor((random||Math.random)()*4)))};}
- return {normalize,initial,evaluate,submit,letters};
+ return {normalize,initial,evaluate,submit,submitCorrection,letters};
 });

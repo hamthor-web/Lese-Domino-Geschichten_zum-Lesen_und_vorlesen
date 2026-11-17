@@ -2,7 +2,7 @@
 (() => {
  const $=id=>document.getElementById(id),A=window.SilvanaSpiderAnswers;
  const VISITED='silvana-visited-scenes-v1';
- let content,phase=0,state=A.initial(),hint=null,draft='',helpValues=['','','',''];
+ let content,phase=0,state=A.initial(),hint=null,draft='',correctionDraft='',firstFeedback='',correctionFeedback='',correctionShown=false,firstAccepted=false,helpValues=['','','',''];
  let imagesReady=false,loadToken=0,speechToken=0,utterance=null,audioState='idle';
  const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -60,7 +60,7 @@
   if(phase===0){
    html='<section class="panel"><span class="eyebrow">Jetzt bist du dran</span><h1>'+esc(content.title)+'</h1><p>Lies in deinem Tempo.</p><div class="reading">'+esc(content.simple)+'</div><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else if(phase===1){
-   html='<section class="panel"><span class="eyebrow">Schau genau hin</span><h1>Finde den Fehler!</h1><p>Vergleiche beide Bilder mit dem Lesetext.</p>'+simpleDetails()+'<p id="imageStatus" role="status">Die Bilder werden geladen.</p><div class="image-grid" id="images" hidden>'+content.images.map((im,i)=>'<figure><img id="compare'+i+'" alt="Waldbild '+(i+1)+' zum Vergleichen"><figcaption>'+esc(im.label)+'</figcaption></figure>').join('')+'</div><div class="image-error" id="imageError" hidden><p>Die Bilder konnten nicht geladen werden. Bitte versuche es noch einmal.</p><button class="secondary" id="retryImages">Erneut versuchen</button></div><form class="answer-form" id="answerForm"><label id="answerLabel" for="answer">'+esc(state.prompt)+'</label><input id="answer" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="feedback" value="'+esc(draft)+'" disabled><div class="actions"><button class="primary" id="check" type="submit" disabled>Antwort prüfen</button></div></form><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(state.feedback)+'</p><section class="help-box" id="help" hidden><h2>Deine Schreibhilfe</h2><p>Ein Buchstabe steht schon an der richtigen Stelle. Ergänze die übrigen Buchstaben.</p><form id="helpForm"><div class="letter-row" id="letterRow"></div><button class="secondary" id="checkHelp" type="submit">Wort prüfen</button></form></section><div class="actions">'+backButton()+'<button class="primary" id="next" '+(state.done?'':'hidden')+'>Weiter</button></div></section>';
+   html='<section class="panel"><span class="eyebrow">Schau genau hin</span><h1>Finde den Fehler!</h1><p>Vergleiche beide Bilder mit dem Lesetext.</p>'+simpleDetails()+'<p id="imageStatus" role="status">Die Bilder werden geladen.</p><div class="image-grid" id="images" hidden>'+content.images.map((im,i)=>'<figure><img id="compare'+i+'" alt="Waldbild '+(i+1)+' zum Vergleichen"><figcaption>'+esc(im.label)+'</figcaption></figure>').join('')+'</div><div class="image-error" id="imageError" hidden><p>Die Bilder konnten nicht geladen werden. Bitte versuche es noch einmal.</p><button class="secondary" id="retryImages">Erneut versuchen</button></div><form class="answer-form" id="answerForm"><label id="answerLabel" for="answer">Schreibe auf, was falsch ist.</label><input id="answer" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="feedback" value="'+esc(draft)+'" disabled><div class="actions"><button class="primary" id="check" type="submit" disabled>Antwort prüfen</button></div></form><p class="feedback" id="feedback" role="status" aria-live="polite">'+esc(firstFeedback)+'</p><section class="correction-block" id="correctionBlock" hidden><form class="answer-form" id="correctionForm"><label for="correction">Welche Farbe haben die Spinnen im Text?</label><input id="correction" type="text" maxlength="180" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="correctionFeedback" value="'+esc(correctionDraft)+'" disabled><div class="actions"><button class="primary" id="checkCorrection" type="submit" disabled>Neue Antwort prüfen</button></div></form><p class="feedback" id="correctionFeedback" role="status" aria-live="polite">'+esc(correctionFeedback)+'</p><section class="help-box" id="help" hidden><h2>Deine Schreibhilfe</h2><p>Ein Buchstabe steht schon an der richtigen Stelle. Ergänze die übrigen Buchstaben.</p><form id="helpForm"><div class="letter-row" id="letterRow"></div><button class="secondary" id="checkHelp" type="submit">Wort prüfen</button></form></section></section><div class="actions">'+backButton()+'<button class="primary" id="next" '+(state.done?'':'hidden')+'>Weiter</button></div></section>';
   }else if(phase===2){
    html='<section class="panel"><span class="eyebrow">Jetzt hörst du die Geschichte</span><h1>Die Spinnen im Wald</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button><button class="secondary" id="restartAudio">↻ Von vorn hören</button></div><p id="audioStatus" class="feedback" role="status" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details><div class="actions">'+backButton()+'<button class="primary" id="next">Weiter</button></div></section>';
   }else{
@@ -71,13 +71,15 @@
   if($('next'))$('next').onclick=()=>go(phase+1);
   if(phase===1){
    $('answer').oninput=()=>draft=$('answer').value;
-   $('answerForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done)check($('answer').value);};
-   $('helpForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done)check([...$('letterRow').querySelectorAll('input')].map(i=>i.value).join(''));};
+   $('answerForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done&&!firstAccepted)check($('answer').value,'first');};
+   $('correction').oninput=()=>correctionDraft=$('correction').value;
+   $('correctionForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done&&correctionShown)check($('correction').value,'correction');};
+   $('helpForm').onsubmit=e=>{e.preventDefault();if(imagesReady&&!state.done)check([...$('letterRow').querySelectorAll('input')].map(i=>i.value).join(''),'correction');};
    $('retryImages').onclick=()=>{loadToken++;loadImages();};
    updateAnswer();loadImages();
   }
   if(phase===2){$('audioToggle').onclick=toggleAudio;$('restartAudio').onclick=startAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';helpValues=['','','',''];go(0);};$('intro').onclick=()=>location.assign('../vorschau-einfuehrung/');}
+  if(phase===3){$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;helpValues=['','','',''];go(0);};$('intro').onclick=()=>location.assign('../vorschau-einfuehrung/');}
   scheduleButtons();
  }
  async function loadImages(){
@@ -91,16 +93,33 @@
   if(result.some(ok=>!ok)){$('imageStatus').hidden=true;$('imageError').hidden=false;scheduleButtons();return;}
   content.images.forEach((im,i)=>$('compare'+i).src=im.src);imagesReady=true;$('images').hidden=false;$('imageStatus').hidden=true;updateAnswer();
  }
- function check(value){
-  const wasHelp=state.help;state=A.submit(state,value);
-  if(state.help&&!hint)hint=A.letters();
+ function check(value,stage){
+  const wasHelp=state.help,wasShown=correctionShown;
+  if(stage==='correction'){
+   state=A.submitCorrection(state,value);
+   correctionFeedback=state.feedback;correctionDraft=value;$('correction').value=value;
+  }else{
+   const result=A.evaluate(value);
+   state=A.submit(state,value);
+   if(result.identifiedBlue){
+    firstAccepted=true;correctionShown=true;
+    firstFeedback='Richtig erkannt: Im falschen Bild sind die Spinnen blau.';
+   }else firstFeedback=state.feedback;
+  }
+  if(state.help){correctionShown=true;if(!hint)hint=A.letters();}
   updateAnswer();
-  if(!wasHelp&&state.help){$('letterRow').querySelector('input:not([readonly])').focus();}
+  if(!wasHelp&&state.help)$('letterRow').querySelector('input:not([readonly])').focus();
+  else if(!wasShown&&correctionShown)$('correction').focus();
  }
  function updateAnswer(){
   if(!$('answer'))return;
-  $('answerLabel').textContent=state.prompt;$('feedback').textContent=state.feedback;
-  $('answer').disabled=!imagesReady||state.done;$('check').disabled=!imagesReady||state.done;
+  $('feedback').textContent=firstFeedback;
+  $('answer').disabled=!imagesReady;$('answer').readOnly=firstAccepted||state.done;
+  $('check').disabled=!imagesReady||state.done;$('check').hidden=firstAccepted||state.done;
+  $('correctionBlock').hidden=!correctionShown;
+  $('correctionFeedback').textContent=correctionFeedback;
+  $('correction').disabled=!imagesReady||state.done;
+  $('checkCorrection').disabled=!imagesReady||state.done;
   $('next').hidden=!state.done;$('help').hidden=!state.help;
   if(state.help&&!$('letterRow').children.length){
    if(!hint)hint=A.letters();

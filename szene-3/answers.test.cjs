@@ -28,3 +28,17 @@ for(const [random,fixed] of [[0,0],[.25,1],[.5,2],[.75,3],[.9999,3]]){
  assert.deepEqual(A.letters(()=>random),{word:'grau',fixed});
 }
 console.log(cases.length+' Antwortfälle und Zustands-/Hilferegeln bestanden.');
+
+let correction=A.submit(A.initial(),'blau');
+assert.equal(correction.done,false);
+assert.equal(A.evaluate('BLAUE SPINNEN').identifiedBlue,true);
+const wrongBlue=A.submitCorrection(correction,'blau');
+assert.equal(wrongBlue.mistakes,1);assert.equal(wrongBlue.done,false);
+assert.equal(A.submitCorrection(correction,'').mistakes,0);
+correction=A.submitCorrection(wrongBlue,'rot');
+assert.equal(correction.help,false);
+correction=A.submitCorrection(correction,'gelb');
+assert.equal(correction.help,true);
+correction=A.submitCorrection(correction,'GRAU');
+assert.equal(correction.done,true);
+console.log('Zweiter Antwortschritt und Hilfe bestanden.');
