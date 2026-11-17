@@ -3,10 +3,15 @@ const $=id=>document.getElementById(id);
 const KEY='silvana-intro-v1';
 const VISITED_KEY='silvana-visited-scenes-v1';
 function scene2Visited(){try{return Number(localStorage.getItem(VISITED_KEY))>=2;}catch{return false;}}
-function markScene2Visited(){try{localStorage.setItem(VISITED_KEY,'2');}catch{}}
+function markScene2Visited(){try{localStorage.setItem(VISITED_KEY,String(Math.max(2,Number(localStorage.getItem(VISITED_KEY))||0)));}catch{}}
 function updateSceneMenu(){
  const next=$('sceneMenu2');
  if(next)next.hidden=!scene2Visited();
+ try{
+  if(next&&Number(localStorage.getItem(VISITED_KEY))>=3&&!$('sceneMenu3')){
+   const link=document.createElement('a');link.id='sceneMenu3';link.href='../szene-3/';link.textContent='Die Spinnen im Wald';next.parentElement.append(link);
+  }
+ }catch{}
  const back=$('sceneBackbar');
  if(back){back.hidden=phase===0;$('sceneBack').onclick=()=>changePhase(Math.max(0,phase-1));}
 }
