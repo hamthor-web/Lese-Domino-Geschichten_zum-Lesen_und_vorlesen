@@ -61,3 +61,6 @@ body{hyphens:none;-webkit-hyphens:none}
 .tile.dragging{opacity:.65;cursor:grabbing;outline:3px solid #8a649f}
 .drop-line{position:fixed;z-index:100;pointer-events:none;background:#8a649f;border-radius:2px;box-shadow:0 0 0 2px #fffdf9}
 @media(orientation:portrait){.chain{flex-direction:column;align-items:stretch}.chain .tile{width:100%}.chain .dot{align-self:flex-end}}
+
+/* Das Titelbild eröffnet im Hochformat die Einführung. */
+@media(orientation:portrait){.listen{grid-template-columns:minmax(0,1fr)}.listen-art{grid-row:1;max-width:none}}
