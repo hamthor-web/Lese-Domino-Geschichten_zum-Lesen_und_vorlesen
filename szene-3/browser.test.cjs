@@ -10,7 +10,7 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=5')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("{location.href='../szene-3/';return}"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=6')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -37,6 +37,11 @@ async function run(){
  page.on('pageerror',e=>errors.push(e.message));
  page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
  await page.goto(base+'szene-2/');
+ assert.equal(await page.locator('#repeat').count(),0);
+ for(const action of ['Pause','Weiterhören','Pause']){await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),new RegExp(action));}
+ await page.evaluate(()=>window.__utterance.onend());
+ assert.match(await page.locator('#audio').innerText(),/Noch einmal/);
+ await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),/Pause/);
  await page.locator('#next').click();await page.locator('#next').click();
  assert.equal(await page.locator('.crate-preview').count(),3);
  for(const word of ['Stoff','Wege']){
@@ -47,9 +52,40 @@ async function run(){
  await page.locator('.weather-choice').first().waitFor({state:'visible'});
  assert.equal(await page.locator('.roll-gif').count(),2);
  assert.equal(await page.locator('.roll-gif').evaluateAll(images=>new Set(images.map(i=>i.src)).size),1);
+ for(const type of ['sun','rain']){
+  const loupe=page.locator('[data-zoom="'+type+'"]');await loupe.click();
+  assert.equal(await page.locator('#pictureZoom').evaluate(d=>d.open),true);
+  await page.waitForFunction(()=>document.getElementById('zoomImage').naturalWidth>0);
+  assert.equal(await page.locator('#next').isVisible(),false);
+  assert.equal(await page.locator('#zoomImage').evaluate(i=>getComputedStyle(i).objectFit),'contain');
+  await page.keyboard.press('Escape');
+  assert.equal(await loupe.evaluate(b=>b===document.activeElement),true);
+ }
+ for(const [width,height] of [[360,800],[800,360],[412,915],[915,412],[768,1024],[1024,768]]){
+  await page.setViewportSize({width,height});
+  for(const [text,board] of [[100,100],[160,100],[100,160],[160,160]]){
+   await page.evaluate(([text,board])=>{for(const [id,value] of [['textSize',text],['boardSize',board]]){const e=document.getElementById(id);e.value=value;e.dispatchEvent(new Event('input',{bubbles:true}));}},[text,board]);
+   await sizeCheck(page,'Wetter '+width+'x'+height+' '+text+'/'+board);
+   await page.locator('[data-zoom="sun"]').click();
+   const box=await page.locator('#pictureZoom').boundingBox();
+   assert.ok(box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1,'Lupe vollständig im Bildschirm');
+   await page.locator('#closeZoom').click();
+  }
+ }
+ await page.setViewportSize({width:412,height:915});
+ await page.evaluate(()=>{for(const id of ['textSize','boardSize']){const e=document.getElementById(id);e.value=100;e.dispatchEvent(new Event('input',{bubbles:true}));}});
+ console.log('PASS: 24 Wetterlayouts und 24 Lupenlayouts in Hoch-/Querformat mit getrenntem Zoom.');
  await page.locator('[data-answer="sun"]').click();
+ await page.waitForFunction(()=>document.querySelector('[data-motion="closing"]'));
+ assert.equal(await page.locator('.weather-choice:disabled').count(),2);
+ await page.waitForFunction(()=>document.querySelector('[data-motion="shaking"]'));
+ await page.waitForFunction(()=>document.querySelector('[data-motion="opening"]'));
+ await page.waitForFunction(()=>[...document.querySelectorAll('.weather-choice')].every(b=>!b.disabled));
+ assert.equal(await page.locator('[data-answer="sun"]').isVisible(),true);
+ console.log('PASS: beide Lupen ohne Antwortwahl, Escape/Fokus; Sonnentag schließt, schüttelt und öffnet die Originalrolle.');
  assert.equal(await page.locator('#next').isVisible(),false);
  await page.locator('[data-answer="rain"]').click();
+ assert.deepEqual(await page.locator('.weather-choice').evaluateAll(bs=>bs.map(b=>getComputedStyle(b).opacity)),['1','1']);
  try{await page.waitForFunction(()=>document.getElementById('nextAnimation').ended,{},{timeout:20000});}catch(error){console.error('Videozustand:',await page.locator('#nextAnimation').evaluate(v=>({paused:v.paused,ended:v.ended,time:v.currentTime,duration:v.duration,ready:v.readyState,error:v.error&&v.error.message})));throw error;}
  assert.equal(await page.locator('#nextAnimation').evaluate(v=>v.loop),false);
  assert.equal(await page.locator('#adventureNext').innerText(),'Jetzt geht das Abenteuer weiter.');
@@ -125,7 +161,11 @@ async function run(){
  await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
  await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Weiterhören/);
  await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
- await page.locator('#restartAudio').click();
+ assert.equal(await page.locator('#restartAudio').count(),0);
+ await page.evaluate(()=>window.__utterance.onend());
+ assert.match(await page.locator('#audioToggle').innerText(),/Noch einmal/);
+ await page.locator('#audioToggle').click();
+ assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
  const calls=await page.evaluate(()=>window.__speechCalls);
  assert.ok(calls.includes('speak')&&calls.includes('pause')&&calls.includes('resume'));
  await page.locator('#next').click();await layout();
@@ -141,6 +181,10 @@ async function run(){
  assert.equal(await page.locator('.adventure-link p').innerText(),'Jetzt geht das Abenteuer weiter.');
  await page.locator('#scene3').click();await page.waitForURL('**/szene-3/');
  await page.locator('.brand').click();
+ await page.locator('#audioToggle').waitFor();
+ assert.equal(await page.locator('#restartAudio').count(),0);
+ await page.locator('#audioToggle').click();await page.evaluate(()=>window.__utterance.onend());
+ await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
  await page.locator('.scene-menu summary').click();
  await page.locator('#sceneMenu3').waitFor({state:'visible'});
  // Zweiter Durchlauf: direkte Korrektur im neuen zweiten Feld ohne Hilfe.

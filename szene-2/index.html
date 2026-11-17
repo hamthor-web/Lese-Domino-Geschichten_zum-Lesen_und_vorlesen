@@ -46,10 +46,22 @@
 
 .adventure-link{flex-basis:100%;min-width:0}
 .adventure-link p,.adventure-next{font-size:calc(22px * var(--text));font-weight:bold;line-height:1.5;margin:12px 0;text-align:center}
+
+.roll-inner .weather-choice:disabled{opacity:1;filter:none}
+.roll-inner .magnify{position:absolute;right:-10px;bottom:-24px;width:52px;height:52px;min-height:52px;border-radius:50%;background:#fffdf9;border:3px solid #8a649f;font-size:28px;line-height:1;padding:4px;box-shadow:0 2px 5px #493e5830}
+.roll-card.shaking .roll-gif{animation:roll-shake .5s ease-in-out}
+@keyframes roll-shake{0%,100%{transform:translateX(0) rotate(0)}20%,60%{transform:translateX(-7px) rotate(-3deg)}40%,80%{transform:translateX(7px) rotate(3deg)}}
+.picture-zoom{width:min(1100px,96vw);max-width:96vw;max-height:94dvh;padding:14px;border:3px solid #8a649f;border-radius:18px;background:#fffdf9;color:#493e58;overflow:auto}
+.picture-zoom::backdrop{background:#20172aca}
+.picture-zoom header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.picture-zoom h2{font-size:calc(22px * var(--text));margin:0}
+.picture-zoom button{font:inherit;font-size:calc(20px * var(--text));min-height:52px;padding:10px 18px;border:2px solid #8a649f;border-radius:12px;background:#f5edf8;color:#493e58;cursor:pointer}
+.picture-zoom img{display:block;width:100%;height:auto;max-height:calc(94dvh - 110px);object-fit:contain}
 </style></head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden><label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label><label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
 <main class="s2" id="main"><details class="scene-menu" id="sceneMenu"><summary>Noch einmal lesen:</summary><nav aria-label="Bereits besuchte Abschnitte"><a href="../vorschau-einfuehrung/">Die Geschichte beginnt</a><a href="./" aria-current="page">Die vier Straßen</a></nav></details><div class="chapterline"><span class="chapter">Die vier Straßen</span><span class="chapter-count">Szene 2 · Vorstellung</span></div><div class="crumbs" id="crumbs"></div><div class="scene-backbar"><button class="secondary" id="sceneBack">← Zurück</button></div><div id="game"></div><footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
+<dialog class="picture-zoom" id="pictureZoom" aria-labelledby="zoomTitle"><header><h2 id="zoomTitle"></h2><button type="button" id="closeZoom" autofocus>✕ Schließen</button></header><img id="zoomImage" alt=""></dialog>
 <script>
 'use strict';
 const original="Vier Straßen voller Schlaglöcher hatte Silvana, und wenn die Kutschen darüber holperten, wurden die Einheimischen aus ihrem ohnehin viel zu leichten Schlaf geweckt. Zum Glück kamen nicht allzu viele vorbei.\nWenn es regnete, roch es auf dem Marktplatz nach nasser Wolle, Pferdemist und dem alten Fett aus der Bäckerei. Und ein bisschen nach alten Gewohnheiten, die sich schon viel zu lange in den Ritzen der Stadt eingenistet hatten.\nViel hatte das Land nicht zu bieten. Reich war Silvana trotzdem.";
@@ -67,15 +79,15 @@ const boxAssets={
  Stoff:{still:'../assets/kiste-stoff.png',gif:'../assets/kiste-stoff-animation.gif',duration:960},
  Wege:{still:'../assets/kiste-wege.png',gif:'../assets/kiste-wege-animation.gif',duration:960}
 };
-let boxOpening=false, phaseToken=0;
+let boxOpening=false, weatherBusy=false, phaseToken=0;
 const timers=new Set();
 function later(fn,ms){const token=phaseToken;const timer=setTimeout(()=>{timers.delete(timer);if(token===phaseToken)fn()},ms);timers.add(timer)}
-function clearPhase(){const video=$('nextAnimation');if(video){video.onended=null;video.onerror=null;video.pause()}phaseToken++;timers.forEach(clearTimeout);timers.clear();boxOpening=false}
+function clearPhase(){const video=$('nextAnimation');if(video){video.onended=null;video.onerror=null;video.pause()}phaseToken++;timers.forEach(clearTimeout);timers.clear();boxOpening=false;weatherBusy=false;if($('pictureZoom').open)$('pictureZoom').close()}
 async function decoded(src){const img=new Image();img.src=src;await img.decode();return img}
 const assetReady=new Map();
 function prepare(src){if(!assetReady.has(src))assetReady.set(src,decoded(src).catch(()=>null));return assetReady.get(src)}
 Object.values(boxAssets).forEach(a=>prepare(a.gif));
-['rolle-oeffnet.gif','marktplatz-sonne.png','marktplatz-regen.png'].forEach(a=>prepare('../assets/'+a));
+['rolle-oeffnet.gif','rolle-schliesst.gif','marktplatz-sonne.png','marktplatz-regen.png'].forEach(a=>prepare('../assets/'+a));
 function crateMarkup(word){const file=boxAssets[word];return '<button class="crate-preview" data-answer="'+word+'" aria-label="Kiste '+word+' öffnen"><img src="'+file.still+'" alt="Geschlossene Kiste mit Aufschrift '+word+'" onerror="this.parentElement.classList.add(\'asset-missing\')"><span class="fallback-label" aria-hidden="true">'+word+'</span><span class="crate-label">'+word+'</span></button>'}
 async function openCrate(button){
  if(boxOpening)return;
@@ -97,7 +109,7 @@ async function openCrate(button){
  if(fallback)later(finish,500);else if(image.complete&&image.naturalWidth)image.onload();
  image.onerror=()=>{button.classList.add('asset-missing');later(finish,500)}
 }
-function rollChoice(type,label){return '<div class="roll-card"><img class="under-crate" src="../assets/kiste-'+(type==='sun'?'stoff':'wege')+'.png" alt="Kiste '+(type==='sun'?'Stoff':'Wege')+'"><img class="roll-gif" alt="Offene Pergamentrolle"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'" aria-label="Marktplatz bei '+label+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"></button></div></div>'}
+function rollChoice(type,label){return '<div class="roll-card"><img class="under-crate" src="../assets/kiste-'+(type==='sun'?'stoff':'wege')+'.png" alt="Kiste '+(type==='sun'?'Stoff':'Wege')+'"><img class="roll-gif" alt="Offene Pergamentrolle"><div class="roll-inner" hidden><button type="button" class="weather-choice" data-answer="'+type+'" aria-label="Marktplatz bei '+label+'"><img src="../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png" alt="Marktplatz bei '+label+'"></button><button type="button" class="magnify" data-zoom="'+type+'" aria-label="Bild vergrößern: Marktplatz bei '+label+'"><span aria-hidden="true">🔍</span></button></div></div>'}
 async function startRolls(){
  const token=phaseToken;
  const ready=await Promise.all(['rolle-oeffnet.gif','marktplatz-sonne.png','marktplatz-regen.png'].map(a=>prepare('../assets/'+a)));
@@ -112,7 +124,47 @@ async function startRolls(){
  document.querySelector('.weather-rolls').classList.add('ready');
  later(revealScrollPictures,1440);
 }
-function revealScrollPictures(){document.querySelectorAll('.roll-inner').forEach(x=>{x.hidden=false});document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{if(b.dataset.answer==='rain'){pictureDone=true;b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');showAnimatedNext()}else notice('Schau noch einmal genau hin: Welches Wetter kam in der Geschichte vor?')})}
+function openPicture(type,button){
+ const label=type==='rain'?'Regen':'Sonnenschein';
+ $('zoomTitle').textContent='Marktplatz bei '+label;
+ $('zoomImage').src='../assets/marktplatz-'+(type==='rain'?'regen':'sonne')+'.png';
+ $('zoomImage').alt='Marktplatz bei '+label;
+ $('pictureZoom').showModal();
+ $('pictureZoom').onclose=()=>{if(button.isConnected)button.focus()};
+}
+$('closeZoom').onclick=()=>$('pictureZoom').close();
+$('pictureZoom').onclick=e=>{if(e.target===$('pictureZoom')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()}};
+async function retrySun(button){
+ if(weatherBusy||pictureDone)return;
+ weatherBusy=true;
+ const token=phaseToken,card=button.closest('.roll-card'),image=card.querySelector('.roll-gif'),inner=card.querySelector('.roll-inner');
+ document.querySelectorAll('.weather-choice').forEach(b=>b.disabled=true);
+ notice('Schau noch einmal genau hin: Welches Wetter kam in der Geschichte vor?');
+ await prepare('../assets/rolle-schliesst.gif');if(token!==phaseToken)return;
+ inner.hidden=true;card.dataset.motion='closing';
+ image.onload=()=>{image.onload=null;if(token!==phaseToken)return;later(()=>{
+  card.dataset.motion='shaking';card.classList.add('shaking');
+  later(()=>{
+   card.classList.remove('shaking');card.dataset.motion='opening';
+   image.onload=()=>{image.onload=null;if(token!==phaseToken)return;later(()=>{
+    delete card.dataset.motion;inner.hidden=false;weatherBusy=false;
+    document.querySelectorAll('.weather-choice').forEach(b=>b.disabled=false);
+   },1440)};
+   image.src='../assets/rolle-oeffnet.gif?retry='+Date.now();
+  },500);
+ },1440)};
+ image.onerror=()=>{image.onload=null;image.onerror=null;if(token!==phaseToken)return;delete card.dataset.motion;card.classList.remove('shaking');inner.hidden=false;weatherBusy=false;document.querySelectorAll('.weather-choice').forEach(b=>b.disabled=false);notice('Die Animation konnte nicht geladen werden. Du kannst das Wetterbild weiter ansehen.');};
+ image.src='../assets/rolle-schliesst.gif?play='+Date.now();
+}
+function revealScrollPictures(){
+ document.querySelectorAll('.roll-inner').forEach(x=>{x.hidden=false});
+ document.querySelectorAll('.magnify').forEach(b=>b.onclick=()=>openPicture(b.dataset.zoom,b));
+ document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{
+  if(weatherBusy||pictureDone)return;
+  if(b.dataset.answer==='rain'){pictureDone=true;b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');showAnimatedNext()}
+  else retrySun(b);
+ });
+}
 function showAnimatedNext(){
  const button=$('next'),video=$('nextAnimation'),token=phaseToken;
  $('weatherQuestion').hidden=true;$('adventureNext').hidden=false;button.hidden=false;button.disabled=true;
@@ -128,13 +180,13 @@ function showAnimatedNext(){
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 $('sceneBack').onclick=()=>{if(phase===0)location.href='../vorschau-einfuehrung/?abschnitt=abschluss';else go(phase-1)};
 function render(){const labels=['Zuhören','Selbst lesen','Kiste öffnen','Bild wählen',''];$('crumbs').hidden=phase===4;$('crumbs').textContent=phase===4?'':'Schritt '+(phase+1)+' von 5 · '+labels[phase];let out='';
-if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><h1>Silvana und die vier Straßen</h1><p>Höre die Geschichte an.</p><div class="controls"><button class="primary" id="audio">▶ Geschichte anhören</button><button class="secondary" id="repeat">↻ Von vorn hören</button></div><p class="feedback" id="feedback" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><p class="original">'+original+'</p></details><div class="controls"><button class="primary" id="next">Weiter</button></div>');
+if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><h1>Silvana und die vier Straßen</h1><p>Höre die Geschichte an.</p><div class="controls"><button class="primary" id="audio">▶ Geschichte anhören</button></div><p class="feedback" id="feedback" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><p class="original">'+original+'</p></details><div class="controls"><button class="primary" id="next">Weiter</button></div>');
 else if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls"><button class="secondary" id="back">← Zurück</button><button class="primary" id="next">Weiter</button></div>');
 else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Stoff','Wege','Marktplatz'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
 else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<div class="weather-prompt"><p class="roll-question" id="weatherQuestion">Von welchem Wetter war in der Geschichte die Rede?</p><p class="adventure-next" id="adventureNext" hidden>Jetzt geht das Abenteuer weiter.</p><button class="animated-next" id="next" hidden disabled aria-label="Weiter-Animation läuft"><video id="nextAnimation" src="../assets/weiter-einmalig.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="nextFallback" class="video-fallback" hidden>Weiter</span></button></div>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
 else out=panel('<h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><div class="adventure-link"><p>Jetzt geht das Abenteuer weiter.</p><button class="primary" id="scene3">Weiter</button></div></div>');
 $('game').innerHTML=out;
-if(phase===0){$('audio').onclick=speak;$('repeat').onclick=()=>{stop();speak()};$('next').onclick=()=>go(1)}
+if(phase===0){$('audio').onclick=speak;$('next').onclick=()=>go(1)}
 if(phase===1){$('back').onclick=()=>go(0);$('next').onclick=()=>go(2)}
 if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
 if(phase===3){$('back').onclick=()=>go(2);startRolls()}
