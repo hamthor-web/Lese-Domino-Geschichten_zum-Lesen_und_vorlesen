@@ -73,3 +73,15 @@ Bild und Satz bilden eine gemeinsame verschiebbare Karte. Die gelieferten Bilder
 Nach erfolgreich geprüfter Reihenfolge werden „Kleiner Tipp“ und „Reihenfolge prüfen“ ausgeblendet. Beim erneuten Umstellen wird die Lösung zurückgesetzt und die Prüfhilfe wieder sichtbar. Bloßes Auswählen einer Karte verändert den Lösungsstatus nicht. Rücknavigation erhält den aktuellen Status; Wiederholung setzt ihn zurück.
 
 Dieser Nachtrag ersetzt den früheren Stand ohne Bildkarten. Vor Veröffentlichung werden Bildladen, feste Zuordnung, Verschieben per Maus/Touch, Aus-/Einblenden der Prüfhilfe und sechs Bildschirmgrößen mit beiden Zoomreglern geprüft.
+
+### Bildkarten veröffentlicht und geprüft – 17.11.2026, 16:11 Uhr
+
+- Prüfung vor Veröffentlichung bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44110573586
+- Veröffentlicht über PR #10, Merge `0a05f2a9d04e4c98c45e2a42243631a83e3c005f`.
+- Bereitstellung und vollständige Live-Prüfung bestanden: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44110913623
+- Alle drei Bilder geladen und ihre Zuordnung geprüft; gemeinsame Karten per Maus und Touch verschoben. Prüfschaltflächen nach erfolgreicher Lösung verborgen, beim Umstellen wieder sichtbar. Rücknavigation und Wiederholung bestanden.
+- Je 96 Layoutprüfungen vor Veröffentlichung und auf der Live-Seite über sechs Smartphone-/Tablet-Formate und vier getrennte Zoomkombinationen. Keine abgeschnittenen Buttons, kein horizontaler Seitenüberlauf, keine JavaScript-/HTTP-Fehler im geprüften Durchlauf.
+- Zusätzlich im Live-Browser Bilder und gelöste Ansicht persönlich angesehen: Bild und Satz stehen gemeinsam auf den Karten; beide Prüfschaltflächen fehlen nach der richtigen Lösung, Weiter ist aktiv.
+- Die WebP-Dateien auf GitHub stimmen bytegenau mit den vorbereiteten Webfassungen überein (Git-Blob-Prüfsummen verglichen). Originale der gelieferten PNG-Dateien bleiben erhalten.
+- Masterstatus unverändert in Entwicklung, Szene 4 um die bestätigten Bildkarten und vereinfachte Abschlussbedienung erweitert und live geprüft. Szene 5 weiterhin nicht begonnen.
+- Keine physischen Endgeräte oder akustische Hörprüfung.
