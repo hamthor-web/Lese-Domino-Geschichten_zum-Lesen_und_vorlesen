@@ -9,8 +9,8 @@ let browser;
 const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
- for(let i=0;i<60;i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok)return;}catch{}
+ for(let i=0;i<(live?180:60);i++){
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("{location.href='../szene-3/';return}"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -21,7 +21,7 @@ async function sizeCheck(page,label){
 }
 async function run(){
  await ready();
- browser=await chromium.launch({headless:true});
+ browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},isMobile:true,hasTouch:true});
  // Nur der Sprachdienst ist simuliert; Navigation, DOM, Bilder und Video sind echt.
  await context.addInitScript(()=>{
@@ -50,7 +50,7 @@ async function run(){
  await page.locator('[data-answer="sun"]').click();
  assert.equal(await page.locator('#next').isVisible(),false);
  await page.locator('[data-answer="rain"]').click();
- await page.waitForFunction(()=>document.getElementById('nextAnimation').ended,{},{timeout:20000});
+ try{await page.waitForFunction(()=>document.getElementById('nextAnimation').ended,{},{timeout:20000});}catch(error){console.error('Videozustand:',await page.locator('#nextAnimation').evaluate(v=>({paused:v.paused,ended:v.ended,time:v.currentTime,duration:v.duration,ready:v.readyState,error:v.error&&v.error.message})));throw error;}
  assert.equal(await page.locator('#nextAnimation').evaluate(v=>v.loop),false);
  await page.locator('#next').click();
  await page.waitForURL('**/szene-3/');
