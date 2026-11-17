@@ -81,3 +81,14 @@ Masterstatus: Szenen 1–6 veröffentlicht. Szene 6 mit den neuen bestätigten V
 Heike beanstandet im Handy-Screenshot die gegeneinander versetzten Lupen der Nachbarkarten. Neue Vorgabe: Karteninhalte vereinheitlichen und Lupen pro Nachbarpaar auf dieselbe Höhe bringen. Umsetzung mit gemeinsam bemessenen Zeilenhöhen für Überschrift, Blase/Auswahlhinweis und Lupe; Texte dürfen weiterhin vollständig umbrechen. Lupenschaltflächen eines Paars gleich breit/hoch und bündig.
 Heikes Formulierung „Andere Szene noch einmal spielen“ ersetzt „Noch einmal lesen:“ einheitlich in den Szenen 1–6. Im aufgeklappten Menü steht zusätzlich „Wähle eine Szene, die du schon besucht hast.“. Bisherige Navigation, Freischaltung, Spieltexte, Blasen, Zuordnung und Animationen bleiben erhalten.
 Masterstatus: Szenen 1–6 veröffentlicht; diese Gestaltungskorrektur zunächst in Prüfung. Gesamtprojekt weiterhin in Entwicklung; Szene 7 unverändert offen.
+
+### Karten und Szenenmenü veröffentlicht und geprüft – 17.11.2026
+Dieser Eintrag ersetzt den offenen Prüfstatus der vorstehenden Gestaltungskorrektur.
+- Veröffentlichung über PR #17, Merge `85ae65ee4ced5e854a42f1187cd61821c0bf37e8`.
+- Überschrift, Blasenvorschau und Auswahlhinweis stehen pro Nachbarpaar auf gemeinsamen Höhen. Lupenschaltflächen eines Paars sind bündig und gleich hoch. Die Höhen werden nach Text-/Bildgrößenänderung, Formatwechsel und geänderter Zuordnung neu abgeglichen; alle Texte dürfen vollständig umbrechen.
+- In allen Szenen 1–6 heißt das Menü „Andere Szene noch einmal spielen“. Beim Öffnen folgt „Wähle eine Szene, die du schon besucht hast.“. Bestehende Ziele, Freischaltung und Navigation bleiben erhalten.
+- Vorprüfung erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44165113753
+- Abschließende vollständige Prüfung einschließlich Live-Seite erfolgreich: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44165576252
+- Je 288 Layoutprüfungen vor Veröffentlichung und live: sechs Handy-/Tabletformate im Hoch-/Querformat mit vier Schrift-/Spielfeldkombinationen. Zusätzlich tatsächliche Oberkanten von Überschriften, Blasen, Auswahlhinweisen und Lupen je Kartenpaar verglichen; Lupenhöhen ebenfalls abgeglichen. Neue Menütexte auf allen sechs Seiten geprüft. Sämtliche bisherigen Szenen- und Aufgabenprüfungen bestanden.
+- Persönliche Live-Sichtprüfung: neues geöffnetes Szenenmenü mit Hinweis sowie beide bündigen Kartenpaare. Keine physischen Endgeräte; automatisierte Sprachsteuerung weiterhin simuliert.
+Masterstatus: Szenen 1–6 veröffentlicht; Szene 6 gestalterisch aktualisiert, Menübezeichnung in allen sechs Szenen vereinheitlicht. Gesamtprojekt weiterhin in Entwicklung; Szene 7 unverändert offen. Ältere Entscheidungen bleiben im Verlauf erhalten.
