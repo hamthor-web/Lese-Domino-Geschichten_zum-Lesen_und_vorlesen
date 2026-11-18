@@ -118,3 +118,9 @@ Quelle und Details: SPIELAKTE_SZENE7_2026-11-17.md. Gesamtprojekt weiterhin in E
 
 ### Abschluss Szene 7 – 17.11.2026, 23:27 Uhr
 Vollständige Abschlussprüfung einschließlich Live-Seite erfolgreich (Lauf 44189499259). Szene 7: alle Trefferflächen, zwölf Wortrichtungen, Fehler-/Fortschritts-/Navigationsregeln und 144 Layoutprüfungen je Durchlauf bestanden; bestehende Szenen ebenfalls bestanden. Masterstatus: Szenen 1–7 veröffentlicht und geprüft; Szene 8 offen. Einzelheiten und Grenzen stehen in SPIELAKTE_SZENE7_2026-11-17.md.
+
+## Aktualisierung vom 18.11.2026
+
+| Bereich | Stand |
+|---|---|
+| Szene 3 „Die Spinnen im Wald“ | Am Abschluss übernimmt das automatisch einmal abgespielte Häkelvideo die Weiter-Funktion. Das Schlussbild führt auf Klick zu Szene 4 „Der Händler“. |

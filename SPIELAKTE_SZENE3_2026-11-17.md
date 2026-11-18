@@ -237,3 +237,9 @@ Zurück/Weiter stehen nebeneinander (Zurück links) oder bei notwendigem Umbruch
 Vor Veröffentlichung und live vollständiger Browserlauf einschließlich Maus-/Touch-Eingaben sowie je 192 Layoutprüfungen bestanden. Details: [Spielakte Bedienung](SPIELAKTE_BEDIENUNG_DOMINO_2026-11-17.md).
 Code-Merge: `2e7cd93a9dbbbb2d7472ec8c4603bf7f7224e16e`; abschließender Programmstand: `7c5b4ad6e71867c700ab3119dee221f5e4b38848`.
 Live-Prüflauf: https://github.com/hamthor-web/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/actions/runs/44054360463
+
+## Bestätigte Änderung am Abschluss – 18.11.2026
+
+Auf „Sehr gut hingeschaut!“ ersetzt Heikes Häkelvideo die bisherige Schaltfläche „Weiter“. Die Animation startet beim Öffnen des Abschlusses, läuft stumm einmal durch und bleibt auf dem Schlussbild mit dem gehäkelten Schild stehen. Erst dann führt ein Klick oder eine Tastaturaktivierung zu Szene 4 „Der Händler“. Das Video behält seine quadratischen Proportionen und passt sich der Spielfeldgröße und der verfügbaren Bildschirmhöhe an.
+
+Bei gesperrter automatischer Wiedergabe lässt sich das Video per Klick starten. Bei einem Lade- oder Wiedergabefehler führt eine Textschaltfläche zu Szene 4. Die Rücknavigation und die Szenenwiederholung bleiben am Abschluss verfügbar.

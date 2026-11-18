@@ -53,11 +53,40 @@
  }
  function go(n){
   if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!state.done))return;
-  loadToken++;stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});
+  loadToken++;stopAudio();phase=n;render();$('main').focus();if(phase===3)$('scene4').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});
  }
  function backButton(){return '<button class="secondary" id="back">← Zurück</button>';}
  function simpleDetails(){return '<details><summary>Lesetext ansehen</summary><div class="reading">'+esc(content.simple)+'</div></details>';}
+ function setupCompletionVideo(){
+  const button=$('scene4'),video=$('completionVideo'),fallback=$('completionVideoFallback');
+  function enable(label,action,text=''){
+   if(!button.isConnected)return;
+   fallback.textContent=text;
+   fallback.hidden=!text;
+   button.setAttribute('aria-label',label);
+   button.onclick=action;
+   button.disabled=false;
+  }
+  function ready(showFallback=false){
+   video.hidden=showFallback;
+   enable('Weiter zu Der Händler',()=>location.assign('../szene-4/'),showFallback?'Weiter':'');
+  }
+  function play(){
+   button.disabled=true;
+   button.setAttribute('aria-label','Würstchen-Animation läuft');
+   fallback.hidden=true;
+   video.play().catch(error=>{
+    if(!button.isConnected||video.error)return;
+    if(error.name==='NotAllowedError')enable('Würstchen-Animation abspielen',play,'▶ Abspielen');
+    else ready(true);
+   });
+  }
+  video.addEventListener('ended',()=>ready(),{once:true});
+  video.addEventListener('error',()=>ready(true),{once:true});
+  play();
+ }
  function render(){
+  $('completionVideo')?.pause();
   updateSceneMenu();$('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
   $('stepStatus').hidden=phase===3;
   let html='';
@@ -68,7 +97,7 @@
   }else if(phase===2){
    html='<section class="panel"><span class="eyebrow">Jetzt hörst du die Geschichte</span><h1>Die Spinnen im Wald</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details><div class="actions scene-navigation"><button class="primary" id="next">Weiter</button>'+backButton()+'</div></section>';
   }else{
-   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><p>Jetzt geht das Abenteuer weiter.</p><div class="actions scene-navigation"><button class="primary" id="scene4">Weiter</button>'+backButton()+'</div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div></section>';
+   html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><p>Jetzt geht das Abenteuer weiter.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene4" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-haekelt-weiter.mp4" width="358" height="358" preload="auto" muted playsinline aria-hidden="true"></video><span id="completionVideoFallback" hidden></span></button>'+backButton()+'</div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div></section>';
   }
   $('game').innerHTML=html;
   $('back').onclick=()=>phase===0?location.assign('../szene-2/?abschnitt=abschluss'):go(phase-1);
@@ -84,7 +113,7 @@
    updateAnswer();loadImages();
   }
   if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if(phase===3){$('scene4').onclick=()=>location.assign('../szene-4/');$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;comparisonVisible=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
+  if(phase===3){setupCompletionVideo();$('again').onclick=()=>{state=A.initial();hint=null;draft='';correctionDraft='';firstFeedback='';correctionFeedback='';correctionShown=false;firstAccepted=false;pictureSelected=false;comparisonVisible=false;selectionFeedback='';helpValues=['','','',''];go(0);}}
   scheduleButtons();
  }
  async function loadImages(){

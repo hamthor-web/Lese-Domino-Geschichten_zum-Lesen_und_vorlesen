@@ -10,7 +10,7 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=10')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=11')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -173,7 +173,16 @@ async function run(){
  assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
  const calls=await page.evaluate(()=>window.__speechCalls);
  assert.ok(calls.includes('speak')&&calls.includes('pause')&&calls.includes('resume'));
- await page.locator('#next').click();await layout();
+ await page.locator('#next').click();
+ const completion=page.locator('#scene4'),clip=page.locator('#completionVideo');
+ assert.equal(await completion.isDisabled(),true);
+ await page.waitForFunction(()=>document.getElementById('completionVideo').currentTime>0);
+ assert.equal(await completion.isDisabled(),true);
+ await layout();
+ await page.waitForFunction(()=>document.getElementById('completionVideo').ended);
+ assert.equal(await completion.isEnabled(),true);
+ assert.equal(await clip.isVisible(),true);
+ assert.equal(await completion.getAttribute('aria-label'),'Weiter zu Der Händler');
  assert.doesNotMatch(await page.locator('body').innerText(),/Szene 3 geschafft/);
  await page.locator('#back').click();await page.locator('#back').click();
  assert.equal(await page.locator('#answer').inputValue(),'BLAU');

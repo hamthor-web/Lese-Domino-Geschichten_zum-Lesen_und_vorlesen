@@ -40,3 +40,18 @@ h1{overflow-wrap:break-word}
 .picture-choice:disabled{opacity:1;cursor:default}
 
 .image-grid.has-selection{grid-template-columns:minmax(0,1fr);max-width:calc(640px * var(--board))}
+
+.actions.scene-navigation.completion-navigation{justify-content:center;align-items:center}
+.actions.scene-navigation.completion-navigation>.completion-video{
+ flex:0 1 auto!important;
+ width:min(100%,calc(358px * var(--board)),75svh);
+ min-width:0;
+ padding:0;
+ background:transparent;
+ box-shadow:none;
+}
+.completion-video:disabled{opacity:1}
+.completion-video video{display:block;width:100%;height:auto;pointer-events:none}
+@media(max-width:650px){.actions.scene-navigation.completion-navigation{flex-direction:column}
+ .actions.scene-navigation.completion-navigation>button{flex:0 1 auto!important}
+}
