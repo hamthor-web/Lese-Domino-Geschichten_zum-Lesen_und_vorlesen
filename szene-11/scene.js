@@ -112,13 +112,14 @@
     const word = rounds[index].word;
     select(null);
     if (tile.textContent !== word[Number(slot.dataset.position)]) {
-      const first = slots.firstElementChild;
-      if (!first.disabled) {
-        first.textContent = word[0];
-        first.classList.add('is-hint');
-        first.setAttribute('aria-label', 'Erster Buchstabenplatz. Tipp ' + word[0]);
-      }
-      feedback.textContent = 'Schau noch einmal genau hin. Das Wort beginnt mit ' + word[0] + '.';
+      const openSlot = slots.querySelector('button:not(:disabled)');
+      const position = Number(openSlot.dataset.position);
+      const hint = word[position];
+      const label = 'Auf Platz ' + (position + 1) + ' gehört ' + hint + '.';
+      openSlot.textContent = hint;
+      openSlot.classList.add('is-hint');
+      openSlot.setAttribute('aria-label', label);
+      feedback.textContent = 'Schau noch einmal genau hin. ' + label;
       tile.focus({preventScroll: true});
       return;
     }
