@@ -41,7 +41,7 @@ function toggleAudio(){audio.toggle(content.original);}
   if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!state.done))return;
   loadToken++;stopAudio();phase=n;render();$('main').focus();if(phase===3)$('scene4').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});
  }
- function backButton(){return '<button class="secondary" id="back">← Zurück</button>';}
+ function backButton(){return phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>';}
  function simpleDetails(){return '<details><summary>Lesetext ansehen</summary><div class="reading">'+esc(content.simple)+'</div></details>';}
  function setupCompletionVideo(){
   const button=$('scene4'),video=$('completionVideo'),fallback=$('completionVideoFallback');
@@ -86,7 +86,7 @@ function toggleAudio(){audio.toggle(content.original);}
    html='<section class="panel"><h1>Sehr gut hingeschaut!</h1><p>Du hast die Farbe der Spinnen im Text und in den Bildern verglichen.</p><p>Jetzt geht das Abenteuer weiter.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene4" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-haekelt-weiter.mp4" width="358" height="358" preload="auto" muted playsinline aria-hidden="true"></video><span id="completionVideoFallback" hidden></span></button>'+backButton()+'</div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div></section>';
   }
   $('game').innerHTML=html;
-  $('back').onclick=()=>phase===0?location.assign('../szene-2/?abschnitt=abschluss'):go(phase-1);
+  if ($('back')) $('back').onclick=()=>go(phase-1);
   if($('next'))$('next').onclick=()=>go(phase+1);
   if(phase===1){
    document.querySelectorAll('.picture-choice').forEach(button=>button.onclick=()=>choosePicture(Number(button.dataset.picture)));

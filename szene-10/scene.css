@@ -1,0 +1,74 @@
+@import url("../szene-9/scene.css?v=2");
+
+.drop-board {
+  display: grid;
+  gap: 12px;
+}
+
+.drop-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(5px, 1.5vw, 18px);
+  align-items: stretch;
+}
+
+.drop-target,
+.drop-picture {
+  min-width: 0;
+  border: 2px solid #ab936b;
+  border-radius: 10px;
+  color: #382c25;
+  cursor: pointer;
+}
+
+.drop-target {
+  min-height: clamp(58px, calc(100px * var(--board)), 160px);
+  padding: 5px;
+  background: #f5edd9 url('../vorschau-einfuehrung/assets/button-parchment.svg') center / auto 240% no-repeat;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.drop-target:disabled {
+  cursor: default;
+  opacity: 1;
+  border-color: #688052;
+}
+
+.drop-picture {
+  padding: 2px;
+  background: #fff8e9;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.drop-picture img,
+.drop-target img {
+  display: block;
+  width: min(100%, calc(220px * var(--board)));
+  height: auto;
+  margin: auto;
+  border-radius: 6px;
+}
+
+.drop-target img { margin-top: 6px; }
+.drop-target.is-over,
+.drop-picture[aria-pressed="true"] {
+  outline: 3px solid #694786;
+  outline-offset: -2px;
+}
+
+.drag-preview {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+  height: auto;
+  border-radius: 8px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 5px 18px #34293a70;
+}
+
+#transitionStatus { text-align: center; }

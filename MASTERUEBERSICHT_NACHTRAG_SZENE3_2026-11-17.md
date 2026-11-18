@@ -128,3 +128,9 @@ Vollständige Abschlussprüfung einschließlich Live-Seite erfolgreich (Lauf 441
 ## Nachtrag vom 18. November 2026 · Szene 4 zu Szene 5
 
 Am Abschluss von Szene 4 „Der Händler“ übernimmt das Schlussbild des von Heike gelieferten Videos die Weiter-Funktion. Nach einmaligem automatischem Abspielen führt ein Klick zu Szene 5 „Der König“. Siehe den [Nachtrag zur Spielakte von Szene 4](SPIELAKTE_SZENE4_2026-11-17.md#nachtrag-vom-18-november-2026--weiter-video-im-abschluss).
+
+## Nachtrag vom 18. November 2026 – Szene 10 „1. Erkenntnis“
+
+Szene 10 ist spielbar. Nach dem Lesetext zieht das Kind die drei Tautropfenbilder auf die Pergamente „Der Wald“, „Der Himmel“ und „Die Krone“. Nach der Lösung steht der Originalabschnitt zum Vorlesen bereit. Die Würstchen-Animation startet automatisch und wird am Ende anklickbar. Szene 9 führt zu Szene 10. Der Weiter-Button in Szene 10 ist für Szene 11 „Der Zauber geht vorbei“ vorbereitet. Bis zu deren Einbau zeigt er einen kurzen Hinweis.
+
+Die früheren Szenen nutzen für den Szenenwechsel das Menü. Zurück innerhalb einer laufenden Szene bleibt möglich. Elins Rücksprung zu Szene 8 bleibt wie besprochen erhalten.

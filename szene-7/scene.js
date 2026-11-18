@@ -28,7 +28,7 @@ function toggleAudio(){audio.toggle(content.original);}
 
  function complete(){return solved.size===content.differences.length;}
  function go(n){if(n<0||n>3||(n===3&&!complete()))return;$('scene7-next-video')?.pause();stopAudio();phase=n;active=null;feedback='';render();$('main').focus();$('main').scrollIntoView({block:'start'});}
- function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
+ function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function pictures(){return '<div class="forest-pictures">'+[0,1].map(side=>'<figure><figcaption>Bild '+(side+1)+'</figcaption><div class="forest-scroll" role="region" aria-label="Bild '+(side+1)+' vergrößert seitlich verschieben" tabindex="0"><div class="forest-board" data-side="'+side+'"><img src="assets/wald-'+(side?'b':'a')+'.png" width="1536" height="1152" alt="'+(side?'Wald mit Haselnüssen, Käfern, Schal, Strauch und alter Frau.':'Wald mit Tautropfen, Spinnen, Spinnennetz, Brunnen und Mädchen.')+'">'+content.differences.map((d,i)=>d.areas.map((r,j)=>'<button class="hotspot '+(solved.has(d.id)?'found':'')+'" style="left:'+(r[0]+r[2]/2)+'%;top:'+(r[1]+r[3]/2)+'%;width:'+r[2]+'%;height:'+r[3]+'%" data-diff="'+i+'" data-area="'+j+'" data-side="'+side+'" aria-label="Bild '+(side+1)+', Bildstelle '+(i+1)+(d.areas.length>1?'.'+(j+1):'')+(solved.has(d.id)?', schon gefunden':'')+'">'+(solved.has(d.id)?'<span aria-hidden="true">✓</span>':'')+'</button>').join('')).join('')+'</div></div></figure>').join('')+'</div>';}
  function render(){
@@ -49,7 +49,7 @@ function toggleAudio(){audio.toggle(content.original);}
      <button class="secondary" id="back">← Zurück</button>
     </div>
    </section>`;
-  $('back').onclick=()=>phase===0?location.assign('../szene-6/?abschnitt=abschluss'):go(phase-1);
+  if ($('back')) $('back').onclick=()=>go(phase-1);
   if($('next')){$('next').disabled=phase===2&&!complete();$('next').onclick=()=>go(phase+1);}
   if($('audioToggle')){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
   if($('again'))$('again').onclick=()=>{solved.clear();go(0);};

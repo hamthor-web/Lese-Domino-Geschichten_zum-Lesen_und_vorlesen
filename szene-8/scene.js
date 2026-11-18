@@ -11,7 +11,7 @@ function sizes(){
 }
 function picture(){return '<figure class="king-picture"><img src="'+esc(content.image)+'" width="1536" height="1152" alt="Der König steht im Wald am glitzernden Spinnennetz und hebt die Hände."></figure>';}
 function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
-function navigation(forward=false){return '<div class="actions scene-navigation">'+(forward?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
+function navigation(forward=false){return '<div class="actions scene-navigation">'+(forward?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
 function hint(){return '<p class="scene-feedback" id="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p>';}
 function render(){
  $('transitionVideo')?.pause();
@@ -23,7 +23,7 @@ function render(){
  html+='</section>';$('game').innerHTML=html;
  document.querySelectorAll('[data-feel]').forEach(b=>b.onclick=()=>{if(b.dataset.feel==='angry'){phase=2;feedback='';render();}else{feedback='Schau dir den Text noch einmal an: Wie reagiert der König?';render();}});
  document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{if(Number(b.dataset.answer)===content.correct){phase=3;feedback='';render();}else{feedback='Das passt noch nicht. Was hat der König sich im Wald erhofft?';render();}});
- if($('back'))$('back').onclick=()=>{if(phase===0)location.assign('../szene-7/?abschnitt=abschluss');else{phase--;feedback='';render();}};
+ if($('back'))$('back').onclick=()=>{phase--;feedback='';render();};
  if($('next'))$('next').onclick=()=>{phase=1;feedback='';render();};
  if($('again'))$('again').onclick=()=>{phase=0;feedback='';render();};
  if(phase===3)playTransition();

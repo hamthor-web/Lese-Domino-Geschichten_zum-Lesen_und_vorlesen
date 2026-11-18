@@ -35,7 +35,7 @@ function toggleAudio(){audio.toggle(content.original);}
 
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(5,Number(localStorage.getItem(VISITED))||0)));}catch{}}
  function go(n){if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!solved))return;animationToken++;stopAudio();phase=n;render();$('main').focus();if(phase===3)$('scene6').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});}
- function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
+ function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900"></figure>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function setupCompletionVideo(){
@@ -74,7 +74,7 @@ function toggleAudio(){audio.toggle(content.original);}
   if(phase===1){$('game').innerHTML='<section class="panel"><h1>Finde den Fehler</h1><div class="king-layout task-layout">'+illustration()+'<section class="task-content"><div class="parchment question-box"><h2>Welches Wort muss getauscht werden?</h2><p>Tippe das Wort an. Wähle danach ein passendes Wort für die Lücke.</p></div><div id="wordTask"></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details></section></div>'+nav()+'</section>';renderTask();}
   if(phase===2)$('game').innerHTML='<section class="panel"><h1>Der König</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===3)$('game').innerHTML='<section class="panel"><h1>Der König und die Spinnennetze</h1><p>Du hast herausgefunden, was der König vorhatte.</p><p class="parchment sentence">'+esc(content.sentenceStart)+' '+esc(content.correct)+'.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene6" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-kutsche-weiter.mp4" width="358" height="354" preload="auto" muted playsinline aria-hidden="true"></video><span class="primary" id="completionVideoFallback" hidden></span></button></div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
-  $('back').onclick=()=>phase===0?location.assign('../szene-4/?abschnitt=abschluss'):go(phase-1);
+  if ($('back')) $('back').onclick=()=>go(phase-1);
   if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase+1);}
   if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
   if(phase===3)setupCompletionVideo();
