@@ -11,9 +11,8 @@
 .scene-feedback{font-size:calc(21px * var(--text,1));text-align:center;min-height:35px;line-height:1.5}
 .scene-navigation{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px}
 .scene-navigation .secondary{min-height:54px}
-@media(max-width:600px){.emotion{min-width:84px;min-height:84px;font-size:64px;padding:6px}.answer{padding:14px;font-size:calc(21px * var(--text,1))}.king-picture{border-radius:10px}.video-next{width:200px}}
+@media(max-width:600px){.emotion{min-width:84px;min-height:84px;font-size:64px;padding:6px}.answer{padding:14px;font-size:calc(21px * var(--text,1))}.king-picture{border-radius:10px}}
 
-.transition-panel{text-align:center}.transition-movie{width:min(354px,90vw);margin:18px auto}.transition-movie video{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain}.transition-panel .secondary{min-height:54px}
 
 /* Navigation in sinnvoller Reihenfolge, auch im Hochformat. */
 #game .scene-navigation{display:flex;flex-direction:column;align-items:stretch;gap:14px}
@@ -42,3 +41,31 @@
   padding-bottom:18px;
   background-size:100% 100%;
 }
+
+.scene-transition {
+  display:block;
+  position:relative;
+  width:min(100%, calc(220px * var(--board,1)));
+  margin:18px auto;
+  padding:0;
+  overflow:hidden;
+  border:3px solid #bda6d1;
+  border-radius:18px;
+  background:#fff8eb;
+  cursor:pointer;
+}
+.scene-transition:focus-visible {outline:3px solid #745093;outline-offset:3px}
+.scene-transition video {display:block;width:100%;height:auto;aspect-ratio:1}
+.transition-play {
+  position:absolute;
+  inset:auto 10px 10px auto;
+  display:grid;
+  place-items:center;
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:#34293a;
+  color:white;
+  font-size:24px;
+}
+.scene-transition.playing .transition-play {visibility:hidden}
