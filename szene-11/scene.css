@@ -102,3 +102,16 @@
 @media (orientation: landscape) and (max-height: 600px) {
   .magic-stage { width: min(100%, calc(350px * var(--board))); }
 }
+
+#finishActions .elin-navigation {
+  width: fit-content;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: stretch;
+  margin-inline: auto;
+}
+
+#speechStatus {
+  contain: inline-size;
+  text-align: center;
+}
