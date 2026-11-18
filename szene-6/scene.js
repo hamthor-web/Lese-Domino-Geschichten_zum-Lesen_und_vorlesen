@@ -56,21 +56,51 @@
 
 
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(6,Number(localStorage.getItem(VISITED))||0)));}catch{}}
- function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}
+ function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus({preventScroll:phase===3});if(phase===3)$('scene7').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});}
  function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1448" height="1086"></figure>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
+ function setupCompletionVideo(){
+  const button=$('scene7'),video=$('completionVideo'),fallback=$('completionVideoFallback');
+  const destination='Weiter zu Der König im Wald';
+  function enable(label,action,text=''){
+   if(!button.isConnected)return;
+   fallback.textContent=text;
+   fallback.hidden=!text;
+   button.setAttribute('aria-label',label);
+   button.onclick=action;
+   button.disabled=false;
+  }
+  function ready(showFallback=false){
+   video.hidden=showFallback;
+   enable(destination,()=>location.assign('../szene-7/'),showFallback?'Weiter: Der König im Wald':'');
+  }
+  function play(){
+   button.disabled=true;
+   button.setAttribute('aria-label','Würstchen-Animation läuft');
+   fallback.hidden=true;
+   video.play().catch(error=>{
+    if(!button.isConnected||video.error)return;
+    if(error.name==='NotAllowedError')enable('Würstchen-Animation abspielen',play,'▶ Abspielen');
+    else ready(true);
+   });
+  }
+  video.addEventListener('ended',()=>ready(),{once:true});
+  video.addEventListener('error',()=>ready(true),{once:true});
+  play();
+ }
  function render(){
+  $('completionVideo')?.pause();
   $('stepStatus').textContent=['Schritt 1 von 3 · Selbst lesen','Schritt 2 von 3 · Zuordnen','Schritt 3 von 3 · Zuhören',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
   if(phase===1){$('game').innerHTML='<section class="panel"><h1>Wer sagt oder tut das?</h1><p>Welche zwei Blasen passen zum Text? Wähle eine Blase und tippe auf das passende Kreuz im Bild.</p><div class="village-task"><div class="board-scroll" role="region" aria-label="Wirtshausbild mit zwei Kreuzen"><div id="villageBoard"><img class="village-image" src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900">'+['king','mayor'].map((person,i)=>'<div class="person-slot '+person+'" id="slot'+i+'"><button class="person-cross" data-person="'+person+'" aria-label="Kreuz beim '+(i?'Bürgermeister':'König')+'"><span aria-hidden="true">✕</span></button></div>').join('')+'</div></div><aside class="question-panel"><div id="questionArea"></div><p id="feedback" class="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p></aside></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details>'+nav()+'</section>';renderQuestion();}
 
   if(phase===2)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
-  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Das Gespräch im Dorf</h1><p>Du hast die Worte und die Handlung richtig zugeordnet.</p><div class="actions"><button class="primary" id="scene7">Weiter: Der König im Wald</button><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
+  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Das Gespräch im Dorf</h1><p>Du hast die Worte und die Handlung richtig zugeordnet.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene7" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-weiter.mp4" width="356" height="356" preload="auto" muted playsinline aria-hidden="true"></video><span class="primary" id="completionVideoFallback" hidden></span></button></div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
   $('back').onclick=()=>phase===0?location.assign('../szene-5/?abschnitt=abschluss'):go(phase-1);
   if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase+1);}
   if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
-  if($('scene7'))$('scene7').onclick=()=>location.assign('../szene-7/');
+  if(phase===3)setupCompletionVideo();
   if($('again'))$('again').onclick=()=>{cancelFlight();placed=[false,false,false,false];shuffleCards();solved=false;feedback='';go(0);};
   scheduleButtons();
  }
