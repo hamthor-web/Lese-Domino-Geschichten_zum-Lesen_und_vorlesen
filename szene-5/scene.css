@@ -1,4 +1,4 @@
-@import url("../szene-3/scene.css?v=4");
+@import url("../szene-3/scene.css?v=5");
 .king-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
 .king-layout>*{min-width:0}
 .king-art{width:min(100%,calc(620px * var(--board)));margin:0 auto}
@@ -18,3 +18,9 @@
 .feedback{overflow-wrap:break-word}
 @media(orientation:portrait),(max-width:800px){.king-layout,.task-layout{grid-template-columns:minmax(0,1fr)}.king-layout .king-art{grid-row:1;max-width:calc(520px * var(--board))}}
 @media(prefers-reduced-motion:no-preference){.shake{animation:word-shake .32s ease}@keyframes word-shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}}
+
+.completion-video{border:0;cursor:pointer}
+.completion-video:disabled{cursor:default}
+.completion-video:focus-visible{outline:4px solid #8a649f;outline-offset:3px}
+.completion-video [hidden]{display:none}
+.completion-video span:not([hidden]){display:block}

@@ -6,7 +6,7 @@ const live=process.env.SILVANA_BASE_URL,base=(live||'http://127.0.0.1:8767/').re
 const server=live?null:spawn('python3',['-m','http.server','8767','--bind','127.0.0.1'],{stdio:'ignore'});
 let browser;const errors=[];
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-5/?test='+Date.now());if(r.ok&&(await r.text()).includes('scene.js?v=2'))break;}catch{}if(i===179)throw Error('Szene 5 fehlt');await new Promise(r=>setTimeout(r,500));}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-5/?test='+Date.now());if(r.ok&&(await r.text()).includes('scene.js?v=3'))break;}catch{}if(i===179)throw Error('Szene 5 fehlt');await new Promise(r=>setTimeout(r,500));}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true});
  await context.addInitScript(()=>{
@@ -29,6 +29,10 @@ async function run(){
     assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),label+' horizontal overflow '+width+' '+text+'/'+board);
     assert.ok(await p.locator('button:visible').evaluateAll(bs=>bs.every(b=>{const r=b.getBoundingClientRect();return r.width<=innerWidth+1&&b.scrollHeight<=b.clientHeight+2;})),label+' clipped button');
     assert.ok(await p.locator('.king-art img').evaluateAll(images=>images.every(i=>{const r=i.getBoundingClientRect();return Math.abs(r.width/r.height-i.naturalWidth/i.naturalHeight)<.01;})),label+' distorted picture');
+    assert.ok(await p.locator('#completionVideo:visible').evaluateAll(videos=>videos.every(video=>{
+     const rect=video.getBoundingClientRect();
+     return Math.abs(rect.width/rect.height-358/354)<.01&&rect.height<=innerHeight;
+    })),label+' distorted or oversized completion video');
     checks++;
    }
   }
@@ -54,10 +58,22 @@ async function run(){
  for(const word of ['Pause','Weiterhören','Pause']){await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),new RegExp(word));}
  assert.match(await p.evaluate(()=>window.__u.text),/Sechs Pferde begleiteten ihn, zwölf Soldaten und drei Diener/);
  await p.evaluate(()=>window.__u.onend());await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),/Pause/);await layout('Zuhören');
- const before=await p.evaluate(()=>window.__speech.filter(x=>x==='cancel').length);await p.locator('#next').click();assert.ok(await p.evaluate(()=>window.__speech.filter(x=>x==='cancel').length)>before);await layout('Abschluss');
+ const before=await p.evaluate(()=>window.__speech.filter(x=>x==='cancel').length);await p.locator('#next').click();assert.ok(await p.evaluate(()=>window.__speech.filter(x=>x==='cancel').length)>before);const video=p.locator('#completionVideo'),forward=p.locator('#scene6');
+ await video.waitFor();
+ assert.equal(await forward.isDisabled(),true);
+ await p.waitForFunction(()=>{const video=document.querySelector('#completionVideo');return !video.paused&&video.currentTime>0;});
+ assert.equal(await forward.isDisabled(),true);
+ await p.waitForFunction(()=>document.querySelector('#completionVideo').ended&&!document.querySelector('#scene6').disabled);
+ assert.equal(await forward.getAttribute('aria-label'),'Weiter zu Im Dorf');
+ assert.equal(await p.locator('#completionVideoFallback').isVisible(),false);
+ await layout('Abschluss');
  await p.locator('#again').click();await p.locator('#next').click();assert.equal(await p.locator('#wrongWord').isVisible(),true);assert.equal(await p.locator('#next').isDisabled(),true);
  await p.locator('#back').click();await p.locator('#back').click();await p.waitForURL('**/szene-4/?abschnitt=abschluss');await p.locator('#scene5').waitFor();await p.locator('#back').click();assert.equal(await p.locator('#check').isVisible(),false);assert.equal(await p.locator('#next').isEnabled(),true);await p.locator('#next').click();await p.locator('#scene5').click();await p.waitForURL('**/szene-5/');
+ await p.goto(base+'szene-5/?abschnitt=abschluss');
+ await p.waitForFunction(()=>document.querySelector('#completionVideo')?.ended);
+ await forward.focus();await p.keyboard.press('Enter');await p.waitForURL('**/szene-6/');
+ await p.locator('h1').filter({hasText:'Im Dorf'}).waitFor();
  await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu5').waitFor({state:'visible'});assert.deepEqual(await p.locator('#sceneMenu3,#sceneMenu4,#sceneMenu5').allTextContents(),['Die Spinnen im Wald','Der Händler','Der König']);
- assert.deepEqual(errors,[]);console.log('PASS König: Alle sieben Wörter einheitlich und anklickbar, falsche Wortwahl ohne Freigabe; Illustration, Pergament-Kästchen, Fehlerwort/Lücke, zwei falsche Wörter, richtiges Wort, Rücknavigation, Wiederholung, Übergänge und Menü; '+checks+' Layoutprüfungen. Sprachsteuerung simuliert.');await context.close();
+ assert.deepEqual(errors,[]);console.log('PASS König: Alle sieben Wörter einheitlich und anklickbar, falsche Wortwahl ohne Freigabe; Illustration, Pergament-Kästchen, Fehlerwort/Lücke, zwei falsche Wörter, richtiges Wort, Rücknavigation, Wiederholung, Kutschen-Video mit automatischer Wiedergabe und Freigabe nach Ende, Übergänge und Menü; '+checks+' Layoutprüfungen. Sprachsteuerung simuliert.');await context.close();
 }
 run().then(async()=>{if(browser)await browser.close();if(server)server.kill();}).catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exitCode=1;});
