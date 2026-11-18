@@ -124,9 +124,6 @@
       const position = Number(openSlot.dataset.position);
       const hint = word[position];
       const label = 'Auf Platz ' + (position + 1) + ' gehört ' + hint + '.';
-      openSlot.textContent = hint;
-      openSlot.classList.add('is-hint');
-      openSlot.setAttribute('aria-label', label);
       feedback.textContent = 'Schau noch einmal genau hin. ' + label;
       tile.focus({preventScroll: true});
       return;
@@ -134,7 +131,6 @@
 
     slot.textContent = tile.textContent;
     slot.setAttribute('aria-label', 'Buchstabenplatz ' + (Number(slot.dataset.position) + 1) + ', ' + tile.textContent);
-    slot.classList.remove('is-hint');
     slot.disabled = true;
     tile.disabled = true;
     const remaining = letters.querySelector('button:not(:disabled)');

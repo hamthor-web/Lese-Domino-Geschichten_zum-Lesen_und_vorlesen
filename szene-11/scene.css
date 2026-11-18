@@ -59,7 +59,6 @@
 
 .letter-slot:disabled { opacity: 1; }
 .letter-slot.is-over { background: #845f22; }
-.letter-slot.is-hint { color: #ffe3a2; }
 .letter-bank { flex-wrap: wrap; margin-top: 8px; }
 
 .letter-tile, .magic-drag {
