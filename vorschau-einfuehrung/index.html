@@ -7,16 +7,9 @@
 <link rel="stylesheet" href="styles.css?v=9">
 <script src="../shared/story-speech.js?v=1" defer></script>
 <script src="game.js?v=24" defer></script>
+<link rel="stylesheet" href="../shared/scene-menu.css">
 <style>
-.scene-menu{position:relative;display:inline-block;margin:4px 0 18px;max-width:100%}
-.scene-menu summary{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:9px 18px;background:#f5edf8;border:2px solid #c8b4d9;border-radius:14px;font-weight:bold;font-size:calc(19px * var(--text));cursor:pointer;list-style:none}
-.scene-menu summary::-webkit-details-marker{display:none}
-.scene-menu summary:after{content:'▾';font-size:18px}.scene-menu[open] summary:after{content:'▴'}
-.scene-menu summary:focus-visible,.scene-menu a:focus-visible{outline:4px solid #8a649f;outline-offset:3px}
-.scene-menu nav{position:absolute;top:calc(100% + 6px);left:0;z-index:20;width:min(390px,calc(100vw - 40px));padding:8px;background:#fffdf9;border:2px solid #dbc8e9;border-radius:16px;box-shadow:0 10px 26px #55416030}
-.scene-menu a{display:block;padding:13px 14px;min-height:52px;border-radius:10px;color:#493e58;text-decoration:none;font-size:calc(19px * var(--text));overflow-wrap:break-word}
-.scene-menu a:hover,.scene-menu a[aria-current="page"]{background:#efe3f7;font-weight:bold}
-.scene-menu [hidden],.scene-backbar[hidden]{display:none!important}
+.scene-backbar[hidden]{display:none!important}
 .scene-backbar{display:flex;margin:4px 0 18px}.scene-backbar button{max-width:100%}
 
 .adventure-link{flex-basis:100%;min-width:0}

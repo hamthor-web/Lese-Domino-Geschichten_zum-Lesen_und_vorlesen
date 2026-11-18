@@ -10,6 +10,11 @@
     ['Niemand wartete auf ihn.', false]
   ];
   const byId = id => document.getElementById(id);
+  const original = [
+    'Auf der Rückreise blieben die Samtkisten leer. Eine war noch immer voller Schlamm, weil niemand Lust gehabt hatte, sie sauber zu machen.',
+    'Als der König einige Tage später seinen Palast erreichte, wartete der Hof bereits auf den berühmten Schatz.'
+  ].join('\n\n');
+  const speech = createStorySpeech(updateSpeech);
   const pool = byId('thumbs');
   const parchment = byId('statements');
   const evidence = byId('evidence');
@@ -45,6 +50,7 @@
     placed = 0;
     select(null);
     video.pause();
+    speech.stop();
     completion.hidden = true;
     transitionStatus.hidden = true;
     evidenceHome.append(evidence);
@@ -255,6 +261,20 @@
     if (!video.getAttribute('src')) video.src = 'assets/weiter-zu-szene-13.mp4';
     playTransition();
   }
+
+  function updateSpeech() {
+    const labels = {playing: 'Pause', paused: 'Weiterhören', ended: 'Noch einmal hören', error: 'Erneut vorlesen'};
+    byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
+    byId('listen').disabled = !speech.available;
+    const status = byId('speechStatus');
+    status.textContent = !speech.available ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
+      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
+    status.hidden = !status.textContent;
+  }
+
+  byId('listen').onclick = () => speech.toggle(original);
+  window.addEventListener('pagehide', () => speech.stop());
+  updateSpeech();
 
   video.onended = () => ready(false);
   video.onerror = () => ready(true);

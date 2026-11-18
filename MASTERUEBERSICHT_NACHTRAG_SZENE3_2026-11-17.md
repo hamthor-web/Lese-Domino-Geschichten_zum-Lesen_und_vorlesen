@@ -141,4 +141,4 @@ Szenen 1 bis 11 sind eingebaut. Nach dem Lesetext folgen sechs fallende Tropfen 
 
 ## Szene 12 „Rückreise“ – 18.11.2026
 
-Szenen 1 bis 12 sind umgesetzt. Szene 12 enthält die Kutschenillustration, den Lesetext und sechs Wahr-oder-falsch-Aussagen. Die Daumen kommen aus der Samtkiste. Bei einem Fehlversuch markiert das Spiel die passende Textstelle. Szene 11 führt zu Szene 12. Das Würstchenvideo bereitet die Weiterleitung zu Szene 13 „Zu Hause“ vor, die noch aussteht.
+Szenen 1 bis 12 sind umgesetzt. Szene 12 enthält die Kutschenillustration, den Lesetext und sechs Wahr-oder-falsch-Aussagen. Die Daumen kommen aus der Samtkiste. Bei einem Fehlversuch markiert das Spiel die passende Textstelle. Szene 11 führt zu Szene 12. Nach der Aufgabe lässt sich der Originalabschnitt vorlesen. Das Würstchenvideo bereitet die Weiterleitung zu Szene 13 „Zu Hause“ vor, die noch aussteht.
