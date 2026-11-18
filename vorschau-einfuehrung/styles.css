@@ -73,3 +73,24 @@ body{hyphens:none;-webkit-hyphens:none}
 .intro-page .listen{display:block}
 @media(min-width:1550px){.intro-title,.intro-tools{max-width:1500px}}
 @media(max-width:650px){.intro-title,.intro-tools{padding-left:14px;padding-right:14px}.intro-tools .quiet{width:100%;max-width:100%}}
+
+/* Das Schlussbild des Videos übernimmt die Weiter-Schaltfläche. */
+.actions.completion-navigation{justify-content:center;align-items:center}
+.actions.completion-navigation>.completion-video{
+ flex:0 1 auto!important;
+ width:min(100%,356px,75svh);
+ min-width:0;
+ padding:0;
+ background:none;
+ border:0;
+}
+.completion-video:disabled{opacity:1}
+.completion-video video{display:block;width:100%;height:auto;pointer-events:none}
+.completion-video span{
+ display:block;
+ padding:14px;
+ border:2px solid var(--green);
+ border-radius:13px;
+ font-weight:bold;
+ background:var(--cream);
+}

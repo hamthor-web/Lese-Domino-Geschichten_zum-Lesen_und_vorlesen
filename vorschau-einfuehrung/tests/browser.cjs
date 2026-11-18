@@ -8,7 +8,7 @@ const server=live?null:spawn('python3',['-m','http.server','8766','--bind','127.
 let browser;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=18'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=19'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
  const page=await context.newPage(),errors=[];
@@ -41,8 +41,8 @@ async function run(){
  await page.evaluate(()=>{for(const id of ['textSize','boardSize']){const e=document.getElementById(id);e.value=100;e.dispatchEvent(new Event('input',{bubbles:true}));}});
  await stable();await page.locator('#new').click();await page.locator('#toRead').click();
  async function navigation(){
-  const r=await page.locator('.scene-navigation').evaluate(g=>{const ns=g.querySelector('.primary').getBoundingClientRect(),bs=g.querySelector('.secondary').getBoundingClientRect();return {next:{x:ns.x,y:ns.y,w:ns.width,h:ns.height},back:{x:bs.x,y:bs.y,w:bs.width,h:bs.height}}});
-  assert.ok(Math.abs(r.next.y-r.back.y)<2?r.back.x<r.next.x:r.next.y<r.back.y,'Weiter rechts oder über Zurück');
+  const r=await page.locator('.scene-navigation').evaluate(g=>{const ns=g.querySelector('.primary, .completion-video').getBoundingClientRect(),bs=g.querySelector('.secondary').getBoundingClientRect();return {next:{x:ns.x,y:ns.y,w:ns.width,h:ns.height},back:{x:bs.x,y:bs.y,w:bs.width,h:bs.height}}});
+  assert.ok(r.back.x+r.back.w<=r.next.x||r.next.y+r.next.h<=r.back.y+1,'Weiter rechts oder über Zurück');
   assert.ok(r.next.h>=48&&r.back.h>=48,'Große Bedienflächen');
  }
  await navigation();await page.locator('#toDomino').click();
@@ -110,7 +110,42 @@ async function run(){
  assert.equal(await page.locator('#hint').isVisible(),false);
  assert.equal(await page.locator('#check').isVisible(),false);
  await page.locator('#finish').click();await navigation();
+ const next=page.locator('#scene2'),video=page.locator('#completionVideo');
+ assert.equal(await next.isEnabled(),false);
+ await video.scrollIntoViewIfNeeded();
+ await page.waitForFunction(()=>{const video=document.getElementById('completionVideo');return video.currentTime>0&&!video.ended;});
+ assert.equal(await next.isEnabled(),false);
+ await page.waitForFunction(()=>document.getElementById('completionVideo').ended);
+ assert.equal(await next.isEnabled(),true);
+ assert.equal(await page.locator('#completionVideoFallback').isVisible(),false);
+ for(const [width,height] of [[360,800],[800,360],[412,915],[915,412],[768,1024],[1024,768]]){
+  await page.setViewportSize({width,height});
+  for(const [text,board] of [[100,100],[160,100],[100,160],[160,160]]){
+   await page.evaluate(([t,b])=>{for(const [id,v] of [['textSize',t],['boardSize',b]]){const e=document.getElementById(id);e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}},[text,board]);
+   await stable();
+   await navigation();
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+   const bounds=await video.boundingBox();
+   assert.ok(Math.abs(bounds.height-bounds.width*350/356)<1,'Videoproportionen');
+  }
+ }
  await page.locator('#back').click();assert.deepEqual(await ids(),[0,1,2]);
+ await page.locator('#finish').click();
+ await video.scrollIntoViewIfNeeded();
+ await page.waitForFunction(()=>document.getElementById('completionVideo').ended);
+ await next.click();
+ await page.waitForURL('**/szene-2/');
+ assert.ok(await page.evaluate(()=>Number(localStorage.getItem('silvana-visited-scenes-v1'))>=2));
+
+ // Falls Autoplay gesperrt ist, bleibt die Navigation über den Textbutton erreichbar.
+ await page.addInitScript(()=>{HTMLMediaElement.prototype.play=()=>Promise.reject(new DOMException('Autoplay gesperrt','NotAllowedError'));});
+ await page.goto(base+'vorschau-einfuehrung/');
+ await page.locator('#resume').click();
+ await next.scrollIntoViewIfNeeded();
+ await page.locator('#completionVideoFallback').waitFor({state:'visible'});
+ await next.press('Enter');
+ await page.waitForURL('**/szene-2/');
+ console.log('PASS: Einmalige Weiter-Animation, Sperre während des Videos, Ziel und Ersatzschaltfläche; 24 Abschlusslayouts.');
  assert.deepEqual(errors,[]);
  console.log('PASS: Domino per Maus und echtem Touch-Pointer in beide Richtungen einsortiert; Einfügelinie, Abbruch, Richtungstexte, Rücknavigation und '+layouts+' Layoutprüfungen bestanden.');
  await context.close();

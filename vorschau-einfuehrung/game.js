@@ -134,11 +134,52 @@ function renderBoard(){finishTileDrag(false);const box=$('boardContent');if(!box
  $('left').onclick=()=>shiftTile(-1);$('right').onclick=()=>shiftTile(1);$('return').onclick=removeTile;$('check').onclick=check;$('hint').onclick=hint;$('finish').onclick=()=>changePhase(3);
 }
 function originalDetails(){return `<details><summary>Originaltext zum Mitlesen</summary><div class="original">${escapeHtml(content.original)}</div></details>`;}
-function render(){$('introTitle').hidden=phase!==0;updateSceneMenu();for(let i=0;i<3;i++){const b=$('step'+i);b.disabled=i>furthest;b.classList.toggle('active',i===Math.min(phase,2));if(i===Math.min(phase,2))b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.onclick=()=>changePhase(i);}
+let stopCompletionVideo;
+
+function setupCompletionVideo(){
+ const button=$('scene2');
+ const video=$('completionVideo');
+ const fallback=$('completionVideoFallback');
+ let observer;
+
+ function ready(showFallback=false){
+  observer?.disconnect();
+  if(showFallback){
+   video.hidden=true;
+   fallback.hidden=false;
+  }
+  button.setAttribute('aria-label','Weiter zu Die vier Straßen');
+  button.disabled=false;
+ }
+ function play(){
+  observer?.disconnect();
+  video.play().catch(()=>{if(video.isConnected)ready(true);});
+ }
+
+ video.addEventListener('ended',()=>ready(),{once:true});
+ video.addEventListener('error',()=>ready(true),{once:true});
+ button.onclick=()=>{markScene2Visited();location.href='../szene-2/';};
+
+ if('IntersectionObserver' in window){
+  observer=new IntersectionObserver(entries=>{
+   if(video.isConnected&&entries.some(entry=>entry.intersectionRatio>=0.5))play();
+  },{threshold:0.5});
+  observer.observe(button);
+ }else{
+  play();
+ }
+
+ stopCompletionVideo=()=>{
+  observer?.disconnect();
+  video.pause();
+ };
+}
+
+function render(){stopCompletionVideo?.();stopCompletionVideo=null;$('introTitle').hidden=phase!==0;updateSceneMenu();for(let i=0;i<3;i++){const b=$('step'+i);b.disabled=i>furthest;b.classList.toggle('active',i===Math.min(phase,2));if(i===Math.min(phase,2))b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.onclick=()=>changePhase(i);}
  const game=$('game');if(phase===0){game.innerHTML=`${saved?'<section class="restore"><strong>Du warst schon hier.</strong><p>Möchtest du an deinem letzten Stand weitermachen?</p><div class="actions"><button class="primary" id="resume">Weitermachen</button><button class="secondary" id="new">Von vorn beginnen</button></div></section>':''}<section class="listen"><div><span class="eyebrow">Erst einmal zuhören</span><h1>Das Land der glitzernden Spinnweben</h1><p>Hinter dunklen Bergen liegt ein kleines Land. Lerne Silvana kennen.</p><div class="audio-controls"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p class="audio-status" id="audioStatus" role="status" aria-live="polite"></p><button class="secondary listen-next" id="toRead">Weiter</button></div></section>${originalDetails()}`;$('audioToggle').onclick=toggleAudio;$('toRead').onclick=()=>changePhase(1);updateAudio();if(saved){$('resume').onclick=()=>{const x=saved;phase=x.phase;furthest=Math.max(x.phase,Math.min(3,Number(x.furthest)||0));placed=x.placed;order=x.order;solved=placed.length===3&&placed.every((id,i)=>id===i);saved=null;render();};$('new').onclick=()=>{saved=null;phase=0;furthest=0;placed=[];solved=false;order=shuffle([0,1,2]);persist();render();};}}
  else if(phase===1){game.innerHTML=`<section class="panel reading-layout"><span class="eyebrow">Jetzt bist du dran</span><h2>Willkommen in Silvana</h2><p class="read-intro">Lies in deinem Tempo.</p><div class="reading">${escapeHtml(content.simple)}</div><div class="actions scene-navigation"><button class="primary" id="toDomino">Weiter</button><button class="secondary" id="back">← Zurück</button></div></section>`;$('back').onclick=()=>changePhase(0);$('toDomino').onclick=()=>changePhase(2);}
  else if(phase===2){game.innerHTML=`<div class="domino-layout"><section class="panel readback"><span class="eyebrow">Zum Nachschauen</span><h3>Dein Lesetext</h3><div class="reading">${escapeHtml(content.simple)}</div></section><section class="panel board"><span class="eyebrow">Dein erstes Domino</span><h2>Baue deinen Satz.</h2><p class="board-help">Tippe die Steine in deiner Reihenfolge an. Du kannst sie auch ziehen. Prüfe deinen Satz, wenn du fertig bist.</p><div id="boardContent"></div></section></div>`;renderBoard();}
- else{game.innerHTML=`<section class="panel finish"><div class="finish-star" aria-hidden="true">✧</div><h2>Willkommen in Silvana!</h2><p>Du hast zugehört, selbst gelesen und deinen Satz gelegt.</p><p class="completed-sentence">${escapeHtml(content.tiles.join(' '))}.</p><p class="note">Die Geschichte geht weiter. Was wartet wohl als Nächstes auf dich?</p><div class="actions completion-actions"><button class="primary" id="again">Domino noch einmal spielen</button><button class="secondary" id="listenAgain">Geschichte noch einmal hören</button><div class="adventure-link"><p>Jetzt geht das Abenteuer weiter.</p><div class="scene-navigation actions"><button class="primary" id="scene2">Weiter</button><button class="secondary" id="back">← Zurück</button></div></div></div></section>`;$('back').onclick=()=>changePhase(2);$('again').onclick=()=>{placed=[];solved=false;order=shuffle([0,1,2]);changePhase(2);};$('listenAgain').onclick=()=>{changePhase(0);speak();};$('scene2').onclick=()=>{markScene2Visited();location.href='../szene-2/';};}}
+ else{game.innerHTML=`<section class="panel finish"><div class="finish-star" aria-hidden="true">✧</div><h2>Willkommen in Silvana!</h2><p>Du hast zugehört, selbst gelesen und deinen Satz gelegt.</p><p class="completed-sentence">${escapeHtml(content.tiles.join(' '))}.</p><p class="note">Die Geschichte geht weiter. Was wartet wohl als Nächstes auf dich?</p><div class="actions completion-actions"><button class="primary" id="again">Domino noch einmal spielen</button><button class="secondary" id="listenAgain">Geschichte noch einmal hören</button><div class="adventure-link"><p>Jetzt geht das Abenteuer weiter.</p><div class="scene-navigation actions completion-navigation"><button class="completion-video" id="scene2" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" width="356" height="350" src="assets/weiter-boden-stampfen.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="completionVideoFallback" hidden>Weiter</span></button><button class="secondary" id="back">← Zurück</button></div></div></div></section>`;$('back').onclick=()=>changePhase(2);$('again').onclick=()=>{placed=[];solved=false;order=shuffle([0,1,2]);changePhase(2);};$('listenAgain').onclick=()=>{changePhase(0);speak();};setupCompletionVideo();}}
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};for(const id of ['textSize','boardSize'])$(id).addEventListener('input',()=>{sizes();if(!saved)persist();});
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&audioAvailable){speechSynthesis.pause();audioState='paused';updateAudio();}});window.addEventListener('pagehide',stopAudio);
  fetch('content.json').then(r=>{if(!r.ok)throw Error('Text nicht gefunden');return r.json();}).then(data=>{content=data;order=shuffle([0,1,2]);loadSaved();sizes();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'&&scene2Visited()){phase=3;furthest=3;saved=null;}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h2>Der Text konnte nicht geladen werden.</h2><p>Bitte lade die Seite noch einmal.</p><button class="primary" onclick="location.reload()">Erneut laden</button></section>';});
