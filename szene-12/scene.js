@@ -6,7 +6,7 @@
     ['Eine Kiste war schmutzig.', true],
     ['Lange Zeit später war der König wieder in seinem Schloss.', false],
     ['Niemand hatte Lust zum Putzen.', true],
-    ['Die Kisten waren aus Samt.', false],
+    ['Die Kisten hatten innen roten Samt.', true],
     ['Niemand wartete auf ihn.', false]
   ];
   const byId = id => document.getElementById(id);
@@ -53,7 +53,7 @@
     taskReading.replaceChildren(...Array.from(byId('readingText').children, p => p.cloneNode(true)));
     document.querySelector('.trip-game').hidden = false;
     document.querySelector('.trip-instructions').hidden = false;
-    pool.replaceChildren(...[true, false, false, true, false, true, false, false].map(value => {
+    pool.replaceChildren(...[true, false, false, true, false, true, true, false].map(value => {
       const tile = makeButton('thumb', value ? '👍' : '👎');
       tile.dataset.value = String(value);
       tile.setAttribute('aria-label', value ? 'Daumen hoch, wahr' : 'Daumen runter, falsch');
