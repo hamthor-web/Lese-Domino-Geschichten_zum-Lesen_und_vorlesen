@@ -137,4 +137,4 @@ Die früheren Szenen nutzen für den Szenenwechsel das Menü. Zurück innerhalb 
 
 ## Szene 11 „Der Zauber geht vorbei“ – 18. November 2026
 
-Szenen 1 bis 11 sind eingebaut. Nach dem Lesetext folgen sechs fallende Tropfen und sechs Wörter zum Legen. Das Abschlussbild „nur Tannennadel“ erscheint mit „Der Zauber ist vorbei.“ Drei Sekunden später läuft der animierte Weiter-Button. Der Originalabschnitt ist zum Vorlesen verfügbar. Szene 10 führt zu Szene 11. Der Anschluss an Szene 12 „Rückreise“ ist vorbereitet. Szene 12 steht noch aus.
+Szenen 1 bis 11 sind eingebaut. Nach dem Lesetext folgen sechs fallende Tropfen und sechs Wörter zum Legen. Das Abschlussbild mit der Spinne im Netz erscheint mit „Der Zauber ist vorbei.“ Drei Sekunden später läuft der animierte Weiter-Button. Der Originalabschnitt ist zum Vorlesen verfügbar. Szene 10 führt zu Szene 11. Der Anschluss an Szene 12 „Rückreise“ ist vorbereitet. Szene 12 steht noch aus.
