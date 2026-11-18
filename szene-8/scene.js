@@ -19,40 +19,43 @@ function render(){
  if(phase===0)html+='<h1>Der wütende König</h1><p class="king-question">Lies den Text in deinem Tempo.</p>'+reading()+picture()+navigation(true);
  if(phase===1)html+='<h1>Wie fühlt sich der König?</h1>'+picture()+'<p class="king-question">Welcher Smiley passt zum König?</p><div class="emotions" role="group" aria-label="Welches Gefühl passt zum König?"><button class="emotion" data-feel="angry" aria-label="Wütend" title="Wütend">😠</button><button class="emotion" data-feel="sad" aria-label="Traurig" title="Traurig">😢</button><button class="emotion" data-feel="happy" aria-label="Fröhlich" title="Fröhlich">😊</button></div>'+hint()+'<details><summary>Lesetext noch einmal ansehen</summary>'+reading()+'</details>'+navigation();
  if(phase===2)html+='<h1>Warum ist der König wütend?</h1>'+picture()+'<p class="king-question">Lies die drei Sätze. Welcher passt zur Geschichte?</p><div class="answer-list">'+content.answers.map((a,i)=>'<button class="answer" data-answer="'+i+'">'+esc(a)+'</button>').join('')+'</div>'+hint()+'<details><summary>Lesetext noch einmal ansehen</summary>'+reading()+'</details>'+navigation();
- if(phase===3)html+='<h1>Richtig erkannt!</h1>'+picture()+'<p class="king-question">'+esc(content.answers[content.correct])+'</p><p class="scene-feedback">Du hast erkannt, warum der König wütend ist.</p><button class="scene-transition" id="goToNextScene" type="button" aria-label="Würstchen-Animation abspielen"><video id="transitionVideo" width="354" height="354" poster="assets/wuerstchen-uebergang.jpg" src="assets/Wuerstchen_Animation.mp4" muted playsinline preload="none" aria-hidden="true"></video><span class="transition-play" aria-hidden="true">▶</span></button><p id="transitionStatus" class="scene-feedback" role="status" hidden></p><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+navigation();
+ if(phase===3)html+='<h1>Richtig erkannt!</h1>'+picture()+'<p class="king-question">'+esc(content.answers[content.correct])+'</p><p class="scene-feedback">Du hast erkannt, warum der König wütend ist.</p><button class="scene-transition" id="goToNextScene" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="transitionVideo" width="354" height="354" poster="assets/wuerstchen-uebergang.jpg" src="assets/Wuerstchen_Animation.mp4" muted playsinline preload="none" aria-hidden="true"></video><span class="transition-label" aria-hidden="true" hidden></span></button><p id="transitionStatus" class="scene-feedback" role="status" hidden></p><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+navigation();
  html+='</section>';$('game').innerHTML=html;
  document.querySelectorAll('[data-feel]').forEach(b=>b.onclick=()=>{if(b.dataset.feel==='angry'){phase=2;feedback='';render();}else{feedback='Schau dir den Text noch einmal an: Wie reagiert der König?';render();}});
  document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{if(Number(b.dataset.answer)===content.correct){phase=3;feedback='';render();}else{feedback='Das passt noch nicht. Was hat der König sich im Wald erhofft?';render();}});
  if($('back'))$('back').onclick=()=>{if(phase===0)location.assign('../szene-7/?abschnitt=abschluss');else{phase--;feedback='';render();}};
  if($('next'))$('next').onclick=()=>{phase=1;feedback='';render();};
  if($('again'))$('again').onclick=()=>{phase=0;feedback='';render();};
- const transition=$('goToNextScene');
- if(transition)transition.onclick=()=>startTransition(transition,$('transitionVideo'),$('transitionStatus'));
+ if(phase===3)playTransition();
 }
-async function startTransition(button,video,status){
- if(button.getAttribute('aria-disabled')==='true')return;
- button.setAttribute('aria-disabled','true');
- button.classList.add('playing');
- status.hidden=true;
- try {
-  video.currentTime=0;
-  const playback = new AbortController();
-  try {
-   const finished = new Promise(resolve=>{
-    for(const event of ['ended','error']){
-     video.addEventListener(event,resolve,{signal:playback.signal});
-    }
-   });
-   await video.play();
-   if(!button.isConnected)return;
-   await finished;
-  } finally {
-   playback.abort();
-  }
- } catch {
-  // Die Vorschau bleibt bedienbar, falls das Video nicht geladen werden kann.
+function playTransition(){
+ const button=$('goToNextScene'), video=$('transitionVideo'), status=$('transitionStatus');
+ const label=button.querySelector('.transition-label');
+ function enable(text,action){
+  if(!button.isConnected)return;
+  label.textContent=text;
+  label.hidden=false;
+  button.setAttribute('aria-label',text==='Weiter →'?'Weiter zur nächsten Szene':'Würstchen-Animation abspielen');
+  button.onclick=action;
+  button.disabled=false;
  }
- if(!button.isConnected)return;
+ const ready=()=>enable('Weiter →',()=>openNextScene(button,status));
+ video.addEventListener('ended',ready,{once:true});
+ video.addEventListener('error',ready,{once:true});
+ function play(){
+  button.disabled=true;
+  button.setAttribute('aria-label','Würstchen-Animation läuft');
+  label.hidden=true;
+  video.play().catch(error=>{
+   if(error.name==='NotAllowedError')enable('▶ Abspielen',play);
+   else ready();
+  });
+ }
+ button.scrollIntoView({block:'nearest',behavior:'instant'});
+ play();
+}
+async function openNextScene(button,status){
+ button.disabled=true;
  try {
   const response=await fetch('../szene-9/index.html',{method:'HEAD',cache:'no-store'});
   if(!button.isConnected)return;
@@ -61,12 +64,10 @@ async function startTransition(button,video,status){
    return;
   }
  } catch {
-  // Die letzte Seite bleibt auch ohne Netz erreichbar.
- } finally {
-  button.removeAttribute('aria-disabled');
-  button.classList.remove('playing');
+  // Die Abschlussseite bleibt auch ohne Netz bedienbar.
  }
  if(!button.isConnected)return;
+ button.disabled=false;
  status.textContent='Hier geht die Geschichte bald weiter.';
  status.hidden=false;
 }
