@@ -30,6 +30,28 @@
   let drag;
   let placed = 0;
   let attempt = 0;
+  let sizingFrame;
+
+  function sizeButtons() {
+    cancelAnimationFrame(sizingFrame);
+    sizingFrame = requestAnimationFrame(() => {
+      const buttons = ['settingsToggle', 'start', 'listen', 'retry'].map(byId);
+      buttons.forEach(button => {
+        button.style.width = 'max-content';
+        button.style.height = 'auto';
+      });
+      const visible = buttons.filter(button => button.getClientRects().length);
+      const available = Math.min(...visible.map(button => {
+        const parent = button.parentElement;
+        const style = getComputedStyle(parent);
+        return parent.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      }));
+      const width = Math.min(available, Math.ceil(Math.max(...visible.map(button => button.getBoundingClientRect().width))));
+      visible.forEach(button => { button.style.width = width + 'px'; });
+      const height = Math.ceil(Math.max(...visible.map(button => button.getBoundingClientRect().height)));
+      visible.forEach(button => { button.style.height = height + 'px'; });
+    });
+  }
 
   function select(tile) {
     selected?.setAttribute('aria-pressed', 'false');
@@ -89,6 +111,7 @@
       return row;
     }));
     byId('activityTitle').focus();
+    sizeButtons();
   }
 
   function place(tile, target, point) {
@@ -258,18 +281,20 @@
     document.querySelector('.trip-instructions').hidden = true;
     completion.hidden = false;
     byId('finishTitle').focus();
+    sizeButtons();
     if (!video.getAttribute('src')) video.src = 'assets/weiter-zu-szene-13.mp4';
     playTransition();
   }
 
   function updateSpeech() {
-    const labels = {playing: 'Pause', paused: 'Weiterhören', ended: 'Noch einmal hören', error: 'Erneut vorlesen'};
+    const labels = {playing: 'Ⅱ Pause', paused: '▶ Weiterhören', ended: '↻ Noch einmal hören', error: 'Erneut vorlesen'};
     byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
     byId('listen').disabled = !speech.available;
     const status = byId('speechStatus');
     status.textContent = !speech.available ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
       : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
     status.hidden = !status.textContent;
+    sizeButtons();
   }
 
   byId('listen').onclick = () => speech.toggle(original);
@@ -295,8 +320,11 @@
     slider.oninput = () => {
       document.documentElement.style.setProperty('--' + name, Number(slider.value) / 100);
       byId(name + 'Output').textContent = slider.value + ' %';
+      sizeButtons();
     };
   }
+  window.addEventListener('resize', sizeButtons);
+  document.fonts?.ready.then(sizeButtons);
   try {
     const key = 'silvana-visited-scenes-v1';
     localStorage.setItem(key, String(Math.max(12, Number(localStorage.getItem(key)) || 0)));

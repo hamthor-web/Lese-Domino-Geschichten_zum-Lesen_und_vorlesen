@@ -142,6 +142,6 @@ function toggleAudio(){audio.toggle(content.original);}
  
  fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.bubbles)||data.bubbles.length!==4)throw Error('Inhalt');
-  content=data;shuffleCards();markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}render();try{if(Number(localStorage.getItem(VISITED))>=7){const a=document.createElement('a');a.href='../szene-7/';a.textContent='Der König im Wald';document.querySelector('.scene-menu nav').append(a);}}catch{}
+  content=data;shuffleCards();markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();

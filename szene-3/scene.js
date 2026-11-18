@@ -9,7 +9,6 @@
  const speechAvailable = audio.available;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(3,Number(localStorage.getItem(VISITED))||0)));}catch{}}
- function updateSceneMenu(){try{const highest=Number(localStorage.getItem(VISITED));for(const [n,title] of [[4,'Der Händler'],[5,'Der König'],[6,'Im Dorf'],[7,'Der König im Wald']]){if(highest>=n){let a=$('sceneMenu'+n);if(!a){a=document.createElement('a');a.id='sceneMenu'+n;a.href='../szene-'+n+'/';a.textContent=title;}document.querySelector('.scene-menu nav').append(a);}}}catch{}}
 
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
@@ -73,7 +72,7 @@ function toggleAudio(){audio.toggle(content.original);}
  }
  function render(){
   $('completionVideo')?.pause();
-  updateSceneMenu();$('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
+  $('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
   $('stepStatus').hidden=phase===3;
   let html='';
   if(phase===0){

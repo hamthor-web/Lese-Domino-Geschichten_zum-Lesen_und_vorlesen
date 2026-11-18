@@ -6,8 +6,7 @@
 <title>Silvana · Die Geschichte beginnt</title>
 <link rel="stylesheet" href="styles.css?v=9">
 <script src="../shared/story-speech.js?v=1" defer></script>
-<script src="game.js?v=24" defer></script>
-<link rel="stylesheet" href="../shared/scene-menu.css">
+<script src="game.js?v=25" defer></script>
 <style>
 .scene-backbar[hidden]{display:none!important}
 .scene-backbar{display:flex;margin:4px 0 18px}.scene-backbar button{max-width:100%}
@@ -15,6 +14,9 @@
 .adventure-link{flex-basis:100%;min-width:0}
 .adventure-link p,.adventure-next{font-size:calc(22px * var(--text));font-weight:bold;line-height:1.5;margin:12px 0;text-align:center}
 </style>
+
+<link rel="stylesheet" href="../shared/scene-menu.css">
+<script src="../shared/scene-menu.js" defer></script>
 </head>
 <body class="intro-page">
 <header class="topbar"><a class="brand" href="#main"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a></header>
@@ -26,7 +28,7 @@
 <p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p>
 </section>
 <main id="main" tabindex="-1">
-<details class="scene-menu" id="sceneMenu"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Bereits besuchte Abschnitte"><p class="note">Wähle eine Szene, die du schon besucht hast.</p><a href="./" aria-current="page">Die Geschichte beginnt</a><a href="../szene-2/" id="sceneMenu2" hidden>Die vier Straßen</a></nav></details>
+<details class="scene-menu" id="sceneMenu" data-scene="1"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Bereits besuchte Abschnitte"><p class="note">Wähle eine Szene, die du schon besucht hast.</p></nav></details>
 <div class="chapterline"><span class="chapter">Die Geschichte beginnt</span><span class="chapter-count">Einführung · Abschnitt 1</span></div>
 <nav class="steps" aria-label="Dein Weg durch die Einführung"><button id="step0" class="step active" aria-current="step"><span class="step-number">1</span> Zuhören</button><button id="step1" class="step" disabled><span class="step-number">2</span> Selbst lesen</button><button id="step2" class="step" disabled><span class="step-number">3</span> Domino legen</button></nav>
 

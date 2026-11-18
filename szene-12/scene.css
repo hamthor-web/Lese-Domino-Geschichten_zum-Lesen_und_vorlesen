@@ -78,3 +78,13 @@
   #thumbs { inset-inline: 13% 10%; }
   .thumb { width: 44px; height: 44px; }
 }
+
+.trip-actions {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  width: min(100%, 40rem);
+  margin-inline: auto;
+}
+#settingsToggle, #start, .trip-actions button { max-width: 100%; }
+#speechStatus { margin: 0; }

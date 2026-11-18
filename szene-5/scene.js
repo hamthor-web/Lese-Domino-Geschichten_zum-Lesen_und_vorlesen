@@ -118,8 +118,6 @@ function toggleAudio(){audio.toggle(content.original);}
  
  fetch('content.json?v=1').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.options)||data.options.length!==3||!data.options.includes(data.correct))throw Error('Inhalt');
-  content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}render();try{if(Number(localStorage.getItem(VISITED))>=6){const a=document.createElement('a');a.href='../szene-6/';a.textContent='Im Dorf';const seven=document.getElementById('sceneMenu7');if(seven)seven.before(a);else document.querySelector('.scene-menu nav').append(a);}}catch{}
+  content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();
-
-window.addEventListener('load',()=>{const add=()=>{try{if(Number(localStorage.getItem('silvana-visited-scenes-v1'))>=7&&!document.getElementById('sceneMenu7')){const a=document.createElement('a');a.id='sceneMenu7';a.href='../szene-7/';a.textContent='Der König im Wald';document.querySelector('.scene-menu nav').append(a);}}catch{}};add();});

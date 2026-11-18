@@ -12,3 +12,5 @@ Stand 18. November 2026.
 ## Nachtrag zur Masterübersicht
 
 Szenen 1 bis 12 sind umgesetzt. Szene 12 „Rückreise“ verbindet den Lesetext mit sechs Wahr-oder-falsch-Aussagen und dem animierten Übergang zu Szene 13. Szene 13 „Zu Hause“ ist der nächste Bauabschnitt.
+
+- Nach der letzten richtigen Antwort erscheint „Du hast alles richtig erkannt!“. Die Aktionsschaltflächen haben die Breite der breitesten sichtbaren Schaltfläche und gleichmäßige Abstände. Während des Vorlesens zeigt die Schaltfläche „Ⅱ Pause“. Einführung und Szenen 2 bis 12 lesen denselben gespeicherten Fortschritt für das Szenenmenü.

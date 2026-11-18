@@ -41,7 +41,6 @@ function go(n){
  else $('main').scrollIntoView({block:'start'});
 }
 function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
-function updateSceneMenu(){try{if(Number(localStorage.getItem(VISITED))>=6&&!$('sceneMenu6')){const a=document.createElement('a');a.id='sceneMenu6';a.href='../szene-6/';a.textContent='Im Dorf';const seven=$('sceneMenu7');if(seven)seven.before(a);else document.querySelector('.scene-menu nav').append(a);}}catch{}try{if(Number(localStorage.getItem(VISITED))>=5&&!$('sceneMenu5')){const a=document.createElement('a');a.id='sceneMenu5';a.href='../szene-5/';a.textContent='Der König';const six=$('sceneMenu6');if(six)six.before(a);else document.querySelector('.scene-menu nav').append(a);}}catch{}}
 function setupCompletionVideo(){
  const button=$('scene5'),video=$('completionVideo'),fallback=$('completionVideoFallback');
  function enable(label,action,text=''){
@@ -72,7 +71,6 @@ function setupCompletionVideo(){
 }
 function render(){
  $('completionVideo')?.pause();
- updateSceneMenu();
 $('stepStatus').textContent=['Schritt 1 von 3 · Zuhören','Schritt 2 von 3 · Selbst lesen','Schritt 3 von 3 · Reihenfolge legen',''][phase];$('stepStatus').hidden=phase===3;
 if(phase===0)$('game').innerHTML='<section class="panel"><span class="eyebrow">Erst einmal zuhören</span><h1>Der Händler</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
 if(phase===1)$('game').innerHTML='<section class="panel"><h1>Der Händler</h1><p>Lies in deinem Tempo.</p><div class="reading">'+esc(content.simple)+'</div>'+nav()+'</section>';
@@ -135,7 +133,6 @@ function finishTileDrag(commit){
  ignoreTileClickUntil=Date.now()+400;
  if(!commit)return;
  if(d.position!==null)move(d.id,d.position);
- 
 }
 function attachTileDrag(button,id){
  button.onpointerdown=e=>{
@@ -168,6 +165,3 @@ window.addEventListener('pagehide',()=>{finishTileDrag(false);stopAudio();});
 if(document.fonts)document.fonts.ready.then(scheduleButtons);
 fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
 })();
-
-
-window.addEventListener('load',()=>{const add=()=>{try{if(Number(localStorage.getItem('silvana-visited-scenes-v1'))>=7&&!document.getElementById('sceneMenu7')){const a=document.createElement('a');a.id='sceneMenu7';a.href='../szene-7/';a.textContent='Der König im Wald';document.querySelector('.scene-menu nav').append(a);}}catch{}};add();});
