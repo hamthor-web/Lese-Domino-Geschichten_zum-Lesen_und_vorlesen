@@ -4,8 +4,9 @@
  const VISITED='silvana-visited-scenes-v1';
  let content,phase=0,state=A.initial(),hint=null,draft='',correctionDraft='',firstFeedback='',correctionFeedback='',correctionShown=false,firstAccepted=false,helpValues=['','','',''];
  let pictureSelected=false,comparisonVisible=false,selectionFeedback='';
- let imagesReady=false,loadToken=0,speechToken=0,utterance=null,audioState='idle';
- const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
+ let imagesReady=false,loadToken=0;
+ const audio = createStorySpeech(updateAudio);
+ const speechAvailable = audio.available;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(3,Number(localStorage.getItem(VISITED))||0)));}catch{}}
  function updateSceneMenu(){try{const highest=Number(localStorage.getItem(VISITED));for(const [n,title] of [[4,'Der Händler'],[5,'Der König'],[6,'Im Dorf'],[7,'Der König im Wald']]){if(highest>=n){let a=$('sceneMenu'+n);if(!a){a=document.createElement('a');a.id='sceneMenu'+n;a.href='../szene-'+n+'/';a.textContent=title;}document.querySelector('.scene-menu nav').append(a);}}}catch{}}
@@ -27,30 +28,15 @@
   const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
   buttons.forEach(b=>b.style.height=height+'px');
  });}
- function stopAudio(){speechToken++;utterance=null;audioState='idle';if(speechAvailable)speechSynthesis.cancel();}
+ function stopAudio(){audio.stop();}
  function updateAudio(message){
   if(!$('audioToggle'))return;
-  $('audioToggle').textContent=audioState==='playing'?'Ⅱ Pause':audioState==='paused'?'▶ Weiterhören':audioState==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
-  $('audioStatus').textContent=message||(audioState==='playing'?'Die Geschichte wird vorgelesen.':audioState==='paused'?'Die Geschichte ist angehalten.':audioState==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
+  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
+  $('audioStatus').textContent=message||(audio.state==='error'?'Die Stimme konnte nicht vorlesen. Versuche es erneut oder klappe den Originaltext auf.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
   $('audioToggle').disabled=!speechAvailable;scheduleButtons();
  }
- function startAudio(){
-  if(!speechAvailable){updateAudio('Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');return;}
-  stopAudio();const token=speechToken;
-  const u=new SpeechSynthesisUtterance(content.original);utterance=u;u.lang='de-DE';u.rate=.85;
-  const voice=speechSynthesis.getVoices().find(v=>/^de[-_]/i.test(v.lang));if(voice)u.voice=voice;
-  u.onend=()=>{if(token!==speechToken)return;audioState='ended';utterance=null;updateAudio();};
-  u.onerror=e=>{if(token!==speechToken||['canceled','interrupted'].includes(e.error))return;audioState='error';updateAudio('Die Stimme konnte nicht starten. Versuche es erneut oder klappe den Originaltext auf.');};
-  try{audioState='playing';updateAudio();speechSynthesis.speak(u);}catch{if(token===speechToken){audioState='error';updateAudio('Die Stimme konnte nicht starten. Du kannst den Originaltext aufklappen.');}}
- }
- function toggleAudio(){
-  if(!speechAvailable)return;
-  try{
-   if(audioState==='playing'){speechSynthesis.pause();audioState='paused';updateAudio();}
-   else if(audioState==='paused'){speechSynthesis.resume();audioState='playing';updateAudio();}
-   else startAudio();
-  }catch{stopAudio();updateAudio('Die Stimme konnte nicht fortgesetzt werden. Versuche es noch einmal.');}
- }
+function toggleAudio(){audio.toggle(content.original);}
+
  function go(n){
   if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!state.done))return;
   loadToken++;stopAudio();phase=n;render();$('main').focus();if(phase===3)$('scene4').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});
@@ -197,7 +183,7 @@
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
  window.addEventListener('resize',scheduleButtons);
  if(document.fonts)document.fonts.ready.then(scheduleButtons);
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&speechAvailable){try{speechSynthesis.pause();audioState='paused';updateAudio();}catch{stopAudio();}}});
+ 
  window.addEventListener('pagehide',()=>{loadToken++;stopAudio();});
  fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.simple!=='string'||typeof data.original!=='string'||!Array.isArray(data.images)||data.images.length!==2||data.images.some(im=>typeof im.matchesText!=='boolean')||data.images.filter(im=>im.matchesText===false).length!==1)throw Error('Inhalt');

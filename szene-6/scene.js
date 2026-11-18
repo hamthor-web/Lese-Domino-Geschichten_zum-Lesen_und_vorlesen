@@ -5,8 +5,8 @@
  let content,phase=0,solved=false,feedback='',animationToken=0,question=0,busy=false;
  let placed=[false,false,false,false],flight=null,flightAnimation=null,cardOrder=[0,1,2,3];
  function shuffleCards(){cardOrder=[0,1,2,3];for(let i=cardOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cardOrder[i],cardOrder[j]]=[cardOrder[j],cardOrder[i]];}question=cardOrder[0];}
- let speechToken=0,utterance=null,audioState='idle';
- const speechAvailable='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
+ const audio = createStorySpeech(updateAudio);
+ const speechAvailable = audio.available;
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
   document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);
@@ -29,30 +29,15 @@
   for(const card of cards)for(const selector of ['h2','.selection-label','.zoom-open'])card.querySelector(selector).style.minHeight='';
   for(let i=0;i<cards.length;i+=2){const pair=cards.slice(i,i+2);for(const selector of ['h2','.selection-label','.zoom-open']){const elements=pair.map(card=>card.querySelector(selector));const height=Math.ceil(Math.max(...elements.map(el=>el.getBoundingClientRect().height)));elements.forEach(el=>el.style.minHeight=height+'px');}}
  }
- function stopAudio(){speechToken++;utterance=null;audioState='idle';if(speechAvailable)speechSynthesis.cancel();}
+ function stopAudio(){audio.stop();}
  function updateAudio(message){
   if(!$('audioToggle'))return;
-  $('audioToggle').textContent=audioState==='playing'?'Ⅱ Pause':audioState==='paused'?'▶ Weiterhören':audioState==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
-  $('audioStatus').textContent=message||(audioState==='playing'?'Die Geschichte wird vorgelesen.':audioState==='paused'?'Die Geschichte ist angehalten.':audioState==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
+  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
+  $('audioStatus').textContent=message||(audio.state==='error'?'Die Stimme konnte nicht vorlesen. Versuche es erneut oder klappe den Originaltext auf.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
   $('audioToggle').disabled=!speechAvailable;scheduleButtons();
  }
- function startAudio(){
-  if(!speechAvailable){updateAudio('Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');return;}
-  stopAudio();const token=speechToken;
-  const u=new SpeechSynthesisUtterance(content.original);utterance=u;u.lang='de-DE';u.rate=.85;
-  const voice=speechSynthesis.getVoices().find(v=>/^de[-_]/i.test(v.lang));if(voice)u.voice=voice;
-  u.onend=()=>{if(token!==speechToken)return;audioState='ended';utterance=null;updateAudio();};
-  u.onerror=e=>{if(token!==speechToken||['canceled','interrupted'].includes(e.error))return;audioState='error';updateAudio('Die Stimme konnte nicht starten. Versuche es erneut oder klappe den Originaltext auf.');};
-  try{audioState='playing';updateAudio();speechSynthesis.speak(u);}catch{if(token===speechToken){audioState='error';updateAudio('Die Stimme konnte nicht starten. Du kannst den Originaltext aufklappen.');}}
- }
- function toggleAudio(){
-  if(!speechAvailable)return;
-  try{
-   if(audioState==='playing'){speechSynthesis.pause();audioState='paused';updateAudio();}
-   else if(audioState==='paused'){speechSynthesis.resume();audioState='playing';updateAudio();}
-   else startAudio();
-  }catch{stopAudio();updateAudio('Die Stimme konnte nicht fortgesetzt werden. Versuche es noch einmal.');}
- }
+function toggleAudio(){audio.toggle(content.original);}
+
 
 
  function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(6,Number(localStorage.getItem(VISITED))||0)));}catch{}}
@@ -154,7 +139,7 @@
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
  window.addEventListener('resize',()=>{cancelFlight();scheduleButtons();});if(document.fonts)document.fonts.ready.then(scheduleButtons);
  window.addEventListener('pagehide',()=>{cancelFlight();stopAudio();});
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&audioState==='playing'&&speechAvailable){speechSynthesis.pause();audioState='paused';updateAudio();}});
+ 
  fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.bubbles)||data.bubbles.length!==4)throw Error('Inhalt');
   content=data;shuffleCards();markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}render();try{if(Number(localStorage.getItem(VISITED))>=7){const a=document.createElement('a');a.href='../szene-7/';a.textContent='Der König im Wald';document.querySelector('.scene-menu nav').append(a);}}catch{}
