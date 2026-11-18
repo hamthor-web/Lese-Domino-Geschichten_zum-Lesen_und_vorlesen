@@ -33,6 +33,7 @@
   let finishCount = 0;
   let phase = 'reading';
   let selected;
+  let mistakes = 0;
   let drag;
 
   function select(tile) {
@@ -71,6 +72,7 @@
   function showPuzzle() {
     if (phase !== 'fall') return;
     phase = 'puzzle';
+    mistakes = 0;
     const {word, letters: shuffled, image, alt} = rounds[index];
     fallStage.hidden = true;
     clue.src = 'assets/' + image + '.webp';
@@ -112,6 +114,12 @@
     const word = rounds[index].word;
     select(null);
     if (tile.textContent !== word[Number(slot.dataset.position)]) {
+      mistakes += 1;
+      if (mistakes === 1) {
+        feedback.textContent = 'Schau noch einmal genau hin.';
+        tile.focus({preventScroll: true});
+        return;
+      }
       const openSlot = slots.querySelector('button:not(:disabled)');
       const position = Number(openSlot.dataset.position);
       const hint = word[position];
