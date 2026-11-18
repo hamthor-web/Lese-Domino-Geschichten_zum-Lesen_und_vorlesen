@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Silvana – Elin</title>
+<link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
+<link rel="stylesheet" href="scene.css?v=1"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=1" defer></script></head>
+<body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
+<button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
+<section id="settings" class="settings" hidden>
+<label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
+<label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
+<main id="main" tabindex="-1"><details class="scene-menu"><summary>Andere Szene noch einmal spielen</summary>
+<nav aria-label="Bereits besuchte Abschnitte">
+<a href="../vorschau-einfuehrung/">Die Geschichte beginnt</a><a href="../szene-2/">Die vier Straßen</a>
+<a href="../szene-3/">Die Spinnen im Wald</a><a href="../szene-4/">Der Händler</a>
+<a href="../szene-5/">Der König</a><a href="../szene-6/">Im Dorf</a>
+<a href="../szene-7/">Der König im Wald</a><a href="../szene-8/">Der wütende König</a><a href="./" aria-current="page">Elin</a></nav></details>
+<div class="chapterline"><span class="chapter">Elin</span><span class="chapter-count">Szene 9</span></div>
+<div id="game" class="panel">
+<section id="reading">
+  <h1 id="readingTitle" tabindex="-1">Elin</h1>
+  <div class="elin-intro">
+    <div class="reading elin-text">
+      <p>Am Wegrand stand ein Mädchen. Es hieß Elin. Leise sagte sie: „Ihr habt es gesehen, aber ihr habt nicht hingeschaut.“</p>
+      <p>Der König blieb stehen, obwohl er Kinder nicht mochte.</p>
+      <p>Etwas an Elins Stimme machte ihn nachdenklich.</p>
+    </div>
+    <figure class="elin-picture" tabindex="0" aria-label="Illustration">
+      <img src="assets/elin.webp" width="1448" height="1086" alt="Elin spricht mit gesenktem Blick zum nachdenklichen König. Neben ihnen glitzert ein Spinnennetz.">
+    </figure>
+  </div>
+  <div class="actions"><a class="elin-back" href="../szene-8/">← Zurück zu Szene 8</a><button class="primary" id="start">Weiter zur Aufgabe</button></div>
+</section>
+<section id="activity" hidden>
+  <h1 id="activityTitle" tabindex="-1">Welche Satzteile gehören zusammen?</h1>
+  <p>Tippe zwei Karten an, die zusammenpassen.</p>
+  <div class="elin-board" tabindex="0" role="region" aria-label="Spielfeld">
+    <div class="elin-cards">
+      <section aria-labelledby="startsTitle"><h2 id="startsTitle">Satzanfänge</h2><div id="starts"></div></section>
+      <section aria-labelledby="endsTitle"><h2 id="endsTitle">Satzenden</h2><div id="ends"></div></section>
+    </div>
+  </div>
+  <ul id="pairs" class="elin-pairs" aria-label="Verbundene Sätze" hidden></ul>
+  <p id="feedback" class="elin-feedback" role="status"></p>
+  <div class="actions">
+    <button class="secondary" id="back">← Zum Lesetext</button>
+    <button class="primary" id="finish" hidden>Weiter zum Vorlesen</button>
+  </div>
+</section>
+<section id="listening" hidden>
+  <h1 id="listeningTitle" tabindex="-1">Hör dir die Geschichte an</h1>
+  <p>Jetzt kannst du die Geschichte vom König und Elin am Stück hören.</p>
+  <div class="actions"><button class="primary" id="listen">Geschichte vorlesen</button></div>
+  <p class="elin-feedback" id="speechStatus" role="status"></p>
+  <div class="actions"><button class="secondary" id="retry">Aufgabe wiederholen</button></div>
+</section>
+</div>
+<footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
+</body></html>

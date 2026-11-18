@@ -1,0 +1,115 @@
+@import url("../szene-3/scene.css?v=4");
+
+#game [hidden] {
+  display: none !important;
+}
+
+#game {
+  font-size: calc(21px * var(--text));
+}
+
+.elin-intro {
+  display: grid;
+  gap: 18px;
+  align-items: start;
+}
+
+.elin-text p:first-child { margin-top: 0; }
+.elin-text p:last-child { margin-bottom: 0; }
+
+.elin-picture {
+  margin: 0;
+  overflow: auto;
+  border: 2px solid #dcc5a6;
+  border-radius: 14px;
+  background: #f6ead9;
+}
+
+.elin-picture img {
+  display: block;
+  width: calc(100% * var(--board));
+  height: auto;
+  max-width: none;
+}
+
+.elin-board {
+  overflow-x: auto;
+  padding: 5px;
+}
+
+.elin-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 20px);
+  width: calc(100% * var(--board));
+}
+
+.elin-cards h2 {
+  font-size: calc(17px * var(--text));
+  overflow-wrap: anywhere;
+  margin: 0 0 8px;
+}
+
+.elin-cards section > div {
+  display: grid;
+  gap: 10px;
+}
+
+.elin-card {
+  width: 100%;
+  min-height: calc(66px * var(--board));
+  padding: calc(10px * var(--board));
+  border: 2px solid #b2a0c1;
+  border-radius: 12px;
+  background: #fff8e9;
+  color: #34293a;
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.35;
+  text-align: left;
+  overflow-wrap: break-word;
+  touch-action: manipulation;
+}
+
+.elin-card[aria-pressed="true"] {
+  background: #ede1fa;
+  border-color: #694786;
+  box-shadow: inset 0 0 0 2px #694786;
+}
+
+.elin-card:focus-visible,
+.elin-back:focus-visible {
+  outline: 3px solid #694786;
+  outline-offset: 2px;
+}
+
+.elin-pairs {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.elin-pairs li {
+  border: 2px solid #7a9363;
+  border-radius: 12px;
+  background: #eef4e2;
+  padding: 12px;
+  margin-bottom: 8px;
+  line-height: 1.45;
+}
+
+.elin-feedback {
+  min-height: 1.5em;
+}
+
+.elin-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 7px;
+  color: inherit;
+}
+
+@media (min-width: 700px) and (orientation: landscape) {
+  .elin-intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+}
