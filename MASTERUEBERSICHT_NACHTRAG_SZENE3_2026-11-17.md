@@ -124,3 +124,7 @@ Vollständige Abschlussprüfung einschließlich Live-Seite erfolgreich (Lauf 441
 | Bereich | Stand |
 |---|---|
 | Szene 3 „Die Spinnen im Wald“ | Am Abschluss übernimmt das automatisch einmal abgespielte Häkelvideo die Weiter-Funktion. Das Schlussbild führt auf Klick zu Szene 4 „Der Händler“. |
+
+## Nachtrag vom 18. November 2026 · Szene 4 zu Szene 5
+
+Am Abschluss von Szene 4 „Der Händler“ übernimmt das Schlussbild des von Heike gelieferten Videos die Weiter-Funktion. Nach einmaligem automatischem Abspielen führt ein Klick zu Szene 5 „Der König“. Siehe den [Nachtrag zur Spielakte von Szene 4](SPIELAKTE_SZENE4_2026-11-17.md#nachtrag-vom-18-november-2026--weiter-video-im-abschluss).

@@ -7,7 +7,7 @@ const base=(live||'http://127.0.0.1:8765/').replace(/\/?$/,'/');
 const server=live?null:spawn('python3',['-m','http.server','8765','--bind','127.0.0.1'],{stdio:'ignore'});
 let browser;const errors=[];
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-4/');if(r.ok&&(await r.text()).includes('scene.js?v=3'))break;}catch{}if(i===179)throw Error('Szene 4 fehlt');await new Promise(r=>setTimeout(r,500));}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-4/');if(r.ok&&(await r.text()).includes('scene.js?v=4'))break;}catch{}if(i===179)throw Error('Szene 4 fehlt');await new Promise(r=>setTimeout(r,500));}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true});
  await context.addInitScript(()=>{
@@ -52,9 +52,17 @@ async function run(){
  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:b.x+b.width/2,y:b.y+2}]});
  await p.locator('#dropLine').waitFor();await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.deepEqual(await order(),[2,0,1]);
  await p.locator('#right').click();await p.locator('#right').click();
- await p.locator('#check').click();await p.locator('#next').click();await layout();
+ await p.locator('#check').click();await p.locator('#next').click();
+ assert.equal(await p.locator('#scene5').isDisabled(),true);
+ await p.waitForFunction(()=>document.querySelector('#completionVideo').currentTime>0);
+ await layout();
  assert.equal(await p.locator('.result li').count(),3);await p.locator('#back').click();assert.deepEqual(await order(),[0,1,2]);
  await p.locator('#next').click();await p.locator('#again').click();await p.locator('#next').click();await p.locator('#next').click();assert.deepEqual(await order(),[2,0,1]);assert.equal(await p.locator('#next').isDisabled(),true);
+ await p.goto(base+'szene-4/?abschnitt=abschluss');
+ await p.waitForFunction(()=>document.querySelector('#completionVideo')?.ended);
+ assert.equal(await p.locator('#scene5').getAttribute('aria-label'),'Weiter zu Der König');
+ assert.equal(await p.locator('#completionVideoFallback').isVisible(),false);
+ await p.locator('#scene5').tap();await p.waitForURL('**/szene-5/');
  await p.goto(base+'szene-3/?abschnitt=abschluss');await p.locator('#scene4').click();await p.waitForURL('**/szene-4/');await p.locator('#back').click();await p.waitForURL('**/szene-3/?abschnitt=abschluss');await p.locator('#scene4').waitFor();
  await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu4').waitFor({state:'visible'});
  assert.deepEqual(errors,[]);console.log('PASS Händler: Audio-Steuerung (simulierte Stimme), Texte, Reihenfolgeprüfung, Bilder gemeinsam mit Satzkarten, Ausblenden der Prüfhilfen, Pfeile, Mausziehen/Einfügelinie, Zustand bei Rücknavigation, Wiederholung, Übergänge und Menü; '+checks+' Layoutprüfungen.');await context.close();

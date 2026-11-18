@@ -9,3 +9,12 @@
 .card-image{display:block;width:100%;height:auto;object-fit:contain;border-radius:10px;pointer-events:none;}
 .card-sentence{min-width:0;overflow-wrap:break-word;}
 @media(max-width:650px){.story-cards .tile{grid-template-columns:minmax(0,1fr)}.card-image{max-width:calc(240px * var(--board));justify-self:center}}
+
+.actions.scene-navigation.completion-navigation{justify-content:center;align-items:center}
+.actions.scene-navigation.completion-navigation>.completion-video{
+ width:min(100%,calc(358px * var(--board)),75svh);
+}
+@media(max-width:650px){
+ .actions.scene-navigation.completion-navigation{flex-direction:column}
+ .actions.scene-navigation.completion-navigation>button{flex:0 1 auto!important}
+}

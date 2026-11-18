@@ -85,3 +85,9 @@ Dieser Nachtrag ersetzt den früheren Stand ohne Bildkarten. Vor Veröffentlichu
 - Die WebP-Dateien auf GitHub stimmen bytegenau mit den vorbereiteten Webfassungen überein (Git-Blob-Prüfsummen verglichen). Originale der gelieferten PNG-Dateien bleiben erhalten.
 - Masterstatus unverändert in Entwicklung, Szene 4 um die bestätigten Bildkarten und vereinfachte Abschlussbedienung erweitert und live geprüft. Szene 5 weiterhin nicht begonnen.
 - Keine physischen Endgeräte oder akustische Hörprüfung.
+
+## Nachtrag vom 18. November 2026 · Weiter-Video im Abschluss
+
+Heike hat das Video `1000271683.mp4` für den Abschluss „Die Geschichte des Händlers“ ausgewählt. Sobald dieser Bildschirm erscheint, startet der 3,6 Sekunden lange Clip einmal stumm. Das letzte Bild mit „Weiter“ bleibt stehen und öffnet bei Klick, Tippen oder Tastaturbedienung Szene 5 „Der König“. Die Schaltfläche ist während der Wiedergabe gesperrt. Bei blockiertem Autoplay lässt sich der Clip über dieselbe Fläche starten. Bei einem Medienfehler steht eine Textschaltfläche zur Verfügung.
+
+Das quadratische Originalvideo ist ohne zusätzlichen Rahmen eingebunden und reagiert auf die Spielfeldgröße. Seine Breite bleibt an die verfügbare Fläche und Bildschirmhöhe gebunden. Der Schriftregler steuert weiterhin die Schrift.
