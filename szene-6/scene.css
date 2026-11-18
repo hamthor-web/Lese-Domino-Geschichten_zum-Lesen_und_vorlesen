@@ -1,4 +1,4 @@
-@import url("../szene-5/scene.css?v=2");
+@import url("../szene-5/scene.css?v=3");
 .village-task{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr);gap:24px;align-items:start}
 .village-task>*{min-width:0}
 .board-scroll{width:100%;max-width:100%;overflow:auto;border:2px solid #c7b997;border-radius:16px;background:#ede5d5}
