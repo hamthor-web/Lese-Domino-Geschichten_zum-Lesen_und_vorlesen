@@ -93,7 +93,7 @@
     const oldMark = taskReading.querySelector('mark');
     if (oldMark) oldMark.replaceWith(oldMark.textContent);
     if (String(expected) !== tile.dataset.value) {
-      const sentence = taskReading.querySelector('[data-evidence="' + index + '"]');
+      const sentence = taskReading.querySelector('[data-evidence~="' + index + '"]');
       const mark = document.createElement('mark');
       mark.textContent = sentence.textContent;
       sentence.replaceChildren(mark);
