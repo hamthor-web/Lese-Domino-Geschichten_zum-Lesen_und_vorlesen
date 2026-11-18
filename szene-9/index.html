@@ -2,7 +2,7 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Silvana – Elin</title>
 <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
-<link rel="stylesheet" href="scene.css?v=1"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=1" defer></script></head>
+<link rel="stylesheet" href="scene.css?v=2"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=2" defer></script></head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
 <button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden>
@@ -18,9 +18,11 @@
 <div id="game" class="panel">
 <section id="reading">
   <h1 id="readingTitle" tabindex="-1">Elin</h1>
+  <div class="actions"><button class="primary" id="listen">Geschichte vorlesen</button></div>
+  <p class="elin-feedback" id="speechStatus" role="status" hidden></p>
   <div class="elin-intro">
     <div class="reading elin-text">
-      <p>Am Wegrand stand ein Mädchen. Es hieß Elin. Leise sagte sie: „Ihr habt es gesehen, aber ihr habt nicht hingeschaut.“</p>
+      <p>Am Wegrand stand ein Mädchen. Es hieß Elin. Leise sagte sie: „Ihr habt es gesehen. Aber Ihr habt nicht hingeschaut.“</p>
       <p>Der König blieb stehen, obwohl er Kinder nicht mochte.</p>
       <p>Etwas an Elins Stimme machte ihn nachdenklich.</p>
     </div>
@@ -28,7 +30,7 @@
       <img src="assets/elin.webp" width="1448" height="1086" alt="Elin spricht mit gesenktem Blick zum nachdenklichen König. Neben ihnen glitzert ein Spinnennetz.">
     </figure>
   </div>
-  <div class="actions"><a class="elin-back" href="../szene-8/">← Zurück zu Szene 8</a><button class="primary" id="start">Weiter zur Aufgabe</button></div>
+  <div class="elin-navigation"><button class="primary" id="start">Weiter zur Aufgabe</button><a class="elin-back" href="../szene-8/">← Zurück zu Szene 8</a></div>
 </section>
 <section id="activity" hidden>
   <h1 id="activityTitle" tabindex="-1">Welche Satzteile gehören zusammen?</h1>
@@ -41,17 +43,18 @@
   </div>
   <ul id="pairs" class="elin-pairs" aria-label="Verbundene Sätze" hidden></ul>
   <p id="feedback" class="elin-feedback" role="status"></p>
-  <div class="actions">
-    <button class="secondary" id="back">← Zum Lesetext</button>
+  <div class="elin-navigation">
     <button class="primary" id="finish" hidden>Weiter zum Vorlesen</button>
+    <button class="secondary" id="back">← Zum Lesetext</button>
+    <button class="secondary" id="retry" hidden>Aufgabe wiederholen</button>
   </div>
-</section>
-<section id="listening" hidden>
-  <h1 id="listeningTitle" tabindex="-1">Hör dir die Geschichte an</h1>
-  <p>Jetzt kannst du die Geschichte vom König und Elin am Stück hören.</p>
-  <div class="actions"><button class="primary" id="listen">Geschichte vorlesen</button></div>
-  <p class="elin-feedback" id="speechStatus" role="status"></p>
-  <div class="actions"><button class="secondary" id="retry">Aufgabe wiederholen</button></div>
+  <div id="transition" hidden>
+    <button class="elin-transition" id="nextScene" type="button" disabled aria-label="Würstchen-Animation läuft">
+      <video id="transitionVideo" src="assets/weiter-zu-szene-10.mp4" width="358" height="356" muted playsinline preload="none" aria-hidden="true"></video>
+      <span id="transitionFallback" hidden></span>
+    </button>
+    <p id="transitionStatus" class="elin-feedback" role="status" hidden></p>
+  </div>
 </section>
 </div>
 <footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>

@@ -113,3 +113,58 @@
 @media (min-width: 700px) and (orientation: landscape) {
   .elin-intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
 }
+
+.elin-navigation {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.elin-navigation > button {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+#transition {
+  text-align: center;
+}
+
+.elin-transition {
+  display: block;
+  width: min(100%, calc(250px * var(--board)));
+  margin: 18px auto 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.elin-transition:hover:not(:disabled) {
+  filter: none;
+  box-shadow: none;
+}
+
+.elin-transition:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.elin-transition:focus-visible {
+  outline: 3px solid #694786;
+  outline-offset: 4px;
+}
+
+.elin-transition video {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+#transitionFallback {
+  display: inline-block;
+  padding: 8px;
+}

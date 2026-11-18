@@ -10,7 +10,7 @@
   const original = [
     'Der König schnaubte. Er drehte sich um und rief nach seinen Pferden. Einer der Diener ließ vor Schreck eine Samtkiste fallen. Der Deckel landete im Schlamm. Sie machten sich auf, zurückzureiten.',
     'Am Rand des Weges stand ein Mädchen. Elin. Sie hatte wirres Haar, Sommersprossen und einen grünen Fleck auf dem Knie. Wahrscheinlich Gras. Vielleicht auch Suppe vom Vorabend.',
-    '„Ihr habt es gesehen“, murmelte sie ihnen leise hinterher. „Aber ihr habt nicht hingeschaut.“',
+    '„Ihr habt es gesehen“, murmelte sie ihnen leise hinterher. „Aber Ihr habt nicht hingeschaut.“',
     'Der König blieb stehen.',
     'Er mochte es nicht, wenn man so mit ihm redete. Und er mochte keine Kinder. Sie stellten Fragen, wenn man seine Ruhe wollte, und waren klebrig, ohne dass sich feststellen ließ, warum. Aber etwas im Tonfall des Mädchens machte ihn stutzig.'
   ].join('\n\n');
@@ -19,7 +19,7 @@
   const speech = createStorySpeech(updateSpeech);
 
   function show(section) {
-    for (const id of ['reading', 'activity', 'listening']) {
+    for (const id of ['reading', 'activity']) {
       byId(id).hidden = id !== section;
     }
     byId(section + 'Title').focus();
@@ -58,7 +58,9 @@
     if (count === sentences.length) {
       byId('feedback').textContent = 'Alle drei Sätze sind richtig verbunden!';
       byId('finish').hidden = false;
+      byId('retry').hidden = false;
       byId('finish').focus();
+      startTransition();
     } else {
       byId('feedback').textContent = count + ' von 3 Sätzen verbunden.';
       cards[0].find(item => !item.button.hidden).button.focus();
@@ -77,6 +79,10 @@
     byId('pairs').hidden = true;
     byId('feedback').textContent = '';
     byId('finish').hidden = true;
+    byId('retry').hidden = true;
+    byId('transition').hidden = true;
+    byId('transitionStatus').hidden = true;
+    video.pause();
   }
 
   function updateSpeech() {
@@ -88,9 +94,11 @@
     };
     byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
     byId('listen').disabled = !speech.available;
-    byId('speechStatus').textContent = !speech.available
+    const status = byId('speechStatus');
+    status.textContent = !speech.available
       ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
       : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
+    status.hidden = !status.textContent;
   }
 
   for (const [half, order] of [[0, [0, 1, 2]], [1, [1, 2, 0]]]) {
@@ -108,9 +116,71 @@
     }
   }
 
-  byId('start').onclick = () => show('activity');
+  const transition = byId('transition');
+  const next = byId('nextScene');
+  const video = byId('transitionVideo');
+  const fallback = byId('transitionFallback');
+  const transitionStatus = byId('transitionStatus');
+
+  function enableTransition(action, label, fallbackText = '') {
+    fallback.textContent = fallbackText;
+    fallback.hidden = !fallbackText;
+    next.setAttribute('aria-label', label);
+    next.onclick = action;
+    next.disabled = false;
+  }
+
+  function readyForNextScene(fallbackText = '') {
+    if (transition.hidden) return;
+    enableTransition(async () => {
+      next.disabled = true;
+      try {
+        const response = await fetch('../szene-10/index.html', {method: 'HEAD', cache: 'no-store'});
+        if (transition.hidden) return;
+        if (response.ok) {
+          location.assign('../szene-10/');
+          return;
+        }
+      } catch {
+        // Ohne Verbindung bleibt die aktuelle Szene bedienbar.
+      }
+      if (transition.hidden) return;
+      next.disabled = false;
+      transitionStatus.textContent = 'Hier geht die Geschichte bald weiter.';
+      transitionStatus.hidden = false;
+    }, 'Weiter zur nächsten Szene', fallbackText);
+  }
+
+  async function startTransition() {
+    transition.hidden = false;
+    next.disabled = true;
+    next.setAttribute('aria-label', 'Würstchen-Animation läuft');
+    fallback.hidden = true;
+    video.currentTime = 0;
+    try {
+      await video.play();
+    } catch (error) {
+      if (transition.hidden) return;
+      if (error.name === 'NotAllowedError') {
+        enableTransition(startTransition, 'Würstchen-Animation abspielen', '▶ Abspielen');
+      } else {
+        readyForNextScene('Weiter');
+      }
+    }
+  }
+
+  video.addEventListener('ended', () => readyForNextScene());
+  video.addEventListener('error', () => readyForNextScene('Weiter'));
+  byId('start').onclick = () => {
+    speech.stop();
+    show('activity');
+  };
   byId('back').onclick = () => show('reading');
-  byId('finish').onclick = () => show('listening');
+  byId('finish').onclick = () => {
+    show('reading');
+    byId('listen').focus();
+    speech.start(original);
+  };
   byId('listen').onclick = () => speech.toggle(original);
   byId('retry').onclick = () => {
     speech.stop();
