@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Silvana – Der Zauber geht vorbei</title>
+<link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
+<link rel="stylesheet" href="scene.css?v=1"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=1" defer></script></head>
+<body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
+<button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
+<section id="settings" class="settings" hidden>
+<label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
+<label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
+<main id="main" tabindex="-1"><details class="scene-menu"><summary>Andere Szene noch einmal spielen</summary>
+<nav aria-label="Bereits besuchte Abschnitte">
+<a href="../vorschau-einfuehrung/">Die Geschichte beginnt</a><a href="../szene-2/">Die vier Straßen</a>
+<a href="../szene-3/">Die Spinnen im Wald</a><a href="../szene-4/">Der Händler</a>
+<a href="../szene-5/">Der König</a><a href="../szene-6/">Im Dorf</a>
+<a href="../szene-7/">Der König im Wald</a><a href="../szene-8/">Der wütende König</a><a href="../szene-9/">Elin</a><a href="../szene-10/">1. Erkenntnis</a><a href="./" aria-current="page">Der Zauber geht vorbei</a></nav></details>
+<div class="chapterline"><span class="chapter-count">Szene 11</span></div>
+<div id="game" class="panel">
+  <section id="reading">
+    <h1>Der Zauber geht vorbei</h1>
+    <div class="magic-layout">
+      <img class="magic-art" src="assets/netz.webp" width="508" height="508" alt="Ein glitzerndes Netz mit sechs Tautropfen">
+      <div>
+        <div class="reading" id="readingText">
+          <p>Die Sonne stieg höher, und alle Tropfen fielen herunter.</p>
+          <p>Am Ende sah man nur noch ein graues, dünnes Spinnennetz mit einer dicken Spinne und einer kleinen Fliege.</p>
+          <p>„Und jetzt?“, fragte der König, aber Elin sagte nichts dazu.</p>
+        </div>
+        <button class="primary" id="start" type="button">Weiter zur Aufgabe</button>
+      </div>
+    </div>
+  </section>
+  <section id="activity" hidden>
+    <h1 id="activityTitle" tabindex="-1">Buchstaben-Zauber</h1>
+    <div class="magic-stage" id="fallStage" hidden>
+      <video class="magic-art" id="fall" width="508" height="508" muted playsinline preload="auto" poster="assets/netz.webp" src="assets/tropfen-1.mp4" aria-label="Ein Tautropfen fällt"></video>
+      <button class="primary" id="playFall" type="button" hidden>Animation abspielen</button>
+    </div>
+    <div class="magic-stage" id="puzzle" hidden>
+      <div class="magic-picture">
+        <img class="magic-art" id="clue" width="1000" height="1000" alt="">
+        <div class="letter-row word-slots" id="slots" role="group" aria-label="Buchstabenplätze"></div>
+      </div>
+      <div class="letter-row letter-bank" id="letters" role="group" aria-label="Durcheinandergewürfelte Buchstaben"></div>
+      <p id="feedback" role="status"></p>
+      <p class="magic-instruction">Ziehe die Buchstaben auf die Striche. Du kannst auch erst einen Buchstaben und dann einen Strich antippen.</p>
+      <details><summary>Zum Lesetext</summary><div class="reading" id="taskReading"></div></details>
+    </div>
+    <section class="magic-stage magic-finish" id="completion" hidden>
+      <h2 id="finishTitle" tabindex="-1">Der Zauber ist vorbei.</h2>
+      <img class="magic-art" src="assets/tannennadel.webp" width="1000" height="1000" alt="Eine Tannennadel hängt in den Fäden des zerrissenen Netzes" loading="lazy">
+      <div id="finishActions" hidden>
+        <button class="elin-transition" id="nextScene" type="button" disabled aria-label="Würstchen-Animation läuft">
+          <video id="transitionVideo" src="assets/weiter-zu-szene-12.mp4" width="358" height="356" muted playsinline preload="none" aria-hidden="true"></video>
+          <span id="transitionFallback" hidden>Weiter</span>
+        </button>
+        <p id="transitionStatus" role="status" hidden></p>
+        <div class="elin-navigation">
+          <button class="primary" id="listen" type="button">Geschichte vorlesen</button>
+          <p id="speechStatus" role="status" hidden></p>
+          <button class="secondary" id="retry" type="button">Aufgabe wiederholen</button>
+        </div>
+      </div>
+    </section>
+  </section>
+</div>
+<footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
+</body></html>

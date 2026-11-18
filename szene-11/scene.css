@@ -1,0 +1,104 @@
+@import url("../szene-9/scene.css?v=2");
+
+.magic-layout {
+  display: grid;
+  align-items: start;
+  gap: 20px;
+}
+
+.magic-layout .reading { margin-top: 0; }
+
+.magic-stage {
+  width: min(100%, max(320px, calc(480px * var(--board))));
+  margin-inline: auto;
+}
+
+.magic-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+  border-radius: 12px;
+}
+
+.magic-layout .magic-art {
+  width: min(100%, calc(480px * var(--board)));
+}
+
+.magic-picture { position: relative; }
+
+.letter-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.word-slots {
+  position: absolute;
+  inset: auto 4px 8px;
+  padding: 4px 2px;
+  border-radius: 10px;
+  background: #2a211cec;
+}
+
+.letter-row button {
+  min-width: 0;
+  width: calc(48px * var(--board));
+  min-height: 44px;
+  padding: 0;
+  font: bold calc(23px * var(--text)) / 1.1 Arial, sans-serif;
+  border-radius: 6px;
+  overflow-wrap: normal;
+}
+
+.letter-slot {
+  color: #fff9e9;
+  border-bottom: 3px solid #ffe3a2;
+  background: transparent;
+}
+
+.letter-slot:disabled { opacity: 1; }
+.letter-slot.is-over { background: #845f22; }
+.letter-slot.is-hint { color: #ffe3a2; }
+.letter-bank { flex-wrap: wrap; margin-top: 8px; }
+
+.letter-tile, .magic-drag {
+  background: #fff1c9;
+  border: 2px solid #aa813f;
+  color: #3a291c;
+}
+
+.letter-tile { cursor: grab; touch-action: none; user-select: none; }
+.letter-tile[aria-pressed="true"] { outline: 3px solid #694786; outline-offset: -3px; }
+.letter-tile:disabled { opacity: .42; }
+
+.magic-drag {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  padding: 3px 12px;
+  font: bold calc(23px * var(--text)) / 1.5 Arial, sans-serif;
+}
+
+#feedback { min-height: 1.5em; font-weight: bold; }
+#playFall { display: block; margin: 12px auto; }
+.magic-finish { text-align: center; }
+
+@media (min-width: 680px) {
+  .magic-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+}
+
+@media (max-width: 480px) {
+  #game { padding-inline: 8px; }
+  .letter-row { gap: 3px; }
+  .word-slots { inset-inline: 3px; }
+  .word-slots button { font-size: calc(20px * var(--text)); }
+  .letter-bank button { width: max(44px, calc(45px * var(--board))); }
+  .topbar { flex-wrap: wrap; }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .magic-stage { width: min(100%, calc(350px * var(--board))); }
+}
