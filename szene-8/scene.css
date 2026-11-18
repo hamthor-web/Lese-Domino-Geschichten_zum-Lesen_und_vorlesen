@@ -44,28 +44,16 @@
 
 .scene-transition {
   display:block;
-  position:relative;
   width:min(100%, calc(220px * var(--board,1)));
   margin:18px auto;
   padding:0;
-  overflow:hidden;
-  border:3px solid #bda6d1;
-  border-radius:18px;
-  background:#fff8eb;
+  border:0;
+  background:transparent;
+  box-shadow:none;
   cursor:pointer;
 }
 .scene-transition:focus-visible {outline:3px solid #745093;outline-offset:3px}
 .scene-transition video {display:block;width:100%;height:auto;aspect-ratio:1}
 .scene-transition:disabled {opacity:1;cursor:default;filter:none}
-.transition-label {
-  position:absolute;
-  right:8px;
-  bottom:8px;
-  max-width:calc(100% - 16px);
-  padding:6px 12px;
-  border-radius:10px;
-  background:#34293a;
-  color:white;
-  font-size:calc(18px * var(--text,1));
-  line-height:1.25;
-}
+.scene-transition:hover:not(:disabled) {box-shadow:none;filter:none}
+.transition-fallback {display:block;padding:6px;font-weight:700}
