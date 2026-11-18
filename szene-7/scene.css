@@ -20,63 +20,26 @@
 .hotspot{min-width:44px;min-height:44px;transform:translate(-50%,-50%)}
 .hotspot[data-diff="3"]{min-width:24px;min-height:24px}
 
-/* Abschluss von Szene 7: Wiederholen, Würstchen-Weiter, Zurück. */
-.scene7-completion-actions{display:flex;flex-direction:column;align-items:center;gap:14px}
-.scene7-completion-actions>button{width:min(100%,520px);flex:0 0 auto;box-sizing:border-box}
-.scene7-video-next{position:relative;display:block;max-width:354px;min-height:140px;aspect-ratio:1/1;padding:0;border:0;border-radius:18px;background:#f8f1e5;overflow:hidden;cursor:pointer}
-.scene7-video-next video{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
-.scene7-video-next .video-next-fallback{display:none;font:bold calc(23px * var(--text)) Arial,sans-serif;text-align:center;padding:28px}
-.scene7-video-next:not(.video-ready) video{display:none}
-.scene7-video-next:not(.video-ready) .video-next-fallback{display:block}
-.scene7-video-next:focus-visible{outline:4px solid #7750a0;outline-offset:4px}
-.scene7-video-next:disabled{opacity:1;cursor:default}
-
-/* Kompakte, gleich hohe Abschluss-Schaltflächen.
-   Das Würstchen läuft im Weiter-Button nur nach Antippen. */
-#game .scene7-completion-actions{display:flex;flex-direction:column;align-items:stretch;gap:14px}
-#game .scene7-completion-actions>button{
-  flex:0 0 auto !important;
-  width:100% !important;
-  max-width:100% !important;
-  min-width:0 !important;
-  height:auto !important;
+.scene7-completion-actions{flex-direction:column;align-items:stretch;gap:14px}
+#game .scene7-completion-actions>.secondary{
+  flex:0 0 auto;
+  width:100%!important;
+  max-width:100%;
+  height:auto!important;
   min-height:90px;
-  box-sizing:border-box;
 }
 #game .scene7-video-next{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:18px;
-  aspect-ratio:auto;
-  min-height:90px;
-  padding:6px 18px;
-  border:2px solid #a8b99c;
-  border-radius:40px;
-  background:#f5edd9 url('../vorschau-einfuehrung/assets/button-parchment.svg') center/100% 100% no-repeat;
-  box-shadow:0 3px 0 #dcd4bf;
-  color:#493e58;
-  overflow:hidden;
-}
-#game .scene7-video-next video,
-#game .scene7-video-next:not(.video-ready) video{
-  display:block;
-  width:80px;
-  height:80px;
-  flex:0 0 80px;
-  object-fit:contain;
-  background:#fff;
-  border-radius:8px;
-}
-#game .scene7-video-next .video-next-fallback,
-#game .scene7-video-next:not(.video-ready) .video-next-fallback{
-  display:block;
+  align-self:center;
+  flex:none;
+  width:min(100%, calc(240px * var(--board)), clamp(150px, 55vh, 354px));
+  max-width:100%;
   padding:0;
-  font-family:Andika,Arial,sans-serif;
-  font-size:calc(21px * var(--text));
-  line-height:1.4;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  filter:none;
 }
-@media(max-width:380px){
- #game .scene7-video-next{gap:10px;padding:5px 10px}
- #game .scene7-video-next video{width:68px;height:68px;flex-basis:68px}
-}
+.scene7-video-next:disabled{opacity:1}
+.scene7-video-next video{display:block;width:100%;height:auto;pointer-events:none}
+#scene7-video-fallback{display:block;padding:8px 4px;font-weight:bold}

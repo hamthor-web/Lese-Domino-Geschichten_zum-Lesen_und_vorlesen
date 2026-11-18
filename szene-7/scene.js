@@ -42,7 +42,7 @@
   }catch{stopAudio();updateAudio('Die Stimme konnte nicht fortgesetzt werden. Versuche es noch einmal.');}
  }
  function complete(){return solved.size===content.differences.length;}
- function go(n){if(n<0||n>3||(n===3&&!complete()))return;stopAudio();phase=n;active=null;feedback='';render();$('main').focus();$('main').scrollIntoView({block:'start'});}
+ function go(n){if(n<0||n>3||(n===3&&!complete()))return;$('scene7-next-video')?.pause();stopAudio();phase=n;active=null;feedback='';render();$('main').focus();$('main').scrollIntoView({block:'start'});}
  function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button></div>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function pictures(){return '<div class="forest-pictures">'+[0,1].map(side=>'<figure><figcaption>Bild '+(side+1)+'</figcaption><div class="forest-scroll" role="region" aria-label="Bild '+(side+1)+' vergrößert seitlich verschieben" tabindex="0"><div class="forest-board" data-side="'+side+'"><img src="assets/wald-'+(side?'b':'a')+'.png" width="1536" height="1152" alt="'+(side?'Wald mit Haselnüssen, Käfern, Schal, Strauch und alter Frau.':'Wald mit Tautropfen, Spinnen, Spinnennetz, Brunnen und Mädchen.')+'">'+content.differences.map((d,i)=>d.areas.map((r,j)=>'<button class="hotspot '+(solved.has(d.id)?'found':'')+'" style="left:'+(r[0]+r[2]/2)+'%;top:'+(r[1]+r[3]/2)+'%;width:'+r[2]+'%;height:'+r[3]+'%" data-diff="'+i+'" data-area="'+j+'" data-side="'+side+'" aria-label="Bild '+(side+1)+', Bildstelle '+(i+1)+(d.areas.length>1?'.'+(j+1):'')+(solved.has(d.id)?', schon gefunden':'')+'">'+(solved.has(d.id)?'<span aria-hidden="true">✓</span>':'')+'</button>').join('')).join('')+'</div></div></figure>').join('')+'</div>';}
@@ -51,31 +51,56 @@
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Der König im Wald</h1><p>Höre, was der König im Wald entdeckt.</p><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===1)$('game').innerHTML='<section class="panel"><h1>Der König im Wald</h1><p>Lies in deinem Tempo.</p>'+reading()+nav()+'</section>';
   if(phase===2){$('game').innerHTML='<section class="panel"><h1>Was ist auf dem anderen Bild?</h1><p>Vergleiche die Bilder. Tippe auf etwas, das anders ist. Wähle dann das Wort für die gleiche Stelle auf dem anderen Bild.</p><p class="note">Du kannst in beiden Bildern suchen. Mit „Spielfeld“ machst du die Bilder größer und kannst sie seitlich verschieben.</p><p id="progress" role="status"></p>'+pictures()+'<section id="question" class="comparison-question" aria-labelledby="questionTitle" tabindex="-1" hidden></section><p id="feedback" class="feedback" role="status" aria-live="polite"></p><details><summary>Lesetext ansehen</summary>'+reading()+'</details>'+nav()+'</section>';bindPictures();updateProgress();}
-  if(phase===3)$('game').innerHTML='<section class="panel"><h1>Genau hingeschaut!</h1><p>Du hast alle Unterschiede gefunden und die passenden Wörter gelesen.</p><div class="actions scene7-completion-actions"><button class="secondary" id="again">Diese Szene wiederholen</button><button class="scene7-video-next" id="scene8" type="button" aria-label="Weiter zu Szene 8"><video id="scene7-next-video" muted playsinline preload="auto" aria-hidden="true"><source src="../szene-8/assets/Wuerstchen_Animation.mp4" type="video/mp4"></video><span class="video-next-fallback" aria-hidden="true">Weiter zu Szene 8</span></button><button class="secondary" id="back">← Zurück</button></div></section>';
+  if(phase===3)$('game').innerHTML=`
+   <section class="panel">
+    <h1>Genau hingeschaut!</h1>
+    <p>Du hast alle Unterschiede gefunden und die passenden Wörter gelesen.</p>
+    <div class="actions scene7-completion-actions">
+     <button class="secondary" id="again">Diese Szene wiederholen</button>
+     <button class="scene7-video-next" id="scene8" type="button" disabled aria-label="Würstchen-Animation läuft">
+      <video id="scene7-next-video" src="../szene-8/assets/Wuerstchen_Animation.mp4" width="354" height="354" muted playsinline preload="auto" aria-hidden="true"></video>
+      <span id="scene7-video-fallback" hidden></span>
+     </button>
+     <button class="secondary" id="back">← Zurück</button>
+    </div>
+   </section>`;
   $('back').onclick=()=>phase===0?location.assign('../szene-6/?abschnitt=abschluss'):go(phase-1);
   if($('next')){$('next').disabled=phase===2&&!complete();$('next').onclick=()=>go(phase+1);}
   if($('audioToggle')){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
   if($('again'))$('again').onclick=()=>{solved.clear();go(0);};
-  if($('scene8')){
-    const button=$('scene8'),movie=$('scene7-next-video');
-    let started=false;
-    const destination=()=>location.assign('../szene-8/');
-    movie.loop=false;
-    movie.addEventListener('loadeddata',()=>{button.classList.add('video-ready');movie.pause();},{once:true});
-    movie.addEventListener('loadedmetadata',()=>{if(movie.duration>0){try{movie.currentTime=0.04;}catch{}}},{once:true});
-    movie.load();
-    movie.addEventListener('error',()=>{button.classList.remove('video-ready');},{once:true});
-    button.onclick=()=>{
-      if(started)return;
-      started=true;button.disabled=true;
-      movie.currentTime=0;
-      movie.addEventListener('ended',destination,{once:true});
-      movie.addEventListener('error',destination,{once:true});
-      const attempt=movie.play();
-      if(attempt&&typeof attempt.catch==='function')attempt.catch(destination);
-    };
-  }
+  if(phase===3)playCompletionVideo();
   scheduleButtons();
+ }
+ function playCompletionVideo(){
+  const button=$('scene8'),movie=$('scene7-next-video'),fallback=$('scene7-video-fallback');
+  function ready(label=''){
+   if(!button.isConnected)return;
+   movie.hidden=Boolean(label);
+   fallback.textContent=label;
+   fallback.hidden=!label;
+   button.setAttribute('aria-label','Weiter zu Szene 8');
+   button.onclick=()=>location.assign('../szene-8/');
+   button.disabled=false;
+  }
+  async function play(){
+   button.disabled=true;
+   button.setAttribute('aria-label','Würstchen-Animation läuft');
+   fallback.hidden=true;
+   try{await movie.play();}
+   catch(error){
+    if(!button.isConnected||movie.error)return;
+    if(error.name==='NotAllowedError'){
+     fallback.textContent='▶ Animation abspielen';
+     fallback.hidden=false;
+     button.setAttribute('aria-label','Würstchen-Animation abspielen');
+     button.onclick=play;
+     button.disabled=false;
+    }else ready('Weiter zu Szene 8');
+   }
+  }
+  movie.addEventListener('ended',()=>ready(),{once:true});
+  movie.addEventListener('error',()=>ready('Weiter zu Szene 8'),{once:true});
+  play();
  }
  function updateProgress(){$('progress').textContent=solved.size+' von '+content.differences.length+' Unterschieden gefunden';$('next').disabled=!complete();}
  function bindPictures(){document.querySelectorAll('.hotspot').forEach(b=>b.onclick=()=>select(Number(b.dataset.diff),Number(b.dataset.side)));document.querySelectorAll('.forest-board').forEach(b=>b.onclick=e=>{if(e.target.closest('.hotspot'))return;$('feedback').textContent='Schau, was an der gleichen Stelle auf dem anderen Bild anders ist.';});}

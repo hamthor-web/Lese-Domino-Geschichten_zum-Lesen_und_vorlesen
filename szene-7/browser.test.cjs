@@ -23,6 +23,54 @@ async function run(){
  }
  await p.locator('#back').click();await p.locator('#back').click();await p.locator('#back').click();await p.waitForURL('**/szene-6/?abschnitt=abschluss');await p.locator('#scene7').waitFor();await p.locator('#scene7').click();await p.waitForURL('**/szene-7/');
  for(const path of ['vorschau-einfuehrung/','szene-3/','szene-4/','szene-5/','szene-6/']){await p.goto(base+path);await p.locator('.scene-menu summary').click();await p.getByRole('link',{name:'Der König im Wald',exact:true}).waitFor({state:'visible'});assert.equal(await p.locator('.scene-menu nav a').last().innerText(),'Der König im Wald');}
+ const transition = await ctx.newPage();
+ await transition.addInitScript(() => {
+  document.addEventListener('play', event => {
+   if (event.target.id === 'scene7-next-video') {
+    window.transitionWasLocked = document.getElementById('scene8').disabled;
+   }
+  }, true);
+ });
+ await transition.goto(base+'szene-7/?abschnitt=abschluss');
+ const video = transition.locator('#scene7-next-video');
+ const nextScene = transition.locator('#scene8');
+ await transition.waitForFunction(() => document.getElementById('scene7-next-video')?.ended);
+ assert.equal(await transition.evaluate(() => window.transitionWasLocked), true);
+ assert.equal(await nextScene.isEnabled(), true);
+ assert.equal(await video.evaluate(movie => movie.loop), false);
+ assert.equal(await transition.locator('#scene7-video-fallback').isVisible(), false);
+ assert.match(transition.url(), /szene-7/);
+ assert.deepEqual(await nextScene.evaluate(button => {
+  const style = getComputedStyle(button);
+  return [style.backgroundImage, style.backgroundColor, style.borderTopWidth, style.boxShadow];
+ }), ['none', 'rgba(0, 0, 0, 0)', '0px', 'none']);
+ await nextScene.click();
+ await transition.waitForURL('**/szene-8/');
+
+ const blocked = await ctx.newPage();
+ await blocked.addInitScript(() => {
+  const play = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () {
+   if (this.id === 'scene7-next-video' && !this.dataset.retried) {
+    this.dataset.retried = 'true';
+    return Promise.reject(new DOMException('Autoplay blocked', 'NotAllowedError'));
+   }
+   return play.call(this);
+  };
+ });
+ await blocked.goto(base+'szene-7/?abschnitt=abschluss');
+ await blocked.getByRole('button', {name: 'Würstchen-Animation abspielen'}).click();
+ await blocked.waitForFunction(() => document.getElementById('scene7-next-video').ended);
+ await blocked.getByRole('button', {name: 'Weiter zu Szene 8'}).click();
+ await blocked.waitForURL('**/szene-8/');
+
+ const missing = await ctx.newPage();
+ await missing.route('**/Wuerstchen_Animation.mp4', route => route.abort());
+ await missing.goto(base+'szene-7/?abschnitt=abschluss');
+ const fallback = missing.getByRole('button', {name: 'Weiter zu Szene 8'});
+ assert.equal(await fallback.innerText(), 'Weiter zu Szene 8');
+ await fallback.click();
+ await missing.waitForURL('**/szene-8/');
  assert.deepEqual(errors,[]);console.log('PASS Szene 7: alle Trefferflächen beider Bilder, sechs Gruppen, zwölf Wortrichtungen, falsche Wahl, keine Doppelzählung, Freigabe, Rücknavigation, Wiederholung, Audio, Übergang und Menüs; '+checks+' Layoutprüfungen. Sprachdienst simuliert.');await ctx.close();
 }
 run().then(async()=>{if(browser)await browser.close();if(server)server.kill();}).catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exitCode=1;});
