@@ -57,9 +57,8 @@
     const count = byId('pairs').children.length;
     if (count === sentences.length) {
       byId('feedback').textContent = 'Alle drei Sätze sind richtig verbunden!';
-      byId('finish').hidden = false;
-      byId('retry').hidden = false;
-      byId('finish').focus();
+      setCompleted(true);
+      byId('feedback').focus();
       startTransition();
     } else {
       byId('feedback').textContent = count + ' von 3 Sätzen verbunden.';
@@ -78,11 +77,22 @@
     byId('pairs').replaceChildren();
     byId('pairs').hidden = true;
     byId('feedback').textContent = '';
-    byId('finish').hidden = true;
-    byId('retry').hidden = true;
+    setCompleted(false);
+    setReadingHelp(false);
     byId('transition').hidden = true;
     byId('transitionStatus').hidden = true;
     video.pause();
+  }
+
+  function setCompleted(completed) {
+    for (const id of ['instructions', 'board', 'readingHelp']) byId(id).hidden = completed;
+    byId('repeat').hidden = !completed;
+  }
+
+  function setReadingHelp(open) {
+    byId('taskReading').hidden = !open;
+    byId('showText').setAttribute('aria-expanded', String(open));
+    byId('showText').textContent = open ? 'Lesetext schließen' : 'Zum Lesetext';
   }
 
   function updateSpeech() {
@@ -175,12 +185,8 @@
     speech.stop();
     show('activity');
   };
-  byId('back').onclick = () => show('reading');
-  byId('finish').onclick = () => {
-    show('reading');
-    byId('listen').focus();
-    speech.start(original);
-  };
+  byId('taskReading').append(...Array.from(byId('readingText').children, paragraph => paragraph.cloneNode(true)));
+  byId('showText').onclick = () => setReadingHelp(byId('taskReading').hidden);
   byId('listen').onclick = () => speech.toggle(original);
   byId('retry').onclick = () => {
     speech.stop();

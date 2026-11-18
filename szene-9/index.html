@@ -2,7 +2,7 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Silvana – Elin</title>
 <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
-<link rel="stylesheet" href="scene.css?v=2"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=2" defer></script></head>
+<link rel="stylesheet" href="scene.css?v=2"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=3" defer></script></head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
 <button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden>
@@ -21,7 +21,7 @@
   <div class="actions"><button class="primary" id="listen">Geschichte vorlesen</button></div>
   <p class="elin-feedback" id="speechStatus" role="status" hidden></p>
   <div class="elin-intro">
-    <div class="reading elin-text">
+    <div id="readingText" class="reading elin-text">
       <p>Am Wegrand stand ein Mädchen. Es hieß Elin. Leise sagte sie: „Ihr habt es gesehen. Aber Ihr habt nicht hingeschaut.“</p>
       <p>Der König blieb stehen, obwohl er Kinder nicht mochte.</p>
       <p>Etwas an Elins Stimme machte ihn nachdenklich.</p>
@@ -34,19 +34,18 @@
 </section>
 <section id="activity" hidden>
   <h1 id="activityTitle" tabindex="-1">Welche Satzteile gehören zusammen?</h1>
-  <p>Tippe zwei Karten an, die zusammenpassen.</p>
-  <div class="elin-board" tabindex="0" role="region" aria-label="Spielfeld">
+  <p id="instructions">Tippe zwei Karten an, die zusammenpassen.</p>
+  <div id="board" class="elin-board" tabindex="0" role="region" aria-label="Spielfeld">
     <div class="elin-cards">
       <section aria-labelledby="startsTitle"><h2 id="startsTitle">Satzanfänge</h2><div id="starts"></div></section>
       <section aria-labelledby="endsTitle"><h2 id="endsTitle">Satzenden</h2><div id="ends"></div></section>
     </div>
   </div>
   <ul id="pairs" class="elin-pairs" aria-label="Verbundene Sätze" hidden></ul>
-  <p id="feedback" class="elin-feedback" role="status"></p>
-  <div class="elin-navigation">
-    <button class="primary" id="finish" hidden>Weiter zum Vorlesen</button>
-    <button class="secondary" id="back">← Zum Lesetext</button>
-    <button class="secondary" id="retry" hidden>Aufgabe wiederholen</button>
+  <p id="feedback" tabindex="-1" class="elin-feedback" role="status"></p>
+  <div class="elin-navigation" id="readingHelp">
+    <button class="secondary" id="showText" aria-controls="taskReading" aria-expanded="false">Zum Lesetext</button>
+    <div id="taskReading" class="reading elin-text" hidden></div>
   </div>
   <div id="transition" hidden>
     <button class="elin-transition" id="nextScene" type="button" disabled aria-label="Würstchen-Animation läuft">
@@ -54,6 +53,9 @@
       <span id="transitionFallback" hidden></span>
     </button>
     <p id="transitionStatus" class="elin-feedback" role="status" hidden></p>
+  </div>
+  <div class="elin-navigation" id="repeat" hidden>
+    <button class="secondary" id="retry">Aufgabe wiederholen</button>
   </div>
 </section>
 </div>
