@@ -61,8 +61,7 @@ function localServer() {
       }
       await checkWidth('Lesetext', width, height, font, board);
       assert(await page.locator('#reading img').evaluate(img => img.complete && img.naturalWidth > 0));
-      const widths = await page.locator('#reading .home-actions button').evaluateAll(items => items.map(b => b.offsetWidth));
-      assert.equal(widths[0],widths[1]);
+      assert.equal(await button('listen').isVisible(), false);
       await button('start').click();
       assert.equal(await questionCount(),1);
       await button('yes').click();
@@ -78,11 +77,16 @@ function localServer() {
       assert.equal(await questionCount(),2);
       assert(await page.locator('#queenPicture .speech-bubble').isVisible());
       assert(await button('done').isVisible());
+      assert.equal(await button('listen').isVisible(), false);
       assert.equal(await button('transitionVideo').getAttribute('src'),null);
       await checkWidth('Erzählen', width, height, font, board);
     }
   }
   await button('done').click();
+  assert(await button('listen').isVisible());
+  const widths = await page.locator('#completion .home-actions button')
+    .evaluateAll(items => items.map(button => button.offsetWidth));
+  assert.equal(widths[0], widths[1]);
   await page.waitForFunction(() => !document.getElementById('nextScene').disabled);
   assert(await button('transitionVideo').evaluate(v => v.ended && v.currentTime > 0));
   await button('nextScene').click();

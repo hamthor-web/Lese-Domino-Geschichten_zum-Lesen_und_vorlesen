@@ -2,7 +2,7 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Silvana – Zu Hause</title>
 <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
-<link rel="stylesheet" href="scene.css?v=2">
+<link rel="stylesheet" href="scene.css?v=3">
 <script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js" defer></script>
 <link rel="stylesheet" href="../shared/scene-menu.css">
 <script src="../shared/scene-menu.js?v=2" defer></script>
@@ -26,10 +26,8 @@
           <p>Der König hatte nur etwas trockenes Moos am Mantel. Er sah die geschlossenen Kisten an.</p>
         </div>
         <div class="home-actions">
-          <button class="primary" id="listen" type="button">Geschichte vorlesen</button>
           <button class="primary" id="start" type="button">Weiter zur Aufgabe</button>
         </div>
-        <p id="speechStatus" role="status" hidden></p>
       </div>
     </div>
   </section>
@@ -65,7 +63,11 @@
   </section>
   <section id="completion" hidden>
     <h1 id="finishTitle" tabindex="-1">Du hast alles richtig erkannt!</h1>
-    <div class="home-actions"><button class="secondary" id="retry" type="button">Aufgabe wiederholen</button></div>
+    <div class="home-actions">
+      <button class="primary" id="listen" type="button">Geschichte vorlesen</button>
+      <button class="secondary" id="retry" type="button">Aufgabe wiederholen</button>
+    </div>
+    <p id="speechStatus" role="status" hidden></p>
     <button id="nextScene" class="home-next" type="button" disabled aria-label="Würstchen-Animation läuft">
       <video id="transitionVideo" muted playsinline preload="none" aria-hidden="true"></video>
       <span id="transitionFallback" hidden></span>

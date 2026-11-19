@@ -68,5 +68,13 @@
   .home-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
 }
 .home-actions button, #settingsToggle {
-  background: linear-gradient(#fff9e9, #f1e4c6);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  border-image: url('assets/pergament-button.webp') 58 150 fill / 32px 83px stretch;
+  box-shadow: none;
+  padding: 18px 30px 18px 83px;
+  min-height: 72px;
 }
+.home-actions button::before, #settingsToggle::before { content: none; }
+.home-actions button:hover:not(:disabled), #settingsToggle:hover:not(:disabled) { box-shadow: none; }
