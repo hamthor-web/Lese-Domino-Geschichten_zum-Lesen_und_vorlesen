@@ -13,6 +13,8 @@ on:
       - 'szene-14/**'
       - 'vorschau-einfuehrung/**'
       - 'assets/**'
+      - 'shared/**'
+      - 'index.html'
       - '.github/workflows/silvana-browser.yml'
   pull_request:
     branches: [main]
@@ -34,6 +36,10 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/silvana-browser" --no-package-lock playwright@1.56.1
           command -v google-chrome || "$RUNNER_TEMP/silvana-browser/node_modules/.bin/playwright" install --with-deps chrome
+      - name: Schaltflächen in allen Szenen prüfen
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright
+        run: node shared/parchment-actions.test.cjs
       - name: Szenen 13 und 14 im Browser prüfen
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright

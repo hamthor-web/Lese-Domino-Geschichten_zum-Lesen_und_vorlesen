@@ -20,17 +20,6 @@
 #game .panel>.actions:not(.scene-navigation){display:flex;flex-direction:column;align-items:stretch;gap:14px}
 #game .panel>.actions:not(.scene-navigation)>button{width:100%;max-width:100%}
 
-#game .scene-navigation > #back {
-  align-self: flex-start;
-  width: auto;
-  min-width: 0;
-  min-height: 48px;
-  flex: 0 0 auto !important;
-  padding: .4rem .85rem;
-  font-size: calc(1rem * var(--text));
-}
-#game #back::before { content: none; }
-
 .scene-transition {
   display:block;
   width:min(100%, calc(220px * var(--board,1)));

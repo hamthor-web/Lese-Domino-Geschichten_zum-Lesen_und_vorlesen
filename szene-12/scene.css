@@ -2,7 +2,7 @@
 .trip-layout { display: grid; gap: clamp(12px, 2.5vw, 32px); align-items: start; }
 .trip-art { display: block; width: 100%; height: auto; border-radius: 12px; }
 #reading .trip-art, .chest { width: min(100%, calc(540px * var(--board))); margin-inline: auto; }
-.trip-instructions, #feedback, #transitionStatus, #evidence summary { font-size: calc(19px * var(--text)); line-height: 1.5; }
+.trip-instructions, #feedback, #transitionStatus { font-size: calc(19px * var(--text)); line-height: 1.5; }
 .trip-game { align-items: start; }
 .chest { position: relative; }
 #thumbs {
@@ -55,7 +55,6 @@
 .statement:disabled { opacity: 1; background: #eaf0db; border-color: #668049; }
 .answer-icon:empty { border-style: dashed; background: transparent; }
 #evidence { margin-top: 12px; }
-#evidence summary { padding-block: 8px; cursor: pointer; font-weight: bold; }
 .trip-text mark { background: #ffe082; color: #39241a; }
 #completion { text-align: center; }
 .trip-next {

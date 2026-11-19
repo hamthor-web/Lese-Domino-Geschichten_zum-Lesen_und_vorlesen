@@ -7,32 +7,30 @@
 <title>Silvana · Die Geschichte beginnt</title>
 <link rel="stylesheet" href="styles.css?v=9">
 <script src="../shared/story-speech.js?v=3" defer></script>
-<script src="game.js?v=abschluss1" defer></script>
+<script src="game.js?v=einheitliche-buttons" defer></script>
 <style>
-.scene-backbar[hidden]{display:none!important}
-.scene-backbar{display:flex;margin:4px 0 18px}.scene-backbar button{max-width:100%}
+.intro-page .topbar .intro-title { flex: 0 0 100%; padding: 0; margin: 0; }
 
 .adventure-link{flex-basis:100%;min-width:0}
 .adventure-link p,.adventure-next{font-size:calc(22px * var(--text));font-weight:bold;line-height:1.5;margin:12px 0;text-align:center}
 </style>
 
-<link rel="stylesheet" href="../shared/scene-menu.css?v=6">
-<script src="../shared/scene-menu.js?v=abschluss2" defer></script>
+<link rel="stylesheet" href="../shared/scene-menu.css?v=7">
+<script src="../shared/scene-menu.js?v=7" defer></script>
+<link rel="stylesheet" href="../shared/parchment-actions.css">
+<script src="../shared/parchment-actions.js" defer></script>
 </head>
 <body class="intro-page">
-<header class="topbar"><a class="brand" href="#main"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a></header>
+<header class="topbar"><a class="brand" href="#main"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
 <figure class="intro-title" id="introTitle"><img class="landscape" src="assets/silvana-karte.png" width="1536" height="1024" alt="Silvana: zwei Dörfer, eine Stadt und eine Burg zwischen Bergen und einem Wald mit glitzernden Spinnweben."><figcaption>Ein kleines Land voller Geschichten.</figcaption></figure>
-<div class="intro-tools"><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></div>
+<button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" aria-label="Größe einstellen" hidden>
 <label for="textSize">Schrift <output id="textOutput" for="textSize">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
 <label for="boardSize">Spielfeld <output id="boardOutput" for="boardSize">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label>
 <p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p>
 </section>
-<main id="main" tabindex="-1">
+<main class="parchment-actions" id="main" tabindex="-1">
 <details class="scene-menu" id="sceneMenu" data-scene="1"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Abgeschlossene Szenen"><p class="note">Hier erscheinen abgeschlossene Szenen.</p></nav></details>
-<div class="chapterline"><span class="chapter">Die Geschichte beginnt</span><span class="chapter-count">Einführung · Abschnitt 1</span></div>
-<nav class="steps" aria-label="Dein Weg durch die Einführung"><button id="step0" class="step active" aria-current="step"><span class="step-number">1</span> Willkommen</button><button id="step1" class="step" disabled><span class="step-number">2</span> Selbst lesen</button><button id="step2" class="step" disabled><span class="step-number">3</span> Domino legen</button></nav>
-
 <div id="game"></div>
 <noscript>Bitte aktiviere JavaScript, um das Domino zu spielen.</noscript>
 <footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span class="footerleaf" aria-hidden="true">✧</span><span>Das Land der glitzernden Spinnweben</span></footer>

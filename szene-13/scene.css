@@ -5,7 +5,7 @@
   width: min(100%, calc(540px * var(--board)));
   margin-inline: auto;
 }
-#activity p, #textHelp summary, #speechStatus {
+#activity p, #speechStatus {
   font-size: calc(19px * var(--text));
   line-height: 1.5;
 }
@@ -53,7 +53,6 @@
 .answer-actions button { min-width: 84px; }
 @media (max-width: 450px) { .answer-actions { grid-auto-flow: row; } }
 #feedback:empty { display: none; }
-#textHelp summary { padding-block: 8px; cursor: pointer; font-weight: bold; }
 #completion { text-align: center; }
 .home-next {
   display: block;

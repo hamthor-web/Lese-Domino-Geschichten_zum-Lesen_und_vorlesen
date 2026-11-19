@@ -41,29 +41,6 @@
 .story-end .story-reading { margin-block: .75rem 0; }
 .story-end .original { margin-block-start: .65rem; }
 
-main {
-  --action-width: max-content;
-  --action-height: 3.25rem;
-}
-#main :is(button.primary, button.secondary, button.step):not(:is(#back, #again, #retry)) {
-  box-sizing: border-box;
-  inline-size: var(--action-width);
-  min-inline-size: 0;
-  max-inline-size: 100%;
-  block-size: var(--action-height);
-  min-block-size: var(--action-height);
-  flex: 0 0 auto !important;
-  padding: .3rem 1.9rem;
-  font-size: calc(1rem * var(--text, 1));
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-  text-align: center;
-}
-#main :is(button.primary, button.secondary):not(:is(#back, #again, #retry))::before {
-  inset: 10% auto 10% .35rem;
-  width: 1.4rem;
-  height: auto;
-}
 main :is(.actions, .controls, .elin-navigation, .home-actions, .actions-final, .move-controls, .steps) {
   flex-wrap: wrap;
 }
@@ -73,8 +50,8 @@ main button:focus-visible, .story-reading summary:focus-visible {
 }
 
 /* The video and its final frame are the navigation button. */
-#main #game button:has(> video),
-#main button:has(> video) {
+#main #game button:has(> video):not([data-parchment]),
+#main button:has(> video):not([data-parchment]) {
   display: block;
   width: min(100%, 27.5rem, 86svh);
   min-width: 0;
@@ -88,35 +65,15 @@ main button:focus-visible, .story-reading summary:focus-visible {
   opacity: 1;
   filter: none;
 }
-#main button:has(> video) > video:not([hidden]) {
+#main button:has(> video):not([data-parchment]) > video:not([hidden]) {
   display: block;
   width: 100%;
   height: auto;
   pointer-events: none;
 }
-#main button:has(> video) > span:not([hidden]) {
+#main button:has(> video):not([data-parchment]) > span:not([hidden]) {
   line-height: 1.4;
   font-size: calc(1rem * var(--text, 1));
-}
-
-.action-size-probe {
-  position: fixed;
-  inset: 0 auto auto 0;
-  visibility: hidden;
-  pointer-events: none;
-  box-sizing: border-box;
-  padding: .3rem 1.9rem;
-  border: 2px solid transparent;
-  font-weight: 700;
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
-#main .actions-final button:is(.primary, .secondary):not(#retry),
-#main .home-actions button:is(.primary, .secondary):not(#retry) {
-  background: #eee3f5;
-  border: 2px solid #bca6cf;
-  border-radius: .85rem;
-  border-image: none;
 }
 
 #main :is(h1, h2, .eyebrow, .original) { overflow-wrap: anywhere; }
@@ -143,7 +100,6 @@ main button:focus-visible, .story-reading summary:focus-visible {
   width: 100%;
   margin-block-start: 1rem;
 }
-#main .reading-navigation > #back { width: auto; }
 @media (max-width: 650px) {
   #main .reading-navigation {
     flex-direction: column;
