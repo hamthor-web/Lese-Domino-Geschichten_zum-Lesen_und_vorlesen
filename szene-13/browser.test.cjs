@@ -150,12 +150,16 @@ function localServer() {
   assert(await button('questionTitle').isVisible());
   await page.getByRole('button', {name: 'Gold ist wichtiger.'}).click();
   assert(!(await button('board').evaluate(el => el.classList.contains('revealed'))));
+  assert(await button('glowVideo').evaluate(video => video.paused && video.currentTime === 0));
   await page.getByRole('button', {name: 'Man muss genau hinschauen.'}).click();
   assert(await button('ending').isVisible());
   assert(await button('glow').evaluate(image => image.complete && image.naturalWidth === 1254));
-  await page.waitForFunction(() => getComputedStyle(document.querySelector('#glow')).opacity === '1');
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('#glowVideo')).opacity === '1');
   await checkWidth('Szene 14 Abschluss', 1440, 900, 160, 160);
+  await page.waitForFunction(() => document.querySelector('#glowVideo').ended);
+  assert(await button('glowVideo').evaluate(video => video.classList.contains('is-playing') && video.currentTime >= 4.9));
   await button('retry').click();
+  assert(await button('glowVideo').evaluate(video => video.paused && video.currentTime === 0 && !video.classList.contains('is-playing')));
   assert.equal(await page.locator('.piece:visible').count(), 6);
   assert.equal(await button('question').isVisible(), false);
   for (const path of ['vorschau-einfuehrung/','szene-2/','szene-12/']) {

@@ -41,8 +41,10 @@
   height: 100%;
 }
 .puzzle-board img { pointer-events: none; }
-#glow { opacity: 0; transition: opacity 1.65s ease-in-out; }
-.puzzle-board.revealed #glow { opacity: 1; }
+#glow, #glowVideo { opacity: 0; transition: opacity 1.65s ease-in-out; }
+.puzzle-board.revealed.use-still #glow,
+.puzzle-board.revealed #glowVideo.is-playing { opacity: 1; }
+#glowVideo { object-fit: contain; pointer-events: none; }
 .puzzle-board.revealed .seams { opacity: .35; }
 .seams { transition: opacity 1.65s ease-in-out; }
 #placed > img { inset: auto; }
@@ -104,5 +106,5 @@
   .topbar { flex-wrap: wrap; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #glow, .seams { transition: none; }
+  #glow, #glowVideo, .seams { transition: none; }
 }

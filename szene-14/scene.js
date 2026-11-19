@@ -3,6 +3,7 @@
 (() => {
   const byId = id => document.getElementById(id);
   const board = byId('board');
+  const glowVideo = byId('glowVideo');
   const tray = byId('pieces');
   const feedback = byId('feedback');
   const rotate = byId('rotate');
@@ -66,7 +67,10 @@
     cancelDrag();
     speech.stop();
     select(null);
-    board.classList.remove('revealed');
+    board.classList.remove('revealed', 'use-still');
+    glowVideo.classList.remove('is-playing');
+    glowVideo.pause();
+    if (glowVideo.readyState) glowVideo.currentTime = 0;
     byId('assembled').hidden = true;
     byId('placed').replaceChildren();
     byId('targets').hidden = false;
@@ -203,6 +207,15 @@
     feedback.textContent = '';
   };
 
+  glowVideo.addEventListener('playing', () => {
+    if (board.classList.contains('revealed')) glowVideo.classList.add('is-playing');
+  });
+  function showStill() {
+    glowVideo.classList.remove('is-playing');
+    if (board.classList.contains('revealed')) board.classList.add('use-still');
+  }
+  glowVideo.addEventListener('error', showStill);
+
   for (const answer of answers) {
     answer.onclick = () => {
       if (!answer.hasAttribute('data-correct')) {
@@ -213,6 +226,10 @@
       }
       feedback.textContent = 'Richtig! Schau, wie das Spinnennetz leuchtet.';
       board.classList.add('revealed');
+      if (reducedMotion.matches) showStill();
+      else glowVideo.play().catch(error => {
+        if (error.name !== 'AbortError') showStill();
+      });
       byId('answers').hidden = true;
       byId('ending').hidden = false;
       byId('endingTitle').focus({preventScroll: true});
