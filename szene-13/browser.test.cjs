@@ -81,7 +81,7 @@ function localServer() {
   for (const [width,height] of [[320,640],[390,844],[844,390],[768,1024],[1024,768],[1440,900]]) {
     await page.setViewportSize({width,height});
     for (const [font,board] of [[100,100],[160,80],[90,160],[160,160]]) {
-      await page.goto(base + 'szene-13/');
+      await page.goto(base + 'szene-13/?test=' + [width, height, font, board].join('-'));
       await button('settingsToggle').click();
       for (const [key,value] of [['textSize',font],['boardSize',board]]) {
         await button(key).evaluate((input,value) => {
@@ -145,7 +145,7 @@ function localServer() {
   for (const [width, height] of [[320, 640], [390, 844], [844, 390], [768, 1024], [1024, 768], [1440, 900]]) {
     await page.setViewportSize({width, height});
     for (const [font, board] of [[100, 100], [160, 80], [90, 160], [160, 160]]) {
-      await page.goto(base + 'szene-14/');
+      await page.goto(base + 'szene-14/?test=' + [width, height, font, board].join('-'));
       await button('settingsToggle').click();
       for (const [key, value] of [['textSize', font], ['boardSize', board]]) {
         await button(key).evaluate((input, value) => {
