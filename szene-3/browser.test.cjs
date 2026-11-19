@@ -191,7 +191,7 @@ async function run(){
  await page.locator('#back').click();await layout();
  await page.locator('#back').click();
  await page.waitForURL('**/szene-2/?abschnitt=abschluss');
- await page.locator('#scene3').waitFor();
+ await page.locator('#scene3').scrollIntoViewIfNeeded();
  assert.doesNotMatch(await page.locator('body').innerText(),/Szene 2 geschafft/);
  assert.equal(await page.locator('.adventure-link p').innerText(),'Jetzt geht das Abenteuer weiter.');
  await page.locator('#scene3').click();await page.waitForURL('**/szene-3/');
