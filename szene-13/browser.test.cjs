@@ -66,6 +66,48 @@ function localServer() {
   await phone.getByRole('link', {name: startLabel}).tap();
   await phone.waitForURL('**/vorschau-einfuehrung/');
   await phone.close();
+  const chapterStarts = [
+    'Hinter den dunklen Bergen', 'Vier Straßen voller Schlaglöcher', 'In den Wäldern', 'Vor langer Zeit',
+    'Eines Tages', '„Ich bezahle in Gold“', 'Am nächsten Morgen', 'Der König schnaubte', 'Am Rand des Weges',
+    '„Dann zeig mir', 'Hinter ihnen verlagerte ein Pferd', 'Auf der Rückreise', 'Die Königin', 'Dann sah er'
+  ];
+  const chapters = await browser.newContext({viewport: {width: 390, height: 844}});
+  await chapters.addInitScript(() => {
+    Object.defineProperty(window, 'speechSynthesis', {
+      value: {getVoices: () => [], speak: utterance => { window.currentSpeech = utterance; }, cancel() {}}
+    });
+    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+      value: class { constructor(text) { this.text = text; } }
+    });
+  });
+  const chapter = await chapters.newPage();
+  chapter.on('pageerror', err => errors.push(err.message));
+  for (const [index, text] of chapterStarts.entries()) {
+    const number = index + 1;
+    const path = number === 1 ? 'vorschau-einfuehrung/' : 'szene-' + number + '/';
+    await chapter.goto(base + path);
+    assert.equal(await chapter.locator('.story-end:visible').count(), 0);
+    await chapter.evaluate(number => localStorage.setItem('silvana-completed-scenes-v1', JSON.stringify([number])), number);
+    await chapter.goto(base + path + '?abschnitt=abschluss');
+    const story = chapter.locator('.story-end').first();
+    const listen = story.getByRole('button');
+    await listen.waitFor();
+    assert((await story.locator('.original').textContent()).startsWith(text), path + ' Vorlesetext');
+    const size = () => listen.evaluate(button => [button.offsetWidth, button.offsetHeight]);
+    const initialSize = await size();
+    await listen.click();
+    assert.equal(await listen.textContent(), 'Pause');
+    assert(await chapter.evaluate(() => !!window.currentSpeech.text));
+    assert.deepEqual(await size(), initialSize);
+    await listen.click();
+    assert.equal(await listen.textContent(), 'Weiterhören');
+    assert.deepEqual(await size(), initialSize);
+    await listen.click();
+    assert.equal(await listen.textContent(), 'Pause');
+    assert.deepEqual(await size(), initialSize);
+  }
+  await chapters.close();
+
   const questionCount = () => page.locator('#questions .speech-bubble:visible').count();
   async function checkWidth(stage, width, height, font, board) {
     const result = await page.evaluate(() => ({
@@ -124,9 +166,9 @@ function localServer() {
   }
   await button('done').click();
   assert(await button('listen').isVisible());
-  const widths = await page.locator('#completion .home-actions button')
-    .evaluateAll(items => items.map(button => button.offsetWidth));
-  assert.equal(widths[0], widths[1]);
+  const sizes = await page.locator('#listen, #nextScene')
+    .evaluateAll(items => items.map(button => [button.offsetWidth, button.offsetHeight]));
+  assert.deepEqual(sizes[0], sizes[1]);
   await page.waitForFunction(() => !document.getElementById('nextScene').disabled);
   assert(await button('transitionVideo').evaluate(v => v.ended && v.currentTime > 0));
   await button('retry').click();
@@ -190,7 +232,7 @@ function localServer() {
   assert(await button('ending').isVisible());
   assert.equal(await button('questionTitle').isVisible(), false);
   assert.equal(await button('sceneFooter').isVisible(), false);
-  assert.equal(await page.locator('#endingTitle + p:last-child').textContent(),
+  assert.equal(await page.locator('#endingTitle + .credit').textContent(),
     'Dieser Gedanke stammt ursprünglich aus dem Buch „Der kleine Prinz“.');
   assert(await button('glow').evaluate(image => image.complete && image.naturalWidth === 1254));
   await page.waitForFunction(() => getComputedStyle(document.querySelector('#glowVideo')).opacity === '1');
@@ -204,7 +246,7 @@ function localServer() {
     const video = document.querySelector('#glowVideo');
     return !video.paused && video.currentTime < 2;
   });
-  await page.getByText('Geschichte mitlesen', {exact: true}).click();
+  await page.locator('#readFull summary').click();
   assert((await button('fullStory').innerText()).length > 1000);
   assert.equal(await page.locator('#readFull').evaluate(el => el.open), true);
   await page.goBack();

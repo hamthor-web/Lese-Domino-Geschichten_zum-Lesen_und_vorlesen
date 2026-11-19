@@ -2,43 +2,22 @@
 (()=>{
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let content,phase=0,placed=[2,0,1],selected=null,solved=false,feedback='';
-const audio = createStorySpeech(updateAudio);
- const speechAvailable = audio.available;
+let content,phase=1,placed=[2,0,1],selected=null,solved=false,feedback='';
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
   document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);
   $('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';
-  scheduleButtons();
  }
- let sizingFrame=0;
- function scheduleButtons(){cancelAnimationFrame(sizingFrame);sizingFrame=requestAnimationFrame(()=>{
-  const buttons=[...document.querySelectorAll('button.primary,button.secondary,button.quiet')].filter(b=>b.getClientRects().length);
-  if(!buttons.length)return;
-  const available=Math.max(1,Math.min(...buttons.map(b=>b.parentElement.clientWidth-parseFloat(getComputedStyle(b.parentElement).paddingLeft)-parseFloat(getComputedStyle(b.parentElement).paddingRight))));
-  buttons.forEach(b=>{b.style.width='max-content';b.style.maxWidth='100%';b.style.height='auto';b.style.flex='0 1 auto';});
-  const width=Math.min(available,Math.max(...buttons.map(b=>b.getBoundingClientRect().width)));
-  buttons.forEach(b=>b.style.width=width+'px');
-  const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
-  buttons.forEach(b=>b.style.height=height+'px');
- });}
- function stopAudio(){audio.stop();}
- function updateAudio(message){
-  if(!$('audioToggle'))return;
-  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
-  $('audioStatus').textContent=message||(audio.state==='error'?'Die Stimme konnte nicht vorlesen. Versuche es erneut oder klappe den Originaltext auf.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
-  $('audioToggle').disabled=!speechAvailable;scheduleButtons();
- }
-function toggleAudio(){audio.toggle(content.original);}
+let audio;
+ function stopAudio(){audio?.stop();}
 
 function go(n){
  if(n<0||n>3||(n===3&&!solved))return;
  finishTileDrag(false);stopAudio();phase=n;render();
  $('main').focus();
- if(phase===3)$('scene5').scrollIntoView({block:'nearest'});
- else $('main').scrollIntoView({block:'start'});
+ $('main').scrollIntoView({block:'start'});
 }
-function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
+function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button>'+'</div>';}
 function setupCompletionVideo(){
  const button=$('scene5'),video=$('completionVideo'),fallback=$('completionVideoFallback');
  function enable(label,action,text=''){
@@ -69,16 +48,15 @@ function setupCompletionVideo(){
 }
 function render(){SilvanaProgress.checkpoint(phase);
  $('completionVideo')?.pause();
-$('stepStatus').textContent=['Schritt 1 von 3 · Zuhören','Schritt 2 von 3 · Selbst lesen','Schritt 3 von 3 · Reihenfolge legen',''][phase];$('stepStatus').hidden=phase===3;
-if(phase===0)$('game').innerHTML='<section class="panel"><span class="eyebrow">Erst einmal zuhören</span><h1>Der Händler</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
+$('stepStatus').textContent=['','Schritt 1 von 2 · Selbst lesen','Schritt 2 von 2 · Reihenfolge legen',''][phase];$('stepStatus').hidden=phase===3;
 if(phase===1)$('game').innerHTML='<section class="panel"><h1>Der Händler</h1><p>Lies in deinem Tempo.</p><div class="reading">'+esc(content.simple)+'</div>'+nav()+'</section>';
 if(phase===2){$('game').innerHTML='<section class="panel"><h1>Was geschah zuerst?</h1><div class="reading">'+esc(content.simple)+'</div><p>Bringe die drei Satzkarten in die richtige Reihenfolge. Ziehe sie an die passende Stelle oder tippe eine Karte an und verschiebe sie mit den Pfeilen.</p><div id="boardContent"></div></section>';renderBoard();}
 if(phase===3)$('game').innerHTML='<section class="panel"><h1>Die Geschichte des Händlers</h1><p>Du hast geordnet, was mit dem Spinnennetz geschah.</p><ol class="result">'+content.cards.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ol><p>Jetzt geht das Abenteuer weiter.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene5" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-weiter.mp4" width="358" height="358" preload="auto" muted playsinline aria-hidden="true"></video><span id="completionVideoFallback" hidden></span></button><button class="secondary" id="back">← Zurück</button></div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+''+'</section>';
-if ($('back')) $('back').onclick=()=>go(phase-1);
+if(phase===3)audio=mountStoryReading($('game').firstElementChild,content.original);
+  if ($('back')) $('back').onclick=()=>phase===1?location.assign(SilvanaProgress.previousScene(3)):go(phase-1);
 if($('next'))$('next').onclick=()=>go(phase+1);
-if(phase===0){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
 if(phase===3)setupCompletionVideo();
-if($('again'))$('again').onclick=()=>{placed=[2,0,1];selected=null;solved=false;feedback='';go(0);};scheduleButtons();
+if($('again'))$('again').onclick=()=>{placed=[2,0,1];selected=null;solved=false;feedback='';go(1);};
 }
 function changed(){solved=false;feedback='';renderBoard();}
 function move(id,pos){if(!placed.includes(id)||!Number.isInteger(pos)||pos<0||pos>3)return;const old=placed.indexOf(id);placed.splice(old,1);if(old<pos)pos--;placed.splice(pos,0,id);selected=id;changed();}
@@ -88,7 +66,7 @@ $('chain').querySelectorAll('.tile').forEach(b=>{const id=Number(b.dataset.id);b
 $('left').onclick=()=>shift(-1);$('right').onclick=()=>shift(1);updateMoveLabels();
 $('check').onclick=()=>{solved=placed.every((id,i)=>id===i);if(solved) SilvanaProgress.finish(4);feedback=solved?'Das passt! Lies die drei Satzkarten noch einmal.':'Lies noch einmal nach: Was versucht der Händler zuerst? Deine Karten bleiben liegen. Du kannst sie umstellen.';renderBoard();};
 $('hint').onclick=()=>{feedback='Was macht der Händler, bevor die Fäden in seinen Haaren kleben?';renderBoard();};
-$('next').disabled=!solved;$('next').onclick=()=>go(3);$('back').onclick=()=>go(1);scheduleButtons();}
+$('next').disabled=!solved;$('next').onclick=()=>go(3);$('back').onclick=()=>go(1);}
 let ignoreTileClickUntil=0,activeDrag=null;
 function verticalBoard(){const chain=$('chain');return !!chain&&getComputedStyle(chain).flexDirection==='column';}
 function updateMoveLabels(){
@@ -157,9 +135,9 @@ window.addEventListener('blur',()=>finishTileDrag(false));
 
 $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
 ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',()=>{sizes();updateMoveLabels();}));sizes();
-window.addEventListener('resize',()=>{scheduleButtons();updateMoveLabels();});
+window.addEventListener('resize',()=>{updateMoveLabels();});
 window.addEventListener('pagehide',()=>{finishTileDrag(false);stopAudio();});
 
-if(document.fonts)document.fonts.ready.then(scheduleButtons);
-fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;if(SilvanaProgress.completed().includes(4) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}if (!SilvanaProgress.connect(phase, screen => {finishTileDrag(false); stopAudio(); phase = screen; if(screen === 3) {placed = [0,1,2]; solved = true;} render();})) render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
+
+fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;if(SilvanaProgress.completed().includes(4) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}if (!SilvanaProgress.connect(phase, screen => {finishTileDrag(false); stopAudio(); phase = screen === 0 ? 1 : screen; if(screen === 3) {placed = [0,1,2]; solved = true;} render();})) render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
 })();

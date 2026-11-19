@@ -12,6 +12,8 @@ function createStorySpeech(onChange) {
 
   function changeState(next) {
     state = next;
+    if (state === 'playing') document.addEventListener('visibilitychange', pauseWhenHidden);
+    else document.removeEventListener('visibilitychange', pauseWhenHidden);
     onChange();
   }
 
@@ -97,9 +99,57 @@ function createStorySpeech(onChange) {
     } else start(text);
   }
 
-  document.addEventListener('visibilitychange', () => {
+  function pauseWhenHidden() {
     if (document.hidden && state === 'playing') pause();
-  });
+  }
 
   return {available, get state() { return state; }, start, stop, toggle};
+}
+
+function mountStoryReading(container, text, {id = 'audioToggle', title = 'Vorlesegeschichte', label = 'Geschichte vorlesen', statusId = 'audioStatus', readingId, textId, readingLabel = 'Geschichte mitlesen', beforeToggle} = {}) {
+  const section = document.createElement('section');
+  section.className = 'story-end';
+  const heading = document.createElement('h2');
+  heading.textContent = title;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'primary';
+  button.id = id;
+  const status = document.createElement('p');
+  status.id = statusId;
+  status.setAttribute('role', 'status');
+  const details = document.createElement('details');
+  details.className = 'story-reading';
+  if (readingId) details.id = readingId;
+  const summary = document.createElement('summary');
+  summary.textContent = readingLabel;
+  const original = document.createElement('div');
+  original.className = 'original';
+  if (textId) original.id = textId;
+  original.textContent = text;
+  details.append(summary, original);
+  section.append(heading, button, status, details);
+  const actions = Array.from(container.children).find(el => el.matches('.actions, .controls, .scene-transition'));
+  container.insertBefore(section, actions || null);
+
+  const labels = {
+    playing: 'Pause',
+    paused: 'Weiterhören',
+    ended: 'Noch einmal hören',
+    error: 'Erneut vorlesen'
+  };
+  const speech = createStorySpeech(update);
+  function update() {
+    button.textContent = labels[speech.state] || label;
+    button.disabled = !speech.available;
+    status.textContent = !speech.available ? 'Die Vorlesestimme ist hier nicht verfügbar.'
+      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
+    status.hidden = !status.textContent;
+  }
+  button.onclick = () => {
+    beforeToggle?.();
+    speech.toggle(text);
+  };
+  update();
+  return speech;
 }

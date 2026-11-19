@@ -23,7 +23,7 @@ await p.locator('[data-person=mayor]').click();await settled();assert.equal(awai
 await p.locator('[data-person=king]').click();await settled();assert.equal(await p.locator('.parked').count(),2);assert.equal(await p.locator('.person-cross:visible').count(),0);assert.equal(await p.locator('#next').isEnabled(),true);
 assert.ok(await p.locator('.parked img').evaluateAll(es=>es.every(e=>getComputedStyle(e).transform.startsWith('matrix(-1,'))),'tail artwork must face right, text unchanged');assert.ok(await p.locator('.parked .text-bubble span').evaluateAll(es=>es.every(e=>getComputedStyle(e).transform==='none')));
 const tips=await p.locator('.person-slot').evaluateAll(es=>{const b=document.getElementById('villageBoard').getBoundingClientRect();return es.map(e=>{const r=e.getBoundingClientRect();return {x:(r.left+r.width*.92-b.left)/b.width,y:(r.top+r.height*.93-b.top)/b.height};});});assert.ok(tips[0].x>.32&&tips[0].x<.35);assert.ok(tips[1].x>.78&&tips[1].x<.83);assert.ok(tips.every(t=>t.y>.28&&t.y<.34));await layout('Beide abgelegt');await zoom(0);
-await p.locator('#back').click();await p.locator('#next').click();assert.equal(await p.locator('.parked').count(),2);assert.equal(await p.locator('.person-cross:visible').count(),0);await p.getByRole('button',{name:'Jetzt hören',exact:true}).click();assert.match(await p.evaluate(()=>window.__u.text),/Ich bezahle in Gold/);assert.doesNotMatch(await p.locator('.original').textContent(),/Am nächsten Morgen/);await layout('Hören');await p.locator('#next').click();const forward=p.locator('#scene7');
+await p.locator('#back').click();await p.locator('#next').click();assert.equal(await p.locator('.parked').count(),2);assert.equal(await p.locator('.person-cross:visible').count(),0);await p.locator('#next').click();await p.locator('#audioToggle').click();assert.match(await p.evaluate(()=>window.__u.text),/Ich bezahle in Gold/);assert.doesNotMatch(await p.locator('.original').textContent(),/Am nächsten Morgen/);await p.locator('#audioToggle').click();const forward=p.locator('#scene7');
 const video=p.locator('#completionVideo');
 await video.waitFor();
 assert.equal(await forward.isDisabled(),true);
@@ -41,6 +41,9 @@ await forward.focus();
 await p.keyboard.press('Enter');
 await p.waitForURL('**/szene-7/');
 await p.locator('h1').filter({hasText:'Der König im Wald'}).waitFor();
+assert.equal(await p.locator('#audioToggle').count(),0);
+await p.evaluate(()=>localStorage.setItem('silvana-completed-scenes-v1','[6,7]'));
+await p.goto(base+'szene-7/?abschnitt=abschluss');
 await p.locator('#audioToggle').click();
 assert.match(await p.evaluate(()=>window.__u.text),/^Am nächsten Morgen/);
 const forestText=await p.locator('.original').textContent();

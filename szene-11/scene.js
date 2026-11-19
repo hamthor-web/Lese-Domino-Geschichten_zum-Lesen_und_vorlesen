@@ -28,7 +28,7 @@
   const next = byId('nextScene');
   const transition = byId('transitionVideo');
   const fallback = byId('transitionFallback');
-  const speech = createStorySpeech(updateSpeech);
+  let speech;
   let index = 0;
   let finishCount = 0;
   let phase = 'reading';
@@ -227,7 +227,6 @@
     setTimeout(() => {
       if (phase !== 'finish') return;
       finishActions.hidden = false;
-      next.scrollIntoView({block: 'nearest'});
       playTransition();
     }, 3000);
   }
@@ -280,25 +279,14 @@
     };
   }
 
-  function updateSpeech() {
-    const labels = {playing: 'Pause', paused: 'Weiterhören', ended: 'Noch einmal hören', error: 'Erneut vorlesen'};
-    byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
-    byId('listen').disabled = !speech.available;
-    const status = byId('speechStatus');
-    status.textContent = !speech.available ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
-      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
-    status.hidden = !status.textContent;
-  }
 
   fall.onended = showPuzzle;
   fall.onerror = showPuzzle;
   playFall.onclick = playDrop;
   transition.onended = () => readyForNextScene();
   transition.onerror = () => readyForNextScene(true);
-  byId('listen').onclick = () => speech.toggle(original);
-  SilvanaProgress.addReading(byId('listen'), original);
+  speech = mountStoryReading(byId('storyEnd'), original, {id: 'listen', statusId: 'speechStatus'});
   window.addEventListener('pagehide', () => speech.stop());
-  updateSpeech();
   byId('taskReading').append(...Array.from(byId('readingText').children, p => p.cloneNode(true)));
 
   byId('start').onclick = () => {
@@ -333,6 +321,7 @@
     update();
   }
 
+  byId('back').onclick = () => location.assign(SilvanaProgress.previousScene(10));
   SilvanaProgress.connect('reading', screen => {
     speech.stop();
     fall.pause();
@@ -346,5 +335,5 @@
     index = Number(screen.split(':')[1]);
     if (screen.startsWith('fall:')) startDrop();
     else { phase = 'fall'; showPuzzle(); }
-  });
+  }, 11);
 })();

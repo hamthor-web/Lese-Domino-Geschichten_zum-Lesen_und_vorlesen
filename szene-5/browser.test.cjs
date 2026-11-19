@@ -6,7 +6,7 @@ const live=process.env.SILVANA_BASE_URL,base=(live||'http://127.0.0.1:8767/').re
 const server=live?null:spawn('python3',['-m','http.server','8767','--bind','127.0.0.1'],{stdio:'ignore'});
 let browser;const errors=[];
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-5/?test='+Date.now());if(r.ok&&(await r.text()).includes('scene.js?v=3'))break;}catch{}if(i===179)throw Error('Szene 5 fehlt');await new Promise(r=>setTimeout(r,500));}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-5/?test='+Date.now());if(r.ok&&(await r.text()).includes('scene.js?v=abschluss1'))break;}catch{}if(i===179)throw Error('Szene 5 fehlt');await new Promise(r=>setTimeout(r,500));}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true});
  await context.addInitScript(()=>{
@@ -15,7 +15,7 @@ async function run(){
  Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:class{constructor(text){this.text=text;}}});
  });
  const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
- await p.goto(base+'szene-5/');await p.locator('#next').waitFor();
+ await p.goto(base+'szene-5/');await p.evaluate(()=>localStorage.setItem('silvana-completed-scenes-v1','[4]'));await p.locator('#next').waitFor();
  await p.waitForFunction(()=>{const i=document.querySelector('.king-art img');return i&&i.complete&&i.naturalWidth>0;});
  assert.match(await p.locator('.reading').innerText(),/für sein Schloss kaufen/);
  assert.equal(await p.locator('#audioToggle').count(),0);assert.equal(await p.locator('.king-art img').getAttribute('src'),'assets/koenig-spinnweben.webp');
@@ -55,10 +55,7 @@ async function run(){
  assert.equal(await p.locator('#taskSentence').innerText(),'Der König wollte Netze für zuhause kaufen.');await layout('Gelöst');
  await p.locator('#back').click();await p.locator('#next').click();assert.equal(await p.locator('#answerWord').innerText(),'kaufen');
  await p.locator('#next').click();
- for(const word of ['Pause','Weiterhören','Pause']){await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),new RegExp(word));}
- assert.match(await p.evaluate(()=>window.__u.text),/Sechs Pferde begleiteten ihn, zwölf Soldaten und drei Diener/);
- await p.evaluate(()=>window.__u.onend());await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),/Pause/);await layout('Zuhören');
- const before=await p.evaluate(()=>window.__speech.filter(x=>x==='cancel').length);await p.locator('#next').click();assert.ok(await p.evaluate(()=>window.__speech.filter(x=>x==='cancel').length)>before);const video=p.locator('#completionVideo'),forward=p.locator('#scene6');
+ const video=p.locator('#completionVideo'),forward=p.locator('#scene6');
  await video.waitFor();
  assert.equal(await forward.isDisabled(),true);
  await p.waitForFunction(()=>{const video=document.querySelector('#completionVideo');return !video.paused&&video.currentTime>0;});
@@ -66,6 +63,9 @@ async function run(){
  await p.waitForFunction(()=>document.querySelector('#completionVideo').ended&&!document.querySelector('#scene6').disabled);
  assert.equal(await forward.getAttribute('aria-label'),'Weiter zu Im Dorf');
  assert.equal(await p.locator('#completionVideoFallback').isVisible(),false);
+ for(const word of ['Pause','Weiterhören','Pause']){await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),new RegExp(word));}
+ assert.match(await p.locator('.story-reading .original').textContent(),/Sechs Pferde begleiteten ihn, zwölf Soldaten und drei Diener/);
+ await p.evaluate(()=>{for(let i=0;i<100;i++) window.__u.onend();});await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),/Pause/);await layout('Zuhören');
  await layout('Abschluss');
  await p.locator('#again').click();await p.locator('#next').click();assert.equal(await p.locator('#wrongWord').isVisible(),true);assert.equal(await p.locator('#next').isDisabled(),true);
  await p.locator('#back').click();await p.locator('#back').click();await p.waitForURL('**/szene-4/?abschnitt=abschluss');await p.locator('#scene5').waitFor();await p.locator('#back').click();assert.equal(await p.locator('#check').isVisible(),false);assert.equal(await p.locator('#next').isEnabled(),true);await p.locator('#next').click();await p.locator('#scene5').click();await p.waitForURL('**/szene-5/');
@@ -73,7 +73,7 @@ async function run(){
  await p.waitForFunction(()=>document.querySelector('#completionVideo')?.ended);
  await forward.focus();await p.keyboard.press('Enter');await p.waitForURL('**/szene-6/');
  await p.locator('h1').filter({hasText:'Im Dorf'}).waitFor();
- await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu5').waitFor({state:'visible'});assert.deepEqual(await p.locator('#sceneMenu3,#sceneMenu4,#sceneMenu5').allTextContents(),['Der König']);
+ await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu5').waitFor({state:'visible'});assert.deepEqual(await p.locator('#sceneMenu3,#sceneMenu4,#sceneMenu5').allTextContents(),['Der Händler','Der König']);
  assert.deepEqual(errors,[]);console.log('PASS König: Alle sieben Wörter einheitlich und anklickbar, falsche Wortwahl ohne Freigabe; Illustration, Pergament-Kästchen, Fehlerwort/Lücke, zwei falsche Wörter, richtiges Wort, Rücknavigation, Wiederholung, Kutschen-Video mit automatischer Wiedergabe und Freigabe nach Ende, Übergänge und Menü; '+checks+' Layoutprüfungen. Sprachsteuerung simuliert.');await context.close();
 }
 run().then(async()=>{if(browser)await browser.close();if(server)server.kill();}).catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exitCode=1;});

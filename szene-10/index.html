@@ -3,9 +3,9 @@
 <script src="../shared/progress.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Silvana – 1. Erkenntnis</title>
 <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
-<link rel="stylesheet" href="scene.css?v=1"><script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js?v=fortschritt1" defer></script>
-<link rel="stylesheet" href="../shared/scene-menu.css?v=3">
-<script src="../shared/scene-menu.js?v=4" defer></script>
+<link rel="stylesheet" href="scene.css?v=1"><script src="../shared/story-speech.js?v=2" defer></script><script src="scene.js?v=abschluss1" defer></script>
+<link rel="stylesheet" href="../shared/scene-menu.css?v=4">
+<script src="../shared/scene-menu.js?v=abschluss1" defer></script>
 </head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
 <button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
@@ -22,7 +22,7 @@
       <p>Aus der Nähe sah der König in den Tautropfen den Wald, den Himmel und sogar seine Krone.</p>
       <p>Ein Tropfen fiel herunter. Der König sagte: „Es geht kaputt.“ Elin antwortete: „Nein.“</p>
     </div>
-    <div class="elin-navigation"><button class="primary" id="start">Weiter zur Aufgabe</button></div>
+    <div class="elin-navigation reading-navigation"><button class="primary" id="start">Weiter zur Aufgabe</button><button class="secondary" id="back" type="button">← Zurück</button></div>
   </section>
   <section id="activity" hidden>
     <h1 id="activityTitle" tabindex="-1">Was siehst du in den Tautropfen?</h1>
@@ -45,8 +45,7 @@
       <div class="reading" id="taskReading" hidden></div>
     </div>
     <div id="completion" hidden>
-      <div class="elin-navigation"><button class="primary" id="listen">Geschichte vorlesen</button></div>
-      <p id="speechStatus" role="status" hidden></p>
+      <div id="storyEnd"></div>
       <button class="elin-transition" id="nextScene" type="button" disabled aria-label="Würstchen-Animation läuft">
         <video id="transitionVideo" src="assets/weiter-zu-szene-11.mp4" width="356" height="358" muted playsinline preload="none" aria-hidden="true"></video>
         <span id="transitionFallback" hidden>Weiter</span>

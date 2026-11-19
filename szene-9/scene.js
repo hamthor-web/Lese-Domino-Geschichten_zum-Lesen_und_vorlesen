@@ -8,7 +8,6 @@
     ['Etwas an Elins Stimme', 'machte ihn nachdenklich.']
   ];
   const original = [
-    'Der König schnaubte. Er drehte sich um und rief nach seinen Pferden. Einer der Diener ließ vor Schreck eine Samtkiste fallen. Der Deckel landete im Schlamm. Sie machten sich auf, zurückzureiten.',
     'Am Rand des Weges stand ein Mädchen. Elin. Sie hatte wirres Haar, Sommersprossen und einen grünen Fleck auf dem Knie. Wahrscheinlich Gras. Vielleicht auch Suppe vom Vorabend.',
     '„Ihr habt es gesehen“, murmelte sie ihnen leise hinterher. „Aber Ihr habt nicht hingeschaut.“',
     'Der König blieb stehen.',
@@ -16,7 +15,7 @@
   ].join('\n\n');
   const cards = [[], []];
   let selection = null;
-  const speech = createStorySpeech(updateSpeech);
+  let speech;
 
   function show(section) {
     SilvanaProgress.checkpoint(section);
@@ -98,21 +97,6 @@
     byId('showText').textContent = open ? 'Lesetext schließen' : 'Zum Lesetext';
   }
 
-  function updateSpeech() {
-    const labels = {
-      playing: 'Pause',
-      paused: 'Weiterhören',
-      ended: 'Noch einmal hören',
-      error: 'Erneut vorlesen'
-    };
-    byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
-    byId('listen').disabled = !speech.available;
-    const status = byId('speechStatus');
-    status.textContent = !speech.available
-      ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
-      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
-    status.hidden = !status.textContent;
-  }
 
   for (const [half, order] of [[0, [0, 1, 2]], [1, [1, 2, 0]]]) {
     const column = byId(half === 0 ? 'starts' : 'ends');
@@ -190,15 +174,13 @@
   };
   byId('taskReading').append(...Array.from(byId('readingText').children, paragraph => paragraph.cloneNode(true)));
   byId('showText').onclick = () => setReadingHelp(byId('taskReading').hidden);
-  byId('listen').onclick = () => speech.toggle(original);
-  SilvanaProgress.addReading(byId('listen'), original);
   byId('retry').onclick = () => {
     speech.stop();
     resetActivity();
     show('activity');
   };
+  speech = mountStoryReading(byId('storyEnd'), original, {id: 'listen', statusId: 'speechStatus'});
   window.addEventListener('pagehide', () => speech.stop());
-  updateSpeech();
 
   const settings = byId('settings');
   byId('settingsToggle').onclick = () => {
@@ -215,6 +197,7 @@
     update();
   }
 
+  byId('back').onclick = () => location.assign(SilvanaProgress.previousScene(8));
   SilvanaProgress.connect('reading', screen => {
     speech.stop();
     if (screen === 'reading') { video.pause(); show('reading'); return; }
@@ -226,5 +209,5 @@
         selectCard(cards[1][i]);
       }
     } else if (!byId('repeat').hidden) resetActivity();
-  });
+  }, 9);
 })();

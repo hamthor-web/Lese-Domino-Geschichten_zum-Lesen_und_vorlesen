@@ -22,7 +22,12 @@
       link.id = 'sceneMenu' + number;
       link.href = number === 1 ? '../vorschau-einfuehrung/' : '../szene-' + number + '/';
       link.textContent = titles[number - 1];
-      if (number === current) link.setAttribute('aria-current', 'page');
+      if (number === current) {
+        link.setAttribute('aria-current', 'page');
+        link.addEventListener('click', () => {
+          if (link.href === location.href) history.replaceState(null, '');
+        });
+      }
       nav.append(link);
     }
   }
@@ -32,15 +37,4 @@
   addEventListener('pageshow', updateMenu);
   addEventListener('silvana-progress', updateMenu);
   addEventListener('storage', updateMenu);
-
-  const markReading = () => {
-    document.querySelectorAll('summary').forEach(summary => {
-      if (!['Originaltext zum Mitlesen', 'Geschichte mitlesen'].includes(summary.textContent.trim())) return;
-      if (summary.parentElement.classList.contains('story-reading')) return;
-      summary.textContent = 'Geschichte mitlesen';
-      summary.parentElement.classList.add('story-reading');
-    });
-  };
-  markReading();
-  new MutationObserver(markReading).observe(document.querySelector('main'), {childList: true, subtree: true});
 })();

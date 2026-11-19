@@ -49,9 +49,17 @@ window.SilvanaProgress = (() => {
     activeScreen = screen;
   }
 
-  function connect(initial, restore) {
+  function previousScene(number) {
+    const path = number === 1 ? 'vorschau-einfuehrung' : 'szene-' + number;
+    const ending = completed().includes(number) ? '?abschnitt=abschluss' : '';
+    return '../' + path + '/' + ending;
+  }
+
+  function connect(initial, restore, number, ending = 'finish') {
     restoreScreen = restore;
-    const saved = read();
+    const requestedEnding = number && completed().includes(number)
+      && new URLSearchParams(location.search).get('abschnitt') === 'abschluss';
+    const saved = read() ?? (requestedEnding ? ending : undefined);
     checkpoint(saved ?? initial);
     if (saved === undefined || saved === initial) return false;
     show(saved);
@@ -70,17 +78,5 @@ window.SilvanaProgress = (() => {
     if (event.persisted && resetVersion() !== version) location.reload();
   });
 
-  function addReading(button, text) {
-    const details = document.createElement('details');
-    details.className = 'story-reading';
-    const summary = document.createElement('summary');
-    summary.textContent = 'Geschichte mitlesen';
-    const content = document.createElement('div');
-    content.className = 'original';
-    content.textContent = text;
-    details.append(summary, content);
-    button.parentElement.after(details);
-  }
-
-  return {completed, finish, reset, checkpoint, connect, addReading};
+  return {completed, finish, reset, checkpoint, connect, previousScene};
 })();

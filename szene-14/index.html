@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Silvana – 2. Erkenntnis</title>
   <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
-  <link rel="stylesheet" href="../shared/scene-menu.css?v=3">
+  <link rel="stylesheet" href="../shared/scene-menu.css?v=4">
   <link rel="stylesheet" href="scene.css?v=4">
-  <script src="../shared/story-speech.js?v=1" defer></script>
-  <script src="../shared/scene-menu.js?v=4" defer></script>
-  <script src="scene.js?v=fortschritt2" defer></script>
+  <script src="../shared/story-speech.js?v=2" defer></script>
+  <script src="../shared/scene-menu.js?v=abschluss1" defer></script>
+  <script src="scene.js?v=abschluss1" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -21,7 +21,7 @@
     <label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
     <label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label>
   </section>
-  <main>
+  <main id="main">
     <details class="scene-menu" data-scene="14"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Abgeschlossene Szenen"><p class="note">Hier erscheinen abgeschlossene Szenen.</p></nav></details>
     <div class="chapterline"><span class="chapter-count">Szene 14</span></div>
     <div class="panel">
@@ -32,11 +32,10 @@
           <p>In der Mitte saß eine kleine braune Spinne und wartete geduldig auf Beute.</p>
           <p>„Noch nichts“, sagte der König.</p>
         </div>
-        <div class="actions-final">
+        <div class="actions-final reading-navigation">
           <button class="primary" id="start">Weiter</button>
-          <button class="secondary" id="listenLast" hidden>Szene vorlesen</button>
+          <button class="secondary" id="back" type="button">← Zurück</button>
         </div>
-        <p id="readingSpeechStatus" role="status" hidden></p>
       </section>
       <section id="activity" hidden>
         <p id="instructions" tabindex="-1">Tippe ein Teil an. Drehe es, bis es passt. Ziehe es auf seinen Platz oder tippe den Platz an.</p>
@@ -62,14 +61,14 @@
               <button class="secondary" data-correct>Man muss genau hinschauen.</button>
             </div>
             <div id="ending" hidden>
-              <div class="actions-final">
-                <button class="primary" id="listenFull">Ganze Geschichte vorlesen</button>
-                <button class="secondary" id="retry">Aufgabe wiederholen</button>
-              </div>
-              <details class="story-reading" id="readFull" hidden><summary>Geschichte mitlesen</summary><div class="original" id="fullStory"></div></details>
-              <p id="speechStatus" role="status" hidden></p>
               <h2 id="endingTitle" tabindex="-1">Du hast die Geschichte zu Ende gespielt!</h2>
               <p class="credit">Dieser Gedanke stammt ursprünglich aus dem Buch „Der kleine Prinz“.</p>
+              <div id="lastReading"></div>
+              <div id="fullReading"></div>
+              <p id="speechStatus" role="status" hidden></p>
+              <div class="actions-final">
+                <button class="secondary" id="retry">Aufgabe wiederholen</button>
+              </div>
             </div>
           </div>
         </div>

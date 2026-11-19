@@ -51,32 +51,24 @@
 .picture-zoom button{font:inherit;font-size:calc(20px * var(--text));min-height:52px;padding:10px 18px;border:2px solid #8a649f;border-radius:12px;background:#f5edf8;color:#493e58;cursor:pointer}
 .picture-zoom img{display:block;width:100%;height:auto;max-height:calc(94dvh - 110px);object-fit:contain}
 </style>
-<link rel="stylesheet" href="../shared/scene-menu.css?v=3">
-<script src="../shared/scene-menu.js?v=4" defer></script>
+<link rel="stylesheet" href="../shared/scene-menu.css?v=4">
+<script src="../shared/scene-menu.js?v=abschluss1" defer></script>
 </head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden><label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label><label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
-<main class="s2" id="main"><details class="scene-menu" id="sceneMenu" data-scene="2"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Abgeschlossene Szenen"><p class="note">Hier erscheinen abgeschlossene Szenen.</p></nav></details><div class="chapterline"><span class="chapter">Die vier Straßen</span><span class="chapter-count">Szene 2 · Vorstellung</span></div><div class="crumbs" id="crumbs"></div><div id="game"></div><footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
+<main class="s2" id="main" tabindex="-1"><details class="scene-menu" id="sceneMenu" data-scene="2"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Abgeschlossene Szenen"><p class="note">Hier erscheinen abgeschlossene Szenen.</p></nav></details><div class="chapterline"><span class="chapter">Die vier Straßen</span><span class="chapter-count">Szene 2 · Vorstellung</span></div><div class="crumbs" id="crumbs"></div><div id="game"></div><footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
 <dialog class="picture-zoom" id="pictureZoom" aria-labelledby="zoomTitle"><header><h2 id="zoomTitle"></h2><button type="button" id="closeZoom" autofocus>✕ Schließen</button></header><img id="zoomImage" alt=""></dialog>
-<script src="../shared/story-speech.js?v=1"></script>
+<script src="../shared/story-speech.js?v=2"></script>
 <script>
 'use strict';
 const original="Vier Straßen voller Schlaglöcher hatte Silvana, und wenn die Kutschen darüber holperten, wurden die Einheimischen aus ihrem ohnehin viel zu leichten Schlaf geweckt. Zum Glück kamen nicht allzu viele vorbei.\nWenn es regnete, roch es auf dem Marktplatz nach nasser Wolle, Pferdemist und dem alten Fett aus der Bäckerei. Und ein bisschen nach alten Gewohnheiten, die sich schon viel zu lange in den Ritzen der Stadt eingenistet hatten.\nViel hatte das Land nicht zu bieten. Reich war Silvana trotzdem.";
 const simple="In Silvana gab es nur vier Straßen mit vielen Löchern. Wenn Kutschen darüber holperten, wachten die Leute auf.\nWenn es regnete, roch der Marktplatz nach nasser Wolle, Pferdemist und altem Fett.\nSilvana hatte nicht viel, aber das Land war trotzdem reich.";
-const $=id=>document.getElementById(id);let phase=0,boxDone=false,pictureDone=false,mistakes=0;
+const $=id=>document.getElementById(id);let phase=1,pictureDone=false,mistakes=0;
 function sizes(){document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);$('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';}
 $('settingsToggle').onclick=()=>{let isOpen=$('settings').hidden;$('settings').hidden=!isOpen;$('settingsToggle').setAttribute('aria-expanded',String(isOpen));};['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
-const audio = createStorySpeech(updateAudio);
-function stop(){audio.stop()}
-function updateAudio(){
- const button=$('audio');
- if(!button)return;
- button.textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
- notice(!audio.available?'Die Vorlesestimme ist in diesem Browser nicht verfügbar.':audio.state==='error'?'Die Vorlesestimme konnte nicht vorlesen. Du kannst den Originaltext aufklappen.':'');
-}
-
-function speak(){audio.toggle(original)}
-function go(n){clearPhase();stop();phase=n;render();scrollTo(0,0)}
+let audio;
+function stop(){audio?.stop();}
+function go(n){clearPhase();stop();phase=n;render();$('main').focus({preventScroll:true});scrollTo(0,0)}
 function notice(x){if($('feedback'))$('feedback').textContent=x}
 function city(rain){let drops='';if(rain){for(let i=0;i<24;i++){let x=25+i*23,y=75+(i*47)%125;drops+='<path d="M'+x+' '+y+'l-7 14" stroke="#407b9b" stroke-width="4"/>'}}return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Stadt '+(rain?'bei Regen':'bei Sonnenschein')+'"><rect width="600" height="400" fill="'+(rain?'#bdcddd':'#a8ddf6')+'"/>'+(rain?'<g fill="#8fa3b4"><ellipse cx="140" cy="70" rx="125" ry="45"/><ellipse cx="350" cy="61" rx="155" ry="46"/><ellipse cx="520" cy="90" rx="110" ry="42"/></g>':'<circle cx="510" cy="74" r="48" fill="#ffdf78"/><g fill="#fff"><ellipse cx="155" cy="74" rx="95" ry="26"/></g>')+'<path d="M0 280Q180 240 320 280T600 280V400H0" fill="'+(rain?'#9faea3':'#bad68c')+'"/><g stroke="#877384" stroke-width="4"><path d="M32 325V180h142v145Z" fill="#f1d6b4"/><path d="m20 182 81-80 87 80Z" fill="#ad8298"/><path d="M196 325V163h142v162Z" fill="#edd0b8"/><path d="m183 164 84-82 84 82Z" fill="#9c8cad"/><path d="M364 326V185h124v141Z" fill="#f0dfbf"/><path d="m350 186 76-73 76 73Z" fill="#ba8981"/><path d="M502 329V215h89v114Z" fill="#e0c0a4"/><path d="m492 215 55-62 54 62Z" fill="#a88aa9"/></g><g fill="#a6d5e2" stroke="#776d83" stroke-width="4"><rect x="58" y="208" width="38" height="45"/><rect x="119" y="208" width="35" height="45"/><rect x="226" y="195" width="37" height="44"/><rect x="279" y="195" width="38" height="44"/><rect x="392" y="216" width="31" height="42"/><rect x="447" y="216" width="31" height="42"/><rect x="527" y="240" width="33" height="37"/></g><g fill="#84677a"><rect x="90" y="270" width="38" height="55"/><rect x="249" y="256" width="39" height="69"/><rect x="411" y="277" width="38" height="49"/><rect x="531" y="285" width="34" height="44"/></g><path d="M0 353H600V400H0Z" fill="'+(rain?'#8999ab':'#b7a99a')+'"/><path d="M0 364Q160 326 300 360T600 357" stroke="#eee5d2" stroke-width="10" fill="none"/>'+drops+'</svg>'}
 const boxAssets={
@@ -107,7 +99,7 @@ async function openCrate(button){
  image.onload=()=>later(finish,asset.duration);
  function finish(){
   if(finished)return;finished=true;boxOpening=false;
-  if(word==='Marktplatz'){boxDone=true;pictureDone=false;button.classList.add('correct');go(3)}
+  if(word==='Marktplatz'){pictureDone=false;button.classList.add('correct');go(3)}
   else{mistakes++;notice(mistakes===1?'Schau noch einmal im Lesetext nach. Welche Kiste passt?':'Vergleiche die Wörter auf den Kisten mit dem Lesetext.');
    image.src=asset.still;document.querySelectorAll('.crate-preview').forEach(b=>b.disabled=false)}
  }
@@ -166,40 +158,56 @@ function revealScrollPictures(){
  document.querySelectorAll('.magnify').forEach(b=>b.onclick=()=>openPicture(b.dataset.zoom,b));
  document.querySelectorAll('.weather-choice').forEach(b=>b.onclick=()=>{
   if(weatherBusy||pictureDone)return;
-  if(b.dataset.answer==='rain'){pictureDone=true;SilvanaProgress.finish(2);SilvanaProgress.checkpoint('solved');b.classList.add('correct');document.querySelectorAll('.weather-choice').forEach(x=>x.disabled=true);notice('Richtig! In der Geschichte hat es geregnet.');showAnimatedNext()}
+  if(b.dataset.answer==='rain'){pictureDone=true;SilvanaProgress.finish(2);go(4)}
   else retrySun(b);
  });
 }
 function showAnimatedNext(){
- const button=$('next'),video=$('nextAnimation'),token=phaseToken;
- $('weatherQuestion').hidden=true;$('adventureNext').hidden=false;button.hidden=false;button.disabled=true;
- button.scrollIntoView({block:'center',behavior:'instant'});
- video.onended=()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter zu Die Spinnen im Wald');};
- video.onerror=()=>{if(token!==phaseToken)return;video.hidden=true;$('nextFallback').hidden=false;button.disabled=false;button.dataset.fallback='true';};
- button.onclick=()=>{
-  if(video.ended||button.dataset.fallback==='true'){location.href='../szene-3/';return}
-  button.disabled=true;video.play().catch(()=>{if(token===phaseToken)button.disabled=false});
- };
- video.play().catch(()=>{if(token!==phaseToken)return;button.disabled=false;button.setAttribute('aria-label','Weiter-Animation starten');notice('Tippe auf die Figur, um die Animation zu starten.');});
+ const button=$('scene3'),video=$('nextAnimation'),fallback=$('nextFallback'),token=phaseToken;
+ function ready(failed=false){
+  if(token!==phaseToken)return;
+  video.hidden=failed;
+  fallback.hidden=!failed;
+  fallback.textContent='Weiter';
+  button.disabled=false;
+  button.setAttribute('aria-label','Weiter zu Die Spinnen im Wald');
+  button.onclick=()=>location.assign('../szene-3/');
+ }
+ async function play(retry=false){
+  button.disabled=true;
+  fallback.hidden=true;
+  button.setAttribute('aria-label','Würstchen-Animation läuft');
+  try{await video.play();}
+  catch(error){
+   if(token!==phaseToken)return;
+   if(retry||error.name!=='NotAllowedError'){ready(true);return;}
+   fallback.textContent='▶ Abspielen';
+   fallback.hidden=false;
+   button.disabled=false;
+   button.setAttribute('aria-label','Würstchen-Animation abspielen');
+   button.onclick=()=>play(true);
+  }
+ }
+ video.onended=()=>ready();
+ video.onerror=()=>ready(true);
+ play();
 }
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 
-function render(){SilvanaProgress.checkpoint((phase===3&&pictureDone)?'solved':phase);const labels=['Zuhören','Selbst lesen','Kiste öffnen','Bild wählen',''];$('crumbs').hidden=phase===4;$('crumbs').textContent=phase===4?'':'Schritt '+(phase+1)+' von 5 · '+labels[phase];let out='';
-if(phase===0)out=panel('<span class="eyebrow">Die Geschichte geht weiter</span><h1>Silvana und die vier Straßen</h1><p>Höre die Geschichte an.</p><div class="controls"><button class="primary" id="audio">▶ Geschichte anhören</button></div><p class="feedback" id="feedback" aria-live="polite"></p><details><summary>Originaltext zum Mitlesen</summary><p class="original">'+original+'</p></details><div class="controls scene-navigation"><button class="primary" id="next">Weiter</button></div>');
-else if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls scene-navigation"><button class="primary" id="next">Weiter</button><button class="secondary" id="back">← Zurück</button></div>');
+function render(){SilvanaProgress.checkpoint(phase);const labels=['','Selbst lesen','Kiste öffnen','Bild wählen',''];$('crumbs').hidden=phase===4;$('crumbs').textContent=phase===4?'':'Schritt '+phase+' von 3 · '+labels[phase];let out='';
+if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls scene-navigation"><button class="primary" id="next">Weiter</button><button class="secondary" id="back">← Zurück</button></div>');
 else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Stoff','Wege','Marktplatz'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
-else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<div class="weather-prompt"><p class="roll-question" id="weatherQuestion">Von welchem Wetter war in der Geschichte die Rede?</p><p class="adventure-next" id="adventureNext" hidden>Jetzt geht das Abenteuer weiter.</p><button class="animated-next" id="next" hidden disabled aria-label="Weiter-Animation läuft"><video id="nextAnimation" src="../assets/weiter-einmalig.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="nextFallback" class="video-fallback" hidden>Weiter</span></button></div>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
-else out=panel('<h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><div class="adventure-link"><p>Jetzt geht das Abenteuer weiter.</p><div class="scene-navigation controls"><button class="primary" id="scene3">Weiter</button><button class="secondary" id="back">← Zurück</button></div></div></div>');
+else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<div class="weather-prompt"><p class="roll-question" id="weatherQuestion">Von welchem Wetter war in der Geschichte die Rede?</p></div>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
+else out=panel('<h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><div class="adventure-link"><div class="scene-navigation controls"><p class="adventure-next" id="adventureNext">Jetzt geht das Abenteuer weiter.</p><button class="animated-next" id="scene3" disabled aria-label="Weiter-Animation läuft"><video id="nextAnimation" src="../assets/weiter-einmalig.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="nextFallback" class="video-fallback" hidden>Weiter</span></button><button class="secondary" id="back">← Zurück</button></div></div></div>');
 $('game').innerHTML=out;
-if(phase===0){$('audio').onclick=speak;updateAudio();$('next').onclick=()=>go(1)}
-if(phase===1){$('back').onclick=()=>go(0);$('next').onclick=()=>go(2)}
+if(phase===1){$('back').onclick=()=>location.assign(SilvanaProgress.previousScene(1));$('next').onclick=()=>go(2)}
 if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
-if(phase===3){$('back').onclick=()=>go(2);startRolls();if(pictureDone) showAnimatedNext();}
-if(phase===4){$('back').onclick=()=>go(3);$('scene3').onclick=()=>location.href='../szene-3/';$('again').onclick=()=>{mistakes=0;boxDone=false;pictureDone=false;go(0)}}
+if(phase===3){$('back').onclick=()=>go(2);pictureDone=false;startRolls();}
+if(phase===4){audio=mountStoryReading($('game').firstElementChild,original,{id:'audio'});showAnimatedNext();$('back').onclick=()=>go(3);$('again').onclick=()=>{mistakes=0;pictureDone=false;go(1)}}
 }
 window.addEventListener('pagehide',stop);
 if(SilvanaProgress.completed().includes(2)){
  if(new URLSearchParams(location.search).get('abschnitt')==='abschluss')phase=4;
 }
-if (!SilvanaProgress.connect(phase, screen => {clearPhase(); stop(); phase = screen === 'solved' ? 3 : screen; pictureDone = screen === 'solved'; render();})) render();
+if (!SilvanaProgress.connect(phase, screen => {clearPhase(); stop(); phase = screen === 'solved' ? 4 : screen === 0 ? 1 : screen; render();})) render();
 </script></body></html>

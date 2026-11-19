@@ -27,20 +27,106 @@
   white-space: pre-wrap;
   line-height: 1.55;
 }
-#audioToggle, #audio, #listen, #listenLast {
-  inline-size: min(100%, calc(17rem * var(--text, 1)));
-  min-inline-size: min(100%, calc(17rem * var(--text, 1)));
+
+.story-end {
+  margin-block: 1.5rem;
+  padding: clamp(.75rem, 2vw, 1.25rem);
+  border: 2px solid #e4d4ec;
+  border-radius: 1rem;
+  background: #fffaf1;
+  color: #493e58;
+  text-align: left;
 }
-#listenFull {
-  inline-size: min(100%, calc(21rem * var(--text, 1)));
-  min-inline-size: min(100%, calc(21rem * var(--text, 1)));
+.story-end h2 { margin: 0 0 .75rem; }
+.story-end .story-reading { margin-block: .75rem 0; }
+.story-end .original { margin-block-start: .65rem; }
+
+main {
+  --action-width: min(16rem, 100%);
+  --action-height: calc(3rem + 1.5rem * var(--text, 1));
+  --transition-size: min(12rem, 40vmin);
+}
+#main :is(button.primary, button.secondary, button.step, button:has(> video)):not(:is(#back, #again, #retry)) {
+  box-sizing: border-box;
+  inline-size: var(--action-width);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  block-size: var(--action-height);
+  min-block-size: var(--action-height);
+  flex: 0 0 auto !important;
+  padding: .3rem .65rem;
+  font-size: calc(1rem * var(--text, 1));
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+main :is(.actions, .controls, .elin-navigation, .home-actions, .actions-final, .move-controls, .steps) {
+  flex-wrap: wrap;
+}
+main button:focus-visible, .story-reading summary:focus-visible {
+  outline: 3px solid #674483;
+  outline-offset: 3px;
 }
 
-.home-actions:has(> #listen),
-.actions-final:has(> #listenFull) {
-  width: min(100%, calc(21rem * var(--text, 1)));
+/* The illustration keeps its own aspect ratio above the navigation control. */
+#main button:has(> video) {
+  position: relative;
+  margin-block-start: calc(var(--transition-size) + .75rem);
+  background: #eee3f5;
+  color: #493e58;
+  border: 2px solid #bca6cf;
+  border-radius: .85rem;
+  text-decoration: none;
 }
-.home-actions:has(> #listen) > button,
-.actions-final:has(> #listenFull) > button {
+#main button:has(> video) > video {
+  position: absolute;
+  inset: auto auto calc(100% + .75rem) 50%;
+  transform: translateX(-50%);
+  width: var(--transition-size);
+  height: auto;
+  aspect-ratio: auto;
+  max-width: 100%;
+  pointer-events: none;
+}
+#main button:has(> video) > span { padding: 0; }
+#main button:has(> video):not(:has(> span:not([hidden])))::after { content: 'Weiter'; }
+#main button:has(> video):disabled { opacity: .75; }
+#main .actions-final button:is(.primary, .secondary):not(#retry),
+#main .home-actions button:is(.primary, .secondary):not(#retry) {
+  background: #eee3f5;
+  border: 2px solid #bca6cf;
+  border-radius: .85rem;
+  border-image: none;
+}
+
+#main :is(h1, h2, .eyebrow, .original) { overflow-wrap: anywhere; }
+
+#main .answer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   width: 100%;
+}
+
+#main .story-end > button {
+  display: block;
+  margin-inline: auto;
+}
+#main :is(h1, h2)[tabindex="-1"]:focus { outline: none; }
+
+#main .reading-navigation {
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+  width: 100%;
+  margin-block-start: 1rem;
+}
+#main .reading-navigation > #back { width: auto; }
+@media (max-width: 650px) {
+  #main .reading-navigation {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

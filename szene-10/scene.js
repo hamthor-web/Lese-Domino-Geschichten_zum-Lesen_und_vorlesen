@@ -17,7 +17,7 @@
   const next = byId('nextScene');
   const video = byId('transitionVideo');
   const fallback = byId('transitionFallback');
-  const speech = createStorySpeech(updateSpeech);
+  let speech;
   let selected = null;
   let drag = null;
   let ignoreClick = false;
@@ -177,15 +177,6 @@
     next.disabled = false;
   }
 
-  function updateSpeech() {
-    const labels = {playing: 'Pause', paused: 'Weiterhören', ended: 'Noch einmal hören', error: 'Erneut vorlesen'};
-    byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
-    byId('listen').disabled = !speech.available;
-    const status = byId('speechStatus');
-    status.textContent = !speech.available ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
-      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
-    status.hidden = !status.textContent;
-  }
 
   function setReadingHelp(open) {
     byId('taskReading').hidden = !open;
@@ -195,10 +186,8 @@
 
   video.addEventListener('ended', () => readyForNextScene());
   video.addEventListener('error', () => readyForNextScene(true));
-  byId('listen').onclick = () => speech.toggle(original);
-  SilvanaProgress.addReading(byId('listen'), original);
+  speech = mountStoryReading(byId('storyEnd'), original, {id: 'listen', statusId: 'speechStatus'});
   window.addEventListener('pagehide', () => speech.stop());
-  updateSpeech();
   byId('start').onclick = () => {
     SilvanaProgress.checkpoint('activity');
     byId('reading').hidden = true;
@@ -242,6 +231,7 @@
     update();
   }
 
+  byId('back').onclick = () => location.assign(SilvanaProgress.previousScene(9));
   SilvanaProgress.connect('reading', screen => {
     speech.stop();
     video.pause();
@@ -256,5 +246,5 @@
         place(target);
       }
     }
-  });
+  }, 10);
 })();

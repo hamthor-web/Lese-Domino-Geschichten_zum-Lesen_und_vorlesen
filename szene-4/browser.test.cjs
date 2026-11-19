@@ -7,7 +7,7 @@ const base=(live||'http://127.0.0.1:8765/').replace(/\/?$/,'/');
 const server=live?null:spawn('python3',['-m','http.server','8765','--bind','127.0.0.1'],{stdio:'ignore'});
 let browser;const errors=[];
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-4/');if(r.ok&&(await r.text()).includes('scene.js?v=4'))break;}catch{}if(i===179)throw Error('Szene 4 fehlt');await new Promise(r=>setTimeout(r,500));}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'szene-4/');if(r.ok&&(await r.text()).includes('scene.js?v=abschluss1'))break;}catch{}if(i===179)throw Error('Szene 4 fehlt');await new Promise(r=>setTimeout(r,500));}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true});
  await context.addInitScript(()=>{
@@ -16,10 +16,8 @@ async function run(){
  Object.defineProperty(window,'SpeechSynthesisUtterance',{configurable:true,value:class{constructor(text){this.text=text;}}});
  });
  const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
- await p.goto(base+'szene-4/');await p.locator('#audioToggle').waitFor();
- for(const word of ['Pause','Weiterhören','Pause']){await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),new RegExp(word));}
- await p.evaluate(()=>window.__u.onend());await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),/Pause/);
- assert.match(await p.evaluate(()=>window.__u.text),/verlorene Tannennadel/);
+ await p.goto(base+'szene-4/');await p.evaluate(()=>localStorage.setItem('silvana-completed-scenes-v1','[3]'));await p.locator('#next').waitFor();
+ assert.equal(await p.locator('#audioToggle').count(),0);
  let checks=0;
  async function layout(){
  for(const [width,height] of [[360,800],[800,360],[412,915],[915,412],[768,1024],[1024,768]]){
@@ -32,7 +30,7 @@ async function run(){
  }}
  await p.setViewportSize({width:412,height:915});await p.evaluate(()=>{for(const id of ['textSize','boardSize']){const x=document.getElementById(id);x.value=100;x.dispatchEvent(new Event('input'));}});
  }
- await layout();await p.locator('#next').click();assert.match(await p.locator('.reading').innerText(),/Ein Händler wollte einmal/);await layout();
+ await layout();assert.match(await p.locator('.reading').innerText(),/Ein Händler wollte einmal/);await layout();
  await p.locator('#next').click();assert.equal(await p.locator('.tile').count(),3);await p.waitForFunction(()=>[...document.querySelectorAll('.card-image')].length===3&&[...document.querySelectorAll('.card-image')].every(i=>i.complete&&i.naturalWidth>0));
  assert.deepEqual(await p.locator('.tile').evaluateAll(bs=>bs.map(b=>({id:Number(b.dataset.id),src:b.querySelector('img').getAttribute('src')}))),[{id:2,src:'assets/haendler-rest.webp'},{id:0,src:'assets/haendler-netz.webp'},{id:1,src:'assets/haendler-faeden.webp'}]);await layout();
  const order=()=>p.locator('.tile').evaluateAll(bs=>bs.map(b=>Number(b.dataset.id)));
@@ -55,9 +53,13 @@ async function run(){
  await p.locator('#check').click();await p.locator('#next').click();
  assert.equal(await p.locator('#scene5').isDisabled(),true);
  await p.waitForFunction(()=>document.querySelector('#completionVideo').currentTime>0);
+ await p.locator('#audioToggle').waitFor();
+ for(const word of ['Pause','Weiterhören','Pause']){await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),new RegExp(word));}
+ await p.evaluate(()=>{for(let i=0;i<100;i++) window.__u.onend();});await p.locator('#audioToggle').click();assert.match(await p.locator('#audioToggle').innerText(),/Pause/);
+ assert.match(await p.locator('.story-reading .original').textContent(),/verlorene Tannennadel/);
  await layout();
  assert.equal(await p.locator('.result li').count(),3);await p.locator('#back').click();assert.deepEqual(await order(),[0,1,2]);
- await p.locator('#next').click();await p.locator('#again').click();await p.locator('#next').click();await p.locator('#next').click();assert.deepEqual(await order(),[2,0,1]);assert.equal(await p.locator('#next').isDisabled(),true);
+ await p.locator('#next').click();await p.locator('#again').click();await p.locator('#next').click();assert.deepEqual(await order(),[2,0,1]);assert.equal(await p.locator('#next').isDisabled(),true);
  await p.goto(base+'szene-4/?abschnitt=abschluss');
  await p.waitForFunction(()=>document.querySelector('#completionVideo')?.ended);
  assert.equal(await p.locator('#scene5').getAttribute('aria-label'),'Weiter zu Der König');

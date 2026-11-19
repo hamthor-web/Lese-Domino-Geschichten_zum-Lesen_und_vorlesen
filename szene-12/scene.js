@@ -14,7 +14,7 @@
     'Auf der Rückreise blieben die Samtkisten leer. Eine war noch immer voller Schlamm, weil niemand Lust gehabt hatte, sie sauber zu machen.',
     'Als der König einige Tage später seinen Palast erreichte, wartete der Hof bereits auf den berühmten Schatz.'
   ].join('\n\n');
-  const speech = createStorySpeech(updateSpeech);
+  let speech;
   const pool = byId('thumbs');
   const parchment = byId('statements');
   const evidence = byId('evidence');
@@ -29,28 +29,6 @@
   let drag;
   let placed = 0;
   let attempt = 0;
-  let sizingFrame;
-
-  function sizeButtons() {
-    cancelAnimationFrame(sizingFrame);
-    sizingFrame = requestAnimationFrame(() => {
-      const buttons = ['settingsToggle', 'start', 'listen', 'retry'].map(byId);
-      buttons.forEach(button => {
-        button.style.width = 'max-content';
-        button.style.height = 'auto';
-      });
-      const visible = buttons.filter(button => button.getClientRects().length);
-      const available = Math.min(...visible.map(button => {
-        const parent = button.parentElement;
-        const style = getComputedStyle(parent);
-        return parent.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
-      }));
-      const width = Math.min(available, Math.ceil(Math.max(...visible.map(button => button.getBoundingClientRect().width))));
-      visible.forEach(button => { button.style.width = width + 'px'; });
-      const height = Math.ceil(Math.max(...visible.map(button => button.getBoundingClientRect().height)));
-      visible.forEach(button => { button.style.height = height + 'px'; });
-    });
-  }
 
   function select(tile) {
     selected?.setAttribute('aria-pressed', 'false');
@@ -110,7 +88,6 @@
       return row;
     }));
     byId('activityTitle').focus();
-    sizeButtons();
   }
 
   function place(tile, target, point) {
@@ -265,26 +242,13 @@
     document.querySelector('.trip-instructions').hidden = true;
     completion.hidden = false;
     byId('finishTitle').focus();
-    sizeButtons();
     if (!video.getAttribute('src')) video.src = 'assets/weiter-zu-szene-13.mp4';
     playTransition();
   }
 
-  function updateSpeech() {
-    const labels = {playing: 'Ⅱ Pause', paused: '▶ Weiterhören', ended: '↻ Noch einmal hören', error: 'Erneut vorlesen'};
-    byId('listen').textContent = labels[speech.state] || 'Geschichte vorlesen';
-    byId('listen').disabled = !speech.available;
-    const status = byId('speechStatus');
-    status.textContent = !speech.available ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
-      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
-    status.hidden = !status.textContent;
-    sizeButtons();
-  }
 
-  byId('listen').onclick = () => speech.toggle(original);
-  SilvanaProgress.addReading(byId('listen'), original);
+  speech = mountStoryReading(byId('storyEnd'), original, {id: 'listen', statusId: 'speechStatus'});
   window.addEventListener('pagehide', () => speech.stop());
-  updateSpeech();
 
   video.onended = () => ready(false);
   video.onerror = () => ready(true);
@@ -305,11 +269,9 @@
     slider.oninput = () => {
       document.documentElement.style.setProperty('--' + name, Number(slider.value) / 100);
       byId(name + 'Output').textContent = slider.value + ' %';
-      sizeButtons();
     };
   }
-  window.addEventListener('resize', sizeButtons);
-  document.fonts?.ready.then(sizeButtons);
+  byId('back').onclick = () => location.assign(SilvanaProgress.previousScene(11));
   SilvanaProgress.connect('reading', screen => {
     speech.stop();
     video.pause();
@@ -317,6 +279,5 @@
     byId('activity').hidden = screen === 'reading';
     if (screen === 'finish') finish();
     if (screen === 'activity' && !completion.hidden) reset();
-    sizeButtons();
-  });
+  }, 12);
 })();
