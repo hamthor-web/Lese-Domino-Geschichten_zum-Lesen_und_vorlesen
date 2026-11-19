@@ -1,6 +1,6 @@
 'use strict';
 (()=>{
- const $=id=>document.getElementById(id),VISITED='silvana-visited-scenes-v1';
+ const $=id=>document.getElementById(id);
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let content,phase=0,solved=false,feedback='',animationToken=0,question=0,busy=false;
  let placed=[false,false,false,false],flight=null,flightAnimation=null,cardOrder=[0,1,2,3];
@@ -38,9 +38,6 @@
  }
 function toggleAudio(){audio.toggle(content.original);}
 
-
-
- function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(6,Number(localStorage.getItem(VISITED))||0)));}catch{}}
  function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus({preventScroll:phase===3});if(phase===3)$('scene7').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});}
  function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1448" height="1086"></figure>';}
@@ -74,7 +71,7 @@ function toggleAudio(){audio.toggle(content.original);}
   video.addEventListener('error',()=>ready(true),{once:true});
   play();
  }
- function render(){
+ function render(){SilvanaProgress.checkpoint(phase);
   $('completionVideo')?.pause();
   $('stepStatus').textContent=['Schritt 1 von 3 · Selbst lesen','Schritt 2 von 3 · Zuordnen','Schritt 3 von 3 · Zuhören',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
@@ -133,7 +130,7 @@ function toggleAudio(){audio.toggle(content.original);}
    if(!await animateBubble([{transform:whirl},{transform:'translate(0px,0px) rotate(1440deg) scale(1)'}],650,token))return;
    cancelFlight();feedback=content.bubbles[question].person===null?'Diese Blase passt nicht zum Text. Wähle eine andere Blase.':'Das passt noch nicht. Lies noch einmal und tippe auf das andere Kreuz.';$('feedback').textContent=feedback;renderQuestion();return;
   }
-  placed[question]=true;solved=content.bubbles.every((b,i)=>b.person===null||placed[i]);if(!solved)question=cardOrder.find(i=>!placed[i]);cancelFlight();feedback=solved?'':'Genau! Hier bleibt die Blase. Wähle jetzt eine weitere passende Blase.';$('feedback').textContent=feedback;renderQuestion();
+  placed[question]=true;solved=content.bubbles.every((b,i)=>b.person===null||placed[i]);if(solved) SilvanaProgress.finish(6);if(!solved)question=cardOrder.find(i=>!placed[i]);cancelFlight();feedback=solved?'':'Genau! Hier bleibt die Blase. Wähle jetzt eine weitere passende Blase.';$('feedback').textContent=feedback;renderQuestion();
  }
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
@@ -142,6 +139,6 @@ function toggleAudio(){audio.toggle(content.original);}
  
  fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.bubbles)||data.bubbles.length!==4)throw Error('Inhalt');
-  content=data;shuffleCards();markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}render();
+  content=data;shuffleCards();if(SilvanaProgress.completed().includes(6) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}if (!SilvanaProgress.connect(phase, screen => {cancelFlight(); closeZoom(); stopAudio(); phase = screen; if(screen >= 2) {placed = content.bubbles.map(b => b.person !== null); solved = true;} render();})) render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();

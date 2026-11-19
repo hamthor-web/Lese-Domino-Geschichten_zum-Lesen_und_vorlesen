@@ -6,11 +6,14 @@
   <meta name="theme-color" content="#f2e9dc">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/silvana-icon-192.png">
-  <script src="shared/installieren.js" defer></script>
+  <script src="shared/progress.js" defer></script>
+  <script src="shared/installieren.js?v=2" defer></script>
   <title>Silvana · Das Land der glitzernden Spinnweben</title>
   <style>
+    @font-face { font-family: Andika; src: url('vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: Andika; src: url('vorschau-einfuehrung/assets/fonts/Andika-Bold.ttf'); font-weight: 700; font-display: swap; }
     * { box-sizing: border-box; }
-    body { margin: 0; background: #f2e9dc; color: #291709; font-family: Georgia, 'Times New Roman', serif; }
+    body { margin: 0; background: #f2e9dc; color: #291709; font-family: Andika, sans-serif; }
     .welcome {
       display: grid;
       justify-items: center;
@@ -36,6 +39,7 @@
       margin: .05em 0 .1em;
       color: #50250f;
       font-size: clamp(2.5rem, 9vw, 4.7rem);
+      font-family: Georgia, serif;
       font-style: italic;
       line-height: 1.05;
       text-shadow: 1px 2px 0 #ecd5a9, 0 0 10px #f5dbb8;
@@ -49,6 +53,7 @@
       line-height: 1.42;
       text-shadow: 0 1px 4px #f7e0c0;
     }
+    .note-heading { font-weight: 700; padding-bottom: 0; }
     .aktionen { display: grid; gap: .55rem; width: 100%; min-width: 0; }
     .start {
       background: transparent;
@@ -109,10 +114,12 @@
         <p><strong>Mac ab macOS Sonoma:</strong> Öffne Silvana in Safari und wähle „Ablage“ und dann „Zum Dock hinzufügen“.</p>
         <p><strong>Android und Windows:</strong> Öffne das Browsermenü in Chrome oder Edge und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“, wenn die Option angeboten wird.</p>
       </div>
+      <button class="start" id="zuruecksetzen" type="button">Spiel zurücksetzen</button>
       <p id="app-status" role="status"></p>
     </div>
   </main>
   <footer>
+    <h2 class="note note-heading">Für die Eltern und Lesebegleiter</h2>
     <p class="note">Wie uns Reinhard Mey lehrte, sind wir alle nur kleine Würstchen. Doch ich denke, arm sind wir dabei nicht unbedingt. Tatsächlich sind wir alle kleine Könige, und es kommt nur darauf an, was wir daraus machen. Aus diesem Grund habe ich die Figur des Kleinen Würstchens ins Leben gerufen. Mein Wunsch ist es, dass seine Größe Ihrem Kind Freude beim Entdecken schenkt!</p>
   </footer>
 </body>

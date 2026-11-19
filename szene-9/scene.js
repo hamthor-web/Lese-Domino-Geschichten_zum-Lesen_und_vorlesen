@@ -19,6 +19,7 @@
   const speech = createStorySpeech(updateSpeech);
 
   function show(section) {
+    SilvanaProgress.checkpoint(section);
     for (const id of ['reading', 'activity']) {
       byId(id).hidden = id !== section;
     }
@@ -57,6 +58,8 @@
     const count = byId('pairs').children.length;
     if (count === sentences.length) {
       byId('feedback').textContent = 'Alle drei Sätze sind richtig verbunden!';
+      SilvanaProgress.finish(9);
+      SilvanaProgress.checkpoint('finish');
       setCompleted(true);
       byId('feedback').focus();
       startTransition();
@@ -188,6 +191,7 @@
   byId('taskReading').append(...Array.from(byId('readingText').children, paragraph => paragraph.cloneNode(true)));
   byId('showText').onclick = () => setReadingHelp(byId('taskReading').hidden);
   byId('listen').onclick = () => speech.toggle(original);
+  SilvanaProgress.addReading(byId('listen'), original);
   byId('retry').onclick = () => {
     speech.stop();
     resetActivity();
@@ -211,10 +215,16 @@
     update();
   }
 
-  try {
-    const key = 'silvana-visited-scenes-v1';
-    localStorage.setItem(key, String(Math.max(9, Number(localStorage.getItem(key)) || 0)));
-  } catch {
-    // Die Szene ist auch ohne gespeicherten Besuch spielbar.
-  }
+  SilvanaProgress.connect('reading', screen => {
+    speech.stop();
+    if (screen === 'reading') { video.pause(); show('reading'); return; }
+    show('activity');
+    if (screen === 'finish') {
+      resetActivity();
+      for (let i = 0; i < sentences.length; i++) {
+        selectCard(cards[0][i]);
+        selectCard(cards[1][i]);
+      }
+    } else if (!byId('repeat').hidden) resetActivity();
+  });
 })();

@@ -73,7 +73,7 @@ async function run(){
  await p.waitForFunction(()=>document.querySelector('#completionVideo')?.ended);
  await forward.focus();await p.keyboard.press('Enter');await p.waitForURL('**/szene-6/');
  await p.locator('h1').filter({hasText:'Im Dorf'}).waitFor();
- await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu5').waitFor({state:'visible'});assert.deepEqual(await p.locator('#sceneMenu3,#sceneMenu4,#sceneMenu5').allTextContents(),['Die Spinnen im Wald','Der Händler','Der König']);
+ await p.locator('.brand').click();await p.locator('.scene-menu summary').click();await p.locator('#sceneMenu5').waitFor({state:'visible'});assert.deepEqual(await p.locator('#sceneMenu3,#sceneMenu4,#sceneMenu5').allTextContents(),['Der König']);
  assert.deepEqual(errors,[]);console.log('PASS König: Alle sieben Wörter einheitlich und anklickbar, falsche Wortwahl ohne Freigabe; Illustration, Pergament-Kästchen, Fehlerwort/Lücke, zwei falsche Wörter, richtiges Wort, Rücknavigation, Wiederholung, Kutschen-Video mit automatischer Wiedergabe und Freigabe nach Ende, Übergänge und Menü; '+checks+' Layoutprüfungen. Sprachsteuerung simuliert.');await context.close();
 }
 run().then(async()=>{if(browser)await browser.close();if(server)server.kill();}).catch(async e=>{console.error(e);if(browser)await browser.close();if(server)server.kill();process.exitCode=1;});

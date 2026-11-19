@@ -1,6 +1,6 @@
 'use strict';
 (()=>{
- const $=id=>document.getElementById(id),VISITED='silvana-visited-scenes-v1';
+ const $=id=>document.getElementById(id);
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let content,phase=0,removed=false,solved=false,feedback='',animationToken=0;
  const audio = createStorySpeech(updateAudio);
@@ -31,9 +31,6 @@
  }
 function toggleAudio(){audio.toggle(content.original);}
 
-
-
- function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(5,Number(localStorage.getItem(VISITED))||0)));}catch{}}
  function go(n){if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!solved))return;animationToken++;stopAudio();phase=n;render();$('main').focus();if(phase===3)$('scene6').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});}
  function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900"></figure>';}
@@ -67,7 +64,7 @@ function toggleAudio(){audio.toggle(content.original);}
   video.addEventListener('error',()=>ready(true),{once:true});
   play();
  }
- function render(){
+ function render(){SilvanaProgress.checkpoint(phase);
   $('completionVideo')?.pause();
   $('stepStatus').textContent=['Schritt 1 von 3 · Selbst lesen','Schritt 2 von 3 · Ein Wort tauschen','Schritt 3 von 3 · Zuhören',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Der König</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
@@ -103,7 +100,7 @@ function toggleAudio(){audio.toggle(content.original);}
   const word=button.dataset.word;
   if(word!==content.correct){feedback='Das passt noch nicht. Lies im Text nach, was der König mit den Netzen vorhatte.';$('feedback').textContent=feedback;button.classList.remove('shake');void button.offsetWidth;button.classList.add('shake');return;}
   const source=button.getBoundingClientRect(),token=++animationToken;
-  solved=true;feedback='Genau! Der König wollte die Netze kaufen.';renderTask();
+  solved=true;SilvanaProgress.finish(5);feedback='Genau! Der König wollte die Netze kaufen.';renderTask();
   const target=$('answerWord'),r=target.getBoundingClientRect();
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&typeof target.animate==='function'){
    const animation=target.animate([{transform:'translate('+(source.left-r.left)+'px,'+(source.top-r.top)+'px)',opacity:.5},{transform:'translate(0,0)',opacity:1}],{duration:420,easing:'ease-out'});
@@ -118,6 +115,6 @@ function toggleAudio(){audio.toggle(content.original);}
  
  fetch('content.json?v=1').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.options)||data.options.length!==3||!data.options.includes(data.correct))throw Error('Inhalt');
-  content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}render();
+  content=data;if(SilvanaProgress.completed().includes(5) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}if (!SilvanaProgress.connect(phase, screen => {animationToken++; stopAudio(); phase = screen; if(screen >= 2) {solved = true; removed = true;} render();})) render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();

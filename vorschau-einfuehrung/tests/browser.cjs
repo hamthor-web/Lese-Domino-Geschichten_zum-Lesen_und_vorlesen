@@ -135,7 +135,7 @@ async function run(){
  await page.waitForFunction(()=>document.getElementById('completionVideo').ended);
  await next.click();
  await page.waitForURL('**/szene-2/');
- assert.ok(await page.evaluate(()=>Number(localStorage.getItem('silvana-visited-scenes-v1'))>=2));
+ assert.ok(await page.evaluate(()=>JSON.parse(localStorage.getItem('silvana-completed-scenes-v1')).includes(1)));
 
  // Falls Autoplay gesperrt ist, bleibt die Navigation über den Textbutton erreichbar.
  await page.addInitScript(()=>{HTMLMediaElement.prototype.play=()=>Promise.reject(new DOMException('Autoplay gesperrt','NotAllowedError'));});

@@ -67,3 +67,13 @@ if (pageUrl.searchParams.has('aktualisiert')) {
   history.replaceState(null, '', pageUrl);
   status.textContent = 'Silvana wurde neu geladen.';
 }
+
+document.querySelector('#zuruecksetzen').addEventListener('click', () => {
+  if (!confirm('Möchtest du den gespeicherten Silvana-Spielfortschritt zurücksetzen?')) return;
+  try {
+    SilvanaProgress.reset();
+    status.textContent = 'Der Spielfortschritt wurde zurückgesetzt.';
+  } catch {
+    status.textContent = 'Der Spielfortschritt konnte nicht zurückgesetzt werden.';
+  }
+});

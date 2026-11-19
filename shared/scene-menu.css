@@ -7,3 +7,31 @@
 .scene-menu a{display:block;padding:13px 14px;min-height:52px;border-radius:10px;color:#493e58;text-decoration:none;font-size:calc(19px * var(--text));overflow-wrap:break-word}
 .scene-menu a:hover,.scene-menu a[aria-current="page"]{background:#efe3f7;font-weight:bold}
 .scene-menu [hidden]{display:none!important}
+
+.story-reading {
+  max-width: 48rem;
+  margin-block: 1rem;
+  padding: .65rem .85rem;
+  border: 1px solid #aa9377;
+  border-radius: .65rem;
+  background: #fff9eb;
+  color: #35271d;
+  text-align: left;
+}
+.story-reading summary {
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.story-reading .original {
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+#audioToggle, #audio, #listen, #listenLast {
+  inline-size: min(100%, calc(17rem * var(--text, 1)));
+  min-inline-size: min(100%, calc(17rem * var(--text, 1)));
+}
+#listenFull {
+  inline-size: min(100%, calc(21rem * var(--text, 1)));
+  min-inline-size: min(100%, calc(21rem * var(--text, 1)));
+}

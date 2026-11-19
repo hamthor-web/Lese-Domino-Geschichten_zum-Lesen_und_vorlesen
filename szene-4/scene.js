@@ -1,6 +1,6 @@
 'use strict';
 (()=>{
-const $=id=>document.getElementById(id),VISITED='silvana-visited-scenes-v1';
+const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let content,phase=0,placed=[2,0,1],selected=null,solved=false,feedback='';
 const audio = createStorySpeech(updateAudio);
@@ -31,8 +31,6 @@ const audio = createStorySpeech(updateAudio);
  }
 function toggleAudio(){audio.toggle(content.original);}
 
-
-function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(4,Number(localStorage.getItem(VISITED))||0)));}catch{}}
 function go(n){
  if(n<0||n>3||(n===3&&!solved))return;
  finishTileDrag(false);stopAudio();phase=n;render();
@@ -69,7 +67,7 @@ function setupCompletionVideo(){
  video.addEventListener('error',()=>ready(true),{once:true});
  play();
 }
-function render(){
+function render(){SilvanaProgress.checkpoint(phase);
  $('completionVideo')?.pause();
 $('stepStatus').textContent=['Schritt 1 von 3 · Zuhören','Schritt 2 von 3 · Selbst lesen','Schritt 3 von 3 · Reihenfolge legen',''][phase];$('stepStatus').hidden=phase===3;
 if(phase===0)$('game').innerHTML='<section class="panel"><span class="eyebrow">Erst einmal zuhören</span><h1>Der Händler</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
@@ -88,7 +86,7 @@ function shift(delta){const i=placed.indexOf(selected),j=i+delta;if(i<0||j<0||j>
 function renderBoard(){finishTileDrag(false);$('boardContent').innerHTML='<ol class="chain story-cards" id="chain" aria-label="Deine Reihenfolge">'+placed.map(id=>'<li><button class="tile '+(id===selected?'selected':'')+'" data-id="'+id+'" aria-pressed="'+(id===selected)+'">' + '<img class="card-image" src="'+esc(content.images[id])+'" alt="" draggable="false" width="1000" height="750"><span class="card-sentence">'+esc(content.cards[id])+'</span></button></li>').join('')+'</ol><div class="move-controls"><button class="secondary" id="left" '+(selected===null||placed.indexOf(selected)===0?'disabled':'')+'>Nach oben</button><button class="secondary" id="right" '+(selected===null||placed.indexOf(selected)===2?'disabled':'')+'>Nach unten</button></div><p class="feedback" role="status">'+esc(feedback)+'</p><div class="actions"><button class="primary" id="check" '+(solved?'hidden':'')+'>Reihenfolge prüfen</button><button class="secondary" id="hint" '+(solved?'hidden':'')+'>Kleiner Tipp</button></div>'+nav();
 $('chain').querySelectorAll('.tile').forEach(b=>{const id=Number(b.dataset.id);b.onclick=()=>{if(Date.now()<ignoreTileClickUntil)return;selected=selected===id?null:id;renderBoard();$('chain').querySelector('[data-id="'+id+'"]').focus();};attachTileDrag(b,id);});
 $('left').onclick=()=>shift(-1);$('right').onclick=()=>shift(1);updateMoveLabels();
-$('check').onclick=()=>{solved=placed.every((id,i)=>id===i);feedback=solved?'Das passt! Lies die drei Satzkarten noch einmal.':'Lies noch einmal nach: Was versucht der Händler zuerst? Deine Karten bleiben liegen. Du kannst sie umstellen.';renderBoard();};
+$('check').onclick=()=>{solved=placed.every((id,i)=>id===i);if(solved) SilvanaProgress.finish(4);feedback=solved?'Das passt! Lies die drei Satzkarten noch einmal.':'Lies noch einmal nach: Was versucht der Händler zuerst? Deine Karten bleiben liegen. Du kannst sie umstellen.';renderBoard();};
 $('hint').onclick=()=>{feedback='Was macht der Händler, bevor die Fäden in seinen Haaren kleben?';renderBoard();};
 $('next').disabled=!solved;$('next').onclick=()=>go(3);$('back').onclick=()=>go(1);scheduleButtons();}
 let ignoreTileClickUntil=0,activeDrag=null;
@@ -163,5 +161,5 @@ window.addEventListener('resize',()=>{scheduleButtons();updateMoveLabels();});
 window.addEventListener('pagehide',()=>{finishTileDrag(false);stopAudio();});
 
 if(document.fonts)document.fonts.ready.then(scheduleButtons);
-fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
+fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.cards?.length!==3||data.images?.length!==3||data.images.some(src=>typeof src!=='string'))throw Error('Inhalt');content=data;if(SilvanaProgress.completed().includes(4) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[0,1,2];solved=true;}if (!SilvanaProgress.connect(phase, screen => {finishTileDrag(false); stopAudio(); phase = screen; if(screen === 3) {placed = [0,1,2]; solved = true;} render();})) render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
 })();

@@ -34,6 +34,7 @@
   }
 
   function start() {
+    SilvanaProgress.checkpoint('activity');
     attempt++;
     questionIndex = 0;
     video.pause();
@@ -58,6 +59,7 @@
   }
 
   function tell() {
+    SilvanaProgress.checkpoint('telling');
     const from = rightBubble.getBoundingClientRect();
     const queen = byId('queenPicture');
     queen.append(rightBubble);
@@ -92,6 +94,7 @@
     }
     answered.classList.add('reviewed');
     questionIndex++;
+    SilvanaProgress.checkpoint('question:' + questionIndex);
     const upcoming = bubbles[questionIndex];
     upcoming.hidden = false;
     upcoming.classList.add('current');
@@ -129,6 +132,8 @@
   }
 
   byId('done').onclick = () => {
+    SilvanaProgress.finish(13);
+    SilvanaProgress.checkpoint('finish');
     activity.hidden = true;
     completion.hidden = false;
     byId('finishTitle').focus();
@@ -144,6 +149,7 @@
   byId('no').onclick = () => answer(false);
   byId('taskReading').replaceChildren(...Array.from(byId('readingText').children, p => p.cloneNode(true)));
   listen.onclick = () => speech.toggle(original);
+  SilvanaProgress.addReading(byId('listen'), original);
   window.addEventListener('pagehide', () => speech.stop());
   updateSpeech();
 
@@ -159,4 +165,18 @@
       byId(name + 'Output').textContent = slider.value + ' %';
     };
   }
+  SilvanaProgress.connect('reading', screen => {
+    speech.stop();
+    video.pause();
+    if (screen === 'reading') {
+      reading.hidden = false;
+      activity.hidden = completion.hidden = true;
+      return;
+    }
+    if (screen === 'finish') { reading.hidden = true; byId('done').onclick(); return; }
+    start();
+    if (screen.startsWith('question:') || screen === 'telling') answer(false);
+    if (screen === 'question:2' || screen === 'telling') answer(false);
+    if (screen === 'telling') answer(true);
+  });
 })();

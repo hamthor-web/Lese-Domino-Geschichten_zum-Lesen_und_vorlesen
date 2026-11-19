@@ -1,6 +1,6 @@
 'use strict';
 (()=>{
- const $=id=>document.getElementById(id),VISITED='silvana-visited-scenes-v1';
+ const $=id=>document.getElementById(id);
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let content,phase=0,active=null,solved=new Set(),choices=[],feedback='';
  const audio = createStorySpeech(updateAudio);
@@ -31,7 +31,7 @@ function toggleAudio(){audio.toggle(content.original);}
  function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function pictures(){return '<div class="forest-pictures">'+[0,1].map(side=>'<figure><figcaption>Bild '+(side+1)+'</figcaption><div class="forest-scroll" role="region" aria-label="Bild '+(side+1)+' vergrößert seitlich verschieben" tabindex="0"><div class="forest-board" data-side="'+side+'"><img src="assets/wald-'+(side?'b':'a')+'.png" width="1536" height="1152" alt="'+(side?'Wald mit Haselnüssen, Käfern, Schal, Strauch und alter Frau.':'Wald mit Tautropfen, Spinnen, Spinnennetz, Brunnen und Mädchen.')+'">'+content.differences.map((d,i)=>d.areas.map((r,j)=>'<button class="hotspot '+(solved.has(d.id)?'found':'')+'" style="left:'+(r[0]+r[2]/2)+'%;top:'+(r[1]+r[3]/2)+'%;width:'+r[2]+'%;height:'+r[3]+'%" data-diff="'+i+'" data-area="'+j+'" data-side="'+side+'" aria-label="Bild '+(side+1)+', Bildstelle '+(i+1)+(d.areas.length>1?'.'+(j+1):'')+(solved.has(d.id)?', schon gefunden':'')+'">'+(solved.has(d.id)?'<span aria-hidden="true">✓</span>':'')+'</button>').join('')).join('')+'</div></div></figure>').join('')+'</div>';}
- function render(){
+ function render(){SilvanaProgress.checkpoint(phase);
   $('stepStatus').textContent=['Schritt 1 von 3 · Zuhören','Schritt 2 von 3 · Selbst lesen','Schritt 3 von 3 · Bilder vergleichen',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Der König im Wald</h1><p>Höre, was der König im Wald entdeckt.</p><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===1)$('game').innerHTML='<section class="panel"><h1>Der König im Wald</h1><p>Lies in deinem Tempo.</p>'+reading()+nav()+'</section>';
@@ -97,11 +97,11 @@ function toggleAudio(){audio.toggle(content.original);}
   $('feedback').textContent='';q.querySelectorAll('[data-word]').forEach(b=>b.onclick=()=>answer(b.dataset.word));scheduleButtons();q.focus({preventScroll:true});q.scrollIntoView({block:'center',behavior:'instant'});
  }
  function answer(word){if(!active)return;const d=content.differences[active.index],target=d.words[1-active.side];if(word!==target){$('feedback').textContent='Das passt noch nicht. Vergleiche diese Stelle auf beiden Bildern.';$('feedback').scrollIntoView({block:'nearest'});return;}
-  solved.add(d.id);active=null;$('question').hidden=true;document.querySelectorAll('.hotspot').forEach(b=>{b.classList.remove('selected');if(content.differences[Number(b.dataset.diff)].id===d.id){b.classList.add('found');b.innerHTML='<span aria-hidden="true">✓</span>';b.setAttribute('aria-label',b.getAttribute('aria-label')+', schon gefunden');}});
+  solved.add(d.id);if(complete()) SilvanaProgress.finish(7);active=null;$('question').hidden=true;document.querySelectorAll('.hotspot').forEach(b=>{b.classList.remove('selected');if(content.differences[Number(b.dataset.diff)].id===d.id){b.classList.add('found');b.innerHTML='<span aria-hidden="true">✓</span>';b.setAttribute('aria-label',b.getAttribute('aria-label')+', schon gefunden');}});
   $('feedback').textContent=complete()?'Alle Unterschiede gefunden! Jetzt kannst du weiter.':'Richtig! '+d.words[0]+' und '+d.words[1]+'. Suche weiter auf den Bildern.';updateProgress();$('feedback').scrollIntoView({block:'center'});$('next').focus({preventScroll:true});if(!complete())document.querySelector('.forest-scroll').focus({preventScroll:true});scheduleButtons();
  }
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();window.addEventListener('resize',scheduleButtons);if(document.fonts)document.fonts.ready.then(scheduleButtons);window.addEventListener('pagehide',stopAudio);
  
- fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.differences.length!==6)throw Error('Inhalt');content=data;try{localStorage.setItem(VISITED,String(Math.max(7,Number(localStorage.getItem(VISITED))||0)));}catch{}if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=new Set(content.differences.map(d=>d.id));}render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" onclick="location.reload()">Erneut laden</button></section>';});
+ fetch('content.json?v=2').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{if(typeof data.original!=='string'||typeof data.simple!=='string'||data.differences.length!==6)throw Error('Inhalt');content=data;if(SilvanaProgress.completed().includes(7) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=new Set(content.differences.map(d=>d.id));}if (!SilvanaProgress.connect(phase, screen => {stopAudio(); phase = screen; active = null; if(screen === 3) solved = new Set(content.differences.map(d => d.id)); render();})) render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" onclick="location.reload()">Erneut laden</button></section>';});
 })();

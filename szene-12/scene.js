@@ -67,6 +67,7 @@
   }
 
   function reset() {
+    SilvanaProgress.checkpoint('activity');
     attempt++;
     placed = 0;
     select(null);
@@ -258,6 +259,8 @@
   }
 
   function finish() {
+    SilvanaProgress.finish(12);
+    SilvanaProgress.checkpoint('finish');
     document.querySelector('.trip-game').hidden = true;
     document.querySelector('.trip-instructions').hidden = true;
     completion.hidden = false;
@@ -279,6 +282,7 @@
   }
 
   byId('listen').onclick = () => speech.toggle(original);
+  SilvanaProgress.addReading(byId('listen'), original);
   window.addEventListener('pagehide', () => speech.stop());
   updateSpeech();
 
@@ -306,10 +310,13 @@
   }
   window.addEventListener('resize', sizeButtons);
   document.fonts?.ready.then(sizeButtons);
-  try {
-    const key = 'silvana-visited-scenes-v1';
-    localStorage.setItem(key, String(Math.max(12, Number(localStorage.getItem(key)) || 0)));
-  } catch {
-    // Die Szene bleibt ohne gespeicherten Besuch spielbar.
-  }
+  SilvanaProgress.connect('reading', screen => {
+    speech.stop();
+    video.pause();
+    byId('reading').hidden = screen !== 'reading';
+    byId('activity').hidden = screen === 'reading';
+    if (screen === 'finish') finish();
+    if (screen === 'activity' && !completion.hidden) reset();
+    sizeButtons();
+  });
 })();

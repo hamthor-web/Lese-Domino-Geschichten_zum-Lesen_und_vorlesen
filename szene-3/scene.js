@@ -1,14 +1,14 @@
 'use strict';
 (() => {
  const $=id=>document.getElementById(id),A=window.SilvanaSpiderAnswers;
- const VISITED='silvana-visited-scenes-v1';
+
  let content,phase=0,state=A.initial(),hint=null,draft='',correctionDraft='',firstFeedback='',correctionFeedback='',correctionShown=false,firstAccepted=false,helpValues=['','','',''];
  let pictureSelected=false,comparisonVisible=false,selectionFeedback='';
  let imagesReady=false,loadToken=0;
  const audio = createStorySpeech(updateAudio);
  const speechAvailable = audio.available;
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- function markVisited(){try{localStorage.setItem(VISITED,String(Math.max(3,Number(localStorage.getItem(VISITED))||0)));}catch{}}
+
 
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
@@ -70,7 +70,7 @@ function toggleAudio(){audio.toggle(content.original);}
   video.addEventListener('error',()=>ready(true),{once:true});
   play();
  }
- function render(){
+ function render(){SilvanaProgress.checkpoint(phase);
   $('completionVideo')?.pause();
   $('stepStatus').textContent=['Schritt 1 von 4 · Selbst lesen','Schritt 2 von 4 · Bilder vergleichen','Schritt 3 von 4 · Zuhören',''][phase];
   $('stepStatus').hidden=phase===3;
@@ -138,6 +138,7 @@ function toggleAudio(){audio.toggle(content.original);}
     firstFeedback=result.feedback;
    }else firstFeedback=state.feedback;
   }
+  if(state.done) SilvanaProgress.finish(3);
   if(state.help){correctionShown=true;if(!hint)hint=A.letters();}
   updateAnswer();
   if(!wasHelp&&state.help)$('letterRow').querySelector('input:not([readonly])').focus();
@@ -186,7 +187,7 @@ function toggleAudio(){audio.toggle(content.original);}
  window.addEventListener('pagehide',()=>{loadToken++;stopAudio();});
  fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.simple!=='string'||typeof data.original!=='string'||!Array.isArray(data.images)||data.images.length!==2||data.images.some(im=>typeof im.matchesText!=='boolean')||data.images.filter(im=>im.matchesText===false).length!==1)throw Error('Inhalt');
-  content=data;markVisited();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;state.done=true;}render();
+  content=data;if(SilvanaProgress.completed().includes(3) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;state.done=true;}if (!SilvanaProgress.connect(phase, screen => {loadToken++; stopAudio(); phase = screen; if(screen >= 2) state.done = true; render();})) render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
 })();
 

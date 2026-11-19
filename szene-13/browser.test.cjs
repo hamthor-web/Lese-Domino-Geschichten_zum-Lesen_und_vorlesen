@@ -137,7 +137,11 @@ function localServer() {
   await button('done').click();
   await button('nextScene').click();
   await page.waitForURL('**/szene-14/');
-  assert.equal(await button('sceneMenu14').textContent(), '2. Erkenntnis');
+  assert.equal(await button('sceneMenu14').count(), 0);
+  await page.goBack();
+  await button('completion').waitFor({state: 'visible'});
+  await page.goForward();
+  await button('start').waitFor({state: 'visible'});
   for (const [width, height] of [[320, 640], [390, 844], [844, 390], [768, 1024], [1024, 768], [1440, 900]]) {
     await page.setViewportSize({width, height});
     for (const [font, board] of [[100, 100], [160, 80], [90, 160], [160, 160]]) {
@@ -193,15 +197,31 @@ function localServer() {
   await checkWidth('Szene 14 Abschluss', 1440, 900, 160, 160);
   await page.waitForFunction(() => document.querySelector('#glowVideo').ended);
   assert(await button('glowVideo').evaluate(video => video.classList.contains('is-playing') && video.currentTime >= 4.9));
+  await page.getByText('Geschichte mitlesen', {exact: true}).click();
+  assert((await button('fullStory').innerText()).length > 1000);
+  assert.equal(await page.locator('#readFull').evaluate(el => el.open), true);
+  await page.goBack();
+  await button('questionTitle').waitFor({state: 'visible'});
+  await page.goForward();
+  await button('ending').waitFor({state: 'visible'});
   await button('retry').click();
   assert(await button('glowVideo').evaluate(video => video.paused && video.currentTime === 0 && !video.classList.contains('is-playing')));
   assert.equal(await page.locator('.piece:visible').count(), 6);
   assert.equal(await button('question').isVisible(), false);
-  for (const path of ['vorschau-einfuehrung/','szene-2/','szene-12/']) {
+  const scenePaths = ['vorschau-einfuehrung/', ...Array.from({length: 13}, (_, i) => 'szene-' + (i + 2) + '/')];
+  for (const path of scenePaths) {
     await page.goto(base + path);
     assert.equal(await button('sceneMenu13').textContent(),'Zu Hause');
     assert.equal(await button('sceneMenu14').textContent(),'2. Erkenntnis');
+    assert.equal(await page.locator('.scene-menu nav a').count(), 2);
   }
+  await page.goto(base);
+  assert(await page.getByRole('heading', {name: 'Für die Eltern und Lesebegleiter'}).isVisible());
+  page.once('dialog', dialog => dialog.accept());
+  await button('zuruecksetzen').click();
+  await page.getByText('Der Spielfortschritt wurde zurückgesetzt.').waitFor();
+  await page.goto(base + 'szene-13/');
+  assert.equal(await page.locator('.scene-menu nav a').count(), 0);
   assert.deepEqual(errors,[]);
   await browser.close();
   server.close();

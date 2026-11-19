@@ -64,6 +64,7 @@
   }
 
   function start() {
+    SilvanaProgress.checkpoint('activity');
     cancelDrag();
     speech.stop();
     select(null);
@@ -121,16 +122,21 @@
     button.hidden = true;
     target.disabled = true;
     if (pieces.every(piece => piece.target.disabled)) {
-      byId('assembled').hidden = false;
-      byId('placed').replaceChildren();
-      byId('targets').hidden = true;
-      byId('tray').hidden = true;
-      byId('instructions').hidden = true;
-      byId('question').hidden = false;
-      byId('questionTitle').focus();
+      showQuestion();
     } else if (document.activeElement === document.body || document.activeElement === target) {
       tray.querySelector('.piece:not([hidden])').focus({preventScroll: true});
     }
+  }
+
+  function showQuestion() {
+    SilvanaProgress.checkpoint('question');
+    byId('assembled').hidden = false;
+    byId('placed').replaceChildren();
+    byId('targets').hidden = true;
+    byId('tray').hidden = true;
+    byId('instructions').hidden = true;
+    byId('question').hidden = false;
+    byId('questionTitle').focus();
   }
 
   function returnPiece(ghost) {
@@ -226,6 +232,8 @@
         feedback.textContent = 'Überlege noch einmal. Was tat der König, als Elin ihm das Netz zeigte?';
         return;
       }
+      SilvanaProgress.finish(14);
+      SilvanaProgress.checkpoint('finish');
       feedback.textContent = '';
       byId('questionTitle').hidden = true;
       byId('sceneFooter').hidden = true;
@@ -261,19 +269,20 @@
     };
   }
   listenFull.disabled = true;
-  if (speech.available) {
-    fetch('assets/vorlesetext.json')
-      .then(response => {
-        if (!response.ok) throw new Error('Vorlesetext fehlt');
-        return response.json();
-      })
-      .then(text => {
-        story = text;
-        listenLast.hidden = false;
-        listenFull.disabled = false;
-      })
-      .catch(() => { listenFull.hidden = true; });
-  } else listenFull.hidden = true;
+  listenFull.hidden = !speech.available;
+  fetch('assets/vorlesetext.json')
+    .then(response => {
+      if (!response.ok) throw new Error('Vorlesetext fehlt');
+      return response.json();
+    })
+    .then(text => {
+      story = text;
+      byId('fullStory').textContent = text.full;
+      byId('readFull').hidden = false;
+      listenLast.hidden = !speech.available;
+      listenFull.disabled = !speech.available;
+    })
+    .catch(() => { listenFull.hidden = true; });
 
   byId('start').onclick = start;
   byId('retry').onclick = start;
@@ -291,4 +300,21 @@
       byId(name + 'Output').textContent = slider.value + ' %';
     };
   }
+  SilvanaProgress.connect('reading', screen => {
+    speech.stop();
+    glowVideo.pause();
+    if (screen === 'reading') {
+      byId('reading').hidden = false;
+      byId('activity').hidden = true;
+      return;
+    }
+    if (screen === 'activity' && byId('question').hidden && tray.childElementCount) {
+      byId('reading').hidden = true;
+      byId('activity').hidden = false;
+      return;
+    }
+    start();
+    if (screen === 'question' || screen === 'finish') showQuestion();
+    if (screen === 'finish') answers.find(answer => answer.hasAttribute('data-correct')).onclick();
+  });
 })();

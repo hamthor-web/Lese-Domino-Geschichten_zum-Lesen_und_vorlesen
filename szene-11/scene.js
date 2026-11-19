@@ -58,6 +58,7 @@
 
   function startDrop() {
     phase = 'fall';
+    SilvanaProgress.checkpoint('fall:' + index);
     puzzle.hidden = true;
     completion.hidden = true;
     fallStage.hidden = false;
@@ -72,6 +73,7 @@
   function showPuzzle() {
     if (phase !== 'fall') return;
     phase = 'puzzle';
+    SilvanaProgress.checkpoint('puzzle:' + index);
     mistakes = 0;
     const {word, letters: shuffled, image, alt} = rounds[index];
     fallStage.hidden = true;
@@ -141,7 +143,9 @@
     }
     phase = 'solved';
     feedback.textContent = word + ' – richtig!';
+    const solvedIndex = index;
     setTimeout(() => {
+      if (phase !== 'solved' || index !== solvedIndex) return;
       index += 1;
       if (index < rounds.length) startDrop();
       else showFinish();
@@ -214,11 +218,14 @@
 
   function showFinish() {
     phase = 'finish';
+    SilvanaProgress.finish(11);
+    SilvanaProgress.checkpoint('finish');
     finishCount += 1;
     puzzle.hidden = true;
     completion.hidden = false;
     byId('finishTitle').focus();
     setTimeout(() => {
+      if (phase !== 'finish') return;
       finishActions.hidden = false;
       next.scrollIntoView({block: 'nearest'});
       playTransition();
@@ -289,6 +296,7 @@
   transition.onended = () => readyForNextScene();
   transition.onerror = () => readyForNextScene(true);
   byId('listen').onclick = () => speech.toggle(original);
+  SilvanaProgress.addReading(byId('listen'), original);
   window.addEventListener('pagehide', () => speech.stop());
   updateSpeech();
   byId('taskReading').append(...Array.from(byId('readingText').children, p => p.cloneNode(true)));
@@ -325,10 +333,18 @@
     update();
   }
 
-  try {
-    const key = 'silvana-visited-scenes-v1';
-    localStorage.setItem(key, String(Math.max(11, Number(localStorage.getItem(key)) || 0)));
-  } catch {
-    // Die Szene bleibt ohne gespeicherten Besuch spielbar.
-  }
+  SilvanaProgress.connect('reading', screen => {
+    speech.stop();
+    fall.pause();
+    transition.pause();
+    byId('reading').hidden = screen !== 'reading';
+    byId('activity').hidden = screen === 'reading';
+    phase = 'reading';
+    if (screen === 'reading') return;
+    if (screen === 'finish') { fallStage.hidden = true; showFinish(); return; }
+    completion.hidden = true;
+    index = Number(screen.split(':')[1]);
+    if (screen.startsWith('fall:')) startDrop();
+    else { phase = 'fall'; showPuzzle(); }
+  });
 })();

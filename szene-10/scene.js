@@ -54,6 +54,8 @@
     byId('pictures').hidden = true;
     byId('instructions').hidden = true;
     byId('readingHelp').hidden = true;
+    SilvanaProgress.finish(10);
+    SilvanaProgress.checkpoint('finish');
     completion.hidden = false;
     feedback.focus({preventScroll: true});
     playTransition();
@@ -194,9 +196,11 @@
   video.addEventListener('ended', () => readyForNextScene());
   video.addEventListener('error', () => readyForNextScene(true));
   byId('listen').onclick = () => speech.toggle(original);
+  SilvanaProgress.addReading(byId('listen'), original);
   window.addEventListener('pagehide', () => speech.stop());
   updateSpeech();
   byId('start').onclick = () => {
+    SilvanaProgress.checkpoint('activity');
     byId('reading').hidden = true;
     byId('activity').hidden = false;
     byId('activityTitle').focus();
@@ -204,6 +208,7 @@
   byId('taskReading').append(...Array.from(byId('readingText').children, paragraph => paragraph.cloneNode(true)));
   byId('showText').onclick = () => setReadingHelp(byId('taskReading').hidden);
   byId('retry').onclick = () => {
+    SilvanaProgress.checkpoint('activity');
     round++;
     completion.hidden = true;
     video.pause();
@@ -237,10 +242,19 @@
     update();
   }
 
-  try {
-    const key = 'silvana-visited-scenes-v1';
-    localStorage.setItem(key, String(Math.max(10, Number(localStorage.getItem(key)) || 0)));
-  } catch {
-    // Die Szene bleibt ohne gespeicherten Besuch spielbar.
-  }
+  SilvanaProgress.connect('reading', screen => {
+    speech.stop();
+    video.pause();
+    byId('reading').hidden = screen !== 'reading';
+    byId('activity').hidden = screen === 'reading';
+    if (screen === 'reading') return;
+    if (screen === 'activity' && !completion.hidden) byId('retry').onclick();
+    if (screen === 'finish' && completion.hidden) {
+      for (const target of targets) {
+        if (target.disabled) continue;
+        select(pictures.find(picture => picture.dataset.picture === target.dataset.target));
+        place(target);
+      }
+    }
+  });
 })();
