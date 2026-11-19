@@ -1,0 +1,102 @@
+.has-app-info {
+  position: relative;
+}
+
+.topbar.has-app-info {
+  padding-inline-end: max(64px, 5vw);
+}
+
+#appInfoButton {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-end: 10px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid #24776b;
+  border-radius: 50%;
+  background: #fffdf0;
+  color: #173c2a;
+  font: 700 26px/1 Georgia, serif;
+  cursor: pointer;
+}
+
+#appInfo {
+  box-sizing: border-box;
+  width: min(94vw, 37rem);
+  max-width: calc(100% - 20px);
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: auto;
+  padding: clamp(.85rem, 3vw, 1.5rem);
+  border: 2px solid #24776b;
+  border-radius: 20px;
+  background: #fffdf2;
+  color: #173c2a;
+  font-family: system-ui, sans-serif;
+  font-size: calc(1.125rem * var(--text, 1));
+  line-height: 1.5;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+#appInfo::backdrop {
+  background: #18352eaa;
+}
+
+#appInfo h2 {
+  margin: 0;
+  color: inherit;
+  font-size: 1.4em;
+  line-height: 1.2;
+}
+
+#appInfo h2:focus {
+  outline: none;
+}
+
+#appInfo nav {
+  display: grid;
+  gap: .5rem;
+}
+
+#appInfo nav a,
+#appInfo button {
+  box-sizing: border-box;
+  display: block;
+  min-height: 48px;
+  padding: .55rem .75rem;
+  border: 1px solid #24776b;
+  border-radius: 12px;
+  background: #fffdf0;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+}
+
+#appInfo nav a {
+  text-decoration: underline;
+}
+
+#appInfo a span {
+  font-size: .9em;
+  font-weight: 400;
+}
+
+#appInfo button {
+  width: 100%;
+  border-width: 2px;
+  cursor: pointer;
+}
+
+#appInfoButton:focus-visible,
+#appInfo :is(a, button):focus-visible {
+  outline: 3px solid #173c2a;
+  outline-offset: 2px;
+}
