@@ -11,11 +11,8 @@
   const next = byId('nextScene');
   const video = byId('transitionVideo');
   const fallback = byId('transitionFallback');
-  const listen = byId('listen');
-  const speech = createStorySpeech(updateSpeech);
+  let speech;
   const original = [
-    'Auf der Rückreise blieben die Samtkisten leer. Eine war noch immer voller Schlamm, weil niemand Lust gehabt hatte, sie sauber zu machen.',
-    'Als der König einige Tage später seinen Palast erreichte, wartete der Hof bereits auf den berühmten Schatz.',
     'Die Königin kam die Treppe herunter, hinter ihr Minister, Händler und zwei gelangweilte Prinzen.',
     '„Nun?“, fragte sie. „Was hast du mitgebracht?“',
     'Der König stieg vom Pferd. An seinem Mantelsaum klebte etwas Moos, inzwischen trocken und bröselig. Er betrachtete die geschlossenen Kisten.'
@@ -23,15 +20,6 @@
   let questionIndex = 0;
   let attempt = 0;
 
-  function updateSpeech() {
-    const labels = {playing: 'Ⅱ Pause', paused: '▶ Weiterhören', ended: '↻ Noch einmal hören', error: 'Erneut vorlesen'};
-    listen.textContent = labels[speech.state] || 'Geschichte vorlesen';
-    listen.disabled = !speech.available;
-    const status = byId('speechStatus');
-    status.textContent = !speech.available ? 'Auf diesem Gerät ist das Vorlesen nicht verfügbar.'
-      : speech.state === 'error' ? 'Die Vorlesestimme konnte nicht starten.' : '';
-    status.hidden = !status.textContent;
-  }
 
   function start() {
     SilvanaProgress.checkpoint('activity');
@@ -148,10 +136,8 @@
   byId('yes').onclick = () => answer(true);
   byId('no').onclick = () => answer(false);
   byId('taskReading').replaceChildren(...Array.from(byId('readingText').children, p => p.cloneNode(true)));
-  listen.onclick = () => speech.toggle(original);
-  SilvanaProgress.addReading(byId('listen'), original);
+  speech = mountStoryReading(byId('storyEnd'), original, {id: 'listen', statusId: 'speechStatus'});
   window.addEventListener('pagehide', () => speech.stop());
-  updateSpeech();
 
   const settings = byId('settings');
   byId('settingsToggle').onclick = () => {
@@ -165,6 +151,7 @@
       byId(name + 'Output').textContent = slider.value + ' %';
     };
   }
+  byId('back').onclick = () => location.assign(SilvanaProgress.previousScene(12));
   SilvanaProgress.connect('reading', screen => {
     speech.stop();
     video.pause();
@@ -178,5 +165,5 @@
     if (screen.startsWith('question:') || screen === 'telling') answer(false);
     if (screen === 'question:2' || screen === 'telling') answer(false);
     if (screen === 'telling') answer(true);
-  });
+  }, 13);
 })();

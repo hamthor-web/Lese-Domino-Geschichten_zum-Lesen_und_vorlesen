@@ -3,36 +3,17 @@
  const $=id=>document.getElementById(id);
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  let content,phase=0,removed=false,solved=false,feedback='',animationToken=0;
- const audio = createStorySpeech(updateAudio);
- const speechAvailable = audio.available;
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
   document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);
   $('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';
-  scheduleButtons();
- }
- let sizingFrame=0;
- function scheduleButtons(){cancelAnimationFrame(sizingFrame);sizingFrame=requestAnimationFrame(()=>{
-  const buttons=[...document.querySelectorAll('button.primary,button.secondary,button.quiet')].filter(b=>b.getClientRects().length);
-  if(!buttons.length)return;
-  const available=Math.max(1,Math.min(...buttons.map(b=>b.parentElement.clientWidth-parseFloat(getComputedStyle(b.parentElement).paddingLeft)-parseFloat(getComputedStyle(b.parentElement).paddingRight))));
-  buttons.forEach(b=>{b.style.width='max-content';b.style.maxWidth='100%';b.style.height='auto';b.style.flex='0 1 auto';});
-  const width=Math.min(available,Math.max(...buttons.map(b=>b.getBoundingClientRect().width)));
-  buttons.forEach(b=>b.style.width=width+'px');
-  const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
-  buttons.forEach(b=>b.style.height=height+'px');
- });}
- function stopAudio(){audio.stop();}
- function updateAudio(message){
-  if(!$('audioToggle'))return;
-  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
-  $('audioStatus').textContent=message||(audio.state==='error'?'Die Stimme konnte nicht vorlesen. Versuche es erneut oder klappe den Originaltext auf.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
-  $('audioToggle').disabled=!speechAvailable;scheduleButtons();
- }
-function toggleAudio(){audio.toggle(content.original);}
 
- function go(n){if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!solved))return;animationToken++;stopAudio();phase=n;render();$('main').focus();if(phase===3)$('scene6').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});}
- function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
+ }
+ let audio;
+ function stopAudio(){audio?.stop();}
+
+ function go(n){if(!Number.isInteger(n)||n<0||n>3||(n>=2&&!solved))return;animationToken++;stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}
+ function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button>'+'</div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900"></figure>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function setupCompletionVideo(){
@@ -66,17 +47,16 @@ function toggleAudio(){audio.toggle(content.original);}
  }
  function render(){SilvanaProgress.checkpoint(phase);
   $('completionVideo')?.pause();
-  $('stepStatus').textContent=['Schritt 1 von 3 · Selbst lesen','Schritt 2 von 3 · Ein Wort tauschen','Schritt 3 von 3 · Zuhören',''][phase];$('stepStatus').hidden=phase===3;
+  $('stepStatus').textContent=['Schritt 1 von 2 · Selbst lesen','Schritt 2 von 2 · Ein Wort tauschen','',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Der König</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
   if(phase===1){$('game').innerHTML='<section class="panel"><h1>Finde den Fehler</h1><div class="king-layout task-layout">'+illustration()+'<section class="task-content"><div class="parchment question-box"><h2>Welches Wort muss getauscht werden?</h2><p>Tippe das Wort an. Wähle danach ein passendes Wort für die Lücke.</p></div><div id="wordTask"></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details></section></div>'+nav()+'</section>';renderTask();}
-  if(phase===2)$('game').innerHTML='<section class="panel"><h1>Der König</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===3)$('game').innerHTML='<section class="panel"><h1>Der König und die Spinnennetze</h1><p>Du hast herausgefunden, was der König vorhatte.</p><p class="parchment sentence">'+esc(content.sentenceStart)+' '+esc(content.correct)+'.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene6" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-kutsche-weiter.mp4" width="358" height="354" preload="auto" muted playsinline aria-hidden="true"></video><span class="primary" id="completionVideoFallback" hidden></span></button></div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
-  if ($('back')) $('back').onclick=()=>go(phase-1);
-  if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase+1);}
-  if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
+  if(phase===3)audio=mountStoryReading($('game').firstElementChild,content.original);
+  if ($('back')) $('back').onclick=()=>phase===0?location.assign(SilvanaProgress.previousScene(4)):go(phase===3?1:phase-1);
+  if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase===1?3:phase+1);}
   if(phase===3)setupCompletionVideo();
   if($('again'))$('again').onclick=()=>{removed=false;solved=false;feedback='';go(0);};
-  scheduleButtons();
+
  }
  function sentenceWords(){
   if(solved)return esc(content.sentenceStart)+' <span class="answer-word" id="answerWord">'+esc(content.correct)+'</span>';
@@ -110,11 +90,11 @@ function toggleAudio(){audio.toggle(content.original);}
  }
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
- window.addEventListener('resize',scheduleButtons);if(document.fonts)document.fonts.ready.then(scheduleButtons);
+
  window.addEventListener('pagehide',()=>{animationToken++;stopAudio();});
- 
+
  fetch('content.json?v=1').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.options)||data.options.length!==3||!data.options.includes(data.correct))throw Error('Inhalt');
-  content=data;if(SilvanaProgress.completed().includes(5) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}if (!SilvanaProgress.connect(phase, screen => {animationToken++; stopAudio(); phase = screen; if(screen >= 2) {solved = true; removed = true;} render();})) render();
- }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
+  content=data;if(SilvanaProgress.completed().includes(5) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;solved=true;removed=true;}if (!SilvanaProgress.connect(phase, screen => {animationToken++; stopAudio(); phase = screen === 2 ? 3 : screen; if(screen >= 2) {solved = true; removed = true;} render();})) render();
+ }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();});
 })();

@@ -5,41 +5,22 @@
  let content,phase=0,solved=false,feedback='',animationToken=0,question=0,busy=false;
  let placed=[false,false,false,false],flight=null,flightAnimation=null,cardOrder=[0,1,2,3];
  function shuffleCards(){cardOrder=[0,1,2,3];for(let i=cardOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cardOrder[i],cardOrder[j]]=[cardOrder[j],cardOrder[i]];}question=cardOrder[0];}
- const audio = createStorySpeech(updateAudio);
- const speechAvailable = audio.available;
  function sizes(){
   document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);
   document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);
   $('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';
-  cancelFlight();scheduleButtons();
+  cancelFlight();alignCardRows();
  }
- let sizingFrame=0;
- function scheduleButtons(){cancelAnimationFrame(sizingFrame);sizingFrame=requestAnimationFrame(()=>{
-  const buttons=[...document.querySelectorAll('button.primary,button.secondary,button.quiet')].filter(b=>b.getClientRects().length);
-  if(!buttons.length)return;
-  const available=Math.max(1,Math.min(...buttons.map(b=>b.parentElement.clientWidth-parseFloat(getComputedStyle(b.parentElement).paddingLeft)-parseFloat(getComputedStyle(b.parentElement).paddingRight))));
-  buttons.forEach(b=>{b.style.width='max-content';b.style.maxWidth='100%';b.style.height='auto';b.style.flex='0 1 auto';});
-  const width=Math.min(available,Math.max(...buttons.map(b=>b.getBoundingClientRect().width)));
-  buttons.forEach(b=>b.style.width=width+'px');
-  const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
-  buttons.forEach(b=>b.style.height=height+'px');alignCardRows();
- });}
+ let audio;
+ function stopAudio(){audio?.stop();}
  function alignCardRows(){
   const cards=[...document.querySelectorAll('.question-card')];
   for(const card of cards)for(const selector of ['h2','.selection-label','.zoom-open'])card.querySelector(selector).style.minHeight='';
   for(let i=0;i<cards.length;i+=2){const pair=cards.slice(i,i+2);for(const selector of ['h2','.selection-label','.zoom-open']){const elements=pair.map(card=>card.querySelector(selector));const height=Math.ceil(Math.max(...elements.map(el=>el.getBoundingClientRect().height)));elements.forEach(el=>el.style.minHeight=height+'px');}}
  }
- function stopAudio(){audio.stop();}
- function updateAudio(message){
-  if(!$('audioToggle'))return;
-  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Jetzt hören';
-  $('audioStatus').textContent=message||(audio.state==='error'?'Die Stimme konnte nicht vorlesen. Versuche es erneut oder klappe den Originaltext auf.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
-  $('audioToggle').disabled=!speechAvailable;scheduleButtons();
- }
-function toggleAudio(){audio.toggle(content.original);}
 
- function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus({preventScroll:phase===3});if(phase===3)$('scene7').scrollIntoView({block:'nearest'});else $('main').scrollIntoView({block:'start'});}
- function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+(phase === 0 ? '' : '<button class="secondary" id="back">← Zurück</button>')+'</div>';}
+ function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}
+ function nav(next=true){return '<div class="actions scene-navigation">'+(next?'<button class="primary" id="next">Weiter</button>':'')+'<button class="secondary" id="back">← Zurück</button>'+'</div>';}
  function illustration(){return '<figure class="king-art"><img src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1448" height="1086"></figure>';}
  function reading(){return '<div class="reading">'+esc(content.simple)+'</div>';}
  function setupCompletionVideo(){
@@ -73,36 +54,29 @@ function toggleAudio(){audio.toggle(content.original);}
  }
  function render(){SilvanaProgress.checkpoint(phase);
   $('completionVideo')?.pause();
-  $('stepStatus').textContent=['Schritt 1 von 3 · Selbst lesen','Schritt 2 von 3 · Zuordnen','Schritt 3 von 3 · Zuhören',''][phase];$('stepStatus').hidden=phase===3;
+  $('stepStatus').textContent=['Schritt 1 von 2 · Selbst lesen','Schritt 2 von 2 · Zuordnen','',''][phase];$('stepStatus').hidden=phase===3;
   if(phase===0)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="king-layout"><div><p>Lies in deinem Tempo.</p>'+reading()+'</div>'+illustration()+'</div>'+nav()+'</section>';
   if(phase===1){$('game').innerHTML='<section class="panel"><h1>Wer sagt oder tut das?</h1><p>Welche zwei Blasen passen zum Text? Wähle eine Blase und tippe auf das passende Kreuz im Bild.</p><div class="village-task"><div class="board-scroll" role="region" aria-label="Wirtshausbild mit zwei Kreuzen"><div id="villageBoard"><img class="village-image" src="'+esc(content.image)+'" alt="'+esc(content.imageAlt)+'" width="1200" height="900">'+['king','mayor'].map((person,i)=>'<div class="person-slot '+person+'" id="slot'+i+'"><button class="person-cross" data-person="'+person+'" aria-label="Kreuz beim '+(i?'Bürgermeister':'König')+'"><span aria-hidden="true">✕</span></button></div>').join('')+'</div></div><aside class="question-panel"><div id="questionArea"></div><p id="feedback" class="feedback" role="status" aria-live="polite">'+esc(feedback)+'</p></aside></div><details><summary>Lesetext ansehen</summary>'+reading()+'</details>'+nav()+'</section>';renderQuestion();}
 
-  if(phase===2)$('game').innerHTML='<section class="panel"><h1>Im Dorf</h1><div class="actions"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p id="audioStatus" class="feedback" role="status"></p><details><summary>Originaltext zum Mitlesen</summary><div class="original">'+esc(content.original)+'</div></details>'+nav()+'</section>';
   if(phase===3)$('game').innerHTML='<section class="panel"><h1>Das Gespräch im Dorf</h1><p>Du hast die Worte und die Handlung richtig zugeordnet.</p><div class="actions scene-navigation completion-navigation"><button class="completion-video" id="scene7" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" src="assets/wuerstchen-weiter.mp4" width="356" height="356" preload="auto" muted playsinline aria-hidden="true"></video><span class="primary" id="completionVideoFallback" hidden></span></button></div><div class="actions"><button class="secondary" id="again">Diese Szene wiederholen</button></div>'+nav(false)+'</section>';
-  if ($('back')) $('back').onclick=()=>go(phase-1);
-  if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase+1);}
-  if(phase===2){$('audioToggle').onclick=toggleAudio;updateAudio(speechAvailable?'':'Dein Browser kann hier nicht vorlesen. Klappe den Originaltext auf.');}
+  if(phase===3)audio=mountStoryReading($('game').firstElementChild,content.original);
+  if ($('back')) $('back').onclick=()=>phase===0?location.assign(SilvanaProgress.previousScene(5)):go(phase===3?1:phase-1);
+  if($('next')){$('next').disabled=phase===1&&!solved;$('next').onclick=()=>go(phase===1?3:phase+1);}
   if(phase===3)setupCompletionVideo();
   if($('again'))$('again').onclick=()=>{cancelFlight();placed=[false,false,false,false];shuffleCards();solved=false;feedback='';go(0);};
-  scheduleButtons();
+  alignCardRows();
  }
  function bubbleMarkup(i,kind){return '<div class="text-bubble '+kind+'"><img src="assets/sprechblase.webp" alt="" width="900" height="600"><span>'+esc(content.bubbles[i].text)+'</span></div>';}
  function questionTitle(i){return i===1?'Wer hat mit den Schultern gezuckt?':'Wer hat gesagt:';}
  function renderQuestion(){
   if(!$('questionArea'))return;
-  $('questionArea').innerHTML='<div class="question-cards">'+cardOrder.map(i=>{const b=content.bubbles[i];return '<section class="question-card '+(placed[i]?'done':question===i?'selected':'')+'"><h2>'+questionTitle(i)+'</h2><button class="select-question" data-question="'+i+'" aria-label="Blase '+(i+1)+' auswählen: '+esc(b.text)+'" aria-pressed="'+(question===i&&!placed[i])+'" '+(placed[i]||solved?'disabled':'')+'><div class="prompt-scroll"><div id="promptBubble'+i+'">'+bubbleMarkup(i,'large-bubble')+'</div></div><span class="selection-label">'+(placed[i]?'✓ Zugeordnet':solved?'Passt nicht zum Text':question===i?'Diese Blase ist ausgewählt':'Diese Blase auswählen')+'</span></button><button class="zoom-open" data-zoom="'+i+'" aria-label="Blase '+(i+1)+' groß lesen">🔍 <span>Groß lesen</span></button></section>';}).join('')+'</div>'+(solved?'<h2>Beide Blasen passen!</h2><p>Jetzt kannst du diesen Teil der Geschichte hören.</p><div class="actions"><button class="primary" type="button" id="hearNow">Jetzt hören</button></div>':'');
-  if ($('hearNow')) {
-   $('hearNow').onclick = () => {
-    go(2);
-    audio.start(content.original);
-   };
-  }
+  $('questionArea').innerHTML='<div class="question-cards">'+cardOrder.map(i=>{const b=content.bubbles[i];return '<section class="question-card '+(placed[i]?'done':question===i?'selected':'')+'"><h2>'+questionTitle(i)+'</h2><button class="select-question" data-question="'+i+'" aria-label="Blase '+(i+1)+' auswählen: '+esc(b.text)+'" aria-pressed="'+(question===i&&!placed[i])+'" '+(placed[i]||solved?'disabled':'')+'><div class="prompt-scroll"><div id="promptBubble'+i+'">'+bubbleMarkup(i,'large-bubble')+'</div></div><span class="selection-label">'+(placed[i]?'✓ Zugeordnet':solved?'Passt nicht zum Text':question===i?'Diese Blase ist ausgewählt':'Diese Blase auswählen')+'</span></button><button class="zoom-open" data-zoom="'+i+'" aria-label="Blase '+(i+1)+' groß lesen">🔍 <span>Groß lesen</span></button></section>';}).join('')+'</div>'+(solved?'<h2>Beide Blasen passen!</h2><p>Jetzt kannst du diesen Teil der Geschichte hören.</p>':'');
   document.querySelectorAll('.select-question').forEach(b=>b.onclick=()=>{if(busy||solved||placed[Number(b.dataset.question)])return;question=Number(b.dataset.question);feedback='';$('feedback').textContent='';renderQuestion();});
   document.querySelectorAll('.person-cross').forEach((b,i)=>{b.hidden=placed[i];b.disabled=busy||solved;b.onclick=()=>choosePerson(b.dataset.person);});
   placed.slice(0,2).forEach((yes,i)=>{const slot=$('slot'+i);slot.classList.toggle('occupied',yes);const old=slot.querySelector('.parked');if(old)old.remove();if(yes){slot.insertAdjacentHTML('beforeend','<div class="parked" role="group" aria-label="'+esc(content.bubbles[i].text)+' – '+(i?'Bürgermeister':'König')+'">'+bubbleMarkup(i,'small-bubble')+'</div>');}});
   document.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>openZoom(Number(b.dataset.zoom),b));
   $('feedback').hidden=solved;
-  if($('next'))$('next').disabled=!solved||busy;scheduleButtons();
+  if($('next'))$('next').disabled=!solved||busy;alignCardRows();
  }
  let zoomReturn=null;
  function closeZoom(){const d=$('bubbleZoom');if(d&&d.open)d.close();}
@@ -140,11 +114,11 @@ function toggleAudio(){audio.toggle(content.original);}
  }
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};
  ['textSize','boardSize'].forEach(id=>$(id).addEventListener('input',sizes));sizes();
- window.addEventListener('resize',()=>{cancelFlight();scheduleButtons();});if(document.fonts)document.fonts.ready.then(scheduleButtons);
+ window.addEventListener('resize',()=>{cancelFlight();alignCardRows();});if(document.fonts)document.fonts.ready.then(alignCardRows);
  window.addEventListener('pagehide',()=>{cancelFlight();stopAudio();});
- 
+
  fetch('content.json?v=hoertext1').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.bubbles)||data.bubbles.length!==4)throw Error('Inhalt');
-  content=data;shuffleCards();if(SilvanaProgress.completed().includes(6) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}if (!SilvanaProgress.connect(phase, screen => {cancelFlight(); closeZoom(); stopAudio(); phase = screen; if(screen >= 2) {placed = content.bubbles.map(b => b.person !== null); solved = true;} render();})) render();
- }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
+  content=data;shuffleCards();if(SilvanaProgress.completed().includes(6) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}if (!SilvanaProgress.connect(phase, screen => {cancelFlight(); closeZoom(); stopAudio(); phase = screen === 2 ? 3 : screen; if(screen >= 2) {placed = content.bubbles.map(b => b.person !== null); solved = true;} render();})) render();
+ }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();alignCardRows();});
 })();

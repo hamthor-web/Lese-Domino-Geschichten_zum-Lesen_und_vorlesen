@@ -4,40 +4,14 @@ const KEY='silvana-intro-v1';
 function scene2Visited(){return SilvanaProgress.completed().includes(1);}
 
 let content,phase=0,furthest=0,placed=[],order=[2,0,1],selected=null,solved=false,feedback='',hadError=false,saved=null;
-const audio = createStorySpeech(updateAudio);
- const audioAvailable = audio.available;
-let buttonSizingFrame=0;
-function scheduleButtonSizing(){
- if(typeof requestAnimationFrame!=='function')return;
- cancelAnimationFrame(buttonSizingFrame);
- buttonSizingFrame=requestAnimationFrame(equalizeButtons);
-}
-function equalizeButtons(){
- const buttons=[...document.querySelectorAll('button.primary,button.secondary,button.quiet')].filter(b=>b.getClientRects().length);
- if(!buttons.length)return;
- // Measure every label at its natural size before choosing the shared size.
- for(const b of buttons){b.style.width='max-content';b.style.maxWidth='none';b.style.height='auto';b.style.flexShrink='0';}
- const naturalWidth=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().width)));
- const limits=[];
- for(const b of buttons)for(let p=b.parentElement;p;p=p.parentElement){const s=getComputedStyle(p),inner=Math.min(p.clientWidth,p.getBoundingClientRect().width-parseFloat(s.borderLeftWidth)-parseFloat(s.borderRightWidth));limits.push(inner-parseFloat(s.paddingLeft)-parseFloat(s.paddingRight));}
- const availableWidth=Math.floor(Math.min(...limits));
- const width=Math.max(1,Math.min(naturalWidth,availableWidth));
- for(const b of buttons){b.style.width=width+'px';b.style.maxWidth='100%';}
- const height=Math.ceil(Math.max(...buttons.map(b=>b.getBoundingClientRect().height)));
- for(const b of buttons)b.style.height=height+'px';
-}
-if(typeof MutationObserver==='function')new MutationObserver(scheduleButtonSizing).observe(document.body,{childList:true,subtree:true});
-window.addEventListener('resize',()=>{scheduleButtonSizing();updateMoveLabels();});
-if(document.fonts){document.fonts.ready.then(scheduleButtonSizing);document.fonts.addEventListener('loadingdone',scheduleButtonSizing);}
+let audio;
+window.addEventListener('resize',updateMoveLabels);
 function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function loadSaved(){try{const x=JSON.parse(localStorage.getItem(KEY));if(!x)return;const goodIds=a=>Array.isArray(a)&&a.every(i=>Number.isInteger(i)&&i>=0&&i<3)&&new Set(a).size===a.length;if(Number.isInteger(x.phase)&&x.phase>=0&&x.phase<=3&&goodIds(x.placed)&&goodIds(x.order)&&x.order.length===3){saved=x;}if([90,100,110,120,130,140,150,160].includes(x.text))$('textSize').value=x.text;if([80,90,100,110,120,130,140,150,160].includes(x.board))$('boardSize').value=x.board;}catch{}}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({phase,furthest,placed,order,solved,text:Number($('textSize').value),board:Number($('boardSize').value)}));}catch{}}
 function sizes(){document.documentElement.style.setProperty('--text',Number($('textSize').value)/100);document.documentElement.style.setProperty('--board',Number($('boardSize').value)/100);$('textOutput').textContent=$('textSize').value+' %';$('boardOutput').textContent=$('boardSize').value+' %';updateMoveLabels();}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}if(a.every((n,i)=>n===i))a.reverse();return a;}
-function stopAudio(){audio.stop();}
-function updateAudio(){const toggle=$('audioToggle'),status=$('audioStatus');if(!toggle||!status)return;toggle.textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';status.textContent=!audioAvailable?'Dein Browser kann hier nicht vorlesen. Du kannst den Originaltext aufklappen.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Das war der Anfang von Silvana.':audio.state==='error'?'Die Stimme konnte nicht starten. Versuche es erneut oder klappe den Originaltext auf.':'Mach es dir gemütlich und höre zu.';toggle.disabled=!audioAvailable;}
-function speak(){audio.start(content.original);}
-function toggleAudio(){audio.toggle(content.original);}
+function stopAudio(){audio?.stop();}
 function changePhase(n){if(n<0||n>3)return;finishTileDrag(false);stopAudio();phase=n;furthest=Math.max(furthest,n);selected=null;feedback='';hadError=false;saved=null;persist();render();$('main').focus();$('main').scrollIntoView({block:'start'});}
 function tileText(id,index){let text=content.tiles[id];if(index===0)text=text.charAt(0).toUpperCase()+text.slice(1);else if(id===0)text='das'+text.slice(3);return text;}
 function move(id,pos){if(!Number.isInteger(id)||id<0||id>2||!Number.isInteger(pos)||pos<0||pos>placed.length)return;const old=placed.indexOf(id);if(old!==-1){placed.splice(old,1);if(old<pos)pos--;}placed.splice(pos,0,id);changed();}
@@ -127,7 +101,6 @@ function renderBoard(){finishTileDrag(false);const box=$('boardContent');if(!box
  $('back').onclick=()=>changePhase(1);
  $('left').onclick=()=>shiftTile(-1);$('right').onclick=()=>shiftTile(1);$('return').onclick=removeTile;$('check').onclick=check;$('hint').onclick=hint;$('finish').onclick=()=>changePhase(3);
 }
-function originalDetails(){return `<details><summary>Originaltext zum Mitlesen</summary><div class="original">${escapeHtml(content.original)}</div></details>`;}
 let stopCompletionVideo;
 
 function setupCompletionVideo(){
@@ -170,10 +143,10 @@ function setupCompletionVideo(){
 }
 
 function render(){SilvanaProgress.checkpoint(phase);stopCompletionVideo?.();stopCompletionVideo=null;$('introTitle').hidden=phase!==0;for(let i=0;i<3;i++){const b=$('step'+i);b.disabled=i>furthest;b.classList.toggle('active',i===Math.min(phase,2));if(i===Math.min(phase,2))b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.onclick=()=>changePhase(i);}
- const game=$('game');if(phase===0){game.innerHTML=`${saved?'<section class="restore"><strong>Du warst schon hier.</strong><p>Möchtest du an deinem letzten Stand weitermachen?</p><div class="actions"><button class="primary" id="resume">Weitermachen</button><button class="secondary" id="new">Von vorn beginnen</button></div></section>':''}<section class="listen"><div><span class="eyebrow">Erst einmal zuhören</span><h1>Das Land der glitzernden Spinnweben</h1><p>Hinter dunklen Bergen liegt ein kleines Land. Lerne Silvana kennen.</p><div class="audio-controls"><button class="primary" id="audioToggle">▶ Geschichte anhören</button></div><p class="audio-status" id="audioStatus" role="status" aria-live="polite"></p><button class="secondary listen-next" id="toRead">Weiter</button></div></section>${originalDetails()}`;$('audioToggle').onclick=toggleAudio;$('toRead').onclick=()=>changePhase(1);updateAudio();if(saved){$('resume').onclick=()=>{const x=saved;phase=x.phase;furthest=Math.max(x.phase,Math.min(3,Number(x.furthest)||0));placed=x.placed;order=x.order;solved=placed.length===3&&placed.every((id,i)=>id===i);saved=null;render();};$('new').onclick=()=>{saved=null;phase=0;furthest=0;placed=[];solved=false;order=shuffle([0,1,2]);persist();render();};}}
+ const game=$('game');if(phase===0){game.innerHTML=`${saved?'<section class="restore"><strong>Du warst schon hier.</strong><p>Möchtest du an deinem letzten Stand weitermachen?</p><div class="actions"><button class="primary" id="resume">Weitermachen</button><button class="secondary" id="new">Von vorn beginnen</button></div></section>':''}<section class="listen"><div><span class="eyebrow">Dein Abenteuer beginnt</span><h1>Das Land der glitzernden Spinnweben</h1><p>Hinter dunklen Bergen liegt ein kleines Land. Lerne Silvana kennen.</p><button class="primary" id="toRead">Weiter</button></div></section>`;$('toRead').onclick=()=>changePhase(1);if(saved){$('resume').onclick=()=>{const x=saved;phase=x.phase;furthest=Math.max(x.phase,Math.min(3,Number(x.furthest)||0));placed=x.placed;order=x.order;solved=placed.length===3&&placed.every((id,i)=>id===i);saved=null;render();};$('new').onclick=()=>{saved=null;phase=0;furthest=0;placed=[];solved=false;order=shuffle([0,1,2]);persist();render();};}}
  else if(phase===1){game.innerHTML=`<section class="panel reading-layout"><span class="eyebrow">Jetzt bist du dran</span><h2>Willkommen in Silvana</h2><p class="read-intro">Lies in deinem Tempo.</p><div class="reading">${escapeHtml(content.simple)}</div><div class="actions scene-navigation"><button class="primary" id="toDomino">Weiter</button><button class="secondary" id="back">← Zurück</button></div></section>`;$('back').onclick=()=>changePhase(0);$('toDomino').onclick=()=>changePhase(2);}
  else if(phase===2){game.innerHTML=`<div class="domino-layout"><section class="panel readback"><span class="eyebrow">Zum Nachschauen</span><h3>Dein Lesetext</h3><div class="reading">${escapeHtml(content.simple)}</div></section><section class="panel board"><span class="eyebrow">Dein erstes Domino</span><h2>Baue deinen Satz.</h2><p class="board-help">Tippe die Steine in deiner Reihenfolge an. Du kannst sie auch ziehen. Prüfe deinen Satz, wenn du fertig bist.</p><div id="boardContent"></div></section></div>`;renderBoard();}
- else{game.innerHTML=`<section class="panel finish"><div class="finish-star" aria-hidden="true">✧</div><h2>Willkommen in Silvana!</h2><p>Du hast zugehört, selbst gelesen und deinen Satz gelegt.</p><p class="completed-sentence">${escapeHtml(content.tiles.join(' '))}.</p><p class="note">Die Geschichte geht weiter. Was wartet wohl als Nächstes auf dich?</p><div class="actions completion-actions"><button class="primary" id="again">Domino noch einmal spielen</button><button class="secondary" id="listenAgain">Geschichte noch einmal hören</button><div class="adventure-link"><p>Jetzt geht das Abenteuer weiter.</p><div class="scene-navigation actions completion-navigation"><button class="completion-video" id="scene2" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" width="356" height="350" src="assets/weiter-boden-stampfen.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="completionVideoFallback" hidden>Weiter</span></button><button class="secondary" id="back">← Zurück</button></div></div></div></section>`;$('back').onclick=()=>changePhase(2);$('again').onclick=()=>{placed=[];solved=false;order=shuffle([0,1,2]);changePhase(2);};$('listenAgain').onclick=()=>{changePhase(0);speak();};setupCompletionVideo();}}
+ else{game.innerHTML=`<section class="panel finish"><div class="finish-star" aria-hidden="true">✧</div><h2>Willkommen in Silvana!</h2><p>Du hast selbst gelesen und deinen Satz gelegt.</p><p class="completed-sentence">${escapeHtml(content.tiles.join(' '))}.</p><p class="note">Die Geschichte geht weiter. Was wartet wohl als Nächstes auf dich?</p><div class="actions completion-actions"><button class="primary" id="again">Domino noch einmal spielen</button><div class="adventure-link"><p>Jetzt geht das Abenteuer weiter.</p><div class="scene-navigation actions completion-navigation"><button class="completion-video" id="scene2" type="button" disabled aria-label="Würstchen-Animation läuft"><video id="completionVideo" width="356" height="350" src="assets/weiter-boden-stampfen.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="completionVideoFallback" hidden>Weiter</span></button><button class="secondary" id="back">← Zurück</button></div></div></div></section>`;$('back').onclick=()=>changePhase(2);$('again').onclick=()=>{placed=[];solved=false;order=shuffle([0,1,2]);changePhase(2);};audio=mountStoryReading(game.querySelector('.finish'),content.original);setupCompletionVideo();}}
  $('settingsToggle').onclick=()=>{const open=$('settings').hidden;$('settings').hidden=!open;$('settingsToggle').setAttribute('aria-expanded',String(open));};for(const id of ['textSize','boardSize'])$(id).addEventListener('input',()=>{sizes();if(!saved)persist();});
  window.addEventListener('pagehide',stopAudio);
  fetch('content.json').then(r=>{if(!r.ok)throw Error('Text nicht gefunden');return r.json();}).then(data=>{content=data;order=shuffle([0,1,2]);loadSaved();sizes();if(new URLSearchParams(location.search).get('abschnitt')==='abschluss'&&scene2Visited()){phase=3;furthest=3;saved=null;}if (!SilvanaProgress.connect(phase, screen => {stopAudio(); phase = screen; furthest = Math.max(furthest, screen); saved = null; render();})) render();}).catch(()=>{$('game').innerHTML='<section class="panel"><h2>Der Text konnte nicht geladen werden.</h2><p>Bitte lade die Seite noch einmal.</p><button class="primary" onclick="location.reload()">Erneut laden</button></section>';});

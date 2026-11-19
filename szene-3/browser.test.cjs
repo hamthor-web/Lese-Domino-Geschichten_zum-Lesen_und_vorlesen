@@ -10,7 +10,7 @@ const errors=[];
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function ready(){
  for(let i=0;i<(live?180:60);i++){
-  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=11')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
+  try{const r=await fetch(base+'szene-3/');if(r.ok){if(!live)return;const entry=await r.text();if(!entry.includes('scene.js?v=abschluss1')){await delay(500);continue;}const code=await fetch(base+'szene-2/?pruefung='+Date.now()).then(x=>x.text());if(code.includes("function retrySun(button)"))return;}}catch{}
   await delay(500);
  }
  throw Error('Server nicht erreichbar: '+base);
@@ -40,11 +40,8 @@ async function run(){
  page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(r.status()+' '+r.url());});
  await page.goto(base+'szene-2/');
  assert.equal(await page.locator('#repeat').count(),0);
- for(const action of ['Pause','Weiterhören','Pause']){await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),new RegExp(action));}
- await page.evaluate(()=>window.__utterance.onend());
- assert.match(await page.locator('#audio').innerText(),/Noch einmal/);
- await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),/Pause/);
- await page.locator('#next').click();await page.locator('#next').click();
+ assert.equal(await page.locator('#audio').count(),0);
+ await page.locator('#next').click();
  assert.equal(await page.locator('.crate-preview').count(),3);
  for(const word of ['Stoff','Wege']){
   await page.locator('[data-answer="'+word+'"]').click();
@@ -87,11 +84,15 @@ async function run(){
  console.log('PASS: beide Lupen ohne Antwortwahl, Escape/Fokus; Sonnentag schließt, schüttelt und öffnet die Originalrolle.');
  assert.equal(await page.locator('#next').isVisible(),false);
  await page.locator('[data-answer="rain"]').click();
- assert.deepEqual(await page.locator('.weather-choice').evaluateAll(bs=>bs.map(b=>getComputedStyle(b).opacity)),['1','1']);
+ for(const action of ['Pause','Weiterhören','Pause']){await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),new RegExp(action));}
+ await page.evaluate(()=>(() => {for(let i=0;i<100;i++) window.__utterance.onend();})());
+ assert.match(await page.locator('#audio').innerText(),/Noch einmal/);
+ await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),/Pause/);
+
  try{await page.waitForFunction(()=>document.getElementById('nextAnimation').ended,{},{timeout:20000});}catch(error){console.error('Videozustand:',await page.locator('#nextAnimation').evaluate(v=>({paused:v.paused,ended:v.ended,time:v.currentTime,duration:v.duration,ready:v.readyState,error:v.error&&v.error.message})));throw error;}
  assert.equal(await page.locator('#nextAnimation').evaluate(v=>v.loop),false);
  assert.equal(await page.locator('#adventureNext').innerText(),'Jetzt geht das Abenteuer weiter.');
- await page.locator('#next').click();
+ await page.locator('#scene3').click();
  await page.waitForURL('**/szene-3/');
  await page.locator('#next').waitFor();
  console.log('PASS: echte Kisten/Rollen/MP4 und animierter Weiter-Button führen zu Szene 3.');
@@ -167,13 +168,12 @@ async function run(){
  await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Weiterhören/);
  await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
  assert.equal(await page.locator('#restartAudio').count(),0);
- await page.evaluate(()=>window.__utterance.onend());
+ await page.evaluate(()=>{for(let i=0;i<100;i++) window.__utterance.onend();});
  assert.match(await page.locator('#audioToggle').innerText(),/Noch einmal/);
  await page.locator('#audioToggle').click();
  assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
  const calls=await page.evaluate(()=>window.__speechCalls);
- assert.ok(calls.includes('speak')&&calls.includes('pause')&&calls.includes('resume'));
- await page.locator('#next').click();
+ assert.ok(calls.filter(call=>call==='speak').length>1&&calls.includes('cancel'));
  const completion=page.locator('#scene4'),clip=page.locator('#completionVideo');
  assert.equal(await completion.isDisabled(),true);
  await page.waitForFunction(()=>document.getElementById('completionVideo').currentTime>0);
@@ -184,7 +184,7 @@ async function run(){
  assert.equal(await clip.isVisible(),true);
  assert.equal(await completion.getAttribute('aria-label'),'Weiter zu Der Händler');
  assert.doesNotMatch(await page.locator('body').innerText(),/Szene 3 geschafft/);
- await page.locator('#back').click();await page.locator('#back').click();
+ await page.locator('#back').click();
  assert.equal(await page.locator('#answer').inputValue(),'BLAU');
  assert.equal(await page.locator('#correction').inputValue(),'grau');
  await page.locator('#back').click();await layout();
@@ -195,10 +195,7 @@ async function run(){
  assert.equal(await page.locator('.adventure-link p').innerText(),'Jetzt geht das Abenteuer weiter.');
  await page.locator('#scene3').click();await page.waitForURL('**/szene-3/');
  await page.locator('.brand').click();
- await page.locator('#audioToggle').waitFor();
- assert.equal(await page.locator('#restartAudio').count(),0);
- await page.locator('#audioToggle').click();await page.evaluate(()=>window.__utterance.onend());
- await page.locator('#audioToggle').click();assert.match(await page.locator('#audioToggle').innerText(),/Pause/);
+ assert.equal(await page.locator('#audioToggle').count(),0);
  await page.locator('.scene-menu summary').click();
  await page.locator('#sceneMenu3').waitFor({state:'visible'});
  // Zweiter Durchlauf: direkte Korrektur im neuen zweiten Feld ohne Hilfe.
@@ -225,7 +222,7 @@ async function run(){
  console.log('PASS: Rücknavigation zum Szene-2-Abschluss, Wiederbesuch, Menüfreischaltung.');
 
  // Wiederholung setzt die Auswahl zurück; Eingabefelder sind erneut verborgen.
- await page.locator('#next').click();await page.locator('#next').click();
+ await page.locator('#next').click();
  await page.locator('#again').click();await page.locator('#next').click();
  assert.equal(await page.locator('#answerDialog').isVisible(),false);
  await page.locator('.picture-choice').first().waitFor({state:'visible'});

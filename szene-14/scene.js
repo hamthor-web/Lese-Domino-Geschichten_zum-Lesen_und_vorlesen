@@ -67,7 +67,7 @@
   function start() {
     SilvanaProgress.checkpoint('activity');
     cancelDrag();
-    speech.stop();
+    stopSpeech();
     select(null);
     board.classList.remove('revealed', 'use-still');
     sparkle.hidden = true;
@@ -262,44 +262,37 @@
     };
   }
 
-  let story;
-  let activeListen;
-  const speech = createStorySpeech(() => {
-    if (!activeListen) return;
-    const labels = {playing: 'Ⅱ Pause', paused: '▶ Weiterhören', ended: '↻ Noch einmal hören', error: 'Erneut vorlesen'};
-    activeListen.textContent = labels[speech.state] || activeListen.dataset.label;
-    const status = byId(activeListen.id === 'listenLast' ? 'readingSpeechStatus' : 'speechStatus');
-    status.hidden = speech.state !== 'error';
-    status.textContent = status.hidden ? '' : 'Die Vorlesestimme konnte nicht starten.';
-  });
-  const listenLast = byId('listenLast');
-  const listenFull = byId('listenFull');
-  for (const [button, section] of [[listenLast, 'last'], [listenFull, 'full']]) {
-    button.dataset.label = button.textContent;
-    button.onclick = () => {
-      activeListen = button;
-      speech.toggle(story[section]);
-    };
+  let lastSpeech;
+  let fullSpeech;
+
+  function stopSpeech() {
+    lastSpeech?.stop();
+    fullSpeech?.stop();
   }
-  listenFull.disabled = true;
-  listenFull.hidden = !speech.available;
+
   fetch('assets/vorlesetext.json')
     .then(response => {
       if (!response.ok) throw new Error('Vorlesetext fehlt');
       return response.json();
     })
     .then(text => {
-      story = text;
-      byId('fullStory').textContent = text.full;
-      byId('readFull').hidden = false;
-      listenLast.hidden = !speech.available;
-      listenFull.disabled = !speech.available;
+      lastSpeech = mountStoryReading(byId('lastReading'), text.last, {
+        id: 'listenLast', label: 'Szene vorlesen', beforeToggle: () => fullSpeech.stop()
+      });
+      fullSpeech = mountStoryReading(byId('fullReading'), text.full, {
+        id: 'listenFull', title: 'Die ganze Geschichte', label: 'Ganze Geschichte vorlesen',
+        statusId: 'fullSpeechStatus', readingId: 'readFull', textId: 'fullStory',
+        readingLabel: 'Ganze Geschichte mitlesen', beforeToggle: () => lastSpeech.stop()
+      });
     })
-    .catch(() => { listenFull.hidden = true; });
+    .catch(() => {
+      byId('speechStatus').textContent = 'Die Vorlesetexte konnten nicht geladen werden.';
+      byId('speechStatus').hidden = false;
+    });
 
   byId('start').onclick = start;
   byId('retry').onclick = start;
-  window.addEventListener('pagehide', () => speech.stop());
+  window.addEventListener('pagehide', stopSpeech);
 
   const settings = byId('settings');
   byId('settingsToggle').onclick = () => {
@@ -313,8 +306,9 @@
       byId(name + 'Output').textContent = slider.value + ' %';
     };
   }
+  byId('back').onclick = () => location.assign(SilvanaProgress.previousScene(13));
   SilvanaProgress.connect('reading', screen => {
-    speech.stop();
+    stopSpeech();
     glowVideo.pause();
     if (screen === 'reading') {
       byId('reading').hidden = false;
@@ -329,5 +323,5 @@
     start();
     if (screen === 'question' || screen === 'finish') showQuestion();
     if (screen === 'finish') answers.find(answer => answer.hasAttribute('data-correct')).onclick();
-  });
+  }, 14);
 })();
