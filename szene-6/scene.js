@@ -32,7 +32,7 @@
  function stopAudio(){audio.stop();}
  function updateAudio(message){
   if(!$('audioToggle'))return;
-  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Geschichte anhören';
+  $('audioToggle').textContent=audio.state==='playing'?'Ⅱ Pause':audio.state==='paused'?'▶ Weiterhören':audio.state==='ended'?'↻ Noch einmal hören':'▶ Jetzt hören';
   $('audioStatus').textContent=message||(audio.state==='error'?'Die Stimme konnte nicht vorlesen. Versuche es erneut oder klappe den Originaltext auf.':audio.state==='playing'?'Die Geschichte wird vorgelesen.':audio.state==='paused'?'Die Geschichte ist angehalten.':audio.state==='ended'?'Du hast diesen Teil der Geschichte gehört.':'Höre dir die Geschichte an.');
   $('audioToggle').disabled=!speechAvailable;scheduleButtons();
  }
@@ -90,7 +90,13 @@ function toggleAudio(){audio.toggle(content.original);}
  function questionTitle(i){return i===1?'Wer hat mit den Schultern gezuckt?':'Wer hat gesagt:';}
  function renderQuestion(){
   if(!$('questionArea'))return;
-  $('questionArea').innerHTML='<div class="question-cards">'+cardOrder.map(i=>{const b=content.bubbles[i];return '<section class="question-card '+(placed[i]?'done':question===i?'selected':'')+'"><h2>'+questionTitle(i)+'</h2><button class="select-question" data-question="'+i+'" aria-label="Blase '+(i+1)+' auswählen: '+esc(b.text)+'" aria-pressed="'+(question===i&&!placed[i])+'" '+(placed[i]||solved?'disabled':'')+'><div class="prompt-scroll"><div id="promptBubble'+i+'">'+bubbleMarkup(i,'large-bubble')+'</div></div><span class="selection-label">'+(placed[i]?'✓ Zugeordnet':solved?'Passt nicht zum Text':question===i?'Diese Blase ist ausgewählt':'Diese Blase auswählen')+'</span></button><button class="zoom-open" data-zoom="'+i+'" aria-label="Blase '+(i+1)+' groß lesen">🔍 <span>Groß lesen</span></button></section>';}).join('')+'</div>'+(solved?'<h2>Beide Blasen passen!</h2><p>Jetzt kannst du diesen Teil der Geschichte hören.</p>':'');
+  $('questionArea').innerHTML='<div class="question-cards">'+cardOrder.map(i=>{const b=content.bubbles[i];return '<section class="question-card '+(placed[i]?'done':question===i?'selected':'')+'"><h2>'+questionTitle(i)+'</h2><button class="select-question" data-question="'+i+'" aria-label="Blase '+(i+1)+' auswählen: '+esc(b.text)+'" aria-pressed="'+(question===i&&!placed[i])+'" '+(placed[i]||solved?'disabled':'')+'><div class="prompt-scroll"><div id="promptBubble'+i+'">'+bubbleMarkup(i,'large-bubble')+'</div></div><span class="selection-label">'+(placed[i]?'✓ Zugeordnet':solved?'Passt nicht zum Text':question===i?'Diese Blase ist ausgewählt':'Diese Blase auswählen')+'</span></button><button class="zoom-open" data-zoom="'+i+'" aria-label="Blase '+(i+1)+' groß lesen">🔍 <span>Groß lesen</span></button></section>';}).join('')+'</div>'+(solved?'<h2>Beide Blasen passen!</h2><p>Jetzt kannst du diesen Teil der Geschichte hören.</p><div class="actions"><button class="primary" type="button" id="hearNow">Jetzt hören</button></div>':'');
+  if ($('hearNow')) {
+   $('hearNow').onclick = () => {
+    go(2);
+    audio.start(content.original);
+   };
+  }
   document.querySelectorAll('.select-question').forEach(b=>b.onclick=()=>{if(busy||solved||placed[Number(b.dataset.question)])return;question=Number(b.dataset.question);feedback='';$('feedback').textContent='';renderQuestion();});
   document.querySelectorAll('.person-cross').forEach((b,i)=>{b.hidden=placed[i];b.disabled=busy||solved;b.onclick=()=>choosePerson(b.dataset.person);});
   placed.slice(0,2).forEach((yes,i)=>{const slot=$('slot'+i);slot.classList.toggle('occupied',yes);const old=slot.querySelector('.parked');if(old)old.remove();if(yes){slot.insertAdjacentHTML('beforeend','<div class="parked" role="group" aria-label="'+esc(content.bubbles[i].text)+' – '+(i?'Bürgermeister':'König')+'">'+bubbleMarkup(i,'small-bubble')+'</div>');}});
@@ -137,7 +143,7 @@ function toggleAudio(){audio.toggle(content.original);}
  window.addEventListener('resize',()=>{cancelFlight();scheduleButtons();});if(document.fonts)document.fonts.ready.then(scheduleButtons);
  window.addEventListener('pagehide',()=>{cancelFlight();stopAudio();});
  
- fetch('content.json?v=3').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
+ fetch('content.json?v=hoertext1').then(r=>{if(!r.ok)throw Error('Text');return r.json();}).then(data=>{
   if(typeof data.original!=='string'||typeof data.simple!=='string'||typeof data.image!=='string'||!Array.isArray(data.bubbles)||data.bubbles.length!==4)throw Error('Inhalt');
   content=data;shuffleCards();if(SilvanaProgress.completed().includes(6) && new URLSearchParams(location.search).get('abschnitt')==='abschluss'){phase=3;placed=[true,true,false,false];solved=true;}if (!SilvanaProgress.connect(phase, screen => {cancelFlight(); closeZoom(); stopAudio(); phase = screen; if(screen >= 2) {placed = content.bubbles.map(b => b.person !== null); solved = true;} render();})) render();
  }).catch(()=>{$('game').innerHTML='<section class="panel"><h1>Die Geschichte konnte nicht geladen werden.</h1><button class="primary" id="retry">Erneut laden</button></section>';$('retry').onclick=()=>location.reload();scheduleButtons();});
