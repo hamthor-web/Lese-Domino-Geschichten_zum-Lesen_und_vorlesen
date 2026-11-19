@@ -44,6 +44,15 @@
 #glow, #glowVideo { opacity: 0; transition: opacity 1.65s ease-in-out; }
 .puzzle-board.revealed.use-still #glow,
 .puzzle-board.revealed #glowVideo.is-playing { opacity: 1; }
+#sparkle {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: none;
+}
+#sparkle::before { content: none; }
+#sparkle:focus-visible { outline-offset: -5px; }
 #glowVideo { object-fit: contain; pointer-events: none; }
 .puzzle-board.revealed .seams { opacity: .35; }
 .seams { transition: opacity 1.65s ease-in-out; }

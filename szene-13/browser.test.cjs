@@ -197,6 +197,13 @@ function localServer() {
   await checkWidth('Szene 14 Abschluss', 1440, 900, 160, 160);
   await page.waitForFunction(() => document.querySelector('#glowVideo').ended);
   assert(await button('glowVideo').evaluate(video => video.classList.contains('is-playing') && video.currentTime >= 4.9));
+  const sparkle = page.getByRole('button', {name: 'Abschlussbild erneut funkeln lassen'});
+  assert.equal(await sparkle.textContent(), '');
+  await sparkle.click();
+  await page.waitForFunction(() => {
+    const video = document.querySelector('#glowVideo');
+    return !video.paused && video.currentTime < 2;
+  });
   await page.getByText('Geschichte mitlesen', {exact: true}).click();
   assert((await button('fullStory').innerText()).length > 1000);
   assert.equal(await page.locator('#readFull').evaluate(el => el.open), true);

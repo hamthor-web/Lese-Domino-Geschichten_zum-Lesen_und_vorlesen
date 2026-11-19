@@ -4,6 +4,7 @@
   const byId = id => document.getElementById(id);
   const board = byId('board');
   const glowVideo = byId('glowVideo');
+  const sparkle = byId('sparkle');
   const tray = byId('pieces');
   const feedback = byId('feedback');
   const rotate = byId('rotate');
@@ -69,6 +70,7 @@
     speech.stop();
     select(null);
     board.classList.remove('revealed', 'use-still');
+    sparkle.hidden = true;
     glowVideo.classList.remove('is-playing');
     glowVideo.pause();
     if (glowVideo.readyState) glowVideo.currentTime = 0;
@@ -224,6 +226,19 @@
   }
   glowVideo.addEventListener('error', showStill);
 
+  function playSparkle() {
+    if (reducedMotion.matches) {
+      showStill();
+      return;
+    }
+    if (glowVideo.readyState) glowVideo.currentTime = 0;
+    glowVideo.play().catch(error => {
+      if (error.name !== 'AbortError') showStill();
+    });
+  }
+
+  sparkle.onclick = playSparkle;
+
   for (const answer of answers) {
     answer.onclick = () => {
       if (!answer.hasAttribute('data-correct')) {
@@ -238,10 +253,8 @@
       byId('questionTitle').hidden = true;
       byId('sceneFooter').hidden = true;
       board.classList.add('revealed');
-      if (reducedMotion.matches) showStill();
-      else glowVideo.play().catch(error => {
-        if (error.name !== 'AbortError') showStill();
-      });
+      sparkle.hidden = false;
+      playSparkle();
       byId('answers').hidden = true;
       byId('ending').hidden = false;
       byId('endingTitle').focus({preventScroll: true});
