@@ -29,17 +29,19 @@ const layoutProblems = new Map();
 async function checkActions(page, description) {
   const issues = await page.evaluate(() => {
     const problems = [];
-    for (const group of document.querySelectorAll('#main, .topbar, .welcome, dialog')) {
+    const groups = '#main, .topbar, .welcome, dialog, [data-parchment-group]';
+    for (const group of document.querySelectorAll(groups)) {
       const controls = [...group.querySelectorAll('[data-parchment]')].filter(control =>
-        control.getClientRects().length && control.closest('#main, .topbar, .welcome, dialog') === group
+        control.getClientRects().length && control.closest(groups) === group
       );
       const bounds = controls.map(control => control.getBoundingClientRect());
       for (const [index, control] of controls.entries()) {
         const style = getComputedStyle(control);
+        const glanz = getComputedStyle(control, '::before');
         const {width, height, left, right} = bounds[index];
         const label = control.textContent.trim();
         if (!style.borderImageSource.includes('button-pergament.webp') ||
-            !getComputedStyle(control, '::before').backgroundImage.includes('button-glanz.webp')) {
+            !glanz.backgroundImage.includes('button-glanz.webp')) {
           problems.push(['Gestaltung', label]);
         }
         if (Math.abs(width - bounds[0].width) >= 0.1 || Math.abs(height - bounds[0].height) >= 0.1) {
@@ -48,6 +50,12 @@ async function checkActions(page, description) {
         if (height < 55 || left < -1 || right > innerWidth + 1 ||
             control.scrollWidth > control.clientWidth + 1 || control.scrollHeight > control.clientHeight + 1) {
           problems.push(['Platz', label, width, height, left, right, control.scrollWidth, control.scrollHeight]);
+        }
+        const range = document.createRange();
+        range.selectNodeContents(control);
+        const sparkleEnd = left + parseFloat(glanz.left) + parseFloat(glanz.width);
+        if ([...range.getClientRects()].some(rect => rect.width > 0 && rect.left < sparkleEnd - 1)) {
+          problems.push(['Text über der Verzierung', label]);
         }
       }
       for (const control of group.querySelectorAll('button.primary, button.secondary, #main summary, .welcome .start')) {
@@ -117,6 +125,35 @@ async function checkActions(page, description) {
       }
     }
     assert.deepEqual([...layoutProblems.values()], []);
+    await page.setViewportSize({width: 320, height: 640});
+    await page.goto(base + 'szene-6/?test-screen=1');
+    await page.locator('.zoom-open[data-parchment]').first().waitFor();
+    await layout(page);
+    const reread = await page.locator('#game summary').boundingBox();
+    const back = await page.locator('#back').boundingBox();
+    const next = await page.locator('#next').boundingBox();
+    const magnifier = await page.locator('.zoom-open').first().boundingBox();
+    assert.equal(reread.x, back.x);
+    assert.equal(back.x, next.x);
+    assert.ok(reread.y < back.y && back.y < next.y);
+    assert.ok(next.width > magnifier.width && next.height < 100);
+    await page.goto(base + 'szene-10/?test-screen=finish');
+    for (const [width, height] of devices) {
+      await page.setViewportSize({width, height});
+      for (const [text, board] of zooms) {
+        await page.evaluate(([text, board]) => {
+          for (const [id, value] of [['textSize', text], ['boardSize', board]]) {
+            const input = document.getElementById(id);
+            input.value = value;
+            input.dispatchEvent(new Event('input', {bubbles: true}));
+          }
+        }, [text, board]);
+        const tops = await page.locator('.drop-target img').evaluateAll(images =>
+          images.map(image => image.getBoundingClientRect().top));
+        assert.equal(tops.length, 3);
+        assert.ok(Math.max(...tops) - Math.min(...tops) < 1, 'Tropfenbilder stehen bündig');
+      }
+    }
     await page.setViewportSize({width: 320, height: 640});
     const stateTest = async (selector, label) => {
       const control = page.locator(selector);

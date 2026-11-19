@@ -22,6 +22,8 @@
 }
 
 .drop-target {
+  display: flex;
+  flex-direction: column;
   min-height: clamp(58px, calc(100px * var(--board)), 160px);
   padding: 5px;
   background: #f5edd9 url('../vorschau-einfuehrung/assets/button-parchment.svg') center / auto 240% no-repeat;
@@ -29,6 +31,13 @@
   font-size: inherit;
   font-weight: bold;
   overflow-wrap: anywhere;
+}
+
+.drop-target > span {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  width: 100%;
 }
 
 .drop-target:disabled {
@@ -54,7 +63,7 @@
   border-radius: 6px;
 }
 
-.drop-target img { margin-top: 6px; }
+.drop-target img { margin-block: 6px 0; }
 .drop-target.is-over,
 .drop-picture[aria-pressed="true"] {
   outline: 3px solid #694786;
