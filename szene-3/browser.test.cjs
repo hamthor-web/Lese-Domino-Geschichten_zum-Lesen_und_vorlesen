@@ -89,6 +89,7 @@ async function run(){
  assert.match(await page.locator('#audio').innerText(),/Noch einmal/);
  await page.locator('#audio').click();assert.match(await page.locator('#audio').innerText(),/Pause/);
 
+ await page.locator('#scene3').scrollIntoViewIfNeeded();
  try{await page.waitForFunction(()=>document.getElementById('nextAnimation').ended,{},{timeout:20000});}catch(error){console.error('Videozustand:',await page.locator('#nextAnimation').evaluate(v=>({paused:v.paused,ended:v.ended,time:v.currentTime,duration:v.duration,ready:v.readyState,error:v.error&&v.error.message})));throw error;}
  assert.equal(await page.locator('#nextAnimation').evaluate(v=>v.loop),false);
  assert.equal(await page.locator('#adventureNext').innerText(),'Jetzt geht das Abenteuer weiter.');

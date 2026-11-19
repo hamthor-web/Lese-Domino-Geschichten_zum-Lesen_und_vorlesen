@@ -51,14 +51,14 @@
 .picture-zoom button{font:inherit;font-size:calc(20px * var(--text));min-height:52px;padding:10px 18px;border:2px solid #8a649f;border-radius:12px;background:#f5edf8;color:#493e58;cursor:pointer}
 .picture-zoom img{display:block;width:100%;height:auto;max-height:calc(94dvh - 110px);object-fit:contain}
 </style>
-<link rel="stylesheet" href="../shared/scene-menu.css?v=4">
-<script src="../shared/scene-menu.js?v=abschluss1" defer></script>
+<link rel="stylesheet" href="../shared/scene-menu.css?v=6">
+<script src="../shared/scene-menu.js?v=abschluss2" defer></script>
 </head>
 <body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a><button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
 <section id="settings" class="settings" hidden><label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label><label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
 <main class="s2" id="main" tabindex="-1"><details class="scene-menu" id="sceneMenu" data-scene="2"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Abgeschlossene Szenen"><p class="note">Hier erscheinen abgeschlossene Szenen.</p></nav></details><div class="chapterline"><span class="chapter">Die vier Straßen</span><span class="chapter-count">Szene 2 · Vorstellung</span></div><div class="crumbs" id="crumbs"></div><div id="game"></div><footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
 <dialog class="picture-zoom" id="pictureZoom" aria-labelledby="zoomTitle"><header><h2 id="zoomTitle"></h2><button type="button" id="closeZoom" autofocus>✕ Schließen</button></header><img id="zoomImage" alt=""></dialog>
-<script src="../shared/story-speech.js?v=2"></script>
+<script src="../shared/story-speech.js?v=3"></script>
 <script>
 'use strict';
 const original="Vier Straßen voller Schlaglöcher hatte Silvana, und wenn die Kutschen darüber holperten, wurden die Einheimischen aus ihrem ohnehin viel zu leichten Schlaf geweckt. Zum Glück kamen nicht allzu viele vorbei.\nWenn es regnete, roch es auf dem Marktplatz nach nasser Wolle, Pferdemist und dem alten Fett aus der Bäckerei. Und ein bisschen nach alten Gewohnheiten, die sich schon viel zu lange in den Ritzen der Stadt eingenistet hatten.\nViel hatte das Land nicht zu bieten. Reich war Silvana trotzdem.";
@@ -77,9 +77,10 @@ const boxAssets={
  Wege:{still:'../assets/kiste-wege.png',gif:'../assets/kiste-wege-animation.gif',duration:960}
 };
 let boxOpening=false, weatherBusy=false, phaseToken=0;
+let transitionObserver;
 const timers=new Set();
 function later(fn,ms){const token=phaseToken;const timer=setTimeout(()=>{timers.delete(timer);if(token===phaseToken)fn()},ms);timers.add(timer)}
-function clearPhase(){const video=$('nextAnimation');if(video){video.onended=null;video.onerror=null;video.pause()}phaseToken++;timers.forEach(clearTimeout);timers.clear();boxOpening=false;weatherBusy=false;if($('pictureZoom').open)$('pictureZoom').close()}
+function clearPhase(){transitionObserver?.disconnect();const video=$('nextAnimation');if(video){video.onended=null;video.onerror=null;video.pause()}phaseToken++;timers.forEach(clearTimeout);timers.clear();boxOpening=false;weatherBusy=false;if($('pictureZoom').open)$('pictureZoom').close()}
 async function decoded(src){const img=new Image();img.src=src;await img.decode();return img}
 const assetReady=new Map();
 function prepare(src){if(!assetReady.has(src))assetReady.set(src,decoded(src).catch(()=>null));return assetReady.get(src)}
@@ -190,7 +191,12 @@ function showAnimatedNext(){
  }
  video.onended=()=>ready();
  video.onerror=()=>ready(true);
- play();
+ transitionObserver=new IntersectionObserver(entries=>{
+  if(!entries.some(entry=>entry.isIntersecting)||token!==phaseToken)return;
+  transitionObserver.disconnect();
+  play();
+ },{threshold:.25});
+ transitionObserver.observe(button);
 }
 function panel(inner){return '<section class="stage">'+inner+'</section>'}
 
@@ -198,7 +204,7 @@ function render(){SilvanaProgress.checkpoint(phase);const labels=['','Selbst les
 if(phase===1)out=panel('<span class="eyebrow">Jetzt bist du dran</span><h1>Die vier Straßen</h1><p>Lies in deinem Tempo.</p><div class="text">'+simple+'</div><div class="controls scene-navigation"><button class="primary" id="next">Weiter</button><button class="secondary" id="back">← Zurück</button></div>');
 else if(phase===2)out=panel('<span class="eyebrow">Welches Wort kommt im Text vor?</span><h1>Öffne die richtige Kiste!</h1><p>Tippe auf das Wort, das du im Lesetext gefunden hast.</p><details><summary>Lesetext ansehen</summary><p class="text">'+simple+'</p></details><div class="crate-grid">'+['Stoff','Wege','Marktplatz'].map(crateMarkup).join('')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
 else if(phase===3)out=panel('<span class="eyebrow">Schau genau hin</span><h1>Was steht in der Geschichte?</h1><div class="weather-rolls">'+rollChoice('sun','Sonnenschein')+'<div class="weather-prompt"><p class="roll-question" id="weatherQuestion">Von welchem Wetter war in der Geschichte die Rede?</p></div>'+rollChoice('rain','Regen')+'</div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="controls"><button class="secondary" id="back">← Zurück</button></div>');
-else out=panel('<h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="controls"><button class="secondary" id="again">Diese Szene wiederholen</button><div class="adventure-link"><div class="scene-navigation controls"><p class="adventure-next" id="adventureNext">Jetzt geht das Abenteuer weiter.</p><button class="animated-next" id="scene3" disabled aria-label="Weiter-Animation läuft"><video id="nextAnimation" src="../assets/weiter-einmalig.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="nextFallback" class="video-fallback" hidden>Weiter</span></button><button class="secondary" id="back">← Zurück</button></div></div></div>');
+else out=panel('<h1>Sehr gut hingeschaut!</h1><p>Du hast das Wort „Marktplatz“ gefunden und das richtige Wetter erkannt.</p><p>Silvana hatte nicht viel – und war trotzdem reich.</p><div class="adventure-link"><p class="adventure-next" id="adventureNext">Jetzt geht das Abenteuer weiter.</p><button class="animated-next" id="scene3" disabled aria-label="Weiter-Animation läuft"><video id="nextAnimation" src="../assets/weiter-einmalig.mp4" preload="auto" muted playsinline aria-hidden="true"></video><span id="nextFallback" class="video-fallback" hidden>Weiter</span></button></div><div class="scene-navigation controls"><button class="secondary" id="back">← Zurück</button><button class="secondary" id="again">Diese Szene wiederholen</button></div>');
 $('game').innerHTML=out;
 if(phase===1){$('back').onclick=()=>location.assign(SilvanaProgress.previousScene(1));$('next').onclick=()=>go(2)}
 if(phase===2){$('back').onclick=()=>go(1);document.querySelectorAll('.crate-preview').forEach(b=>b.onclick=()=>openCrate(b))}
