@@ -60,19 +60,22 @@
 
   function tell() {
     const from = rightBubble.getBoundingClientRect();
-    byId('queenPicture').append(rightBubble);
+    const queen = byId('queenPicture');
+    queen.append(rightBubble);
     byId('questionPrompt').hidden = true;
     byId('answerActions').hidden = true;
     byId('textHelp').hidden = true;
     byId('telling').hidden = false;
-    byId('tellingTitle').focus();
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const to = rightBubble.getBoundingClientRect();
-    rightBubble.animate([
-      {transform: `translate(${from.left - to.left}px, ${from.top - to.top}px)`},
-      {transform: 'none'}
-    ], {duration: 420, easing: 'ease-out'});
+    byId('tellingTitle').focus({preventScroll: true});
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) {
+      const to = rightBubble.getBoundingClientRect();
+      rightBubble.animate([
+        {transform: `translate(${from.left - to.left}px, ${from.top - to.top}px)`},
+        {transform: 'none'}
+      ], {duration: 420, easing: 'ease-out'});
+    }
+    queen.scrollIntoView({block: 'nearest', behavior: reducedMotion ? 'instant' : 'smooth'});
   }
 
   function answer(isYes) {
