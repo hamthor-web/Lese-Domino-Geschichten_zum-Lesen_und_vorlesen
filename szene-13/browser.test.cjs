@@ -99,16 +99,72 @@ function localServer() {
   assert.equal(widths[0], widths[1]);
   await page.waitForFunction(() => !document.getElementById('nextScene').disabled);
   assert(await button('transitionVideo').evaluate(v => v.ended && v.currentTime > 0));
-  await button('nextScene').click();
-  await button('transitionStatus').waitFor({state:'visible'});
   await button('retry').click();
   assert.equal(await questionCount(),1);
+  await button('no').click();
+  await button('no').click();
+  await button('yes').click();
+  await button('done').click();
+  await button('nextScene').click();
+  await page.waitForURL('**/szene-14/');
+  assert.equal(await button('sceneMenu14').textContent(), '2. Erkenntnis');
+  for (const [width, height] of [[320, 640], [390, 844], [844, 390], [768, 1024], [1024, 768], [1440, 900]]) {
+    await page.setViewportSize({width, height});
+    for (const [font, board] of [[100, 100], [160, 80], [90, 160], [160, 160]]) {
+      await page.goto(base + 'szene-14/');
+      await button('settingsToggle').click();
+      for (const [key, value] of [['textSize', font], ['boardSize', board]]) {
+        await button(key).evaluate((input, value) => {
+          input.value = value;
+          input.dispatchEvent(new Event('input'));
+        }, value);
+      }
+      await checkWidth('Szene 14 Lesetext', width, height, font, board);
+      await button('start').click();
+      await checkWidth('Szene 14 Puzzle', width, height, font, board);
+    }
+  }
+  const piece = number => page.getByRole('button', {name: 'Puzzleteil ' + number, exact: true});
+  const target = number => page.locator('.target').nth(number - 1);
+  assert.equal(await page.locator('.piece:visible').count(), 6);
+  await piece(1).click();
+  await target(2).click();
+  assert.match(await button('feedback').innerText(), /anderen Platz/);
+  await target(1).click();
+  assert.match(await button('feedback').innerText(), /Drehe/);
+  for (let number = 1; number <= 6; number++) {
+    const loose = piece(number);
+    await loose.click();
+    const angle = await loose.evaluate(el => parseInt(el.style.getPropertyValue('--turn'), 10));
+    for (let turn = angle; turn % 360; turn += 90) await button('rotate').click();
+    if (number === 1) {
+      await loose.dragTo(target(2));
+      assert.match(await button('feedback').innerText(), /anderen Platz/);
+      await loose.dragTo(target(number));
+    } else {
+      await target(number).click();
+    }
+    assert.equal(await loose.isVisible(), false);
+  }
+  assert(await button('assembled').isVisible());
+  assert(await button('questionTitle').isVisible());
+  await page.getByRole('button', {name: 'Gold ist wichtiger.'}).click();
+  assert(!(await button('board').evaluate(el => el.classList.contains('revealed'))));
+  await page.getByRole('button', {name: 'Man muss genau hinschauen.'}).click();
+  assert(await button('ending').isVisible());
+  assert(await button('glow').evaluate(image => image.complete && image.naturalWidth === 1254));
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('#glow')).opacity === '1');
+  await checkWidth('Szene 14 Abschluss', 1440, 900, 160, 160);
+  await button('retry').click();
+  assert.equal(await page.locator('.piece:visible').count(), 6);
+  assert.equal(await button('question').isVisible(), false);
   for (const path of ['vorschau-einfuehrung/','szene-2/','szene-12/']) {
     await page.goto(base + path);
     assert.equal(await button('sceneMenu13').textContent(),'Zu Hause');
+    assert.equal(await button('sceneMenu14').textContent(),'2. Erkenntnis');
   }
   assert.deepEqual(errors,[]);
   await browser.close();
   server.close();
-  console.log('24 Geräte-/Zoomkombinationen, Fragenfolge, Erzählen, MP4 und Szenenmenü geprüft.');
+  console.log('Szenen 13 und 14: je 24 Geräte-/Zoomkombinationen, Übergang, Puzzle, Schlussfrage und Szenenmenü geprüft.');
 })().catch(error => { console.error(error); process.exit(1); });

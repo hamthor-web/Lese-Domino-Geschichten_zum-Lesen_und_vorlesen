@@ -5,7 +5,7 @@
   width: min(100%, calc(540px * var(--board)));
   margin-inline: auto;
 }
-#activity p, #textHelp summary, #speechStatus, #transitionStatus {
+#activity p, #textHelp summary, #speechStatus {
   font-size: calc(19px * var(--text));
   line-height: 1.5;
 }

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Silvana – 2. Erkenntnis</title>
+  <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
+  <link rel="stylesheet" href="../shared/scene-menu.css">
+  <link rel="stylesheet" href="scene.css">
+  <script src="../shared/story-speech.js?v=1" defer></script>
+  <script src="../shared/scene-menu.js?v=3" defer></script>
+  <script src="scene.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
+    <button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button>
+  </header>
+  <section class="settings" id="settings" hidden>
+    <label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
+    <label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label>
+  </section>
+  <main>
+    <details class="scene-menu" data-scene="14"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Bereits besuchte Abschnitte"><p class="note">Wähle eine Szene, die du schon besucht hast.</p></nav></details>
+    <div class="chapterline"><span class="chapter-count">Szene 14</span></div>
+    <div class="panel">
+      <h1>2. Erkenntnis</h1>
+      <section id="reading">
+        <div class="reading">
+          <p>Der König sah am Brunnen ein ganz gewöhnliches Spinnennetz zwischen einem Eimer und einem Nagel.</p>
+          <p>In der Mitte saß eine kleine braune Spinne und wartete geduldig auf Beute.</p>
+          <p>„Noch nichts“, sagte der König.</p>
+        </div>
+        <div class="actions-final">
+          <button class="primary" id="start">Weiter</button>
+          <button class="secondary" id="listenLast" hidden>Szene vorlesen</button>
+        </div>
+      </section>
+      <section id="activity" hidden>
+        <h2 id="puzzleTitle" tabindex="-1">Setze das Puzzle zusammen</h2>
+        <p id="instructions">Tippe ein Teil an. Drehe es, bis es passt. Ziehe es auf seinen Platz oder tippe den Platz an.</p>
+        <div class="puzzle-layout">
+          <div class="puzzle-board" id="board" role="group" aria-label="Puzzelfeld">
+            <img id="assembled" src="assets/lernsatz.webp" alt="Das Wichtigste ist für die Augen oft unsichtbar." hidden>
+            <img id="glow" src="assets/tautropfen.webp" alt="" aria-hidden="true" decoding="async">
+            <div id="placed" aria-hidden="true"></div>
+            <img class="seams" src="assets/puzzle-konturen.webp" alt="" aria-hidden="true">
+            <div id="targets" role="group" aria-label="Plätze für die Puzzleteile"></div>
+          </div>
+          <div id="tray">
+            <div class="pieces" id="pieces" role="group" aria-label="Lose Puzzleteile"></div>
+            <div class="actions-final"><button class="secondary" id="rotate" disabled>↻ Teil drehen</button></div>
+          </div>
+          <div id="question" hidden>
+            <h2 id="questionTitle" tabindex="-1">Was hat der König gelernt?</h2>
+            <div class="actions-final" id="answers">
+              <button class="secondary" data-correct>Man muss genau hinschauen.</button>
+              <button class="secondary">Spinnennetze sind schmutzig.</button>
+              <button class="secondary">Gold ist wichtiger.</button>
+            </div>
+            <div id="ending" hidden>
+              <h2 id="endingTitle" tabindex="-1">Du hast die Geschichte zu Ende gespielt!</h2>
+              <div class="actions-final">
+                <button class="primary" id="listenFull">Ganze Geschichte vorlesen</button>
+                <button class="secondary" id="retry">Aufgabe wiederholen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="feedback" role="status"></p>
+      </section>
+      <p id="speechStatus" role="status" hidden></p>
+    </div>
+    <footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer>
+  </main>
+</body>
+</html>

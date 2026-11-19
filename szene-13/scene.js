@@ -11,7 +11,6 @@
   const next = byId('nextScene');
   const video = byId('transitionVideo');
   const fallback = byId('transitionFallback');
-  const transitionStatus = byId('transitionStatus');
   const listen = byId('listen');
   const speech = createStorySpeech(updateSpeech);
   const original = [
@@ -106,24 +105,7 @@
     fallback.textContent = 'Weiter';
     next.disabled = false;
     next.setAttribute('aria-label', 'Weiter zur nächsten Szene');
-    next.onclick = async () => {
-      const current = attempt;
-      next.disabled = true;
-      try {
-        const response = await fetch('../szene-14/index.html', {method: 'HEAD', cache: 'no-store'});
-        if (current !== attempt) return;
-        if (response.ok) {
-          location.assign('../szene-14/');
-          return;
-        }
-      } catch {
-        // Die Aufgabe kann auch ohne Verbindung wiederholt werden.
-      }
-      if (current !== attempt) return;
-      next.disabled = false;
-      transitionStatus.textContent = 'Hier geht die Geschichte bald weiter.';
-      transitionStatus.hidden = false;
-    };
+    next.onclick = () => location.assign('../szene-14/');
   }
 
   function playTransition() {
@@ -149,7 +131,6 @@
   byId('done').onclick = () => {
     activity.hidden = true;
     completion.hidden = false;
-    transitionStatus.hidden = true;
     byId('finishTitle').focus();
     if (!video.getAttribute('src')) video.src = 'assets/weiter-zu-szene-14.mp4';
     playTransition();
