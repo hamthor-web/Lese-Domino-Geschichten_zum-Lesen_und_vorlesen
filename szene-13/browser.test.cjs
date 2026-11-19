@@ -43,7 +43,7 @@ function localServer() {
     assert.equal(await page.locator('h1').textContent(), 'Silvana');
     await page.waitForFunction(() => document.querySelector('.mascot img').naturalWidth > 0);
     assert(await page.getByRole('link', {name: startLabel}).isVisible());
-    assert(await page.locator('footer .note').evaluate(note =>
+    assert(await page.locator('footer p.note').evaluate(note =>
       note.getBoundingClientRect().top >= document.querySelector('main').getBoundingClientRect().bottom));
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   }
