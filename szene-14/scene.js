@@ -78,6 +78,8 @@
     byId('instructions').hidden = false;
     byId('question').hidden = true;
     byId('ending').hidden = true;
+    byId('questionTitle').hidden = false;
+    byId('sceneFooter').hidden = false;
     byId('answers').hidden = false;
     answers.forEach(answer => { answer.disabled = false; });
     const shuffled = [...pieces];
@@ -95,7 +97,7 @@
     tray.replaceChildren(...shuffled.map(piece => piece.button));
     byId('reading').hidden = true;
     byId('activity').hidden = false;
-    byId('puzzleTitle').focus();
+    byId('instructions').focus();
   }
 
   function place(index, ghost) {
@@ -224,7 +226,9 @@
         feedback.textContent = 'Überlege noch einmal. Was tat der König, als Elin ihm das Netz zeigte?';
         return;
       }
-      feedback.textContent = 'Richtig! Schau, wie das Spinnennetz leuchtet.';
+      feedback.textContent = '';
+      byId('questionTitle').hidden = true;
+      byId('sceneFooter').hidden = true;
       board.classList.add('revealed');
       if (reducedMotion.matches) showStill();
       else glowVideo.play().catch(error => {
@@ -243,7 +247,7 @@
     if (!activeListen) return;
     const labels = {playing: 'Ⅱ Pause', paused: '▶ Weiterhören', ended: '↻ Noch einmal hören', error: 'Erneut vorlesen'};
     activeListen.textContent = labels[speech.state] || activeListen.dataset.label;
-    const status = byId('speechStatus');
+    const status = byId(activeListen.id === 'listenLast' ? 'readingSpeechStatus' : 'speechStatus');
     status.hidden = speech.state !== 'error';
     status.textContent = status.hidden ? '' : 'Die Vorlesestimme konnte nicht starten.';
   });

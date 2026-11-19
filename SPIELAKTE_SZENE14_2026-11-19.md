@@ -17,3 +17,10 @@ Stand 19. November 2026
 | Silvana gesamt | Alle 14 geplanten Szenen sind technisch umgesetzt. Vorlesequalität auf einzelnen Endgeräten bleibt geräteabhängig. |
 
 [Szene 14 spielen](https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/szene-14/)
+
+## Begrüßung und Schlussbildschirm
+
+- Die Web-Startseite zeigt vor dem bisherigen Einstieg das Begrüßungsvideo mit dem Kleinen Würstchen. In der Textlücke steht „Das Land der glitzernden Spinnweben“. „Lass uns beginnen!“ startet das Spiel. Das Video läuft einmal stumm ab.
+- Die Antworten erscheinen in der Reihenfolge „Spinnennetze sind schmutzig.“, „Gold ist wichtiger.“, „Man muss genau hinschauen.“.
+- Die Puzzleüberschrift entfällt. Auf dem Schlussbildschirm stehen die Vorlese- und Wiederholschaltflächen vor „Du hast die Geschichte zu Ende gespielt!“. Direkt darunter steht klein „Dieser Gedanke stammt ursprünglich aus dem Buch ‚Der kleine Prinz‘.“.
+- Masterübersicht: Alle 14 Szenen sind spielbar. Die vorgelagerte Begrüßungsseite und der überarbeitete Schluss sind eingebaut.

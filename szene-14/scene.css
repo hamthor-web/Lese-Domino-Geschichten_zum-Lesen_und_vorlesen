@@ -99,6 +99,8 @@
 }
 #feedback:empty { display: none; }
 #ending { text-align: center; }
+#endingTitle { margin-top: 24px; }
+.credit { font-size: calc(.875rem * var(--text)); margin-bottom: 0; }
 @media (min-width: 700px) {
   .puzzle-layout { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
 }

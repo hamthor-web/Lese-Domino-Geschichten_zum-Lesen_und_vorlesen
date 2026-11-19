@@ -6,10 +6,10 @@
   <title>Silvana – 2. Erkenntnis</title>
   <link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
   <link rel="stylesheet" href="../shared/scene-menu.css">
-  <link rel="stylesheet" href="scene.css?v=2">
+  <link rel="stylesheet" href="scene.css?v=3">
   <script src="../shared/story-speech.js?v=1" defer></script>
   <script src="../shared/scene-menu.js?v=3" defer></script>
-  <script src="scene.js?v=2" defer></script>
+  <script src="scene.js?v=3" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -35,10 +35,10 @@
           <button class="primary" id="start">Weiter</button>
           <button class="secondary" id="listenLast" hidden>Szene vorlesen</button>
         </div>
+        <p id="readingSpeechStatus" role="status" hidden></p>
       </section>
       <section id="activity" hidden>
-        <h2 id="puzzleTitle" tabindex="-1">Setze das Puzzle zusammen</h2>
-        <p id="instructions">Tippe ein Teil an. Drehe es, bis es passt. Ziehe es auf seinen Platz oder tippe den Platz an.</p>
+        <p id="instructions" tabindex="-1">Tippe ein Teil an. Drehe es, bis es passt. Ziehe es auf seinen Platz oder tippe den Platz an.</p>
         <div class="puzzle-layout">
           <div class="puzzle-board" id="board" role="group" aria-label="Puzzelfeld">
             <img id="assembled" src="assets/lernsatz.webp" alt="Das Wichtigste ist für die Augen oft unsichtbar." hidden>
@@ -55,24 +55,25 @@
           <div id="question" hidden>
             <h2 id="questionTitle" tabindex="-1">Was hat der König gelernt?</h2>
             <div class="actions-final" id="answers">
-              <button class="secondary" data-correct>Man muss genau hinschauen.</button>
               <button class="secondary">Spinnennetze sind schmutzig.</button>
               <button class="secondary">Gold ist wichtiger.</button>
+              <button class="secondary" data-correct>Man muss genau hinschauen.</button>
             </div>
             <div id="ending" hidden>
-              <h2 id="endingTitle" tabindex="-1">Du hast die Geschichte zu Ende gespielt!</h2>
               <div class="actions-final">
                 <button class="primary" id="listenFull">Ganze Geschichte vorlesen</button>
                 <button class="secondary" id="retry">Aufgabe wiederholen</button>
               </div>
+              <p id="speechStatus" role="status" hidden></p>
+              <h2 id="endingTitle" tabindex="-1">Du hast die Geschichte zu Ende gespielt!</h2>
+              <p class="credit">Dieser Gedanke stammt ursprünglich aus dem Buch „Der kleine Prinz“.</p>
             </div>
           </div>
         </div>
         <p id="feedback" role="status"></p>
       </section>
-      <p id="speechStatus" role="status" hidden></p>
     </div>
-    <footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer>
+    <footer id="sceneFooter"><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer>
   </main>
 </body>
 </html>

@@ -36,6 +36,16 @@ function localServer() {
   const errors = [];
   page.on('pageerror', err => errors.push(err.message));
   const button = id => page.locator('#' + id);
+  for (const [width, height] of [[320, 640], [844, 390], [768, 1024], [1440, 900]]) {
+    await page.setViewportSize({width, height});
+    await page.goto(base);
+    assert.equal(await page.locator('h1').textContent(), 'Das Land der glitzernden Spinnweben');
+    assert(await page.getByRole('link', {name: 'Lass uns beginnen!'}).isVisible());
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  }
+  await page.waitForFunction(() => document.querySelector('#welcomeVideo').ended);
+  await page.getByRole('link', {name: 'Lass uns beginnen!'}).click();
+  await page.waitForURL('**/vorschau-einfuehrung/');
   const questionCount = () => page.locator('#questions .speech-bubble:visible').count();
   async function checkWidth(stage, width, height, font, board) {
     const result = await page.evaluate(() => ({
@@ -148,11 +158,16 @@ function localServer() {
   }
   assert(await button('assembled').isVisible());
   assert(await button('questionTitle').isVisible());
+  assert.equal(await page.locator('#answers button').last().textContent(), 'Man muss genau hinschauen.');
   await page.getByRole('button', {name: 'Gold ist wichtiger.'}).click();
   assert(!(await button('board').evaluate(el => el.classList.contains('revealed'))));
   assert(await button('glowVideo').evaluate(video => video.paused && video.currentTime === 0));
   await page.getByRole('button', {name: 'Man muss genau hinschauen.'}).click();
   assert(await button('ending').isVisible());
+  assert.equal(await button('questionTitle').isVisible(), false);
+  assert.equal(await button('sceneFooter').isVisible(), false);
+  assert.equal(await page.locator('#endingTitle + p:last-child').textContent(),
+    'Dieser Gedanke stammt ursprünglich aus dem Buch „Der kleine Prinz“.');
   assert(await button('glow').evaluate(image => image.complete && image.naturalWidth === 1254));
   await page.waitForFunction(() => getComputedStyle(document.querySelector('#glowVideo')).opacity === '1');
   await checkWidth('Szene 14 Abschluss', 1440, 900, 160, 160);

@@ -1,17 +1,62 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Silvana – Geschichten zum Lesen und Vorlesen</title>
-<meta http-equiv="refresh" content="0; url=./vorschau-einfuehrung/">
-<link rel="canonical" href="./vorschau-einfuehrung/">
-<script>location.replace(new URL("./vorschau-einfuehrung/", location.href));</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Das Land der glitzernden Spinnweben · Silvana</title>
+  <style>
+    body { margin: 0; background: #f2e9dc; color: #2d1b14; }
+    main { padding: .5rem; }
+    .welcome {
+      position: relative;
+      width: min(100%, clamp(315px, 73svh, 600px));
+      margin: 0 auto;
+      container-type: inline-size;
+    }
+    video { display: block; width: 100%; aspect-ratio: 816 / 1056; }
+    h1 {
+      position: absolute;
+      top: 71.1%;
+      left: 4%;
+      width: 92%;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+      font: 800 clamp(.85rem, 4.6cqi, 1.8rem)/1.1 Georgia, serif;
+    }
+    a {
+      position: absolute;
+      inset: 80% 15.5% auto;
+      height: 7%;
+      min-height: 44px;
+      border-radius: 100px;
+      touch-action: manipulation;
+    }
+    a:focus-visible { outline: 4px solid #7c4726; outline-offset: 2px; }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
-<main>
-<h1>Silvana – Geschichten zum Lesen und Vorlesen</h1>
-<p>Zur <a href="./vorschau-einfuehrung/">spielbaren Einführung</a>.</p>
-</main>
+  <main>
+    <div class="welcome">
+      <video id="welcomeVideo" muted playsinline preload="none" poster="assets/silvana-begruessung.webp" aria-hidden="true" width="816" height="1056"></video>
+      <h1>Das Land der glitzernden Spinnweben</h1>
+      <a href="./vorschau-einfuehrung/"><span class="visually-hidden">Lass uns beginnen!</span></a>
+    </div>
+  </main>
+  <script>
+    const welcomeVideo = document.getElementById('welcomeVideo');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      welcomeVideo.src = 'assets/silvana-begruessung.mp4';
+      welcomeVideo.play().catch(() => {});
+    }
+  </script>
 </body>
 </html>
