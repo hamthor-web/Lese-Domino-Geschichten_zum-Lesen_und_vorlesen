@@ -50,7 +50,19 @@ function localServer() {
   await page.getByRole('link', {name: startLabel}).click();
   await page.waitForURL('**/vorschau-einfuehrung/');
   const phone = await browser.newPage({hasTouch: true, isMobile: true, viewport: {width: 393, height: 780}});
+  await phone.addInitScript(() => {
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    });
+  });
   await phone.goto(base);
+  await phone.getByRole('button', {name: 'Installieren'}).tap();
+  assert(await phone.getByText('iPhone und iPad:', {exact: true}).isVisible());
+  await phone.getByRole('button', {name: 'Installieren'}).tap();
+  assert.equal(await phone.locator('#installationshilfe').isVisible(), false);
+  await phone.getByRole('button', {name: 'Aktualisieren'}).tap();
+  await phone.getByText('Silvana wurde neu geladen.', {exact: true}).waitFor();
   await phone.getByRole('link', {name: startLabel}).tap();
   await phone.waitForURL('**/vorschau-einfuehrung/');
   await phone.close();

@@ -7,3 +7,7 @@ Die Startseite verwendet das gelieferte Pergament, die freigestellte Verbeugung 
 Im Hochformat erscheinen Figur und Texte untereinander. Auf breiten Querformat-Bildschirmen steht das Würstchen neben dem Text. Bei aktivierter Einstellung für reduzierte Bewegung erscheint die Figur als Standbild.
 
 [Silvana starten](https://hamthor-web.github.io/Lese-Domino-Geschichten_zum-Lesen_und_vorlesen/)
+
+## Installation und Aktualisierung
+
+Unter der Startschaltfläche stehen „Installieren“ und „Aktualisieren“ in derselben Spinnwebenform. „Installieren“ öffnet den Installationsdialog, sofern der Browser ihn anbietet. Andernfalls zeigt die Seite die Schritte über das jeweilige Browsermenü, einschließlich Safari auf iPhone, iPad und Mac. „Aktualisieren“ lädt die Startseite frisch und prüft die Web-App auf Änderungen.
