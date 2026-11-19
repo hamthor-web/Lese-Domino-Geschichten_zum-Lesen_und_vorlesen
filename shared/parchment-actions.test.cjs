@@ -72,6 +72,33 @@ async function checkActions(page, description) {
   }
 }
 
+
+async function checkAppInfo(page, description) {
+  const trigger = page.getByRole('button', {name: 'Informationen & Kontakt', exact: true});
+  const dialog = page.getByRole('dialog', {name: 'Informationen & Kontakt'});
+  const bounds = await trigger.boundingBox();
+  const {width, height} = page.viewportSize();
+  assert.ok(bounds && bounds.x > width / 2 && bounds.x + bounds.width <= width &&
+    bounds.y < 32 && bounds.width >= 44, description + ' i-Button');
+  const historyState = await page.evaluate(() => history.state);
+  await trigger.tap();
+  await dialog.waitFor();
+  assert.equal(await dialog.getByText('Sprecherin: Nadine Weder', {exact: true}).count(), 1, description);
+  assert.deepEqual(await dialog.getByRole('link').evaluateAll(links => links.map(a => [a.getAttribute('href'), a.target])), [
+    ['https://lesespiele.heike-amthor.de/impressum', '_blank'],
+    ['https://lesespiele.heike-amthor.de/datenschutz', '_blank'],
+    ['https://lesespiele.heike-amthor.de/', '_blank'],
+    ['mailto:lesespiele.heike.amthor@gmx.de', '']
+  ], description);
+  const box = await dialog.boundingBox();
+  assert.ok(box.x >= 0 && box.y >= 0 && box.x + box.width <= width && box.y + box.height <= height, description);
+  assert.ok(await dialog.evaluate(element => element.scrollWidth <= element.clientWidth), description);
+  await dialog.getByRole('button', {name: 'Schließen'}).tap();
+  await dialog.waitFor({state: 'hidden'});
+  await page.waitForFunction(() => document.activeElement.id === 'appInfoButton');
+  assert.deepEqual(await page.evaluate(() => history.state), historyState, description);
+}
+
 (async () => {
   let browser;
   try {
@@ -105,6 +132,7 @@ async function checkActions(page, description) {
       await page.goto(base);
       await layout(page);
       await checkActions(page, 'Begrüßung ' + width + '×' + height);
+      await checkAppInfo(page, 'Begrüßung ' + width + '×' + height);
       for (const [path, screens] of scenes) {
         for (const screen of screens) {
           await page.goto(base + path + '/?test-screen=' + screen, {waitUntil: 'domcontentloaded'});
@@ -119,7 +147,9 @@ async function checkActions(page, description) {
               }
             }, [text, board]);
             await layout(page);
-            await checkActions(page, [path, screen, width, height, text, board].join(' '));
+            const description = [path, screen, width, height, text, board].join(' ');
+            await checkActions(page, description);
+            if (screen === screens[0]) await checkAppInfo(page, description);
           }
         }
       }
