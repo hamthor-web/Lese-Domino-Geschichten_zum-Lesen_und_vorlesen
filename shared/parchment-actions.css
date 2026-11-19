@@ -56,6 +56,15 @@
   cursor: default;
 }
 
+/* A wide label can wrap inside a grid cell instead of widening the page. */
+#main :is(.elin-navigation, .trip-layout, .trip-actions, .home-actions, .actions-final) {
+  grid-auto-columns: minmax(0, 1fr);
+}
+#main :is(.home-actions, .actions-final):not(.reading-navigation, .answer-actions) {
+  width: 100%;
+  justify-items: center;
+}
+
 #main .scene-menu { display: block; }
 #main summary[data-parchment]::-webkit-details-marker { display: none; }
 #main summary[data-parchment]::after {
