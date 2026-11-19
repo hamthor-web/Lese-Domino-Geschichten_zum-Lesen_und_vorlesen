@@ -1,0 +1,92 @@
+.parchment-actions, .topbar, dialog {
+  --button-font-size: calc(1.125rem * var(--text, 1));
+}
+.welcome.parchment-actions {
+  --button-font-size: clamp(1rem, 3.7vw, 1.23rem);
+}
+
+/* Fixed-size caps and a separate sparkle layer leave the artwork undistorted. */
+:is(#main, .topbar, .welcome, dialog) [data-parchment],
+.parchment-measure {
+  box-sizing: border-box;
+  padding: .65rem 2.8rem;
+  border: 0;
+  font: 700 var(--button-font-size, 1.125rem) / 1.2 Andika, Arial, sans-serif;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  text-align: center;
+}
+:is(#main, .topbar, .welcome, dialog) [data-parchment] {
+  position: relative;
+  display: block;
+  inline-size: var(--parchment-width, max-content);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  block-size: var(--parchment-height, auto);
+  min-block-size: 3.5rem;
+  align-self: center;
+  align-content: center;
+  flex: 0 0 auto !important;
+  border-radius: 1.72rem;
+  border-image: url('../assets/button-pergament.webp') 67 69 67 152 fill / 1.68rem 1.72rem 1.68rem 3.8rem stretch;
+  background: none;
+  box-shadow: none;
+  color: #17130f;
+  cursor: pointer;
+  text-decoration: none;
+}
+:is(#main, .topbar, .welcome, dialog) [data-parchment]::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto .62rem;
+  width: 3rem;
+  height: 2.8rem;
+  transform: translateY(-50%);
+  background: url('../assets/button-glanz.webp') center / contain no-repeat;
+  pointer-events: none;
+}
+:is(#main, .topbar, .welcome, dialog) [data-parchment]:is(:hover, :focus-visible) {
+  box-shadow: none;
+}
+:is(#main, .topbar, .welcome, dialog) [data-parchment]:focus-visible {
+  outline: 3px solid #674483;
+  outline-offset: 3px;
+}
+:is(#main, .topbar, .welcome, dialog) [data-parchment]:disabled {
+  cursor: default;
+}
+
+/* A wide label can wrap inside a grid cell instead of widening the page. */
+#main :is(.elin-navigation, .trip-layout, .trip-actions, .home-actions, .actions-final) {
+  grid-auto-columns: minmax(0, 1fr);
+}
+#main :is(.home-actions, .actions-final):not(.reading-navigation, .answer-actions) {
+  width: 100%;
+  justify-items: center;
+}
+
+#main .scene-menu { display: block; }
+#main summary[data-parchment]::-webkit-details-marker { display: none; }
+#main summary[data-parchment]::after {
+  content: '▾';
+  position: absolute;
+  inset: 50% .85rem auto auto;
+  transform: translateY(-50%);
+}
+#main details[open] > summary[data-parchment]::after { content: '▴'; }
+
+#main #game button[data-parchment]:has(> video) {
+  margin-inline: auto;
+}
+#main button[data-parchment]:has(> video) > span:not([hidden]) {
+  display: contents;
+}
+.welcome .aktionen > [data-parchment] { inline-size: 100%; }
+.welcome .aktionen { grid-template-columns: minmax(0, 1fr); }
+
+.parchment-measure {
+  position: fixed;
+  inset: 0 auto auto 0;
+  visibility: hidden;
+  pointer-events: none;
+}

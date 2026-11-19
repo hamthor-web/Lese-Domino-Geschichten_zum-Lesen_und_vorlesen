@@ -8,7 +8,7 @@ const server=live?null:spawn('python3',['-m','http.server','8766','--bind','127.
 let browser;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function run(){
- for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('game.js?v=abschluss1'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
+ for(let i=0;i<180;i++){try{const r=await fetch(base+'vorschau-einfuehrung/?test='+Date.now());if(r.ok&&(await r.text()).includes('parchment-actions.js'))break;}catch{}if(i===179)throw Error('Aktuelle Einführung nicht erreichbar');await sleep(500);}
  browser=await chromium.launch({headless:true,channel:'chrome'});
  const context=await browser.newContext({viewport:{width:412,height:915},hasTouch:true,isMobile:true});
  const page=await context.newPage(),errors=[];
@@ -23,8 +23,9 @@ async function run(){
    await stable();
    const art=await page.locator('#introTitle').boundingBox(),brand=await page.locator('.brand').boundingBox();
    assert.ok(art.y>=brand.y+brand.height,'Titelbild unter dem Namenskopf');
-   assert.equal(await page.locator('.topbar').evaluate(e=>e.nextElementSibling.id),'introTitle');
-   for(const selector of ['#settingsToggle','#sceneMenu','.chapterline','.steps','.listen','.restore']){
+   assert.equal(await page.locator('.brand').evaluate(e=>e.nextElementSibling.id),'introTitle');
+   assert.equal(await page.locator('.chapterline, .steps').count(),0);
+   for(const selector of ['#settingsToggle','#sceneMenu','.reading-layout','.restore']){
     const element=page.locator(selector);if(await element.count())assert.ok((await element.boundingBox()).y>=art.y+art.height,selector+' muss unter dem Titelbild stehen');
    }
    assert.equal(await page.locator('#game img.landscape').count(),0);

@@ -15,8 +15,8 @@
  function stopAudio(){audio?.stop();}
  function alignCardRows(){
   const cards=[...document.querySelectorAll('.question-card')];
-  for(const card of cards)for(const selector of ['h2','.selection-label','.zoom-open'])card.querySelector(selector).style.minHeight='';
-  for(let i=0;i<cards.length;i+=2){const pair=cards.slice(i,i+2);for(const selector of ['h2','.selection-label','.zoom-open']){const elements=pair.map(card=>card.querySelector(selector));const height=Math.ceil(Math.max(...elements.map(el=>el.getBoundingClientRect().height)));elements.forEach(el=>el.style.minHeight=height+'px');}}
+  for(const card of cards)for(const selector of ['h2','.selection-label'])card.querySelector(selector).style.minHeight='';
+  for(let i=0;i<cards.length;i+=2){const pair=cards.slice(i,i+2);for(const selector of ['h2','.selection-label']){const elements=pair.map(card=>card.querySelector(selector));const height=Math.ceil(Math.max(...elements.map(el=>el.getBoundingClientRect().height)));elements.forEach(el=>el.style.minHeight=height+'px');}}
  }
 
  function go(n){if(n<0||n>3||(n>=2&&!solved))return;cancelFlight();closeZoom();stopAudio();phase=n;render();$('main').focus();$('main').scrollIntoView({block:'start'});}

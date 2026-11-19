@@ -13,6 +13,8 @@ on:
       - 'szene-14/**'
       - 'vorschau-einfuehrung/**'
       - 'assets/**'
+      - 'shared/**'
+      - 'index.html'
       - '.github/workflows/silvana-browser.yml'
   pull_request:
     branches: [main]
@@ -58,6 +60,12 @@ jobs:
           node szene-3/browser.test.cjs
           node szene-4/browser.test.cjs
           node szene-5/browser.test.cjs
+
+      - name: Schaltflächen in allen Szenen prüfen
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright
+        run: node shared/parchment-actions.test.cjs
 
       - name: Veröffentlichte GitHub-Pages-Seite prüfen
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
