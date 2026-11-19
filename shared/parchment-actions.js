@@ -7,7 +7,7 @@
     '#main summary',
     'button:has(> video[hidden]):has(> span:not([hidden]))'
   ].join(', ');
-  const groups = Array.from(document.querySelectorAll('#main, .topbar, .welcome, dialog'));
+  const groupSelector = '#main, .topbar, .welcome, dialog, [data-parchment-group]';
   const probe = document.createElement('div');
   probe.className = 'parchment-measure';
   probe.setAttribute('aria-hidden', 'true');
@@ -22,19 +22,23 @@
   }
 
   function sizeActions() {
-    for (const group of groups) {
+    for (const group of document.querySelectorAll(groupSelector)) {
       const controls = Array.from(group.querySelectorAll(controlSelector))
-        .filter(control => control.closest('#main, .topbar, .welcome, dialog') === group);
+        .filter(control => control.closest(groupSelector) === group);
       const matches = new Set(controls);
       for (const control of group.querySelectorAll('[data-parchment]:has(> video)')) {
-        if (!matches.has(control)) control.removeAttribute('data-parchment');
+        if (control.closest(groupSelector) === group && !matches.has(control)) {
+          control.removeAttribute('data-parchment');
+        }
       }
       for (const control of controls) control.setAttribute('data-parchment', '');
       const visible = controls.filter(control => control.getClientRects().length);
       if (!visible.length) continue;
 
       const labels = new Set(visible.flatMap(labelsFor));
-      probe.style.font = getComputedStyle(visible[0]).font;
+      const style = getComputedStyle(visible[0]);
+      probe.style.font = style.font;
+      probe.style.padding = style.padding;
       probe.style.width = 'max-content';
       const required = Math.max(...Array.from(labels, label => {
         probe.textContent = label;
