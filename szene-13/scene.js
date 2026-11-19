@@ -64,7 +64,6 @@
     byId('questionPrompt').hidden = true;
     byId('answerActions').hidden = true;
     byId('textHelp').hidden = true;
-    feedback.textContent = '';
     byId('telling').hidden = false;
     byId('tellingTitle').focus();
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -82,18 +81,19 @@
       feedback.textContent = 'Schau noch einmal im Lesetext nach.';
       return;
     }
-    bubbles[questionIndex].classList.remove('current');
+    const answered = bubbles[questionIndex];
+    feedback.textContent = `Richtig! Sie hat ${isLast ? 'gefragt' : 'nicht gefragt'}: „${answered.textContent}“`;
+    answered.classList.remove('current');
     if (isLast) {
       tell();
       return;
     }
-    bubbles[questionIndex].classList.add('reviewed');
+    answered.classList.add('reviewed');
     questionIndex++;
     const upcoming = bubbles[questionIndex];
     upcoming.hidden = false;
     upcoming.classList.add('current');
     byId('questionPrompt').textContent = 'Gehört die neue Frage zum Lesetext?';
-    feedback.textContent = 'Richtig! ' + upcoming.textContent;
   }
 
   function ready(failed) {

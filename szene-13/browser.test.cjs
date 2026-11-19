@@ -68,6 +68,7 @@ function localServer() {
       assert.equal(await questionCount(),1);
       await button('no').click();
       assert.equal(await questionCount(),2);
+      assert.equal(await button('feedback').textContent(), 'Richtig! Sie hat nicht gefragt: „Wo bist du gewesen?“');
       await button('no').click();
       assert.equal(await questionCount(),3);
       await button('no').click();
@@ -75,7 +76,16 @@ function localServer() {
       await checkWidth('Aufgabe', width, height, font, board);
       await button('yes').click();
       assert.equal(await questionCount(),2);
-      assert(await page.locator('#queenPicture .speech-bubble').isVisible());
+      assert.equal(await button('feedback').textContent(), 'Richtig! Sie hat gefragt: „Was hast du mitgebracht?“');
+      const queenBubble = page.locator('#queenPicture .speech-bubble');
+      assert(await queenBubble.isVisible());
+      assert(await queenBubble.evaluate(async bubble => {
+        await Promise.all(bubble.getAnimations().map(animation => animation.finished));
+        const image = bubble.previousElementSibling.getBoundingClientRect();
+        const box = bubble.getBoundingClientRect();
+        return box.top >= image.top && box.right <= image.right && box.bottom <= image.bottom;
+      }));
+      assert(await page.getByText('Was hat der König auf die Fragen geantwortet?', {exact: true}).isVisible());
       assert(await button('done').isVisible());
       assert.equal(await button('listen').isVisible(), false);
       assert.equal(await button('transitionVideo').getAttribute('src'),null);

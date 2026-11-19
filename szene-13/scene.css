@@ -29,9 +29,12 @@
 .queen-picture { display: grid; grid-template-columns: minmax(0, 1fr); }
 .queen-picture > * { grid-area: 1 / 1; }
 .queen-picture .speech-bubble {
-  align-self: end;
+  align-self: start;
   justify-self: end;
-  margin: 0;
+  width: min(75%, max(68%, calc(170px * var(--text))));
+  margin: 2% 2% 0 0;
+  font-size: calc(17px * var(--text));
+  z-index: 1;
 }
 .home-actions {
   display: grid;
