@@ -16,9 +16,8 @@
 
 /* Navigation in sinnvoller Reihenfolge, auch im Hochformat. */
 #game .scene-navigation{display:flex;flex-direction:column;align-items:stretch;gap:14px}
-#game .scene-navigation>button{width:100%;max-width:100%;box-sizing:border-box}
+
 #game .panel>.actions:not(.scene-navigation){display:flex;flex-direction:column;align-items:stretch;gap:14px}
-#game .panel>.actions:not(.scene-navigation)>button{width:100%;max-width:100%}
 
 .scene-transition {
   display:block;

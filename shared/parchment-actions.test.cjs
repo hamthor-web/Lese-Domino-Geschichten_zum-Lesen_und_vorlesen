@@ -24,6 +24,8 @@ async function layout(page) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 }
 
+const layoutProblems = new Map();
+
 async function checkActions(page, description) {
   const issues = await page.evaluate(() => {
     const problems = [];
@@ -56,7 +58,10 @@ async function checkActions(page, description) {
     }
     return problems;
   });
-  assert.deepEqual(issues, [], description + ' ' + JSON.stringify(issues));
+  for (const issue of issues) {
+    const key = [description.split(' ')[0], ...issue.slice(0, 2)].join(' ');
+    if (!layoutProblems.has(key)) layoutProblems.set(key, [description, issue]);
+  }
 }
 
 (async () => {
@@ -111,6 +116,7 @@ async function checkActions(page, description) {
         }
       }
     }
+    assert.deepEqual([...layoutProblems.values()], []);
     await page.setViewportSize({width: 320, height: 640});
     const stateTest = async (selector, label) => {
       const control = page.locator(selector);
