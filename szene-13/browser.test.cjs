@@ -42,10 +42,23 @@ function localServer() {
     assert.equal(await page.locator('h1').textContent(), 'Das Land der glitzernden Spinnweben');
     assert(await page.getByRole('link', {name: 'Lass uns beginnen!'}).isVisible());
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    assert(await page.evaluate(() => {
+      const video = document.querySelector('#welcomeVideo').getBoundingClientRect();
+      const title = document.querySelector('h1').getBoundingClientRect();
+      const titleCenter = (title.top + title.height / 2 - video.top) / video.height;
+      return Math.abs(video.width / video.height - 816 / 1056) < .001
+        && video.top <= 12 && titleCenter > .70 && titleCenter < .73;
+    }));
   }
   await page.waitForFunction(() => document.querySelector('#welcomeVideo').ended);
   await page.getByRole('link', {name: 'Lass uns beginnen!'}).click();
   await page.waitForURL('**/vorschau-einfuehrung/');
+  const phone = await browser.newPage({hasTouch: true, isMobile: true, viewport: {width: 393, height: 780}});
+  await phone.goto(base);
+  const video = await phone.locator('#welcomeVideo').boundingBox();
+  await phone.touchscreen.tap(video.x + video.width / 2, video.y + video.height * .831);
+  await phone.waitForURL('**/vorschau-einfuehrung/');
+  await phone.close();
   const questionCount = () => page.locator('#questions .speech-bubble:visible').count();
   async function checkWidth(stage, width, height, font, board) {
     const result = await page.evaluate(() => ({
