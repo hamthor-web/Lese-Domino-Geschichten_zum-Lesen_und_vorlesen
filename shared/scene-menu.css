@@ -35,3 +35,12 @@
   inline-size: min(100%, calc(21rem * var(--text, 1)));
   min-inline-size: min(100%, calc(21rem * var(--text, 1)));
 }
+
+.home-actions:has(> #listen),
+.actions-final:has(> #listenFull) {
+  width: min(100%, calc(21rem * var(--text, 1)));
+}
+.home-actions:has(> #listen) > button,
+.actions-final:has(> #listenFull) > button {
+  width: 100%;
+}
