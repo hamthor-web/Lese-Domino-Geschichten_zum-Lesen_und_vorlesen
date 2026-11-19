@@ -42,11 +42,10 @@
 .story-end .original { margin-block-start: .65rem; }
 
 main {
-  --action-width: min(16rem, 100%);
-  --action-height: calc(3rem + 1.5rem * var(--text, 1));
-  --transition-size: min(12rem, 40vmin);
+  --action-width: max-content;
+  --action-height: 3.25rem;
 }
-#main :is(button.primary, button.secondary, button.step, button:has(> video)):not(:is(#back, #again, #retry)) {
+#main :is(button.primary, button.secondary, button.step):not(:is(#back, #again, #retry)) {
   box-sizing: border-box;
   inline-size: var(--action-width);
   min-inline-size: 0;
@@ -54,11 +53,16 @@ main {
   block-size: var(--action-height);
   min-block-size: var(--action-height);
   flex: 0 0 auto !important;
-  padding: .3rem .65rem;
+  padding: .3rem 1.9rem;
   font-size: calc(1rem * var(--text, 1));
   line-height: 1.15;
   overflow-wrap: anywhere;
   text-align: center;
+}
+#main :is(button.primary, button.secondary):not(:is(#back, #again, #retry))::before {
+  inset: 10% auto 10% .35rem;
+  width: 1.4rem;
+  height: auto;
 }
 main :is(.actions, .controls, .elin-navigation, .home-actions, .actions-final, .move-controls, .steps) {
   flex-wrap: wrap;
@@ -68,29 +72,45 @@ main button:focus-visible, .story-reading summary:focus-visible {
   outline-offset: 3px;
 }
 
-/* The illustration keeps its own aspect ratio above the navigation control. */
+/* The video and its final frame are the navigation button. */
+#main #game button:has(> video),
 #main button:has(> video) {
-  position: relative;
-  margin-block-start: calc(var(--transition-size) + .75rem);
-  background: #eee3f5;
-  color: #493e58;
-  border: 2px solid #bca6cf;
-  border-radius: .85rem;
-  text-decoration: none;
-}
-#main button:has(> video) > video {
-  position: absolute;
-  inset: auto auto calc(100% + .75rem) 50%;
-  transform: translateX(-50%);
-  width: var(--transition-size);
+  display: block;
+  width: min(100%, 27.5rem, 86svh);
+  min-width: 0;
   height: auto;
-  aspect-ratio: auto;
-  max-width: 100%;
+  padding: 0;
+  margin: 1rem auto;
+  flex: 0 1 auto !important;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  opacity: 1;
+  filter: none;
+}
+#main button:has(> video) > video:not([hidden]) {
+  display: block;
+  width: 100%;
+  height: auto;
   pointer-events: none;
 }
-#main button:has(> video) > span { padding: 0; }
-#main button:has(> video):not(:has(> span:not([hidden])))::after { content: 'Weiter'; }
-#main button:has(> video):disabled { opacity: .75; }
+#main button:has(> video) > span:not([hidden]) {
+  line-height: 1.4;
+  font-size: calc(1rem * var(--text, 1));
+}
+
+.action-size-probe {
+  position: fixed;
+  inset: 0 auto auto 0;
+  visibility: hidden;
+  pointer-events: none;
+  box-sizing: border-box;
+  padding: .3rem 1.9rem;
+  border: 2px solid transparent;
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
 #main .actions-final button:is(.primary, .secondary):not(#retry),
 #main .home-actions button:is(.primary, .secondary):not(#retry) {
   background: #eee3f5;

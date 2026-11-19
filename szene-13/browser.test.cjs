@@ -95,6 +95,10 @@ function localServer() {
     assert((await story.locator('.original').textContent()).startsWith(text), path + ' Vorlesetext');
     const size = () => listen.evaluate(button => [button.offsetWidth, button.offsetHeight]);
     const initialSize = await size();
+    if (number === 14) {
+      const fullSize = await chapter.locator('#listenFull').evaluate(button => [button.offsetWidth, button.offsetHeight]);
+      assert.deepEqual(fullSize, initialSize);
+    }
     await listen.click();
     assert.equal(await listen.textContent(), 'Pause');
     assert(await chapter.evaluate(() => !!window.currentSpeech.text));
@@ -166,9 +170,11 @@ function localServer() {
   }
   await button('done').click();
   assert(await button('listen').isVisible());
-  const sizes = await page.locator('#listen, #nextScene')
-    .evaluateAll(items => items.map(button => [button.offsetWidth, button.offsetHeight]));
-  assert.deepEqual(sizes[0], sizes[1]);
+  const nextBounds = await button('nextScene').boundingBox();
+  const videoBounds = await button('transitionVideo').boundingBox();
+  assert.equal(nextBounds.width, videoBounds.width);
+  assert.equal(await button('nextScene').evaluate(element => getComputedStyle(element).opacity), '1');
+  assert(nextBounds.width >= 250);
   await page.waitForFunction(() => !document.getElementById('nextScene').disabled);
   assert(await button('transitionVideo').evaluate(v => v.ended && v.currentTime > 0));
   await button('retry').click();

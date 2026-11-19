@@ -39,9 +39,11 @@ async function run(){
  assert.equal(await video.evaluate(movie => movie.loop), false);
  assert.equal(await transition.locator('#scene7-video-fallback').isVisible(), false);
  assert.match(transition.url(), /szene-7/);
- const buttons = await transition.locator('#audioToggle, #scene8')
-   .evaluateAll(items => items.map(button => [button.offsetWidth, button.offsetHeight]));
- assert.deepEqual(buttons[0], buttons[1]);
+ const buttonSize = await nextScene.boundingBox();
+ const videoSize = await video.boundingBox();
+ assert.equal(buttonSize.width, videoSize.width);
+ assert.equal(buttonSize.height, videoSize.height);
+ assert(buttonSize.width >= 250);
  await nextScene.click();
  await transition.waitForURL('**/szene-8/');
 

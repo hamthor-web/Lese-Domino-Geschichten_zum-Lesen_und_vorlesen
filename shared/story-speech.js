@@ -129,7 +129,7 @@ function mountStoryReading(container, text, {id = 'audioToggle', title = 'Vorles
   original.textContent = text;
   details.append(summary, original);
   section.append(heading, button, status, details);
-  const actions = Array.from(container.children).find(el => el.matches('.actions, .controls, .scene-transition'));
+  const actions = Array.from(container.children).find(el => el.matches('.actions, .controls, .scene-transition, .adventure-link'));
   container.insertBefore(section, actions || null);
 
   const labels = {
@@ -138,6 +138,7 @@ function mountStoryReading(container, text, {id = 'audioToggle', title = 'Vorles
     ended: 'Noch einmal hören',
     error: 'Erneut vorlesen'
   };
+  button.dataset.actionLabel = [label, ...Object.values(labels)].join('|');
   const speech = createStorySpeech(update);
   function update() {
     button.textContent = labels[speech.state] || label;
