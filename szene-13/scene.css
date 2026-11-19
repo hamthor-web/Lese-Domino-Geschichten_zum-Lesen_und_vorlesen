@@ -71,7 +71,7 @@
   background: transparent;
   border: 0;
   border-radius: 0;
-  border-image: url('assets/pergament-button.webp') 58 150 fill / 32px 83px stretch;
+  border-image: url('assets/pergament-button.webp') 58 65 58 150 fill / 32px 36px 32px 83px stretch;
   box-shadow: none;
   padding: 18px 30px 18px 83px;
   min-height: 72px;
