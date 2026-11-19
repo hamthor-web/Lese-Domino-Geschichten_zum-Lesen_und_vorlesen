@@ -7,7 +7,7 @@
   const titles = [
     'Die Geschichte beginnt', 'Die vier Straßen', 'Die Spinnen im Wald', 'Der Händler',
     'Der König', 'Im Dorf', 'Der König im Wald', 'Der wütende König', 'Elin',
-    '1. Erkenntnis', 'Der Zauber geht vorbei', 'Rückreise'
+    '1. Erkenntnis', 'Der Zauber geht vorbei', 'Rückreise', 'Zu Hause'
   ];
   const key = 'silvana-visited-scenes-v1';
 

@@ -9,6 +9,7 @@ on:
       - 'szene-5/**'
       - 'szene-6/**'
       - 'szene-7/**'
+      - 'szene-13/**'
       - 'vorschau-einfuehrung/**'
       - 'assets/**'
       - '.github/workflows/silvana-browser.yml'
@@ -28,6 +29,14 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
+      - name: Browser installieren
+        run: |
+          npm install --prefix "$RUNNER_TEMP/silvana-browser" --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/silvana-browser/node_modules/.bin/playwright" install --with-deps chrome
+      - name: Szene 13 im Browser prüfen
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright
+        run: node szene-13/browser.test.cjs
       - name: Vorhandene Logiktests
         run: |
           node szene-3/answers.test.cjs
@@ -35,10 +44,6 @@ jobs:
           node --check vorschau-einfuehrung/game.js
           cd vorschau-einfuehrung
           node tests/logic.cjs
-      - name: Browser installieren
-        run: |
-          npm install --prefix "$RUNNER_TEMP/silvana-browser" --no-package-lock playwright@1.56.1
-          "$RUNNER_TEMP/silvana-browser/node_modules/.bin/playwright" install --with-deps chrome
       - name: Szenen im Browser prüfen
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/silvana-browser/node_modules/playwright

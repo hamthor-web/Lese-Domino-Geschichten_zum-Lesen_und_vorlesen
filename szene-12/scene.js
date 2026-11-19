@@ -25,7 +25,6 @@
   const next = byId('nextScene');
   const video = byId('transitionVideo');
   const fallback = byId('transitionFallback');
-  const transitionStatus = byId('transitionStatus');
   let selected;
   let drag;
   let placed = 0;
@@ -74,7 +73,6 @@
     video.pause();
     speech.stop();
     completion.hidden = true;
-    transitionStatus.hidden = true;
     evidenceHome.append(evidence);
     evidence.open = false;
     feedback.hidden = true;
@@ -236,24 +234,7 @@
     fallback.textContent = 'Weiter';
     next.disabled = false;
     next.setAttribute('aria-label', 'Weiter zur nächsten Szene');
-    next.onclick = async () => {
-      const current = attempt;
-      next.disabled = true;
-      try {
-        const response = await fetch('../szene-13/index.html', {method: 'HEAD', cache: 'no-store'});
-        if (current !== attempt) return;
-        if (response.ok) {
-          location.assign('../szene-13/');
-          return;
-        }
-      } catch {
-        // Die Aufgabe kann auch ohne Verbindung wiederholt werden.
-      }
-      if (current !== attempt) return;
-      next.disabled = false;
-      transitionStatus.textContent = 'Hier geht die Geschichte bald weiter.';
-      transitionStatus.hidden = false;
-    };
+    next.onclick = () => location.assign('../szene-13/');
   }
 
   function playTransition() {

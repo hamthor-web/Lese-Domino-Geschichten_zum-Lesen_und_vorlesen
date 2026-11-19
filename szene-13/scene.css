@@ -1,0 +1,72 @@
+[hidden] { display: none !important; }
+.home-layout { display: grid; gap: clamp(12px, 2.5vw, 32px); align-items: start; }
+.home-art { display: block; width: 100%; height: auto; border-radius: 12px; }
+#reading .home-art, .queen-picture {
+  width: min(100%, calc(540px * var(--board)));
+  margin-inline: auto;
+}
+#activity p, #textHelp summary, #speechStatus, #transitionStatus {
+  font-size: calc(19px * var(--text));
+  line-height: 1.5;
+}
+#questionPrompt { margin-top: 0; }
+#questions { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.speech-bubble {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: min(100%, max(calc(290px * var(--board)), calc(220px * var(--text))));
+  aspect-ratio: 3 / 2;
+  margin-inline: auto;
+  background: url('assets/sprechblase.webp') center / contain no-repeat;
+  color: #39241a;
+  text-align: center;
+  font: bold calc(19px * var(--text)) / 1.18 Arial, sans-serif;
+}
+.speech-bubble span { width: 72%; transform: translateY(-8%); overflow-wrap: anywhere; }
+.speech-bubble.current { filter: drop-shadow(0 3px 4px #8a5c40); }
+.speech-bubble.reviewed { opacity: .85; }
+.queen-picture { display: grid; }
+.queen-picture > * { grid-area: 1 / 1; }
+.queen-picture .speech-bubble {
+  align-self: end;
+  justify-self: end;
+  margin: 0;
+}
+.home-actions {
+  display: grid;
+  width: fit-content;
+  max-width: 100%;
+  gap: 12px;
+  justify-content: stretch;
+  margin: 12px auto 0;
+}
+.home-actions button, #settingsToggle {
+  max-width: 100%;
+  min-height: 48px;
+  hyphens: none;
+}
+.answer-actions { grid-auto-flow: column; grid-auto-columns: 1fr; }
+.answer-actions button { min-width: 84px; }
+@media (max-width: 450px) { .answer-actions { grid-auto-flow: row; } }
+#feedback:empty { display: none; }
+#textHelp summary { padding-block: 8px; cursor: pointer; font-weight: bold; }
+#completion { text-align: center; }
+.home-next {
+  display: block;
+  width: min(100%, calc(260px * var(--board)));
+  margin: 16px auto 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.home-next:disabled { opacity: 1; }
+.home-next video { display: block; width: 100%; height: auto; border-radius: 10px; }
+.home-next span { display: block; padding: 12px; background: #f5dfae; border-radius: 12px; font-size: calc(21px * var(--text)); }
+@media (min-width: 740px), (orientation: landscape) and (min-width: 620px) {
+  .home-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); }
+}
+.home-actions button, #settingsToggle {
+  background: linear-gradient(#fff9e9, #f1e4c6);
+}

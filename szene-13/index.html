@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Silvana – Zu Hause</title>
+<link rel="stylesheet" href="../vorschau-einfuehrung/styles.css?v=8">
+<link rel="stylesheet" href="scene.css">
+<script src="../shared/story-speech.js?v=1" defer></script><script src="scene.js" defer></script>
+<link rel="stylesheet" href="../shared/scene-menu.css">
+<script src="../shared/scene-menu.js?v=2" defer></script>
+</head>
+<body><header class="topbar"><a class="brand" href="../vorschau-einfuehrung/"><span class="brandmark" aria-hidden="true">✧</span><span>Silvana<span class="brand-sub">Geschichten zum Lesen und Vorlesen</span></span></a>
+<button class="quiet" id="settingsToggle" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button></header>
+<section id="settings" class="settings" hidden>
+<label for="textSize">Schrift <output id="textOutput">100 %</output><input id="textSize" type="range" min="90" max="160" step="10" value="100"></label>
+<label for="boardSize">Spielfeld <output id="boardOutput">100 %</output><input id="boardSize" type="range" min="80" max="160" step="10" value="100"></label><p>Stelle Schrift und Spielfeld unabhängig voneinander ein.</p></section>
+<main id="main" tabindex="-1"><details class="scene-menu" id="sceneMenu" data-scene="13"><summary>Andere Szene noch einmal spielen</summary><nav aria-label="Bereits besuchte Abschnitte"><p class="note">Wähle eine Szene, die du schon besucht hast.</p></nav></details>
+<div class="chapterline"><span class="chapter-count">Szene 13</span></div>
+<div class="panel">
+  <section id="reading">
+    <h1>Zu Hause</h1>
+    <div class="home-layout">
+      <img class="home-art" src="assets/zu-hause.webp" width="1448" height="1086" alt="Der König steht vor den geschlossenen Kisten. Die Königin kommt die Schlosstreppe herunter.">
+      <div>
+        <div class="reading" id="readingText">
+          <p>Die Königin kam die Treppe herunter. Hinter ihr standen viele wichtige Männer und zwei Prinzen.</p>
+          <p>„Was hast du mitgebracht?“, fragte sie.</p>
+          <p>Der König hatte nur etwas trockenes Moos am Mantel. Er sah die geschlossenen Kisten an.</p>
+        </div>
+        <div class="home-actions">
+          <button class="primary" id="listen" type="button">Geschichte vorlesen</button>
+          <button class="primary" id="start" type="button">Weiter zur Aufgabe</button>
+        </div>
+        <p id="speechStatus" role="status" hidden></p>
+      </div>
+    </div>
+  </section>
+  <section id="activity" hidden>
+    <h1 id="activityTitle" tabindex="-1">Was hat die Königin gefragt?</h1>
+    <div class="home-layout">
+      <div class="queen-picture" id="queenPicture">
+        <img class="home-art" src="assets/koenigin.webp" width="700" height="675" alt="Die Königin auf der Schlosstreppe">
+      </div>
+      <div>
+        <p id="questionPrompt">Gehört diese Frage zum Lesetext?</p>
+        <div id="questions" aria-label="Fragen der Königin">
+          <div class="speech-bubble"><span>Wo bist du gewesen?</span></div>
+          <div class="speech-bubble" hidden><span>Warum ist dein Mantel schmutzig?</span></div>
+          <div class="speech-bubble" hidden><span>Was hast du mitgebracht?</span></div>
+        </div>
+        <div class="home-actions answer-actions" id="answerActions" role="group" aria-label="Gehört die Frage zum Lesetext?">
+          <button class="primary" id="yes" type="button">Ja</button>
+          <button class="secondary" id="no" type="button">Nein</button>
+        </div>
+        <p id="feedback" role="status"></p>
+        <details id="textHelp">
+          <summary>Zum Lesetext</summary>
+          <div class="reading" id="taskReading"></div>
+        </details>
+        <section id="telling" hidden>
+          <h2 id="tellingTitle" tabindex="-1">Jetzt erzählst du!</h2>
+          <p>Was könnte der König auf die beiden anderen Fragen antworten? Erzähle es laut.</p>
+          <div class="home-actions"><button class="primary" id="done" type="button">Fertig</button></div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <section id="completion" hidden>
+    <h1 id="finishTitle" tabindex="-1">Du hast alles richtig erkannt!</h1>
+    <div class="home-actions"><button class="secondary" id="retry" type="button">Aufgabe wiederholen</button></div>
+    <button id="nextScene" class="home-next" type="button" disabled aria-label="Würstchen-Animation läuft">
+      <video id="transitionVideo" muted playsinline preload="none" aria-hidden="true"></video>
+      <span id="transitionFallback" hidden></span>
+    </button>
+    <p id="transitionStatus" role="status" hidden></p>
+  </section>
+</div>
+<footer><span>In deinem Tempo. Ohne Zeitdruck.</span><span>Silvana</span></footer></main>
+</body></html>
