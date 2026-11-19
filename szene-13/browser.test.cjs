@@ -37,7 +37,17 @@ function localServer() {
   page.on('pageerror', err => errors.push(err.message));
   const button = id => page.locator('#' + id);
   const questionCount = () => page.locator('#questions .speech-bubble:visible').count();
-  const noOverflow = () => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
+  async function checkWidth(stage, width, height, font, board) {
+    const result = await page.evaluate(() => ({
+      viewport: innerWidth,
+      document: document.documentElement.scrollWidth,
+      overflowing: Array.from(document.querySelectorAll('main *'))
+        .filter(el => el.getBoundingClientRect().right > innerWidth + 1)
+        .map(el => el.id || el.className || el.tagName).slice(0, 10)
+    }));
+    assert(result.document <= result.viewport,
+      `${stage} ${width}x${height} bei ${font}/${board} %: ${JSON.stringify(result)}`);
+  }
   for (const [width,height] of [[320,640],[390,844],[844,390],[768,1024],[1024,768],[1440,900]]) {
     await page.setViewportSize({width,height});
     for (const [font,board] of [[100,100],[160,80],[90,160],[160,160]]) {
@@ -49,7 +59,7 @@ function localServer() {
           input.dispatchEvent(new Event('input'));
         },value);
       }
-      assert(await noOverflow(), `Lesetext ${width}x${height} ${font},${board}`);
+      await checkWidth('Lesetext', width, height, font, board);
       assert(await page.locator('#reading img').evaluate(img => img.complete && img.naturalWidth > 0));
       const widths = await page.locator('#reading .home-actions button').evaluateAll(items => items.map(b => b.offsetWidth));
       assert.equal(widths[0],widths[1]);
@@ -63,13 +73,13 @@ function localServer() {
       assert.equal(await questionCount(),3);
       await button('no').click();
       assert.equal(await questionCount(),3);
-      assert(await noOverflow(), `Aufgabe ${width}x${height} ${font},${board}`);
+      await checkWidth('Aufgabe', width, height, font, board);
       await button('yes').click();
       assert.equal(await questionCount(),2);
       assert(await page.locator('#queenPicture .speech-bubble').isVisible());
       assert(await button('done').isVisible());
       assert.equal(await button('transitionVideo').getAttribute('src'),null);
-      assert(await noOverflow(), `Erzählen ${width}x${height} ${font},${board}`);
+      await checkWidth('Erzählen', width, height, font, board);
     }
   }
   await button('done').click();

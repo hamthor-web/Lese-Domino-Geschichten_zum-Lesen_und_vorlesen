@@ -1,5 +1,5 @@
 [hidden] { display: none !important; }
-.home-layout { display: grid; gap: clamp(12px, 2.5vw, 32px); align-items: start; }
+.home-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(12px, 2.5vw, 32px); align-items: start; }
 .home-art { display: block; width: 100%; height: auto; border-radius: 12px; }
 #reading .home-art, .queen-picture {
   width: min(100%, calc(540px * var(--board)));
@@ -10,7 +10,7 @@
   line-height: 1.5;
 }
 #questionPrompt { margin-top: 0; }
-#questions { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+#questions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin: 0; padding: 0; list-style: none; }
 .speech-bubble {
   box-sizing: border-box;
   display: grid;
@@ -26,7 +26,7 @@
 .speech-bubble span { width: 72%; transform: translateY(-8%); overflow-wrap: anywhere; }
 .speech-bubble.current { filter: drop-shadow(0 3px 4px #8a5c40); }
 .speech-bubble.reviewed { opacity: .85; }
-.queen-picture { display: grid; }
+.queen-picture { display: grid; grid-template-columns: minmax(0, 1fr); }
 .queen-picture > * { grid-area: 1 / 1; }
 .queen-picture .speech-bubble {
   align-self: end;
@@ -38,15 +38,15 @@
   width: fit-content;
   max-width: 100%;
   gap: 12px;
+  grid-auto-rows: 1fr;
   justify-content: stretch;
   margin: 12px auto 0;
 }
 .home-actions button, #settingsToggle {
   max-width: 100%;
-  min-height: 48px;
   hyphens: none;
 }
-.answer-actions { grid-auto-flow: column; grid-auto-columns: 1fr; }
+.answer-actions { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
 .answer-actions button { min-width: 84px; }
 @media (max-width: 450px) { .answer-actions { grid-auto-flow: row; } }
 #feedback:empty { display: none; }
