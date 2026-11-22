@@ -7,3 +7,5 @@ Stand 22.11.2026.
 - **22.11.2026 – organisatorisch bestätigt:** Die Dokumentation wird im bestehenden Lese-Domino-GitHub-Repository geführt, nicht in einem eigenen Eiche-Repository. Diese neue Dokumentation ändert noch keinen Spielcode.
 
 **Noch nicht bestätigt:** konkrete neue Eichen-Buttons, endgültige Szenenzahl, Einzelillustrationen oder technische Integration.
+
+- **22.11.2026 – bestätigt:** Das von Heike erstellte MP4 mit Ton, in dem Würstchen ein Buch öffnet, dient als wiederkehrender Eichen-Abschnittsübergang. Erst bei vollständig geöffnetem Buch erscheint die nächste Überschrift; Schlussbild bleibt stehen, großer „Weiter“-Button schaltet manuell fort. [Ablaufdetails](KAPITELUEBERGANG_BUCH_2026-11-22.md). Videodatei selbst noch nicht nach GitHub übertragen; keine Codeänderung.
