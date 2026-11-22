@@ -1,5 +1,5 @@
 # Spielakte – Die Eiche
-Stand 22.11.2026 – Konzept/Planung, kein neuer Spielcode.
+Stand 22.11.2026 – Dramaturgisches Grundkonzept bestätigt; noch kein neuer Spielcode.
 
 ## Rolle
 Geplante weitere Geschichte in einer künftigen gemeinsamen Lese-Domino-Geschichten-App neben „Das Land der glitzernden Spinnweben“; später sollen weitere Geschichten dazukommen.
@@ -7,11 +7,17 @@ Geplante weitere Geschichte in einer künftigen gemeinsamen Lese-Domino-Geschich
 ## Verbindlicher Bildstil
 Eigene **handgemachte plastische 3D-Kinderbuchwelt im Stop-Motion-Stil**, angelehnt an die gezeigte Würstchen-/Herbstblätter-Ästhetik. Kein allgemeiner Stilwechsel für andere Geschichten.
 
+## Dramaturgie – Grundkonzept bestätigt am 22.11.2026
+[**Grundkonzept mit zehn Abschnitten und Spannungsbogen**](GRUNDKONZEPT_DRAMATURGIE_2026-11-22.md): geheimnisvoller Winter, erwachender Frühling, lebhafter Sommer mit Eichenhotel, goldener Herbst und ruhiger Abschied. Abwechslungsreiche, humorvolle und sinnvolle Aufgaben statt gleichförmiger Quizfolgen; die Veränderungen der Geschichte sind selbst die Belohnung. Die Eisfrage mit Weihnachten und offenem Kühlschrank ist als besonders gelungene Quatschfrage hervorgehoben.
+
+**Unterscheidung:** Heike bestätigte den **Ablauf als Grundkonzept**, nicht alle Einzelaufgaben als fertige Spezifikation. Detaildramaturgie wird abschnittsweise erarbeitet. Keine Programmierung durch diesen Dokumentationsschritt.
+
 ## Gemeinsame Grundlage
 Bewährte Lesbarkeit, Bedienung, Buttonmaß-Logik, unabhängige Schrift- und Spielfeldgrößenregler. Die eigentliche Button-Dekoration darf passend zur Eiche gestaltet werden; Spinnwebenmotive gehören zur anderen Geschichte.
 
 ## Offen, nicht als beschlossen behandeln
-- Endgültige Szenengliederung und Aufgabeninhalte anhand des vollständigen Originaltexts.
+- Endgültige Einzelaufgaben, Dialoge, Interaktionen und Übergänge innerhalb der zehn geplanten Abschnitte.
+- Prüfung der Aufgaben gegen die vollständige Original- und Lesefassung.
 - Illustrationen/Bildbestand und Animationen der einzelnen Abschnitte.
 - Eigenes Buttonmotiv.
 - Technische Integration in die gemeinsame Geschichtenauswahl und tatsächliche Gerätetests.
