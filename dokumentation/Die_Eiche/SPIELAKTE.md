@@ -37,3 +37,5 @@ Die erste Szene heißt **„Die Eiche“**. Der Titel erscheint in der Szenenüb
 
 ## Traumvideo und Vorlese-Einstieg – 23.11.2026
 Bei der richtigen Antwort „Sie träumt von früher“ läuft das von Heike bereitgestellte Video `Eiche_Winter_1080p.mp4` (drei Sekunden, 1080 × 1080) mit sanfter Überblendung. Die Einladung zum Zuhören lautet „Prima! Und nun lehne dich zurück und höre der Geschichte zu.“ In weiteren Abschnitten darf die Einladung unterschiedlich formuliert werden.
+
+Das letzte Bild des Wintervideos bleibt vor dem Ausblenden 1,5 Sekunden stehen. Mit „Weiter“ lässt sich die Pause überspringen.
