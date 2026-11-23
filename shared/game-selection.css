@@ -1,0 +1,29 @@
+html body {
+  padding-block-end: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+
+.game-selection-link {
+  position: fixed;
+  z-index: 10;
+  inset-inline-end: max(.65rem, env(safe-area-inset-right, 0px));
+  inset-block-end: calc(.5rem + env(safe-area-inset-bottom, 0px));
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  max-inline-size: calc(100% - 2rem);
+  min-block-size: 44px;
+  padding: .3rem .65rem;
+  border: 1px solid #795b44;
+  border-radius: .65rem;
+  background: #fff5e3;
+  color: #402817;
+  font: 700 .875rem/1.25 system-ui, sans-serif;
+  text-align: center;
+  text-decoration: none;
+}
+
+.game-selection-link:hover { text-decoration: underline; }
+.game-selection-link:focus-visible {
+  outline: 3px solid #1c63a2;
+  outline-offset: 2px;
+}

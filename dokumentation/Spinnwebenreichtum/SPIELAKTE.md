@@ -18,3 +18,7 @@ Lese-Domino-Geschichte mit Selbstlesen, Aufgaben und originalem Hörtext; konkre
 Für eine Freigabe aktuelle GitHub-Version, Szeneübergänge, Hoch-/Querformat, beide Zoomregler und Vorlesen auf echten Geräten kontrollieren. Einzelne historische Nachträge können älteren Stand beschreiben.
 
 [Entscheidungen dieser Geschichte](ENTSCHEIDUNGEN.md)
+
+## Zur gemeinsamen Spielauswahl · 23.11.2026
+
+„Zur Spielauswahl“ steht als kleine Schaltfläche unten rechts auf der Startseite dieser Geschichte und auf allen Spielseiten. Sie führt zur gemeinsamen Startseite mit „Die Eiche“ und „Silvana“. Beim Wechsel bleibt der vorhandene Spielstand gespeichert.

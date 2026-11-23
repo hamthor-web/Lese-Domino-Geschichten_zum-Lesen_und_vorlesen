@@ -73,3 +73,7 @@ Bei „Wer hat das Herz in die Rinde geritzt?“ erscheinen „Specht“, „Lie
 ## Antwortbuttons zur Traumfrage · 23.11.2026
 
 Die Antwortbuttons zu „Was träumt die Eiche?“ bleiben gleich hoch und richten ihre Höhe nach der größten benötigten Zeilenzahl bei der gewählten Schriftgröße aus. Die Ober- und Unterkante des Knetrahmens behalten ihre Proportionen. Die Pergamentmitte wächst mit dem Text. Das Kleine Würstchen sitzt als eigene Bildebene seitlich am Rahmen und behält seine Proportionen. Die Schriftgröße und die Spielfeldgröße bleiben unabhängig regelbar. Getestet in Chromium mit Smartphone- und Tabletmaßen im Hoch- und Querformat, auch bei 150 % Schrift und 135 % Spielfeld.
+
+## Zur gemeinsamen Spielauswahl · 23.11.2026
+
+„Zur Spielauswahl“ steht als kleine Schaltfläche unten rechts auf der Startseite dieser Geschichte und auf allen Spielseiten. Sie führt zur gemeinsamen Startseite mit „Die Eiche“ und „Silvana“. Beim Wechsel bleibt der vorhandene Spielstand gespeichert.
