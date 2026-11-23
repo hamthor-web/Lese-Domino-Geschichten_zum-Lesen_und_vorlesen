@@ -1,36 +1,140 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" data-app="eiche">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#e9eddd">
-  <meta name="description" content="Die Eiche – eine interaktive Lesegeschichte. Eigene Entwicklungsseite innerhalb der Lese-Domino-Geschichten.">
-  <title>Die Eiche · Lese-Domino-Geschichten</title>
+  <meta name="theme-color" content="#f2e9dc">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="../assets/silvana-icon-192.png">
+  <script src="spielstand.js" defer></script>
+  <script src="start.js" defer></script>
+  <script src="../shared/installieren.js?v=3" defer></script>
+  <title>Die Eiche</title>
   <style>
-    *,*::before,*::after{box-sizing:border-box}
-    body{margin:0;min-height:100vh;display:grid;place-items:center;padding:1.5rem;background:linear-gradient(150deg,#f6f2e6,#dae8d4);color:#283a2c;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-    main{width:min(100%,42rem);padding:clamp(1.6rem,5vw,3rem);border:1px solid #b8c9b4;border-radius:1.4rem;background:#fffdf5;box-shadow:0 12px 38px #304a3018;text-align:center}
-    .eyebrow{font-size:.95rem;letter-spacing:.09em;text-transform:uppercase;color:#536d52}
-    h1{font-family:Georgia,serif;font-size:clamp(2.8rem,9vw,4.5rem);line-height:1.1;margin:.5rem 0 1rem;color:#35563b}
-    p{font-size:1.12rem;line-height:1.6}
-    audio{display:block;width:100%;margin:0 auto}
-    a{display:inline-block;margin-top:1.5rem;padding:.85rem 1.25rem;border-radius:.8rem;background:#35563b;color:white;text-decoration:none;font-weight:700}
-    a:hover,a:focus-visible{background:#203d28}
-    a:focus-visible{outline:3px solid #9b6d28;outline-offset:3px}
+    @font-face { font-family: Andika; src: url('../vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: Andika; src: url('../vorschau-einfuehrung/assets/fonts/Andika-Bold.ttf'); font-weight: 700; font-display: swap; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f2e9dc; color: #291709; font-family: Andika, sans-serif; }
+    .welcome {
+      display: grid;
+      justify-items: center;
+      gap: clamp(.5rem, 2vw, 1.1rem);
+      width: min(100%, 40rem);
+      margin-inline: auto;
+      padding: clamp(2rem, 8vw, 4rem) 17% clamp(2.25rem, 8vw, 4rem);
+      background: url('../assets/willkommen-pergament.webp') center / 100% 100%;
+    }
+    @media (min-width: 40rem) {
+      .welcome { padding-inline: 6.5rem; }
+    }
+    .mascot { display: block; }
+    .mascot img {
+      display: block;
+      width: clamp(8rem, 40vw, 14rem);
+      max-width: 100%;
+      height: auto;
+    }
+    .greeting {
+      color: #f1e9d5;
+      font-weight: 700;
+      text-align: center;
+      -webkit-text-stroke: .45px #382213;
+      text-shadow: 0 1px 2px #382213, 0 0 4px #382213, 0 0 8px #382213;
+    }
+    .greeting p { margin: .3em 0; font-size: clamp(1.04rem, 4vw, 1.55rem); line-height: 1.3; }
+    h1 {
+      margin: .05em 0 .1em;
+      color: inherit;
+      font-size: clamp(2.5rem, 9vw, 4.7rem);
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-weight: inherit;
+      line-height: 1.05;
+    }
+    .note {
+      margin: .4rem auto 0;
+      max-width: 32rem;
+      padding: 0 1rem 1.25rem;
+      text-align: center;
+      font-size: .77rem;
+      line-height: 1.42;
+      text-shadow: 0 1px 4px #f7e0c0;
+    }
+    #sprachfassung { font-size: 1rem; }
+    footer section { width: min(90%, 32rem); margin: 0 auto 1rem; text-align: center; }
+    footer audio { width: 100%; }
+    .note-heading { font-weight: 700; padding-bottom: 0; }
+    .aktionen { display: grid; gap: .55rem; width: 100%; min-width: 0; }
+    .start {
+      background: transparent;
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+      width: 100%;
+      color: inherit;
+      font-size: clamp(.98rem, 3.7vw, 1.23rem);
+      font-weight: bold;
+      line-height: 1.22;
+      text-align: center;
+      text-decoration: none;
+      touch-action: manipulation;
+    }
+    .hilfe, #app-status { margin: 0; font-size: .95rem; line-height: 1.4; }
+    .hilfe { padding: .65rem; border-radius: .5rem; background: #f8e7cc; }
+    .hilfe p { margin: .3em 0; }
+    #app-status:empty { display: none; }
+    .start:hover { filter: brightness(1.07); }
+    .start:focus-visible { outline: 3px solid #582b13; outline-offset: 3px; border-radius: 2rem; }
+    @media (min-width: 48rem) and (orientation: landscape) {
+      .welcome {
+        width: min(100%, 59rem);
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        align-items: center;
+        padding: 3.5rem min(16vw, 9.5rem);
+      }
+      .mascot { grid-row: span 2; }
+      .aktionen { grid-column: 2; }
+    }
   </style>
+  <link rel="stylesheet" href="../shared/parchment-actions.css">
+  <script src="../shared/parchment-actions.js" defer></script>
+  <link rel="stylesheet" href="../shared/app-info.css">
+  <script src="../shared/app-info.js?v=2" defer></script>
 </head>
 <body>
-  <main>
-    <div class="eyebrow">Lese-Domino-Geschichten</div>
-    <h1>Die Eiche</h1>
-    <p>Eine Geschichte vom Leben und Träumen einer alten Eiche am See.</p>
-    <a href="abschnitt-1/">Abschnitt 1 spielen</a>
-    <a href="abschnitt-2/">Spuren der Zeit spielen</a>
-    <section aria-labelledby="sprachfassung">
+  <main class="welcome parchment-actions">
+    <picture class="mascot">
+      <source media="(prefers-reduced-motion: reduce)" srcset="../assets/willkommen-wuerstchen.webp">
+      <img src="../assets/willkommen-wuerstchen-animiert.webp" alt="Das Kleine Würstchen mit Krone verbeugt sich zur Begrüßung." width="301" height="336">
+    </picture>
+    <div class="greeting">
+      <p>Hallo, schön, dass du da bist.</p>
+      <p>Lass uns gemeinsam die Geschichte</p>
+      <h1>Die Eiche</h1>
+      <p>entdecken.</p>
+    </div>
+    <div class="aktionen">
+      <a class="start" id="eiche-start" href="./abschnitt-1/">Lass uns das Spiel mit der Geschichte beginnen!</a>
+      <a class="start" href="./abschnitt-2/">Spuren der Zeit spielen</a>
+      <button class="start" id="installieren" type="button" aria-controls="installationshilfe" aria-expanded="false">Installieren</button>
+      <button class="start" id="aktualisieren" type="button">Aktualisieren</button>
+      <div class="hilfe" id="installationshilfe" hidden>
+        <p><strong>iPhone und iPad:</strong> Öffne „Die Eiche“ in Safari. Tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“ beziehungsweise „Zu Home-Bildschirm hinzufügen“. Aktiviere, falls angezeigt, „Als Web-App öffnen“ und tippe auf „Hinzufügen“.</p>
+        <p><strong>Mac ab macOS Sonoma:</strong> Öffne „Die Eiche“ in Safari und wähle „Ablage“ und dann „Zum Dock hinzufügen“.</p>
+        <p><strong>Android und Windows:</strong> Öffne das Browsermenü in Chrome oder Edge und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“, wenn die Option angeboten wird.</p>
+      </div>
+      <button class="start" id="zuruecksetzen" type="button">Spiel zurücksetzen</button>
+      <p id="app-status" role="status"></p>
+    </div>
+  </main>
+  <footer>
+    <h2 class="note note-heading">Für die Eltern und Lesebegleiter</h2>
+    <p class="note">Wie uns Reinhard Mey lehrte, sind wir alle nur kleine Würstchen. Doch ich denke, arm sind wir dabei nicht unbedingt. Tatsächlich sind wir alle kleine Könige, und es kommt nur darauf an, was wir daraus machen. Aus diesem Grund habe ich die Figur des Kleinen Würstchens ins Leben gerufen. Mein Wunsch ist es, dass seine Größe Ihrem Kind Freude beim Entdecken schenkt!</p>
+  <section aria-labelledby="sprachfassung">
       <h2 id="sprachfassung">Geschichte anhören</h2>
       <audio controls preload="metadata" aria-labelledby="sprachfassung" src="../assets/die-eiche/die-eiche-sprachfassung.mp3"></audio>
     </section>
-    <a href="../">Zur Geschichte „Silvana“</a>
-  </main>
+    <p class="note"><a href="../">Zur Geschichte „Silvana“</a></p>
+  </footer>
 </body>
 </html>

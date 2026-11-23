@@ -223,6 +223,7 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
   </nav>
   <button class="action oak info-close" id="infoClose" type="button" autofocus>Schließen</button>
 </dialog>
+<script src="../spielstand.js"></script>
 <script>
 const pages = [
   {
@@ -246,6 +247,13 @@ const passage = get('passage');
 const feedback = get('feedback');
 const found = new Set();
 let pageIndex = 0;
+let activeScreen = 'game';
+const saved = EicheProgress.read(2);
+let restoring = false;
+function checkpoint() {
+  if (restoring) return;
+  EicheProgress.save(2, {screen: activeScreen, pageIndex, question: !get('questionPanel').hidden, answers: [...found], feedback: feedback.textContent});
+}
 let revealTimer;
 
 function centerBoard() {
@@ -278,6 +286,7 @@ function renderPage(index, returningFromHeart = false, moveFocus = false) {
   } else {
     showReading();
   }
+  checkpoint();
 }
 
 function revealQuestion() {
@@ -299,6 +308,7 @@ function revealQuestion() {
       if (found.has(index) || found.size === page.correct.length) return;
       if (!page.correct.includes(index)) {
         feedback.textContent = 'Lies noch einmal!';
+        checkpoint();
         return;
       }
       found.add(index);
@@ -314,11 +324,14 @@ function revealQuestion() {
         get('replayCurrent').hidden = false;
         try { localStorage.setItem('die-eiche-completed-section-2', 'yes'); } catch {}
       }
+      checkpoint();
     };
     return button;
   }));
   get('choices').classList.toggle('short-answers', pageIndex === 0);
   get('questionPanel').hidden = false;
+  checkpoint();
+  if (restoring) return;
   get('question').focus({preventScroll: true});
   if (get('question').getBoundingClientRect().bottom > innerHeight) {
     get('question').scrollIntoView({block: 'nearest'});
@@ -346,17 +359,17 @@ for (const [id, property, usePercent] of [['letters', '--letters', false], ['boa
     input.nextElementSibling.value = input.value + ' %';
   };
 }
-renderPage(0);
-
 const bookClip = get('bookClip');
 const jumpClip = get('jumpClip');
 const narration = get('narration');
 function showScreen(id, heading) {
+  activeScreen = id;
   for (const screen of ['game', 'readPage', 'bookPage', 'chapterPage']) {
     get(screen).hidden = screen !== id;
   }
   scrollTo(0, 0);
   if (heading) get(heading).focus({preventScroll: true});
+  checkpoint();
 }
 function stopReading() {
   narration.pause();
@@ -404,6 +417,25 @@ get('replayCurrent').onclick = () => {
   renderPage(0, false, true);
 };
 get('chapterBack').onclick = () => { showScreen('bookPage'); bookOpened(bookClip.hidden); };
+
+restoring = true;
+renderPage(saved?.pageIndex === 1 ? 1 : 0);
+if (saved?.question) {
+  revealQuestion();
+  for (const index of saved.answers ?? []) get('choices').children[index]?.onclick();
+  if (typeof saved.feedback === 'string') feedback.textContent = saved.feedback;
+}
+if (saved?.screen === 'readPage') showScreen('readPage');
+if (saved?.screen === 'bookPage' || saved?.screen === 'chapterPage') {
+  showScreen('bookPage');
+  bookOpened(true);
+  if (saved.screen === 'chapterPage') {
+    jumpClip.pause();
+    showScreen('chapterPage');
+  }
+}
+restoring = false;
+checkpoint();
 
 </script>
 </body>

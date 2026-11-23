@@ -189,6 +189,7 @@ nav .decor { color: #472614 }
   </nav>
   <button class="decor replay info-close" id="infoClose" type="button" autofocus><span class="button-label">Schließen</span></button>
 </dialog>
+<script src="../spielstand.js"></script>
 <script>
 const videos = {
   "dream": "../../assets/die-eiche/abschnitt-1/eiche-winter.mp4",
@@ -441,6 +442,7 @@ function dream() {
         dreamCorrect = true;
         dreamSelection = index;
         showHint(index);
+        checkpoint();
       }
       const playback = play(key, false, controller.signal);
       finishClip = async () => {
@@ -459,6 +461,7 @@ function dream() {
 }
 
 function puzzle() {
+  checkpoint();
   const solved = arrangements[2].solved;
   const left = arrangements.filter(item => !item.solved).length;
   activity.innerHTML = '<h2>Welches Wort passt?</h2><p>Die Äste sehen aus wie …</p><div class="clouds"></div><p class="feedback" role="status"></p>';
@@ -554,12 +557,12 @@ async function addLetter(i,index) {
     return;
   }
   const first = arrangements.every(item => !item.solved);
-  puzzle();
-  await play(word);
+  const animation = play(word);
   entry.solved = true;
   if (i === 2) wordFeedback = first ? praise : 'Die Äste sehen aus wie Blitze.';
   else if (!arrangements[2].solved) wordFeedback = 'Versuch es noch einmal.';
   puzzle();
+  await animation;
   navState();
   if (i === 2) (activity.querySelector('.optional button') || $('next')).focus({preventScroll:true});
 }
@@ -597,6 +600,7 @@ async function showIntro() {
 }
 
 function render() {
+  checkpoint();
   if (step !== 5 && !playing) visualSound = null;
   syncSceneSound();
   $('winter').src = step === 0 && introReady ? introStill.src : winterImage;
@@ -672,6 +676,18 @@ const bookNextClip = $('bookNextClip');
 bookNextClip.src = '../../assets/die-eiche/abschnitt-1/weiter-knetanimation.webm';
 bookNextClip.addEventListener('error', () => { bookNextClip.hidden = true; });
 
+async function openBook() {
+    saveProgress();
+    const bookPlayed = await play('book', true);
+    openedBook = true;
+    if (bookPlayed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      bookNextClip.currentTime = 0;
+      bookNextClip.hidden = Boolean(bookNextClip.error);
+      if (!bookNextClip.hidden) bookNextClip.play().catch(() => { bookNextClip.hidden = true; });
+    }
+    render();
+}
+
 function leaveBook() {
   bookNextClip.pause();
   bookNextClip.hidden = true;
@@ -706,17 +722,7 @@ $('next').onclick = async () => {
   render();
   turnPage();
   window.scrollTo(0,0);
-  if (step === 7) {
-    saveProgress();
-    const bookPlayed = await play('book', true);
-    openedBook = true;
-    if (bookPlayed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      bookNextClip.currentTime = 0;
-      bookNextClip.hidden = Boolean(bookNextClip.error);
-      if (!bookNextClip.hidden) bookNextClip.play().catch(() => { bookNextClip.hidden = true; });
-    }
-    render();
-  }
+  if (step === 7) await openBook();
 };
 
 $('settingsBtn').onclick = () => {
@@ -757,9 +763,21 @@ $('sceneMenu').addEventListener('toggle', updateReplay);
 window.addEventListener('storage', updateReplay);
 window.addEventListener('pageshow', updateReplay);
 window.addEventListener('pagehide', stopNarration);
+function checkpoint() {
+  EicheProgress.save(1, {step, found, dreamCorrect, dreamSelection, wordFeedback, optional, arrangements});
+}
+
+const saved = EicheProgress.read(1);
+if (saved && Number.isInteger(saved.step) && saved.step >= 0 && saved.step <= 7) {
+  ({step, found, dreamCorrect, dreamSelection, wordFeedback, optional} = saved);
+  saved.arrangements?.forEach((entry, i) => {
+    if (arrangements[i] && entry.indices?.length === 6) Object.assign(arrangements[i], entry);
+  });
+}
 updateReplay();
 render();
-showIntro();
+if (step === 0) showIntro();
+if (step === 7) openBook();
 </script>
 </body>
 </html>

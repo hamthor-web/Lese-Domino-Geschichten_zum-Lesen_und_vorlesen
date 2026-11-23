@@ -1,14 +1,15 @@
 'use strict';
 
 (() => {
+  const isEiche = document.documentElement.dataset.app === 'eiche';
   const header = document.querySelector('.topbar, .welcome');
   const dialog = document.createElement('dialog');
   dialog.id = 'appInfo';
   dialog.setAttribute('aria-labelledby', 'appInfoTitle');
   dialog.innerHTML = `
     <h2 id="appInfoTitle" tabindex="-1" autofocus>Informationen &amp; Kontakt</h2>
-    <p>Silvana · Das Land der glitzernden Spinnweben · Heike Amthor</p>
-    <p>Sprecherin: Nadine Weder</p>
+    <p>${isEiche ? 'Die Eiche' : 'Silvana · Das Land der glitzernden Spinnweben'} · Heike Amthor</p>
+    ${isEiche ? '' : '<p>Sprecherin: Nadine Weder</p>'}
     <nav aria-label="Informationen zur App">
       <a href="https://lesespiele.heike-amthor.de/impressum" target="_blank" rel="noopener noreferrer">Impressum <span>(Website)</span></a>
       <a href="https://lesespiele.heike-amthor.de/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutz <span>(Website)</span></a>

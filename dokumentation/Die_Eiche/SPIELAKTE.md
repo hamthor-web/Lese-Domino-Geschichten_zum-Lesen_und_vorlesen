@@ -51,3 +51,9 @@ Der animierte Weiter-Button wird mit transparentem Hintergrund eingeblendet.
 ## Abschnitt 2 · Spuren der Zeit · freigegeben am 23.11.2026
 
 Die freigegebene Vorschau v7 ist als [Abschnitt 2](../../die-eiche/abschnitt-2/) eingebunden. Der animierte Weiter-Button am Ende von Abschnitt 1 führt dorthin. Abschnitt 2 enthält die freigestellten Antwortbuttons, die Originalaufnahme von 00:34,60 bis 01:05,22 und den neuen Vorlesehinweis. Der Buchübergang kündigt „Winterschlaf“ an.
+
+## Startseite und Zwischenstand · 23.11.2026
+
+Die Eiche nutzt den Willkommensbildschirm von Silvana mit eigenem Titel und eigener Begrüßung. Installieren, Aktualisieren und das bestätigte Zurücksetzen gelten für Die Eiche. Ein eigener Web-App-Eintrag öffnet die Eichen-Startseite.
+
+Die Abschnitte 1 und 2 speichern den letzten Bildschirm und den Aufgabenstand im Browser. Suchfunde, gelegte Buchstaben und bereits ausgewählte Antworten bleiben erhalten. „Spiel fortsetzen“ öffnet den zuletzt gespielten Abschnitt. Beim Fortsetzen starten Vorleseton und Videos bei Bedarf von vorn.
