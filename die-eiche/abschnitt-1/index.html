@@ -696,8 +696,7 @@ $('next').onclick = async () => {
     delete $('next').dataset.advancing;
   }
   if (step === 7) {
-    completed = true;
-    render();
+    window.location.assign('../abschnitt-2/');
     return;
   }
   stopNarration();
@@ -764,4 +763,3 @@ showIntro();
 </script>
 </body>
 </html>
-

@@ -47,3 +47,7 @@ Der animierte Weiter-Button wird mit transparentem Hintergrund eingeblendet.
 
 ## Geräusche im ersten Abschnitt – 23.11.2026
 `Blitz und Donner.mp3` begleitet den Blitzclip. `Meisen.mp3` läuft leise auf den ruhigen Spielseiten in Schleife. `wind.mp3` begleitet die träumende Eiche und den Wintertraum. Andere Clips und der Vorlesebildschirm erhalten keinen zusätzlichen Hintergrundton.
+
+## Abschnitt 2 · Spuren der Zeit · freigegeben am 23.11.2026
+
+Die freigegebene Vorschau v7 ist als [Abschnitt 2](../../die-eiche/abschnitt-2/) eingebunden. Der animierte Weiter-Button am Ende von Abschnitt 1 führt dorthin. Abschnitt 2 enthält die freigestellten Antwortbuttons, die Originalaufnahme von 00:34,60 bis 01:05,22 und den neuen Vorlesehinweis. Der Buchübergang kündigt „Winterschlaf“ an.
