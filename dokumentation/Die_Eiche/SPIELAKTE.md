@@ -69,3 +69,7 @@ Die App-Kennung von „Die Eiche“ ist ausdrücklich als eigener Pfad gesetzt. 
 ## Antwortreihenfolge in Abschnitt 2 · 23.11.2026
 
 Bei „Wer hat das Herz in die Rinde geritzt?“ erscheinen „Specht“, „Liebespaar“ und „Händler“ in dieser Reihenfolge. Die richtige Antwort „Liebespaar“ steht in der Mitte. Bereits ausgewählte Antworten werden beim Fortsetzen an der richtigen Schaltfläche angezeigt.
+
+## Antwortbuttons zur Traumfrage · 23.11.2026
+
+Die Antwortbuttons zu „Was träumt die Eiche?“ passen ihre Höhe an die Schrift und die Anzahl der Zeilen an. Die Ober- und Unterkante des Knetrahmens behalten ihre Proportionen. Die Pergamentmitte wächst mit dem Text. Das Kleine Würstchen sitzt als eigene Bildebene seitlich am Rahmen und behält seine Proportionen. Die Schriftgröße und die Spielfeldgröße bleiben unabhängig regelbar. Getestet in Chromium mit Smartphone- und Tabletmaßen im Hoch- und Querformat, auch bei 150 % Schrift und 135 % Spielfeld.
