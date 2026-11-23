@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Die Eiche · Wer schläft denn da?</title>
+<title>Die Eiche · Lese-Domino-Geschichten</title>
 <style>
 * { box-sizing: border-box }
 :root { --letters: 1; --board: 100%; color-scheme: light }
@@ -136,9 +136,9 @@ nav .decor { color: #472614 }
 <details class="scene-menu" id="sceneMenu">
   <summary class="decor">Abschnitt noch einmal erleben</summary>
   <p id="replayNote">Hier erscheinen die Abschnitte, sobald du ihre Aufgaben abgeschlossen hast.</p>
-  <button class="decor replay" id="replay" type="button" hidden>Wer schläft denn da?</button>
+  <button class="decor replay" id="replay" type="button" hidden>Die Eiche</button>
 </details>
-<h1 id="sectionTitle" tabindex="-1">Wer schläft denn da?</h1>
+<h1 id="sectionTitle" tabindex="-1">Die Eiche</h1>
 <div class="layout" id="layout">
 <div class="read-column" id="readColumn" hidden><article class="paper"><p id="reading"></p></article>
 <ol class="finds" id="finds" aria-label="Suchfortschritt" hidden><li>Wurzeln</li><li>See</li><li>Äste</li></ol></div>
@@ -571,7 +571,7 @@ function render() {
   });
   $('winter').hidden = step === 7;
   $('board').classList.toggle('book', step === 7);
-  $('sectionTitle').textContent = step === 7 ? 'Und wie geht es jetzt weiter?' : 'Wer schläft denn da?';
+  $('sectionTitle').textContent = step === 7 ? 'Und wie geht es jetzt weiter?' : 'Die Eiche';
   $('bookTitle').hidden = step !== 7 || !openedBook;
   activity.hidden = step !== 3 && step !== 5 && step !== 6 && !(step === 7 && completed);
   activity.replaceChildren();
