@@ -12,3 +12,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Achtung:** Die ältere [Zusammenfassung](../Lese-Domino-Zusammenfassung.md) nennt teilweise sechs Szenen. Bei Abweichungen spätere Nachträge und den aktuellen Quellcode prüfen, statt alte Zahlen ungeprüft zu übernehmen.
 
 **Die Eiche – Kapitelübergang:** Am 22.11.2026 ist das wiederkehrende Würstchen-Buch-Video mit Ton und manueller Weiter-Schaltung als [Ablaufkonzept](Die_Eiche/KAPITELUEBERGANG_BUCH_2026-11-22.md) bestätigt worden. Das Referenzvideo liegt noch nicht als Binärdatei im Repository, und die Funktion ist noch nicht programmiert.
+
+**Die Eiche – Webstand am 23.11.2026:** Der erste Abschnitt ist spielbar. Die richtige Traumantwort startet das Wintervideo. Der Vorlesebildschirm lädt mit einer eigenen Meldung zum Zuhören ein. [Spielakte](Die_Eiche/SPIELAKTE.md)

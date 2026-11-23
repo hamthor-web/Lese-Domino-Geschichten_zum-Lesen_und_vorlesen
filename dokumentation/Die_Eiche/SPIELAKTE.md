@@ -34,3 +34,6 @@ Die erste Szene heißt **„Die Eiche“**. Der Titel erscheint in der Szenenüb
 
 ## Bedienung der ersten Szene – 23.11.2026
 „Schließen“ beendet den Dialog „Informationen & Kontakt“ direkt. Das Szenenmenü heißt „Anderen Abschnitt noch einmal erleben“. Die Beschriftungen der dekorierten Schaltflächen werden größer, zentriert und ohne Silbentrennung angezeigt. Die Schriftgröße bleibt separat regelbar. Umgesetzt im Webcode und in der eigenständigen Vorschau v18.
+
+## Traumvideo und Vorlese-Einstieg – 23.11.2026
+Bei der richtigen Antwort „Sie träumt von früher“ läuft das von Heike bereitgestellte Video `Eiche_Winter_1080p.mp4` (drei Sekunden, 1080 × 1080) mit sanfter Überblendung. Die Einladung zum Zuhören lautet „Prima! Und nun lehne dich zurück und höre der Geschichte zu.“ In weiteren Abschnitten darf die Einladung unterschiedlich formuliert werden.
