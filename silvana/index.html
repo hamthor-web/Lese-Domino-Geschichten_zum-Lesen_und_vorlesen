@@ -92,15 +92,19 @@
       .aktionen { grid-column: 2; }
     }
   </style>
-  <link rel="stylesheet" href="../shared/parchment-actions.css">
-  <script src="../shared/parchment-actions.js" defer></script>
+  <link rel="stylesheet" href="../shared/parchment-actions.css?v=2">
+  <script src="../shared/parchment-actions.js?v=2" defer></script>
   <link rel="stylesheet" href="../shared/app-info.css">
   <script src="../shared/app-info.js" defer></script>
 
   <link rel="stylesheet" href="../shared/game-selection.css">
+  <link rel="stylesheet" href="../shared/story-welcome.css">
+  <script src="../shared/story-speech.js" defer></script>
+  <script src="vorlesen.js" defer></script>
 </head>
-<body>
-  <main class="welcome parchment-actions">
+<body class="story-welcome">
+  <main class="story-entry">
+    <header class="welcome">
     <picture class="mascot">
       <source media="(prefers-reduced-motion: reduce)" srcset="../assets/willkommen-wuerstchen.webp">
       <img src="../assets/willkommen-wuerstchen-animiert.webp" alt="Das Kleine Würstchen mit Krone verbeugt sich zur Begrüßung." width="301" height="336">
@@ -112,11 +116,15 @@
       <h1>Silvana</h1>
       <p>gemeinsam zu entdecken.</p>
     </div>
-    <div class="aktionen">
-      <a class="start" href="../vorschau-einfuehrung/">Lass uns das Spiel mit der Geschichte beginnen!</a>
+    </header>
+    <div class="aktionen welcome-actions parchment-actions">
+      <a class="start" href="../vorschau-einfuehrung/">Spiel beginnen</a>
       <button class="start" id="zuruecksetzen" type="button">Spiel zurücksetzen</button>
       <p id="app-status" role="status"></p>
     </div>
+    <section class="reading-entry" id="silvana-reading">
+      <p role="status"></p>
+    </section>
   </main>
 
   <a class="game-selection-link" href="../">Zur Spielauswahl</a>

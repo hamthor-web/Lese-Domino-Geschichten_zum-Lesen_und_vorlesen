@@ -1,10 +1,17 @@
 (() => {
-  const start = document.getElementById('eiche-start');
+  const resume = document.getElementById('eiche-resume');
+  const restart = document.getElementById('eiche-restart');
+  const second = document.getElementById('eiche-second');
+
   function updateStart() {
     const section = EicheProgress.latest();
-    start.href = './abschnitt-' + (section ?? 1) + '/';
-    start.textContent = section ? 'Spiel fortsetzen' : 'Lass uns das Spiel mit der Geschichte beginnen!';
+    resume.hidden = section === null;
+    resume.href = './abschnitt-' + (section ?? 1) + '/';
+    const canReplay = section !== null || EicheProgress.secondUnlocked();
+    restart.textContent = canReplay ? 'Spiel neu starten' : 'Spiel beginnen';
+    second.hidden = !EicheProgress.secondUnlocked();
   }
+
   updateStart();
   addEventListener('pageshow', updateStart);
   addEventListener('storage', updateStart);

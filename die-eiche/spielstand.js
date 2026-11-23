@@ -1,32 +1,58 @@
 window.EicheProgress = (() => {
   const prefix = 'die-eiche-checkpoint-v1-';
   const resetKey = 'die-eiche-reset-v1';
+  const latestKey = 'die-eiche-last-section';
+  const completionKey = section => 'die-eiche-completed-section-' + section;
   const version = localStorageValue(resetKey);
+
   function localStorageValue(key) {
     try { return localStorage.getItem(key); } catch { return null; }
   }
   function read(section) {
     try { return JSON.parse(localStorageValue(prefix + section)); } catch { return null; }
   }
+  function readForVisit(section) {
+    const url = new URL(location.href);
+    if (url.searchParams.get('neu') !== '1') return read(section);
+    url.searchParams.delete('neu');
+    history.replaceState(history.state, '', url);
+    return null;
+  }
   function save(section, state) {
     if (localStorageValue(resetKey) !== version) return;
-    try { localStorage.setItem(prefix + section, JSON.stringify({...state, updated: Date.now()})); } catch {}
+    try {
+      localStorage.setItem(prefix + section, JSON.stringify({...state, updated: Date.now()}));
+      localStorage.setItem(latestKey, String(section));
+    } catch {}
   }
   function latest() {
+    const section = Number(localStorageValue(latestKey));
+    if ((section === 1 || section === 2) && read(section)) return section;
     const first = read(1);
     const second = read(2);
     if (!first && !second) return null;
-    return (second?.updated ?? 0) >= (first?.updated ?? 0) && second ? 2 : 1;
+    return second && (second.updated ?? 0) >= (first?.updated ?? 0) ? 2 : 1;
+  }
+  function complete(section) {
+    if (localStorageValue(resetKey) !== version) return;
+    try { localStorage.setItem(completionKey(section), 'yes'); } catch {}
+  }
+  function isComplete(section) {
+    return localStorageValue(completionKey(section)) === 'yes';
+  }
+  function secondUnlocked() {
+    return isComplete(1) || isComplete(2) || Boolean(read(2));
   }
   function reset() {
+    localStorage.setItem(resetKey, String(Date.now()));
     for (const section of [1, 2]) {
       localStorage.removeItem(prefix + section);
-      localStorage.removeItem('die-eiche-completed-section-' + section);
+      localStorage.removeItem(completionKey(section));
     }
-    localStorage.setItem(resetKey, String(Date.now()));
+    localStorage.removeItem(latestKey);
   }
   addEventListener('pageshow', event => {
     if (event.persisted && localStorageValue(resetKey) !== version) location.reload();
   });
-  return {read, save, latest, reset};
+  return {readForVisit, save, latest, complete, isComplete, secondUnlocked, reset};
 })();

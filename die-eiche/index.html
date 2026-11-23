@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#f2e9dc">
   <link rel="manifest" href="../manifest.webmanifest">
   <link rel="apple-touch-icon" href="../assets/silvana-icon-192.png">
-  <script src="spielstand.js" defer></script>
-  <script src="start.js" defer></script>
+  <script src="spielstand.js?v=2" defer></script>
+  <script src="start.js?v=2" defer></script>
   <script src="../shared/geschichte-reset.js" defer></script>
   <title>Die Eiche</title>
   <style>
@@ -107,9 +107,11 @@
   <script src="../shared/app-info.js?v=2" defer></script>
 
   <link rel="stylesheet" href="../shared/game-selection.css">
+  <link rel="stylesheet" href="../shared/story-welcome.css">
 </head>
-<body>
-  <main class="welcome">
+<body class="story-welcome">
+  <main class="story-entry">
+    <header class="welcome">
     <picture class="mascot">
       <source media="(prefers-reduced-motion: reduce)" srcset="../assets/willkommen-wuerstchen.webp">
       <img src="../assets/willkommen-wuerstchen-animiert.webp" alt="Das Kleine Würstchen mit Krone verbeugt sich zur Begrüßung." width="301" height="336">
@@ -120,18 +122,19 @@
       <h1>Die Eiche</h1>
       <p>entdecken.</p>
     </div>
+    </header>
     <div class="aktionen">
-      <a class="start" id="eiche-start" href="./abschnitt-1/">Lass uns das Spiel mit der Geschichte beginnen!</a>
+      <a class="start" id="eiche-resume" href="./abschnitt-1/" hidden>Spiel fortsetzen</a>
+      <a class="start" id="eiche-restart" href="./abschnitt-1/?neu=1">Spiel beginnen</a>
+      <a class="start" id="eiche-second" href="./abschnitt-2/?neu=1" hidden>Abschnitt 2 spielen</a>
       <button class="start" id="zuruecksetzen" type="button">Spiel zurücksetzen</button>
       <p id="app-status" role="status"></p>
     </div>
-  </main>
-  <footer>
-  <section aria-labelledby="sprachfassung">
+    <section class="reading-entry" aria-labelledby="sprachfassung">
       <h2 id="sprachfassung">Geschichte anhören</h2>
       <audio controls preload="metadata" aria-labelledby="sprachfassung" src="../assets/die-eiche/die-eiche-sprachfassung.mp3"></audio>
     </section>
-  </footer>
+  </main>
 
   <a class="game-selection-link" href="../">Zur Spielauswahl</a>
 </body>

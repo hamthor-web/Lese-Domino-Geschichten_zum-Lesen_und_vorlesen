@@ -3,11 +3,11 @@
 (() => {
   const controlSelector = [
     'button:is(.primary, .secondary, .quiet, .answer, .word-option, .zoom-open, #closeZoom)',
-    '.welcome .start',
+    '.welcome .start, .welcome-actions .start',
     '#main summary',
     'button:has(> video[hidden]):has(> span:not([hidden]))'
   ].join(', ');
-  const groupSelector = '#main, .topbar, .welcome, dialog, [data-parchment-group]';
+  const groupSelector = '#main, .topbar, .welcome, .welcome-actions, dialog, [data-parchment-group]';
   const probe = document.createElement('div');
   probe.className = 'parchment-measure';
   probe.setAttribute('aria-hidden', 'true');

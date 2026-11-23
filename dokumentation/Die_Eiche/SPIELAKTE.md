@@ -77,3 +77,7 @@ Die Antwortbuttons zu „Was träumt die Eiche?“ bleiben gleich hoch und richt
 ## Zur gemeinsamen Spielauswahl · 23.11.2026
 
 „Zur Spielauswahl“ steht als kleine Schaltfläche unten rechts auf der Startseite dieser Geschichte und auf allen Spielseiten. Sie führt zur gemeinsamen Startseite mit „Die Eiche“ und „Silvana“. Beim Wechsel bleibt der vorhandene Spielstand gespeichert.
+
+## Fortsetzen, neu spielen und zurücksetzen · 23.11.2026
+
+„Spiel fortsetzen“ öffnet den zuletzt gespielten Abschnitt am gespeicherten Bildschirm. „Spiel neu starten“ öffnet die erste Seite von Abschnitt 1. Freigeschaltete Abschnitte bleiben erhalten. Sobald Abschnitt 2 freigespielt ist, lässt er sich auf der Startseite und in der Abschnittsauswahl direkt anwählen. Über die Abschnittsauswahl beginnt ein Abschnitt mit einem einzigen Tipp auf seiner ersten Seite. „Spiel zurücksetzen“ löscht nach Bestätigung Zwischenstände und Freischaltungen. Das Begrüßungspergament und die darunterliegenden Schaltflächen werden vertikal zentriert. Der Zugang zur gemeinsamen Spielauswahl bleibt unten rechts auch bei geöffnetem Abschnittsmenü erreichbar.

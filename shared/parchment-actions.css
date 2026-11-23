@@ -1,12 +1,12 @@
 .parchment-actions, .topbar, dialog {
   --button-font-size: calc(1.125rem * var(--text, 1));
 }
-.welcome.parchment-actions {
+.welcome-actions.parchment-actions {
   --button-font-size: clamp(1rem, 3.7vw, 1.23rem);
 }
 
 /* Fixed-size caps and a separate sparkle layer leave the artwork undistorted. */
-:is(#main, .topbar, .welcome, dialog) [data-parchment],
+:is(#main, .topbar, .welcome, .welcome-actions, dialog) [data-parchment],
 .parchment-measure {
   box-sizing: border-box;
   padding: .65rem 1.75rem .65rem 3.85rem;
@@ -17,7 +17,7 @@
   white-space: normal;
   text-align: center;
 }
-:is(#main, .topbar, .welcome, dialog) [data-parchment] {
+:is(#main, .topbar, .welcome, .welcome-actions, dialog) [data-parchment] {
   position: relative;
   display: block;
   inline-size: var(--parchment-width, max-content);
@@ -36,7 +36,7 @@
   cursor: pointer;
   text-decoration: none;
 }
-:is(#main, .topbar, .welcome, dialog) [data-parchment]::before {
+:is(#main, .topbar, .welcome, .welcome-actions, dialog) [data-parchment]::before {
   content: '';
   position: absolute;
   inset: 50% auto auto var(--parchment-glanz-inset, .62rem);
@@ -46,14 +46,14 @@
   background: url('../assets/button-glanz.webp') center / contain no-repeat;
   pointer-events: none;
 }
-:is(#main, .topbar, .welcome, dialog) [data-parchment]:is(:hover, :focus-visible) {
+:is(#main, .topbar, .welcome, .welcome-actions, dialog) [data-parchment]:is(:hover, :focus-visible) {
   box-shadow: none;
 }
-:is(#main, .topbar, .welcome, dialog) [data-parchment]:focus-visible {
+:is(#main, .topbar, .welcome, .welcome-actions, dialog) [data-parchment]:focus-visible {
   outline: 3px solid #674483;
   outline-offset: 3px;
 }
-:is(#main, .topbar, .welcome, dialog) [data-parchment]:disabled {
+:is(#main, .topbar, .welcome, .welcome-actions, dialog) [data-parchment]:disabled {
   cursor: default;
 }
 
@@ -82,8 +82,7 @@
 #main button[data-parchment]:has(> video) > span:not([hidden]) {
   display: contents;
 }
-.welcome .aktionen > [data-parchment] { inline-size: 100%; }
-.welcome .aktionen { grid-template-columns: minmax(0, 1fr); }
+.welcome-actions > [data-parchment] { inline-size: 100%; }
 
 .parchment-measure {
   position: fixed;

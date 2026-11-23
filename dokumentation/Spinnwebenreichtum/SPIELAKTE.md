@@ -22,3 +22,7 @@ Für eine Freigabe aktuelle GitHub-Version, Szeneübergänge, Hoch-/Querformat, 
 ## Zur gemeinsamen Spielauswahl · 23.11.2026
 
 „Zur Spielauswahl“ steht als kleine Schaltfläche unten rechts auf der Startseite dieser Geschichte und auf allen Spielseiten. Sie führt zur gemeinsamen Startseite mit „Die Eiche“ und „Silvana“. Beim Wechsel bleibt der vorhandene Spielstand gespeichert.
+
+## Startseite und Vorlesefunktion · 23.11.2026
+
+Das Begrüßungspergament und die darunterliegenden Schaltflächen werden vertikal zentriert. „Geschichte vorlesen“ verwendet die vollständige Textfassung aus Szene 14 mit der Browserstimme. Der Text lässt sich auf Wunsch mitlesen. Der Zugang zur gemeinsamen Spielauswahl bleibt unten rechts auch bei geöffnetem Szenenmenü erreichbar.

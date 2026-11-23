@@ -149,8 +149,8 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
 <details class="scene-menu" id="sceneMenu">
   <summary class="action oak"><span>Anderen Abschnitt<br>noch einmal erleben</span></summary>
   <p>Wähle einen Abschnitt.</p>
-  <a class="action oak" id="replayPrevious" href="../abschnitt-1/">Die Eiche</a>
-  <button type="button" class="action oak" id="replayCurrent" hidden>Spuren der Zeit</button>
+  <a class="action oak" id="replayPrevious" href="../abschnitt-1/?neu=1">Die Eiche</a>
+  <a class="action oak" id="replayCurrent" href="?neu=1">Spuren der Zeit</a>
 </details>
 <div id="game"><h1>Spuren der Zeit</h1>
 <div class="layout">
@@ -225,7 +225,7 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
   </nav>
   <button class="action oak info-close" id="infoClose" type="button" autofocus>Schließen</button>
 </dialog>
-<script src="../spielstand.js"></script>
+<script src="../spielstand.js?v=2"></script>
 <script>
 const pages = [
   {
@@ -251,7 +251,7 @@ const feedback = get('feedback');
 const found = new Set();
 let pageIndex = 0;
 let activeScreen = 'game';
-const saved = EicheProgress.read(2);
+const saved = EicheProgress.readForVisit(2);
 let restoring = false;
 function checkpoint() {
   if (restoring) return;
@@ -326,8 +326,7 @@ function revealQuestion() {
       } else {
         feedback.textContent = 'Genau so ist es.';
         get('readNext').hidden = false;
-        get('replayCurrent').hidden = false;
-        try { localStorage.setItem('die-eiche-completed-section-2', 'yes'); } catch {}
+        if (!restoring) EicheProgress.complete(2);
       }
       checkpoint();
     };
@@ -380,14 +379,14 @@ function stopReading() {
   narration.pause();
   narration.currentTime = 0;
 }
-function bookOpened(useStill = false) {
+function bookOpened(useStill = false, animate = true) {
   if (get('bookPage').hidden) return;
   bookClip.hidden = useStill;
   get('openStill').hidden = !useStill;
   get('bookTitle').hidden = false;
   get('jumpButton').hidden = false;
   get('bookTitle').focus({preventScroll: true});
-  jumpClip.play().catch(() => {});
+  if (animate) jumpClip.play().catch(() => {});
 }
 bookClip.addEventListener('ended', () => bookOpened());
 bookClip.addEventListener('error', () => bookOpened(true));
@@ -410,17 +409,8 @@ get('bookBack').onclick = () => {
   showScreen('readPage','readTitle');
 };
 get('jumpButton').onclick = () => { jumpClip.pause(); showScreen('chapterPage','chapterTitle'); };
-try { get('replayCurrent').hidden = localStorage.getItem('die-eiche-completed-section-2') !== 'yes'; } catch {}
 get('infoButton').onclick = () => get('info').showModal();
 get('infoClose').onclick = () => get('info').close();
-get('replayCurrent').onclick = () => {
-  stopReading();
-  bookClip.pause();
-  jumpClip.pause();
-  get('sceneMenu').open = false;
-  showScreen('game');
-  renderPage(0, false, true);
-};
 get('chapterBack').onclick = () => { showScreen('bookPage'); bookOpened(bookClip.hidden); };
 
 restoring = true;
@@ -436,7 +426,7 @@ if (saved?.question) {
 if (saved?.screen === 'readPage') showScreen('readPage');
 if (saved?.screen === 'bookPage' || saved?.screen === 'chapterPage') {
   showScreen('bookPage');
-  bookOpened(true);
+  bookOpened(true, false);
   if (saved.screen === 'chapterPage') {
     jumpClip.pause();
     showScreen('chapterPage');
