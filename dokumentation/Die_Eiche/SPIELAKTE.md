@@ -61,3 +61,7 @@ Die Abschnitte 1 und 2 speichern den letzten Bildschirm und den Aufgabenstand im
 Die Schaltflächen auf der Startseite verwenden den freigestellten Eichenrahmen mit Eicheln und Blättern. Das Motiv behält sein ursprüngliches Seitenverhältnis.
 
 Die App-Kennung von „Die Eiche“ ist ausdrücklich als eigener Pfad gesetzt. Die Startseite verwendet einen gemeinsamen Einstieg zum Beginnen oder Fortsetzen.
+
+## Gemeinsame Startseite · 23.11.2026
+
+„Geschichten zum Lesen und Vorlesen“ bündelt „Die Eiche“ und „Silvana“ in einer Web-App. Nach dem kurzen Lesefilm des Kleinen Würstchens stehen beide Geschichten als Denkblasen zur Auswahl. Bei reduzierter Bewegung sind die Denkblasen sofort sichtbar. Der Text für Eltern und Lesebegleiter, „Installieren“ und „Aktualisieren“ stehen auf der gemeinsamen Startseite. Die Geschichten haben weiterhin ihre eigenen Spieleinstiege und Spielstände. Die bestehende App-Kennung der gemeinsamen Adresse bleibt bestehen.

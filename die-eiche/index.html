@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2e9dc">
-  <link rel="manifest" href="eiche-app.webmanifest">
+  <link rel="manifest" href="../manifest.webmanifest">
   <link rel="apple-touch-icon" href="../assets/silvana-icon-192.png">
   <script src="spielstand.js" defer></script>
   <script src="start.js" defer></script>
-  <script src="../shared/installieren.js?v=4" defer></script>
+  <script src="../shared/geschichte-reset.js" defer></script>
   <title>Die Eiche</title>
   <style>
     @font-face { font-family: Andika; src: url('../vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf'); font-weight: 400; font-display: swap; }
@@ -120,27 +120,16 @@
     </div>
     <div class="aktionen">
       <a class="start" id="eiche-start" href="./abschnitt-1/">Lass uns das Spiel mit der Geschichte beginnen!</a>
-      <button class="start" id="installieren" type="button" aria-controls="installationshilfe" aria-expanded="false">Installieren</button>
-      <button class="start" id="aktualisieren" type="button">Aktualisieren</button>
-      <div class="hilfe" id="installationshilfe" hidden>
-        <p id="installation-browser" hidden>Du bist gerade in einem App-Fenster. Öffne „Die Eiche“ in einem normalen Browser-Tab und installiere sie dort als eigene App.</p>
-        <p><strong>iPhone und iPad:</strong> Öffne „Die Eiche“ in Safari. Tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“ beziehungsweise „Zu Home-Bildschirm hinzufügen“. Aktiviere, falls angezeigt, „Als Web-App öffnen“ und tippe auf „Hinzufügen“.</p>
-        <p><strong>Mac ab macOS Sonoma:</strong> Öffne „Die Eiche“ in Safari und wähle „Ablage“ und dann „Zum Dock hinzufügen“.</p>
-        <p><strong>Firefox unter Windows:</strong> Klicke auf das Web-App-Symbol in der Adressleiste, wenn es angezeigt wird.</p>
-        <p><strong>Android und Windows:</strong> Öffne das Browsermenü in Chrome oder Edge und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“, wenn die Option angeboten wird.</p>
-      </div>
+      <a class="start" href="../">Zur Geschichtenauswahl</a>
       <button class="start" id="zuruecksetzen" type="button">Spiel zurücksetzen</button>
       <p id="app-status" role="status"></p>
     </div>
   </main>
   <footer>
-    <h2 class="note note-heading">Für die Eltern und Lesebegleiter</h2>
-    <p class="note">Wie uns Reinhard Mey lehrte, sind wir alle nur kleine Würstchen. Doch ich denke, arm sind wir dabei nicht unbedingt. Tatsächlich sind wir alle kleine Könige, und es kommt nur darauf an, was wir daraus machen. Aus diesem Grund habe ich die Figur des Kleinen Würstchens ins Leben gerufen. Mein Wunsch ist es, dass seine Größe Ihrem Kind Freude beim Entdecken schenkt!</p>
   <section aria-labelledby="sprachfassung">
       <h2 id="sprachfassung">Geschichte anhören</h2>
       <audio controls preload="metadata" aria-labelledby="sprachfassung" src="../assets/die-eiche/die-eiche-sprachfassung.mp3"></audio>
     </section>
-    <p class="note"><a href="../">Zur Geschichte „Silvana“</a></p>
   </footer>
 </body>
 </html>
