@@ -28,3 +28,6 @@ Die Geschichte „Die Eiche“ wurde bereits als Stoff besprochen; eine vollstä
 
 ## Kapitelübergang – bestätigt am 22.11.2026
 [Würstchen öffnet das Buch: verbindlicher Ablauf](KAPITELUEBERGANG_BUCH_2026-11-22.md). Originalvideo mit Ton; Titel erscheint erst beim geöffneten Buch; das letzte Bild bleibt stehen, bis das Kind auf „Weiter“ tippt. Der gleiche Übergang ist für alle Abschnitte vorgesehen. **Referenz-MP4 liegt in diesem Arbeitschat vor, ist aber noch nicht nach GitHub übertragen.** Technische Integration ausstehend.
+
+## Szenentitel – bestätigt am 23.11.2026
+Die erste Szene heißt **„Die Eiche“**. Der Titel erscheint in der Szenenüberschrift und auf der Schaltfläche zum erneuten Spielen.
