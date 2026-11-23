@@ -160,7 +160,6 @@ nav .decor { color: #472614 }
 <div class="book-title" id="bookTitle" hidden><span>Spuren<br>der Zeit</span><img src="../../assets/die-eiche/abschnitt-1/buchtitel.png" alt=""></div>
 </div>
 </div>
-<button class="tool" id="introSound" type="button" hidden>Meisen hören</button>
 <p class="feedback" id="mediaMessage" role="status"></p>
 </section>
 <section class="activity" id="activity" hidden></section>
@@ -268,7 +267,6 @@ function syncSceneSound() {
     step === 0 ? 'birds' : null;
   if (sound !== sceneSound) {
     sceneAudio.pause();
-    $('introSound').hidden = true;
     sceneSound = sound;
     if (sound) {
       const {file, volume, loop} = sceneSounds[sound];
@@ -278,14 +276,7 @@ function syncSceneSound() {
     }
   }
   if (!sound || !sceneAudio.paused || sceneAudio.ended) return;
-  sceneAudio.play().then(() => {
-    if (sound === 'birds' && sceneSound === sound) $('introSound').hidden = true;
-  }).catch(error => {
-    if (error.name === 'NotAllowedError' && sound === 'birds' &&
-        sceneSound === sound && step === 0 && sceneAudio.paused) {
-      $('introSound').hidden = false;
-    }
-  });
+  sceneAudio.play().catch(() => {});
 }
 
 sceneAudio.addEventListener('ended', () => {
