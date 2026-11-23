@@ -84,14 +84,37 @@ button:disabled { cursor: default; opacity: .5 }
 .button-label > span { display: block }
 .info-close { margin: 0 auto }
 .decor::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') center / contain no-repeat }
-.decor.banner .button-label { padding-inline: 24% 9%; font-size: min(calc(clamp(1.125rem, 7cqw, 1.5rem) * var(--letters)), 9cqw) }
-.decor.banner::before { background-image: url('../../assets/die-eiche/abschnitt-1/banner-button.png') }
+.decor.banner { display: block; aspect-ratio: auto; }
+.decor.banner .button-label {
+  width: auto;
+  margin-inline-start: 13.5cqw;
+  padding: .2em 10%;
+  border: solid transparent;
+  border-width: 12.23cqw 0 13.54cqw;
+  /* Only the middle of the parchment extends with the text. */
+  border-image: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') 205 0 227 fill / 1 / 0 stretch;
+  font-size: calc(clamp(1.125rem, 6.5cqw, 1.5rem) * var(--letters));
+  overflow-wrap: anywhere;
+}
+.decor.banner::before {
+  /* Show the figure from the original artwork at its original proportions. */
+  inset: 50% auto auto 0;
+  z-index: 1;
+  width: 17cqw;
+  aspect-ratio: 282 / 529;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background: url('../../assets/die-eiche/abschnitt-1/banner-button.png') left center / calc(1798 / 282 * 100%) 100% no-repeat;
+  clip-path: polygon(
+    0 0, 86% 0, 86% 25%, 86% 36%, 91% 39%, 99% 40%, 100% 47%,
+    95% 56%, 82% 59%, 78% 73%, 67% 88%, 77% 90%, 77% 100%, 0 100%
+  );
+}
 .choices { grid-auto-rows: auto; align-items: start }
 .dream-answer { min-width: 0 }
 .dream-answer .feedback { margin: 6px 4px 10px; color: #60391f }
-.choices .decor { aspect-ratio: 2.49 }
-@media (max-width: 750px) {
-  .choices { grid-template-columns: minmax(0, min(100%, 360px)); justify-content: center }
+@media (max-width: 899px) {
+  .choices { grid-template-columns: minmax(0, min(100%, 400px)); justify-content: center }
 }
 .clouds { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; width: min(100%, 580px); margin: 10px auto 0 }
 @media (orientation: landscape) {
