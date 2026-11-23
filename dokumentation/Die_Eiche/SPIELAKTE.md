@@ -42,3 +42,5 @@ Das letzte Bild des Wintervideos bleibt vor dem Ausblenden 1,5 Sekunden stehen. 
 
 ## Weiter auf der Buchseite – 23.11.2026
 Die Buchseite verwendet die bereitgestellte Animation „Die_Eiche_Weiter_Knetanimation-1.mp4“ als Weiter-Schaltfläche. Erst nach dem vollständigen Aufschlagen des Buchs wird sie aktiv und spielt die Animation einmal ab. Das letzte Bild bleibt stehen. Der Klick bestätigt im aktuellen Spielstand den Abschluss von Abschnitt 1.
+
+Der animierte Weiter-Button wird mit transparentem Hintergrund eingeblendet.

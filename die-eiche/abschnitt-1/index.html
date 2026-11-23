@@ -623,7 +623,7 @@ $('next').onclick = async () => {
     openedBook = await play('book', true);
     render();
     if (openedBook && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      bookNextClip.src = '../../assets/die-eiche/abschnitt-1/weiter-knetanimation.mp4';
+      bookNextClip.src = '../../assets/die-eiche/abschnitt-1/weiter-knetanimation.webm';
       bookNextClip.play().catch(() => { bookNextClip.hidden = true; });
     }
   }
