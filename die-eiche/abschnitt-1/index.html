@@ -86,6 +86,8 @@ button:disabled { cursor: default; opacity: .5 }
 .decor::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') center / contain no-repeat }
 .decor.banner { display: block; aspect-ratio: auto; }
 .decor.banner .button-label {
+  display: grid;
+  place-items: center;
   width: auto;
   margin-inline-start: 13.5cqw;
   padding: .2em 10%;
@@ -96,6 +98,8 @@ button:disabled { cursor: default; opacity: .5 }
   font-size: calc(clamp(1.125rem, 6.5cqw, 1.5rem) * var(--letters));
   overflow-wrap: anywhere;
 }
+.decor.banner .button-label > span { grid-area: 1 / 1; width: 100% }
+.decor.banner .size-reference { visibility: hidden }
 .decor.banner::before {
   /* Show the figure from the original artwork at its original proportions. */
   inset: 50% auto auto 0;
@@ -449,7 +453,18 @@ function dream() {
     button.className = 'decor banner';
     const caption = document.createElement('span');
     caption.className = 'button-label';
-    caption.textContent = label;
+    const text = document.createElement('span');
+    text.textContent = label;
+    caption.append(text);
+    // Reserve space for the largest wrapped answer in each button.
+    for (const [otherKey, otherLabel] of dreams) {
+      if (otherKey === key) continue;
+      const reference = document.createElement('span');
+      reference.className = 'size-reference';
+      reference.setAttribute('aria-hidden', 'true');
+      reference.textContent = otherLabel;
+      caption.append(reference);
+    }
     button.append(caption);
     const hint = document.createElement('p');
     hint.className = 'feedback';
