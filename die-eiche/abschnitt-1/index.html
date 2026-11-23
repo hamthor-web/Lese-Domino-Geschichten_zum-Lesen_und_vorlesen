@@ -102,8 +102,9 @@ button:disabled { cursor: default; opacity: .5 }
 .cloud { display: grid; gap: 7px; align-content: start; justify-items: center; min-width: 0; padding: clamp(4px,1.2vw,15px); border: 2px solid #c8dbe5; border-radius: 24px; background: #f8fcfd }
 .cloud.complete { background: #ebf5ea }
 .tiles, .slots { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 4px; width: min(100%, 350px) }
-.tile, .slot { min-width: 0; padding: 0; color: #472614; font-weight: bold; text-align: center }
+.tile, .slot { min-width: 0; padding: 0; color: #60391f; font-weight: bold; text-align: center }
 .tile { background: #e3eff7; border: 1px solid #7293aa; border-radius: 8px }
+.tile:disabled, .slot:disabled { color: #60391f; opacity: 1 }
 .tile.used { visibility: hidden }
 .slot { border: 0; border-bottom: 2px solid #5e7785; background: transparent; opacity: 1 !important }
 .board.book { aspect-ratio: 712 / 714; width: min(var(--board), 72svh); background: transparent }
@@ -318,12 +319,6 @@ async function play(key, keepFrame = false, cancelSignal) {
     $('winter').classList.remove('dream-hidden');
     clip.classList.remove('visible');
   }
-  function syncDreamReturn() {
-    const remaining = clip.duration - clip.currentTime;
-    if (!Number.isFinite(remaining) || remaining > 1.05) return;
-    startDreamReturn();
-    if (sceneSound === 'wind') sceneAudio.volume = sceneSounds.wind.volume * Math.max(0, remaining / 1.05);
-  }
   const played = await new Promise(resolve => {
     let settled = false;
     let timer;
@@ -335,14 +330,20 @@ async function play(key, keepFrame = false, cancelSignal) {
       clip.removeEventListener('ended', ended);
       clip.removeEventListener('error', failed);
       clip.removeEventListener('playing', visible);
-      clip.removeEventListener('timeupdate', syncDreamReturn);
       resolve(success);
     };
     const deadline = duration => {
       clearTimeout(timer);
       timer = setTimeout(failed, duration);
     };
-    const ended = () => finish(true);
+    const ended = () => {
+      if (!isDream) {
+        finish(true);
+        return;
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => finish(true), 1500);
+    };
     const skipped = () => finish(true);
     const failed = () => finish(false);
     const visible = () => {
@@ -351,7 +352,6 @@ async function play(key, keepFrame = false, cancelSignal) {
       syncSceneSound();
       if (isDream) {
         $('winter').classList.add('dream-hidden');
-        clip.addEventListener('timeupdate', syncDreamReturn);
       }
       if (isDiscovery) {
         clearTimeout(timer);
@@ -373,7 +373,6 @@ async function play(key, keepFrame = false, cancelSignal) {
     }
   });
   if (!keepFrame || !played) {
-    const dreamFadeStarted = isDream && !clip.classList.contains('visible');
     if (isDream) startDreamReturn();
     clip.classList.remove('visible');
     if (isDiscovery) clip.pause();
@@ -392,7 +391,7 @@ async function play(key, keepFrame = false, cancelSignal) {
         clearInterval(interval);
         if (fadeWind && sceneSound === 'wind') sceneAudio.volume = 0;
         resolve();
-      }, dreamFadeStarted ? 0 : fade);
+      }, fade);
     });
     clip.pause();
   }
