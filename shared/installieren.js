@@ -28,7 +28,8 @@ if ('serviceWorker' in navigator) {
 
 install.addEventListener('click', async () => {
   status.textContent = '';
-  if (standalone.matches || navigator.standalone === true) {
+  const inAppWindow = standalone.matches || navigator.standalone === true;
+  if (inAppWindow && !isEiche) {
     status.textContent = appTitle + ' ist bereits als App geöffnet.';
     return;
   }
@@ -42,6 +43,8 @@ install.addEventListener('click', async () => {
       // Die Schritte über das Browsermenü bleiben verfügbar.
     }
   }
+  const browserHint = document.querySelector('#installation-browser');
+  if (browserHint) browserHint.hidden = !inAppWindow;
   help.hidden = !help.hidden;
   install.setAttribute('aria-expanded', String(!help.hidden));
 });
