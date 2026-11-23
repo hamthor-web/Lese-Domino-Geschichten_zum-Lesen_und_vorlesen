@@ -57,3 +57,5 @@ Die freigegebene Vorschau v7 ist als [Abschnitt 2](../../die-eiche/abschnitt-2/)
 Die Eiche nutzt den Willkommensbildschirm von Silvana mit eigenem Titel und eigener Begrüßung. Installieren, Aktualisieren und das bestätigte Zurücksetzen gelten für Die Eiche. Ein eigener Web-App-Eintrag öffnet die Eichen-Startseite.
 
 Die Abschnitte 1 und 2 speichern den letzten Bildschirm und den Aufgabenstand im Browser. Suchfunde, gelegte Buchstaben und bereits ausgewählte Antworten bleiben erhalten. „Spiel fortsetzen“ öffnet den zuletzt gespielten Abschnitt. Beim Fortsetzen starten Vorleseton und Videos bei Bedarf von vorn.
+
+Die Schaltflächen auf der Startseite verwenden den freigestellten Eichenrahmen mit Eicheln und Blättern. Das Motiv behält sein ursprüngliches Seitenverhältnis.
