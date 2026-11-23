@@ -230,6 +230,7 @@ const pages = [
     text: 'Die Rinde der Eiche ist alt und hat viele Risse. Vor langer Zeit hat ein Liebespaar ein Herz hineingeritzt. Auch zwei Buchstaben für ihre Namen stehen darin.',
     question: 'Wer hat das Herz in die Rinde geritzt?',
     answers: ['Liebespaar', 'Specht', 'Händler'],
+    answerOrder: [1, 0, 2],
     correct: [0]
   },
   {
@@ -299,10 +300,12 @@ function revealQuestion() {
   get('showQuestion').hidden = true;
   get('question').textContent = page.question;
   get('instruction').hidden = pageIndex === 0;
-  get('choices').replaceChildren(...page.answers.map((answer, index) => {
+  const answerOrder = page.answerOrder ?? [...page.answers.keys()];
+  get('choices').replaceChildren(...answerOrder.map(index => {
     const button = document.createElement('button');
     button.className = pageIndex === 0 ? 'action oak choice' : 'answer';
-    button.textContent = answer;
+    button.textContent = page.answers[index];
+    button.dataset.answerIndex = String(index);
     button.setAttribute('aria-pressed', 'false');
     button.onclick = () => {
       if (found.has(index) || found.size === page.correct.length) return;
@@ -422,7 +425,10 @@ restoring = true;
 renderPage(saved?.pageIndex === 1 ? 1 : 0);
 if (saved?.question) {
   revealQuestion();
-  for (const index of saved.answers ?? []) get('choices').children[index]?.onclick();
+  for (const index of saved.answers ?? []) {
+    const button = [...get('choices').children].find(choice => choice.dataset.answerIndex === String(index));
+    button?.onclick();
+  }
   if (typeof saved.feedback === 'string') feedback.textContent = saved.feedback;
 }
 if (saved?.screen === 'readPage') showScreen('readPage');
