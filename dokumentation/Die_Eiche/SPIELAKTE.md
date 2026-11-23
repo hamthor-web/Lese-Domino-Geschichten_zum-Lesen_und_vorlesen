@@ -39,3 +39,6 @@ Die erste Szene heißt **„Die Eiche“**. Der Titel erscheint in der Szenenüb
 Bei der richtigen Antwort „Sie träumt von früher“ läuft das von Heike bereitgestellte Video `Eiche_Winter_1080p.mp4` (drei Sekunden, 1080 × 1080) mit sanfter Überblendung. Die Einladung zum Zuhören lautet „Prima! Und nun lehne dich zurück und höre der Geschichte zu.“ In weiteren Abschnitten darf die Einladung unterschiedlich formuliert werden.
 
 Das letzte Bild des Wintervideos bleibt vor dem Ausblenden 1,5 Sekunden stehen. Mit „Weiter“ lässt sich die Pause überspringen.
+
+## Weiter auf der Buchseite – 23.11.2026
+Die Buchseite verwendet die bereitgestellte Animation „Die_Eiche_Weiter_Knetanimation-1.mp4“ als Weiter-Schaltfläche. Erst nach dem vollständigen Aufschlagen des Buchs wird sie aktiv und spielt die Animation einmal ab. Das letzte Bild bleibt stehen. Der Klick bestätigt im aktuellen Spielstand den Abschluss von Abschnitt 1.

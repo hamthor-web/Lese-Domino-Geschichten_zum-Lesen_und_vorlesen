@@ -115,6 +115,10 @@ button:disabled { cursor: default; opacity: .5 }
 nav { margin-top: 10px; flex-wrap: nowrap }
 nav[aria-label="Spielnavigation"] > button { width: min(39vw, 235px) }
 nav .decor { color: #472614 }
+#next.book-next { aspect-ratio: 1078 / 716 }
+#next.book-next video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none }
+#next.book-next:has(video:not([hidden]))::before,
+#next.book-next:has(video:not([hidden])) .button-label { visibility: hidden }
 [hidden] { display: none !important }
 @media (prefers-reduced-motion: reduce) { .board > video { transition: none } }
 
@@ -163,7 +167,7 @@ nav .decor { color: #472614 }
 <nav aria-label="Spielnavigation">
 <button class="decor" id="back"><span class="button-label">Zurück</span></button>
 <span id="counter" aria-live="polite"></span>
-<button class="decor" id="next"><span class="button-label">Weiter</span></button>
+<button class="decor" id="next" aria-label="Weiter"><span class="button-label">Weiter</span><video id="bookNextClip" muted playsinline preload="none" aria-hidden="true" hidden></video></button>
 </nav>
 <footer>In deinem Tempo. Ohne Zeitdruck.</footer>
 </main>
@@ -233,7 +237,8 @@ $('winter').src = winterImage;
 
 function navState() {
   $('back').disabled = playing || step === 0;
-  $('next').disabled = (playing && !(step === 3 && dreamCorrect)) || completed || (step === 1 && found < 3) ||
+  $('next').classList.toggle('book-next', step === 7);
+  $('next').disabled = (step === 7 && !openedBook) || (playing && !(step === 3 && dreamCorrect)) || completed || (step === 1 && found < 3) ||
     (step === 3 && !dreamCorrect) || (step === 5 && !arrangements[2].solved);
   $('counter').textContent = (step + 1) + ' / 8';
   activity.inert = playing;
@@ -572,7 +577,15 @@ function turnPage(backward = false) {
   turn.finished.then(() => sheet.remove(), () => sheet.remove());
 }
 
+const bookNextClip = $('bookNextClip');
+bookNextClip.addEventListener('playing', () => {
+  if (step === 7 && openedBook) bookNextClip.hidden = false;
+});
+bookNextClip.addEventListener('error', () => { bookNextClip.hidden = true; });
+
 function leaveBook() {
+  bookNextClip.pause();
+  bookNextClip.hidden = true;
   clip.classList.remove('visible');
   openedBook = false;
   completed = false;
@@ -609,6 +622,10 @@ $('next').onclick = async () => {
     saveProgress();
     openedBook = await play('book', true);
     render();
+    if (openedBook && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      bookNextClip.src = '../../assets/die-eiche/abschnitt-1/weiter-knetanimation.mp4';
+      bookNextClip.play().catch(() => { bookNextClip.hidden = true; });
+    }
   }
 };
 
