@@ -31,3 +31,6 @@ Die Geschichte „Die Eiche“ wurde bereits als Stoff besprochen; eine vollstä
 
 ## Szenentitel – bestätigt am 23.11.2026
 Die erste Szene heißt **„Die Eiche“**. Der Titel erscheint in der Szenenüberschrift und auf der Schaltfläche zum erneuten Spielen.
+
+## Bedienung der ersten Szene – 23.11.2026
+„Schließen“ beendet den Dialog „Informationen & Kontakt“ direkt. Das Szenenmenü heißt „Anderen Abschnitt noch einmal erleben“. Die Beschriftungen der dekorierten Schaltflächen werden größer, zentriert und ohne Silbentrennung angezeigt. Die Schriftgröße bleibt separat regelbar. Umgesetzt im Webcode und in der eigenständigen Vorschau v18.
