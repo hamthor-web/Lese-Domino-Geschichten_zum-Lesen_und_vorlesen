@@ -7,12 +7,14 @@
     sessionStorage.setItem('lesegeschichten-begruesst', 'yes');
   } catch {}
   const clip = document.getElementById('begrüßung');
+  const still = document.getElementById('lesebild');
   const choices = document.getElementById('geschichten');
   const deadline = setTimeout(finish, 6500);
   function finish() {
     clearTimeout(deadline);
     clip.pause();
     clip.hidden = true;
+    still.hidden = false;
     choices.hidden = false;
   }
   clip.addEventListener('playing', () => {
@@ -20,6 +22,7 @@
   }, {once: true});
   clip.addEventListener('ended', finish, {once: true});
   clip.addEventListener('error', finish, {once: true});
+  still.hidden = true;
   clip.hidden = false;
   clip.play().catch(finish);
 })();
