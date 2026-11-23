@@ -59,3 +59,5 @@ Die Eiche nutzt den Willkommensbildschirm von Silvana mit eigenem Titel und eige
 Die Abschnitte 1 und 2 speichern den letzten Bildschirm und den Aufgabenstand im Browser. Suchfunde, gelegte Buchstaben und bereits ausgewählte Antworten bleiben erhalten. „Spiel fortsetzen“ öffnet den zuletzt gespielten Abschnitt. Beim Fortsetzen starten Vorleseton und Videos bei Bedarf von vorn.
 
 Die Schaltflächen auf der Startseite verwenden den freigestellten Eichenrahmen mit Eicheln und Blättern. Das Motiv behält sein ursprüngliches Seitenverhältnis.
+
+Die App-Kennung von „Die Eiche“ ist ausdrücklich als eigener Pfad gesetzt. Die Startseite verwendet einen gemeinsamen Einstieg zum Beginnen oder Fortsetzen.
