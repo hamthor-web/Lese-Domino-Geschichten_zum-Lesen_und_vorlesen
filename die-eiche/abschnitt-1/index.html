@@ -274,7 +274,14 @@ async function play(key, keepFrame = false, cancelSignal) {
       clearTimeout(timer);
       timer = setTimeout(failed, duration);
     };
-    const ended = () => finish(true);
+    const ended = () => {
+      if (!isDream) {
+        finish(true);
+        return;
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => finish(true), 1500);
+    };
     const skipped = () => finish(true);
     const failed = () => finish(false);
     const visible = () => {
