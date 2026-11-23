@@ -360,7 +360,22 @@ async function play(key, keepFrame = false, cancelSignal) {
   if (!keepFrame || !played) {
     clip.classList.remove('visible');
     const fade = isDream && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 1050 : 330;
-    await new Promise(resolve => setTimeout(resolve, fade));
+    await new Promise(resolve => {
+      const started = performance.now();
+      const fadeWind = isDream && visualSound === 'wind';
+      const onFrame = () => {
+        const remaining = Math.max(0, 1 - (performance.now() - started) / fade);
+        if (fadeWind && sceneSound === 'wind') {
+          sceneAudio.volume = sceneSounds.wind.volume * remaining;
+        }
+      };
+      const interval = fadeWind ? setInterval(onFrame, 16) : null;
+      setTimeout(() => {
+        clearInterval(interval);
+        if (fadeWind && sceneSound === 'wind') sceneAudio.volume = 0;
+        resolve();
+      }, fade);
+    });
     clip.pause();
   }
   if (!played) $('mediaMessage').textContent = 'Das Video konnte gerade nicht abgespielt werden.';
