@@ -64,15 +64,22 @@
     footer section { width: min(90%, 32rem); margin: 0 auto 1rem; text-align: center; }
     footer audio { width: 100%; }
     .note-heading { font-weight: 700; padding-bottom: 0; }
-    .aktionen { display: grid; gap: .55rem; width: 100%; min-width: 0; }
+    .aktionen { display: grid; grid-template-columns: minmax(0, 1fr); gap: .55rem; width: 100%; min-width: 0; }
     .start {
-      background: transparent;
+      box-sizing: border-box;
+      display: grid;
+      place-items: center;
+      aspect-ratio: 1443 / 540;
+      min-height: 48px;
+      padding: .45em 10% 0;
+      overflow-wrap: anywhere;
+      background: transparent url('../assets/die-eiche/abschnitt-2/knetrahmen.webp') center / contain no-repeat;
       border: 0;
       font-family: inherit;
       cursor: pointer;
       width: 100%;
       color: inherit;
-      font-size: clamp(.98rem, 3.7vw, 1.23rem);
+      font-size: clamp(.95rem, 3.7vw, 1.23rem);
       font-weight: bold;
       line-height: 1.22;
       text-align: center;
@@ -96,13 +103,11 @@
       .aktionen { grid-column: 2; }
     }
   </style>
-  <link rel="stylesheet" href="../shared/parchment-actions.css">
-  <script src="../shared/parchment-actions.js" defer></script>
   <link rel="stylesheet" href="../shared/app-info.css">
   <script src="../shared/app-info.js?v=2" defer></script>
 </head>
 <body>
-  <main class="welcome parchment-actions">
+  <main class="welcome">
     <picture class="mascot">
       <source media="(prefers-reduced-motion: reduce)" srcset="../assets/willkommen-wuerstchen.webp">
       <img src="../assets/willkommen-wuerstchen-animiert.webp" alt="Das Kleine Würstchen mit Krone verbeugt sich zur Begrüßung." width="301" height="336">
