@@ -21,7 +21,7 @@ header, nav { justify-content: space-between }
 .brand strong { font-size: calc(1.35rem * var(--letters)) }
 .info { width: 48px; min-height: 48px; border-radius: 50%; border: 2px solid #8c4829; color: #60391f; background: #fae4bd; font-weight: bold; grid-column: 3; grid-row: 1 }
 .scene-menu { margin: 12px 0; font-size: calc(1rem * var(--letters)) }
-.scene-menu summary.decor, .replay { width: min(100%, 330px); padding-inline: 14%; aspect-ratio: 2.65; cursor: pointer; list-style: none }
+.scene-menu summary.decor, .replay { width: min(100%, 340px); cursor: pointer; list-style: none }
 .scene-menu summary::-webkit-details-marker { display: none }
 .scene-menu p { margin-block: 8px }
 footer { margin-top: 16px; text-align: center; font-size: calc(.95rem * var(--letters)) }
@@ -39,7 +39,7 @@ button { font: inherit; color: inherit; cursor: pointer; min-height: 44px }
 button:disabled { cursor: default; opacity: .5 }
 :focus-visible { outline: 3px solid #1c63a2; outline-offset: 2px }
 .tool, .decor { position: relative; isolation: isolate; background: none; border: 0; font-weight: bold }
-.tool { min-width: min(100%, 240px); min-height: 56px; padding: 9px 14px 9px 49px; background: url('../../assets/die-eiche/abschnitt-1/werkzeug-button.png') center / contain no-repeat; font-size: calc(1.05rem * var(--letters)) }
+.tool { min-width: min(100%, 240px); min-height: 56px; padding: 9px 14px 9px 49px; background: url('../../assets/die-eiche/abschnitt-1/werkzeug-button.png') center / contain no-repeat; font-size: calc(1.15rem * var(--letters)); text-align: center; hyphens: none }
 .settings { padding-block: 10px; font-size: calc(1rem * var(--letters)) }
 .settings label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px }
 .settings input { width: 115px; height: 44px; accent-color: #8c4829 }
@@ -74,9 +74,13 @@ button:disabled { cursor: default; opacity: .5 }
 .activity { font-size: calc(1.06rem * var(--letters)); text-align: center }
 .activity h2 { margin-bottom: .22em }
 .choices { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 10px }
-.decor { display: grid; align-items: center; justify-items: center; width: 100%; font-size: calc(1.08rem * var(--letters)); line-height: 1.14; padding: .35em 11%; aspect-ratio: 2.49 }
+.decor { display: grid; place-items: center; width: 100%; min-width: 0; padding: 0; aspect-ratio: 2.49; container-type: inline-size }
+.button-label { display: block; width: 100%; padding: .2em 12%; font-size: min(calc(clamp(1.125rem, 10cqw, 1.65rem) * var(--letters)), 15cqw); line-height: 1.12; text-align: center; text-wrap: balance; word-break: normal; overflow-wrap: normal; hyphens: none }
+.scene-menu summary .button-label { padding-inline: 10%; font-size: min(calc(clamp(1.125rem, 7cqw, 1.5rem) * var(--letters)), 7.4cqw) }
+.button-label > span { display: block }
+.info-close { margin: 0 auto }
 .decor::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') center / contain no-repeat }
-.decor.banner { padding-inline: 24% 9% }
+.decor.banner .button-label { padding-inline: 24% 9%; font-size: min(calc(clamp(1.125rem, 7cqw, 1.5rem) * var(--letters)), 9cqw) }
 .decor.banner::before { background-image: url('../../assets/die-eiche/abschnitt-1/banner-button.png') }
 .choices { grid-auto-rows: auto; align-items: start }
 .dream-answer { min-width: 0 }
@@ -108,7 +112,7 @@ button:disabled { cursor: default; opacity: .5 }
 .optional p { flex-basis: 100% }
 .optional button { width: 110px }
 nav { margin-top: 10px; flex-wrap: nowrap }
-nav > button { width: min(39vw, 235px) !important }
+nav[aria-label="Spielnavigation"] > button { width: min(39vw, 235px) }
 nav .decor { color: #472614 }
 [hidden] { display: none !important }
 @media (prefers-reduced-motion: reduce) { .board > video { transition: none } }
@@ -134,9 +138,9 @@ nav .decor { color: #472614 }
 <label>Spielfeldgröße <input id="size" type="range" min="75" max="135" step="5" value="100"><output id="sizeValue">100 %</output></label>
 </div>
 <details class="scene-menu" id="sceneMenu">
-  <summary class="decor">Abschnitt noch einmal erleben</summary>
+  <summary class="decor"><span class="button-label"><span>Anderen Abschnitt</span> <span>noch einmal erleben</span></span></summary>
   <p id="replayNote">Hier erscheinen die Abschnitte, sobald du ihre Aufgaben abgeschlossen hast.</p>
-  <button class="decor replay" id="replay" type="button" hidden>Die Eiche</button>
+  <button class="decor replay" id="replay" type="button" hidden><span class="button-label">Die Eiche</span></button>
 </details>
 <h1 id="sectionTitle" tabindex="-1">Die Eiche</h1>
 <div class="layout" id="layout">
@@ -159,9 +163,9 @@ nav .decor { color: #472614 }
 <section class="activity" id="activity" hidden></section>
 </div>
 <nav aria-label="Spielnavigation">
-<button class="decor" id="back">Zurück</button>
+<button class="decor" id="back"><span class="button-label">Zurück</span></button>
 <span id="counter" aria-live="polite"></span>
-<button class="decor" id="next">Weiter</button>
+<button class="decor" id="next"><span class="button-label">Weiter</span></button>
 </nav>
 <footer>In deinem Tempo. Ohne Zeitdruck.</footer>
 </main>
@@ -174,7 +178,7 @@ nav .decor { color: #472614 }
     <a href="https://lesespiele.heike-amthor.de/" target="_blank" rel="noopener">Website der Entwicklerin</a>
     <a href="mailto:lesespiele.heike.amthor@gmx.de">Nachricht an die Entwicklerin</a>
   </nav>
-  <form method="dialog"><button class="decor replay" autofocus>Schließen</button></form>
+  <button class="decor replay info-close" id="infoClose" type="button" autofocus><span class="button-label">Schließen</span></button>
 </dialog>
 <script>
 const videos = {
@@ -386,7 +390,10 @@ function dream() {
     answer.className = 'dream-answer';
     const button = document.createElement('button');
     button.className = 'decor banner';
-    button.textContent = label;
+    const caption = document.createElement('span');
+    caption.className = 'button-label';
+    caption.textContent = label;
+    button.append(caption);
     const hint = document.createElement('p');
     hint.className = 'feedback';
     hint.setAttribute('role', 'status');
@@ -475,7 +482,10 @@ function puzzle() {
     for (const [label, choice] of [['Ja',true],['Nein',false]]) {
       const button = document.createElement('button');
       button.className = 'decor';
-      button.textContent = label;
+      const caption = document.createElement('span');
+      caption.className = 'button-label';
+      caption.textContent = label;
+      button.append(caption);
       button.onclick = () => {
         optional = choice;
         puzzle();
@@ -673,6 +683,7 @@ $('size').oninput = event => {
   $('sizeValue').textContent = event.target.value + ' %';
 };
 $('infoBtn').onclick = () => $('info').showModal();
+$('infoClose').onclick = () => $('info').close();
 $('replay').onclick = () => {
   if (playing || !sectionFinished) return;
   stopNarration();
