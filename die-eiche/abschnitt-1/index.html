@@ -627,6 +627,7 @@ $('hotspots').querySelectorAll('polygon').forEach((polygon, index) => {
 
 const pageTurnSound = new Audio('../../assets/die-eiche/abschnitt-1/blaettern.mp3');
 pageTurnSound.preload = 'auto';
+pageTurnSound.volume = .4;
 
 function turnPage(backward = false) {
   pageTurnSound.currentTime = 0;
