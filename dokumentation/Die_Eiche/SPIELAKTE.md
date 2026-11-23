@@ -65,3 +65,7 @@ Die App-Kennung von „Die Eiche“ ist ausdrücklich als eigener Pfad gesetzt. 
 ## Gemeinsame Startseite · 23.11.2026
 
 „Geschichten zum Lesen und Vorlesen“ bündelt „Die Eiche“ und „Silvana“ in einer Web-App. Nach dem kurzen Lesefilm des Kleinen Würstchens stehen beide Geschichten als Denkblasen zur Auswahl. Bei reduzierter Bewegung sind die Denkblasen sofort sichtbar. Der Text für Eltern und Lesebegleiter, „Installieren“ und „Aktualisieren“ stehen auf der gemeinsamen Startseite. Die Geschichten haben weiterhin ihre eigenen Spieleinstiege und Spielstände. Die bestehende App-Kennung der gemeinsamen Adresse bleibt bestehen.
+
+## Antwortreihenfolge in Abschnitt 2 · 23.11.2026
+
+Bei „Wer hat das Herz in die Rinde geritzt?“ erscheinen „Specht“, „Liebespaar“ und „Händler“ in dieser Reihenfolge. Die richtige Antwort „Liebespaar“ steht in der Mitte. Bereits ausgewählte Antworten werden beim Fortsetzen an der richtigen Schaltfläche angezeigt.
