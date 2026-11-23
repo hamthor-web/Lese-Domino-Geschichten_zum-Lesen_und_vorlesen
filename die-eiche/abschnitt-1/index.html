@@ -252,8 +252,8 @@ function navState() {
 }
 
 const sceneSounds = {
-  birds: { file: 'meisen.mp3', volume: .25, loop: true },
-  wind: { file: 'wind.mp3', volume: .3, loop: true },
+  birds: { file: 'meisen.mp3', volume: .25, loop: false },
+  wind: { file: 'wind.mp3', volume: .15, loop: true },
   thunder: { file: 'blitz-und-donner.mp3', volume: .65, loop: false }
 };
 const sceneAudio = new Audio();
@@ -262,8 +262,9 @@ let visualSound = null;
 
 function syncSceneSound() {
   const thunderTail = step === 5 && visualSound === 'thunder';
-  const sound = document.hidden ? null : playing || thunderTail ? visualSound :
-    step === 6 || step === 7 ? null : step === 2 || step === 3 ? 'wind' : 'birds';
+  const sound = document.hidden ? null :
+    visualSound && (playing || thunderTail) ? visualSound :
+    step === 0 ? 'birds' : null;
   if (sound !== sceneSound) {
     sceneAudio.pause();
     sceneSound = sound;
