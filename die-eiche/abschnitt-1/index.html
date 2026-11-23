@@ -251,15 +251,54 @@ function navState() {
   });
 }
 
+const sceneSounds = {
+  birds: { file: 'meisen.mp3', volume: .25, loop: true },
+  wind: { file: 'wind.mp3', volume: .3, loop: true },
+  thunder: { file: 'blitz-und-donner.mp3', volume: .65, loop: false }
+};
+const sceneAudio = new Audio();
+let sceneSound = null;
+let visualSound = null;
+
+function syncSceneSound() {
+  const thunderTail = step === 5 && visualSound === 'thunder';
+  const sound = document.hidden ? null : playing || thunderTail ? visualSound :
+    step === 6 || step === 7 ? null : step === 2 || step === 3 ? 'wind' : 'birds';
+  if (sound !== sceneSound) {
+    sceneAudio.pause();
+    sceneSound = sound;
+    if (sound) {
+      const {file, volume, loop} = sceneSounds[sound];
+      sceneAudio.src = '../../assets/die-eiche/abschnitt-1/' + file;
+      sceneAudio.volume = volume;
+      sceneAudio.loop = loop;
+    }
+  }
+  if (sound && sceneAudio.paused && !sceneAudio.ended) sceneAudio.play().catch(() => {});
+}
+
+sceneAudio.addEventListener('ended', () => {
+  if (visualSound !== 'thunder') return;
+  visualSound = null;
+  syncSceneSound();
+});
+document.addEventListener('visibilitychange', syncSceneSound);
+window.addEventListener('pageshow', syncSceneSound);
+window.addEventListener('pagehide', () => sceneAudio.pause());
+document.addEventListener('click', syncSceneSound);
+
 async function play(key, keepFrame = false, cancelSignal) {
   if (playing) return false;
   playing = true;
+  visualSound = null;
+  syncSceneSound();
   navState();
   $('mediaMessage').textContent = '';
   const previousScroll = window.scrollY;
   if (key !== 'zoom') $('board').scrollIntoView({block:'nearest'});
   const isDream = key === 'dream';
-  clip.muted = key === 'zoom' || isDream;
+  const isLightning = key === 'blitze';
+  clip.muted = key === 'zoom' || isDream || isLightning;
   clip.classList.toggle('dream-clip', isDream);
   clip.classList.toggle('discovery', step === 1);
   const played = await new Promise(resolve => {
@@ -291,6 +330,8 @@ async function play(key, keepFrame = false, cancelSignal) {
     const failed = () => finish(false);
     const visible = () => {
       clip.classList.add('visible');
+      visualSound = isLightning ? 'thunder' : isDream ? 'wind' : null;
+      syncSceneSound();
       deadline((Number.isFinite(clip.duration) ? clip.duration + 5 : 15) * 1000);
     };
     clip.addEventListener('ended', ended);
@@ -314,6 +355,8 @@ async function play(key, keepFrame = false, cancelSignal) {
   if (!played) $('mediaMessage').textContent = 'Das Video konnte gerade nicht abgespielt werden.';
   if (!keepFrame) window.scrollTo(0, previousScroll);
   playing = false;
+  if (!isLightning || !played) visualSound = null;
+  syncSceneSound();
   navState();
   return played;
 }
@@ -511,6 +554,8 @@ async function showIntro() {
 }
 
 function render() {
+  if (step !== 5 && !playing) visualSound = null;
+  syncSceneSound();
   $('winter').src = step === 0 && introReady ? introStill.src : winterImage;
   $('introTitle').hidden = step !== 0 || !introReady;
   const reading = [1,2,4].indexOf(step);

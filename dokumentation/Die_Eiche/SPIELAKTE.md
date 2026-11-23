@@ -44,3 +44,6 @@ Das letzte Bild des Wintervideos bleibt vor dem Ausblenden 1,5 Sekunden stehen. 
 Die Buchseite verwendet die bereitgestellte Animation „Die_Eiche_Weiter_Knetanimation-1.mp4“ als Weiter-Schaltfläche. Erst nach dem vollständigen Aufschlagen des Buchs wird sie aktiv und spielt die Animation einmal ab. Das letzte Bild bleibt stehen. Der Klick bestätigt im aktuellen Spielstand den Abschluss von Abschnitt 1.
 
 Der animierte Weiter-Button wird mit transparentem Hintergrund eingeblendet.
+
+## Geräusche im ersten Abschnitt – 23.11.2026
+`Blitz und Donner.mp3` begleitet den Blitzclip. `Meisen.mp3` läuft leise auf den ruhigen Spielseiten in Schleife. `wind.mp3` begleitet die träumende Eiche und den Wintertraum. Andere Clips und der Vorlesebildschirm erhalten keinen zusätzlichen Hintergrundton.
