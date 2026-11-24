@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Die Eiche · Winterschlaf</title><style>
+* { box-sizing: border-box }
+:root { --letters: 1; --board: 100%; --paper: url("../../assets/die-eiche/abschnitt-2/lesekarte.webp"); color-scheme: light }
+body { margin: 0; background: #edf2ed; color: #293a2b; font: 18px/1.42 Verdana, Arial, sans-serif }
+main { max-width: 1460px; margin: auto; padding: clamp(12px, 2vw, 24px) }
+header, nav, .settings { display: flex; flex-wrap: wrap; align-items: center; gap: 12px }
+header, nav { justify-content: space-between }
+header { margin-bottom: 14px }
+.brand { font-size: calc(1rem * var(--letters)) }
+.brand strong { display: block; font-size: calc(1.35rem * var(--letters)) }
+h1, p { margin: 0 }
+h1 { font-size: calc(clamp(1.35rem, 2.6vw, 2.05rem) * var(--letters)); margin-bottom: 12px }
+.layout { display: grid; gap: clamp(14px, 2vw, 24px); align-items: start }
+@media (min-width: 900px), (orientation: landscape) and (min-width: 760px) {
+  .layout { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr) }
+}
+.board-scroll { overflow: auto; min-width: 0; border-radius: 16px }
+.board { position: relative; width: var(--board); margin-inline: auto; aspect-ratio: 1671 / 941; overflow: hidden; background: #d7e3e9; border-radius: 16px }
+.board img { width: 100%; height: 100%; display: block; transform-origin: 27.7% 54.5%; transition: transform 1.25s ease-in-out }
+.board.closeup img { transform: translate(22.3%, -4.5%) scale(2.48) }
+.hotspot { position: absolute; inset: 0; width: 100%; background: transparent; border: 0; border-radius: inherit }
+.hotspot:focus-visible { outline-offset: -5px }
+.paper { color: #34271a; padding: clamp(8px, 1.3vw, 12px); border: clamp(18px, 4vw, 50px) solid transparent; border-image: var(--paper) 235 270 fill / 1 / 0 stretch; font-size: calc(clamp(1.16rem, 1.75vw, 1.45rem) * var(--letters)); overflow-wrap: anywhere }
+.read-column { min-width: 0 }
+.activity { margin-top: 14px }
+.activity h2 { margin: 0 0 8px; font-size: calc(1.23rem * var(--letters)); line-height: 1.35 }
+.instruction, .feedback { font-size: calc(1rem * var(--letters)); margin: 8px 0 }
+.feedback { font-weight: bold; color: #284b2c }
+.choices { display: grid; gap: 9px; margin-top: 10px }
+button { font: inherit; cursor: pointer; color: #382619; min-height: 48px }
+button:focus-visible, input:focus-visible { outline: 3px solid #1c63a2; outline-offset: 2px }
+.action { padding: 10px 16px; border: 2px solid #9a6944; border-radius: 12px; background: #fae4bd; font-weight: 700; font-size: calc(1rem * var(--letters)) }
+.answer { width: 100%; padding: 3px 8px; min-height: 68px; border: 18px solid transparent; border-image: var(--paper) 235 270 fill / 1 / 0 stretch; background: none; font-size: calc(1.1rem * var(--letters)); font-weight: 700; line-height: 1.22; overflow-wrap: anywhere }
+.answer[aria-pressed="true"] { color: #214a26; box-shadow: inset 0 0 0 3px #547950; border-radius: 11px }
+.answer[aria-pressed="true"]::after { content: " ✓" }
+.settings { margin: 12px 0; font-size: calc(1rem * var(--letters)) }
+.settings label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px }
+.settings input { width: 112px; height: 44px; accent-color: #865129 }
+nav { margin-top: 16px }
+[hidden] { display: none !important }
+@media (prefers-reduced-motion: reduce) { .board img { transition: none } }
+
+.action.oak, #settingsButton {
+  display: inline-grid; place-items: center; text-align: center;
+  border: 0; border-radius: 0; background: transparent center / contain no-repeat;
+  max-width: 100%; line-height: 1.15;
+}
+.action.oak {
+  width: min(100%, calc(15rem * var(--letters))); aspect-ratio: 2.65;
+  background-image: url("../../assets/die-eiche/abschnitt-2/knetrahmen.webp"); padding: 12% 12%;
+  padding: calc(.6rem * var(--letters)) 1.05rem 0;
+}
+#settingsButton {
+  width: min(100%, calc(22rem * var(--letters))); aspect-ratio: 6.08;
+  min-height: 58px; padding: .25rem .75rem .25rem 3.4rem;
+  background-image: url("../../assets/die-eiche/abschnitt-2/groesse.webp");
+}
+.extra { max-width: 920px; margin-inline: auto }
+.extra h2 { font-size: calc(1.4rem * var(--letters)) }
+.extra p { margin-block: .65em }
+.book-stage { position: relative; width: min(100%, 68svh, 630px); margin: auto; aspect-ratio: 712 / 714 }
+.book-stage video, .book-stage img { display: block; width: 100%; border-radius: 14px }
+.book-title {
+  position: absolute; left: 78.8%; top: 56.9%; width: 27%;
+  transform: translate(-50%,-50%); text-align: center; margin: 0;
+  font: italic bold min(calc(5.8cqw * var(--letters)), 7cqw)/1.12 Georgia, serif;
+  color: #4e2e19;
+}
+.book-stage { container-type: inline-size }
+.jump {
+  display: block; width: min(46vw, 185px); padding: 0; background: #f5ede5;
+  border: 0; border-radius: 14px; overflow: hidden; margin-inline-start: auto;
+}
+.jump video { display: block; width: 100%; pointer-events: none }
+
+.listen-intro { font-size: calc(1.12rem * var(--letters)); font-weight: 700 }
+#narration { display: block; width: min(100%, 36rem); min-height: 54px; margin-bottom: 1rem }
+.book-title { left: 78.5%; width: 26%; font-size: min(calc(3.55cqw * var(--letters)), 4.2cqw); white-space: nowrap }
+.book-title img { width: 72%; margin: .3em auto 0; border-radius: 0 }
+.jump { background: transparent; border-radius: 0 }
+
+main { width: min(100%, 1460px) }
+.topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; margin-bottom: 8px }
+.brand { display: grid }
+.info { grid-area: 1 / 3; width: 48px; min-height: 48px; border-radius: 50%; border: 2px solid #8c4829; background: #fae4bd; color: #60391f; font-weight: bold }
+#settingsButton { grid-area: 1 / 2; width: min(100%, 22rem); min-width: min(100%, 240px); font-size: calc(.98rem * var(--letters)) }
+@media (max-width: 620px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) auto }
+  .info { grid-column: 2 }
+  #settingsButton { grid-area: 2 / 1 / 3 / -1; justify-self: start }
+}
+.scene-menu { margin: 12px 0; font-size: calc(1rem * var(--letters)) }
+.scene-menu summary.action, .scene-menu .oak { width: min(100%, 340px); cursor: pointer; list-style: none; aspect-ratio: 2.49; padding: .15em clamp(14px, 4vw, 38px) 0; text-decoration: none }
+.scene-menu summary::-webkit-details-marker { display: none }
+.scene-menu p { margin-block: 8px }
+.scene-menu a { color: #382619 }
+.scene-menu .oak + .oak { margin-top: 6px }
+h1 { font-size: calc(clamp(1.4rem, 3vw, 2.1rem) * var(--letters)) }
+h2 { font-size: calc(1.35rem * var(--letters)) }
+.activity { text-align: center; font-size: calc(1.06rem * var(--letters)) }
+.activity h2 { margin-bottom: .22em }
+.action.oak:not(.choice) { aspect-ratio: 2.49 }
+.action.choice { width: 100%; margin: 0; padding-inline: 8%; aspect-ratio: 2.49 }
+.choice[aria-pressed="true"] { color: #214a26; text-decoration: underline }
+@media (min-width: 760px) {
+  .short-answers { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px }
+  .short-answers .choice { overflow-wrap: anywhere }
+}
+.extra { max-width: none }
+.listen-content { text-align: center; font-size: calc(1.06rem * var(--letters)); margin-top: 12px }
+.listen-intro { font-weight: normal }
+#narration { margin: .7rem auto 1rem }
+.original { text-align: left; max-width: 820px; margin: 10px auto }
+footer { margin-top: 16px; text-align: center; font-size: calc(.95rem * var(--letters)) }
+nav { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(4px, 1.2vw, 12px); margin-top: 10px }
+nav > button { grid-column: 1; grid-row: 1 }
+nav > button:last-child, #next, #readNext { grid-column: 3; justify-self: end }
+nav > .oak { width: min(100%, 235px); min-height: 52px; padding: .3em 10% 0; text-wrap: balance }
+#readNext { min-height: 65px }
+#jumpButton { max-width: 100% }
+@media (max-width: 430px) {
+  #readNext { grid-column: 1 / -1; grid-row: 2 }
+}
+button:disabled { cursor: default; opacity: .5 }
+.counter { grid-column: 2; grid-row: 1; font-size: calc(.95rem * var(--letters)); white-space: nowrap }
+dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px solid #8c4829; border-radius: 15px; background: #fff1d5; color: inherit; font-size: calc(1rem * var(--letters)) }
+.info-links { display: grid; grid-template-columns: 1fr; gap: 9px; margin: 12px 0 }
+
+.board{aspect-ratio:auto;background:transparent;overflow:visible}
+.board img,.board video{width:100%;height:auto;display:block;object-fit:contain;border-radius:16px}
+.board video{background:#d7e3e9}
+.entry .board-scroll{max-width:min(100%,calc(81svh * 1.333));margin:auto}
+.entry .board{position:relative}
+.entry h1{text-align:center}
+.entry nav{margin-inline:auto;max-width:950px}
+.intro-title{position:absolute;top:8%;left:5%;right:5%;text-align:center;color:#fff4d9;text-shadow:0 2px 5px #382619,0 0 12px #382619;font-family:Georgia,serif;font-size:calc(clamp(2rem,5vw,3.8rem)*var(--letters));pointer-events:none}
+.task{font-size:calc(1.1rem * var(--letters));text-align:center}
+.task h2{margin:0 0 .5em}
+.cards{display:grid;gap:10px;margin:12px 0}
+.tile{min-height:62px;padding:12px;border-radius:12px;border:2px solid #ae8054;background:#fae8c7;color:#382619;font-weight:bold;font-size:calc(1.06rem * var(--letters));touch-action:manipulation}
+.tile:disabled{opacity:1;color:#284b2c;background:#e4efd7;border-color:#65825b}
+.slot{min-height:52px;border:2px dashed #aa8762;border-radius:10px;padding:10px;background:#fff0d6;font-size:calc(1.06rem * var(--letters))}
+.slot.filled{border-style:solid;background:#e5efdb;color:#284b2c;font-weight:bold}
+.choices .answer{min-height:80px}
+.placement{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.target{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:135px;border:3px dashed #9a6944;border-radius:14px;background:#f8e8cc;color:#382619;padding:12px;font-weight:bold;font-size:calc(1.06rem * var(--letters));touch-action:manipulation}
+.target:focus-visible,.selected{outline:3px solid #547950;outline-offset:3px}
+.target span{font-weight:normal}
+.drag-card{touch-action:none;cursor:grab}
+.drag-ghost{position:fixed;z-index:99;pointer-events:none;opacity:.9;width:max-content;max-width:85vw;transform:translate(-50%,-50%)}
+.match-board{width:var(--board);margin:auto}
+.wide{max-width:1050px;margin:auto}
+.wide .paper{margin:12px auto}
+nav>button:first-child{grid-column:1;justify-self:start}
+nav>button:last-child{grid-column:3;justify-self:end}
+.selection{display:block;margin:18px 0 0 auto;font-size:calc(.85rem * var(--letters));border:1px solid #9a6944;background:#fae4bd;border-radius:9px;padding:7px 13px;min-height:42px}
+.page-turn{animation:pageTurn .34s ease-out;transform-origin:left center}
+@keyframes pageTurn{from{opacity:.4;transform:perspective(1200px) rotateY(-8deg)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.page-turn{animation:none}}
+@media(max-width:480px){.placement{grid-template-columns:1fr}.intro-title{top:3%}.topbar{gap:4px}.paper{border-width:22px}.action.oak{min-height:58px}}
+
+#domino .tile.used:disabled{background:#e5e3df;border-color:#b6afa4;color:#6d6962;text-decoration:line-through;opacity:1}
+#slots .slot{width:100%;min-height:62px;font-weight:700;cursor:pointer;color:#382619}
+#slots .slot:disabled{cursor:default;opacity:1}
+#slots .slot.filled{background:#fae8c7;border:2px solid #ae8054}
+#slots .slot.verified{background:#e5efdb;border-color:#65825b;color:#284b2c}
+.domino-caption{font-size:calc(.94rem * var(--letters));margin-top:10px;color:#604b39}
+.film-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 4px;color:#382619}
+.film-controls button{border:2px solid #ae8054;border-radius:10px;background:#fae8c7;min-width:48px;min-height:48px;padding:6px 12px;font-size:calc(.92rem * var(--letters));font-weight:700}
+.film-controls input{flex:1;min-width:90px;height:44px;accent-color:#865129}
+.film-controls .film-time{font-size:calc(.85rem * var(--letters));font-variant-numeric:tabular-nums}
+video.scene-film{pointer-events:none}
+
+.read-again{margin:12px auto;max-width:820px}
+.read-again summary{list-style:none;cursor:pointer}
+.read-again summary::-webkit-details-marker{display:none}
+.read-again p{margin:.55em 0}
+.book-stage .book-title{left:78.2%;top:57%;width:23%;font-size:min(calc(2.5cqw * var(--letters)),2.85cqw);line-height:1.17;white-space:normal;overflow-wrap:normal}
+.book-title img{width:61%;margin:.5em auto 0}
+
+.placement{grid-template-columns:minmax(0,1fr);gap:12px}
+.target{position:relative;isolation:isolate;width:100%;aspect-ratio:2/1;min-height:130px;border:2px solid #bb9775;border-radius:12px;overflow:hidden;background-color:#f2e0cb;background-repeat:no-repeat;background-position:center;background-size:contain;justify-content:center;padding:10px;box-shadow:0 1px 4px #6c47351a}
+.target[data-target="0"]{background-image:url("../../assets/die-eiche/abschnitt-3/eisflaeche.webp")}
+.target[data-target="1"]{background-image:url("../../assets/die-eiche/abschnitt-3/aeste.webp");align-items:flex-end;padding-right:8%}
+.target .target-label,.target .target-results{display:block;max-width:100%;padding:5px 10px;border-radius:8px;background:#fff4e2ee;color:#382619;box-shadow:0 1px 3px #38261935;text-align:center;overflow-wrap:normal}
+.target .target-label{font-weight:700}
+.target .target-results{font-weight:600;background:#f0f6e7ed;color:#27452a}
+.target .target-results:empty{display:none}
+.target:focus-visible{outline:3px solid #547950;outline-offset:3px}
+@media(max-width:450px){.target{min-height:125px;padding:8px}.target[data-target="1"]{padding-right:5%}}
+</style><link rel="stylesheet" href="../page-turn.css"><link rel="stylesheet" href="../../shared/game-selection.css"></head>
+<body><main>
+<header class="topbar"><div class="brand"><strong>Die Eiche</strong>Geschichten zum Lesen und Vorlesen</div><button class="info" id="infoButton" aria-label="Informationen und Kontakt">i</button><button class="action" id="settingsButton" aria-expanded="false">Aa · Größe ändern</button></header>
+<div class="settings" id="settings" hidden><label>Schriftgröße <input id="letters" type="range" min="100" max="150" step="5" value="100"><output>100 %</output></label><label>Spielfeldgröße <input id="boardSize" type="range" min="75" max="135" step="5" value="100"><output>100 %</output></label></div>
+<details class="scene-menu"><summary class="action oak">Anderen Abschnitt<br>noch einmal erleben</summary><a class="action oak" href="../abschnitt-1/?neu=1">Die Eiche</a><a class="action oak" href="../abschnitt-2/?neu=1">Spuren der Zeit</a><button class="action oak" id="restart">Winterschlaf</button></details>
+<section id="screen"></section>
+<nav><button id="back" class="action oak">Zurück</button><span class="counter" id="counter" aria-live="polite"></span><button id="next" class="action oak">Weiter</button></nav>
+<a class="game-selection-link" href="../../">Zur Spielauswahl</a>
+<footer>In deinem Tempo. Ohne Zeitdruck.</footer>
+</main><dialog id="info"><h2>Informationen &amp; Kontakt</h2><p>Die Eiche · Heike Amthor</p><p>Sprecherin: Nadine Weder.</p><button class="action oak" id="closeInfo">Schließen</button></dialog>
+<script src="../spielstand.js?v=3"></script><script src="../page-turn.js"></script><script>
+const $=id=>document.getElementById(id), screen=$('screen'), media={image:'../../assets/die-eiche/abschnitt-3/winterbild.webp',skate:'../../assets/die-eiche/abschnitt-3/schlittschuh.mp4',birds:'../../assets/die-eiche/abschnitt-3/voegel.mp4',turn:'../../assets/die-eiche/abschnitt-1/blaettern.mp3',book:'../../assets/die-eiche/abschnitt-2/buchoeffnen.mp4',still:'../../assets/die-eiche/abschnitt-2/buch-standbild.jpg',swirl:'../../assets/die-eiche/abschnitt-2/kringel.png',jump:'../../assets/die-eiche/abschnitt-2/weiter-huepfen.webm',jumpStill:'../../assets/die-eiche/abschnitt-2/weiter-standbild.png',audio:'../../assets/die-eiche/abschnitt-3/vorleseton.mp3'};
+const a='Der See hat eine Decke aus Eis. Kinder laufen darauf Schlittschuh. Sie tragen dicke Mützen. Ihre Wangen sind rot. Ihre Augen leuchten vor Freude. Die Eiche scheint nichts zu merken. Oder merkt sie es doch?';
+const b='Sie steht ganz still. Nur der Wind bewegt ihre Zweige. Oben in den Ästen streiten sich Krähen und Tauben. Jeder will den besten Platz.';
+const original='Auf dem Eis, zu dem das Wasser des Sees gefroren war, liefen die Kinder Schlittschuhe. Dicke Mützen hatten sie auf dem Kopf und vor Begeisterung und Anstrengung rote Wangen und blitzende Augen. Von all dem schien die Eiche nichts zu bemerken. Oder vielleicht doch?\n\nKaum eine Bewegung war in ihr zu sehen. Nur der Wind ließ ihre Zweige leicht rauschen, und die Krähen, die sich mit den Tauben um die besten Plätze im Geäst zankten.';
+const domino=['Die Kinder auf dem Eis','haben dicke Mützen','und rote Wangen'];
+const pieces=['Kinder','Krähen','Tauben'];let step=0,placed=[],joined=[],dominoChecked=false,answer=-1,selected=null,bookReady=false,filmMuted=false;
+function board(kind='image'){return '<div class="board-scroll"><div class="board">'+(kind==='image'?'<img src="'+media.image+'" alt="Winterliche Eiche am gefrorenen See, Kinder und Vögel">':'<video class="scene-film" playsinline preload="metadata" src="'+media[kind]+'"></video><div class="film-controls" aria-label="Filmsteuerung"><button id="filmToggle" aria-label="Film abspielen">Abspielen</button><button id="filmRestart" aria-label="Film von vorne abspielen">↻</button><input id="filmSeek" type="range" min="0" max="1000" value="0" aria-label="Wiedergabeposition"><span id="filmTime" class="film-time">0:00</span><button id="filmSound" aria-label="Ton ausschalten" aria-pressed="true">🔊</button></div>')+'</div></div>'}
+function playVideo(){
+ const v=screen.querySelector('video');if(!v)return;
+ const toggle=$('filmToggle'),restart=$('filmRestart'),seek=$('filmSeek'),sound=$('filmSound'),time=$('filmTime');
+ v.muted=filmMuted;v.volume=1;
+ sound.hidden=false;
+ const fmt=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
+ const update=()=>{toggle.textContent=v.paused||v.ended?'Abspielen':'Pause';toggle.setAttribute('aria-label',v.paused||v.ended?'Film abspielen':'Film pausieren');const d=v.duration;seek.value=Number.isFinite(d)&&d>0?Math.round(v.currentTime/d*1000):0;time.textContent=fmt(v.currentTime)+(Number.isFinite(d)?' / '+fmt(d):'');sound.textContent=v.muted?'🔇':'🔊';sound.setAttribute('aria-label',v.muted?'Ton einschalten':'Ton ausschalten');sound.setAttribute('aria-pressed',String(!v.muted))};
+ const start=()=>v.play().catch(()=>{if(!v.muted){v.muted=true;filmMuted=true;return v.play().catch(()=>{})}}).finally(update);
+ toggle.onclick=()=>{if(v.paused||v.ended){if(v.ended)v.currentTime=0;start()}else v.pause()};
+ restart.onclick=()=>{v.currentTime=0;start()};
+ seek.oninput=()=>{if(Number.isFinite(v.duration)){v.currentTime=Number(seek.value)/1000*v.duration;update()}};
+ seek.onchange=()=>{if(v.ended&&Number(seek.value)<1000)start()};
+ sound.onclick=()=>{v.muted=!v.muted;filmMuted=v.muted;checkpoint();update()};
+ ['loadedmetadata','timeupdate','play','pause','ended','volumechange','seeked'].forEach(e=>v.addEventListener(e,update));
+ update();start()
+}
+function checkpoint(){EicheProgress.save(3,{step,placed,joined,dominoChecked,answer,filmMuted})}
+function go(n){
+ if(EichePageTurn.busy)return;
+ if(n<0){location.assign('../abschnitt-2/');return}
+ screen.querySelectorAll('video,audio').forEach(v=>v.pause());
+ const target=Math.max(0,Math.min(8,n));
+ EichePageTurn.run(()=>{step=target;bookReady=false;render();scrollTo(0,0)},target<step);
+}
+function render(){
+ checkpoint();screen.className=step===0?'entry':step>=5?'wide':'';
+ $('counter').textContent=(step+1)+' / 9';$('back').hidden=false;$('next').hidden=false;$('next').disabled=false;$('next').textContent='Weiter';
+ if(step===0){screen.innerHTML='<h1>Winterschlaf</h1>'+board();$('next').textContent='Los geht’s';return}
+ if(step===1||step===3){const first=step===1;screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board(first?'skate':'birds')+'<section class="read-column"><p class="paper">'+(first?a:b.replace(/^Sie /,"Die Eiche "))+'</p></section></div>';$('next').textContent=first?'Zur Aufgabe':'Zur Frage';playVideo();return}
+ if(step===2){
+ screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="task"><h2>Lege den Satz in die richtige Reihenfolge.</h2><p class="domino-caption">Dein Satz – tippe einen gelegten Teil an, um ihn zurückzulegen.</p><div class="cards" id="slots"></div><p class="domino-caption">Satzteile</p><div class="cards" id="domino"></div><p id="feedback" class="feedback" role="status"></p><button class="action oak" id="checkDomino" hidden>Satz prüfen</button></section></div>';
+ drawDomino();return}
+ if(step===4){
+ screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="task"><h2>Wer streitet um die besten Plätze?</h2><div class="choices" id="choices"></div><p id="feedback" class="feedback" role="status"></p></section></div>';
+ const choices=['Krähen und Kinder','Krähen und Tauben','Kinder und Tauben'];choices.forEach((t,i)=>{const x=document.createElement('button');x.className='answer';x.textContent=t;x.setAttribute('aria-pressed',String(answer===i));x.onclick=()=>{if(i===1){answer=i;render()}else status('Lies noch einmal!')};$('choices').append(x)});$('next').disabled=answer!==1;if(answer===1)status('Genau! Die Krähen und Tauben streiten.');return}
+ if(step===5){
+ screen.innerHTML='<h1>Wer ist wo?</h1><div class="layout">'+board()+'<section class="task"><h2>Ziehe die Kinder und die Vögel an den richtigen Platz.</h2><p>Du kannst auch erst die Karte und dann den Platz antippen.</p><div class="cards" id="pieces"></div><div class="placement" id="targets"></div><p id="feedback" class="feedback" role="status"></p></section></div>';drawMatch();return}
+ if(step===6){screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="read-column"><p class="paper"><strong>Merkt die Eiche etwas von dem Trubel?</strong><br>Was meinst du? Erzähle, was du denkst.</p><details class="read-again"><summary class="action oak">Zum Nachlesen</summary><article class="paper"><p>'+a+'</p><p>'+b+'</p></article></details></section></div>';$('next').textContent='Zum Vorlesen';return}
+ if(step===7){screen.innerHTML='<h1>Winterschlaf</h1><div class="listen-content"><h2>Winterschlaf zum Anhören</h2><p class="listen-intro">Das hast du prima gemacht! Lehne dich zurück und höre der Geschichte zu.</p><audio id="narration" controls preload="metadata" src="'+media.audio+'"></audio><article class="paper original" style="white-space:pre-line">'+original+'</article></div>';return}
+ screen.innerHTML='<h1>Und wie geht es jetzt weiter?</h1><div class="book-stage"><video playsinline id="bookClip" src="'+media.book+'"></video><img id="openStill" src="'+media.still+'" hidden alt="Würstchen mit geöffnetem Buch"><h2 class="book-title" id="bookTitle" hidden>Erste<br>warme<br>Sonnenstrahlen<img src="'+media.swirl+'" alt=""></h2></div><button class="jump" id="jump" hidden aria-label="Abschnitt abschließen"><video muted playsinline src="'+media.jump+'" poster="'+media.jumpStill+'"></video></button>';
+ $('next').hidden=true;let v=$('bookClip');const done=()=>{if(step!==8)return;v.hidden=true;$('openStill').hidden=false;$('bookTitle').hidden=false;$('jump').hidden=false;$('jump').querySelector('video').play().catch(()=>{});bookReady=true};v.onended=done;v.onerror=done;v.play().catch(done);$('jump').onclick=()=>{if(bookReady){EicheProgress.complete(3);checkpoint();alert('Winterschlaf ist geschafft! Hier geht die Geschichte bald weiter.');location.assign('../')}};
+}
+function drawDomino(){checkpoint();
+ const full=joined.length===domino.length;
+ $('slots').replaceChildren(...domino.map((_,i)=>{const x=document.createElement('button');const filled=i<joined.length;x.className='slot'+(filled?' filled':'')+(dominoChecked?' verified':'');x.textContent=filled?domino[joined[i]]:'…';x.disabled=!filled;x.setAttribute('aria-label',filled?domino[joined[i]]+' zurücklegen':'Freier Satzplatz');x.onclick=()=>{joined.splice(i,1);dominoChecked=false;drawDomino()};return x}));
+ $('domino').replaceChildren(...[2,0,1].map(i=>{const used=joined.includes(i),x=document.createElement('button');x.className='tile'+(used?' used':'');x.textContent=domino[i];x.disabled=used;x.setAttribute('aria-label',domino[i]+(used?', schon verwendet':''));x.onclick=()=>{if(!joined.includes(i)&&joined.length<domino.length){joined.push(i);dominoChecked=false;drawDomino()}};return x}));
+ $('checkDomino').hidden=!full||dominoChecked;
+ $('checkDomino').onclick=()=>{if(joined.every((n,i)=>n===i)&&full){dominoChecked=true;drawDomino()}else{status('Lies deinen Satz noch einmal. Passt das so? Tippe auf die Satzteile, die du zurücklegen möchtest.')}};
+ $('next').disabled=!dominoChecked;
+ status(dominoChecked?'Prima! Der Satz ist richtig.':full?'Lies deinen Satz noch einmal. Passt das so?':joined.length?'Tippe auf den nächsten Satzteil.':'');
+}
+function assign(i,t){if(placed.includes(i))return;selected=null;if((i===0?0:1)===t){placed.push(i);drawMatch();status(placed.length===3?'Alles richtig!':'Sehr gut!')}else{drawMatch();status('Huch! Dieser Platz passt noch nicht. Versuche es noch einmal.');const el=$('piece'+i);el?.animate([{transform:'translateX(0)'},{transform:'translateX(10px)'},{transform:'translateX(0)'}],{duration:280})}}
+function drawMatch(){checkpoint();
+ $('pieces').replaceChildren(...pieces.map((name,i)=>{let x=document.createElement('button');x.id='piece'+i;x.className='tile drag-card'+(selected===i?' selected':'');x.textContent=name;x.disabled=placed.includes(i);x.hidden=x.disabled;x.onclick=()=>{selected=i;drawMatch()};x.onpointerdown=e=>{if(x.disabled||e.button!==0)return;let startX=e.clientX,startY=e.clientY,ghost=null;x.setPointerCapture(e.pointerId);x.onpointermove=ev=>{if(!ghost&&Math.hypot(ev.clientX-startX,ev.clientY-startY)>7){ghost=x.cloneNode(true);ghost.removeAttribute('id');ghost.classList.add('drag-ghost');document.body.append(ghost)}if(ghost){ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px'}};x.onpointerup=ev=>{if(ghost){ghost.remove();let target=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('[data-target]');if(target)assign(i,+target.dataset.target);else{selected=null;drawMatch()}}else{selected=i;drawMatch()}x.onpointermove=x.onpointerup=null};x.onpointercancel=()=>{ghost?.remove();x.onpointermove=x.onpointerup=null}};return x}));
+ $('targets').replaceChildren(...['auf dem Eis','oben in den Ästen'].map((name,t)=>{let x=document.createElement('button');x.className='target';x.dataset.target=t;let label=document.createElement('span');label.className='target-label';label.textContent=name;let list=document.createElement('span');list.className='target-results';list.textContent=placed.filter(i=>(i===0?0:1)===t).map(i=>pieces[i]+' ✓').join(' · ');x.append(label,list);x.onclick=()=>{if(selected!==null)assign(selected,t)};return x}));$('next').disabled=placed.length!==3;if(placed.length===3)status('Alles richtig!');}
+ $('back').onclick=()=>go(step-1);$('next').onclick=()=>go(step+1);$('restart').onclick=()=>{joined=[];dominoChecked=false;placed=[];answer=-1;selected=null;go(0);document.querySelector('details').open=false};
+ $('settingsButton').onclick=()=>{$('settings').hidden=!$('settings').hidden;$('settingsButton').setAttribute('aria-expanded',String(!$('settings').hidden))};
+ for(const [id,prop,percent] of [['letters','--letters',false],['boardSize','--board',true]]){$(id).oninput=()=>{document.documentElement.style.setProperty(prop,percent?$(id).value+'%':$(id).value/100);$(id).nextElementSibling.value=$(id).value+' %'}}
+ $('infoButton').onclick=()=>$('info').showModal();$('closeInfo').onclick=()=>$('info').close();
+ const saved=EicheProgress.readForVisit(3);if(saved&&Number.isInteger(saved.step)&&saved.step>=0&&saved.step<=8){step=saved.step;placed=Array.isArray(saved.placed)?saved.placed:[];joined=Array.isArray(saved.joined)?saved.joined:[];dominoChecked=Boolean(saved.dominoChecked);answer=saved.answer===1?1:-1;filmMuted=Boolean(saved.filmMuted)}
+ render();
+</script></body></html>

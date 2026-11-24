@@ -27,11 +27,8 @@ window.EicheProgress = (() => {
   }
   function latest() {
     const section = Number(localStorageValue(latestKey));
-    if ((section === 1 || section === 2) && read(section)) return section;
-    const first = read(1);
-    const second = read(2);
-    if (!first && !second) return null;
-    return second && (second.updated ?? 0) >= (first?.updated ?? 0) ? 2 : 1;
+    if ([1, 2, 3].includes(section) && read(section)) return section;
+    return [1, 2, 3].filter(n => read(n)).sort((a,b) => (read(b).updated ?? 0) - (read(a).updated ?? 0))[0] ?? null;
   }
   function complete(section) {
     if (localStorageValue(resetKey) !== version) return;
@@ -43,9 +40,12 @@ window.EicheProgress = (() => {
   function secondUnlocked() {
     return isComplete(1) || isComplete(2) || Boolean(read(2));
   }
+  function thirdUnlocked() {
+    return isComplete(2) || isComplete(3) || Boolean(read(3));
+  }
   function reset() {
     localStorage.setItem(resetKey, String(Date.now()));
-    for (const section of [1, 2]) {
+    for (const section of [1, 2, 3]) {
       localStorage.removeItem(prefix + section);
       localStorage.removeItem(completionKey(section));
     }
@@ -54,5 +54,5 @@ window.EicheProgress = (() => {
   addEventListener('pageshow', event => {
     if (event.persisted && localStorageValue(resetKey) !== version) location.reload();
   });
-  return {readForVisit, save, latest, complete, isComplete, secondUnlocked, reset};
+  return {readForVisit, save, latest, complete, isComplete, secondUnlocked, thirdUnlocked, reset};
 })();

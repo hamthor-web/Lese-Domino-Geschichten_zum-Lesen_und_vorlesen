@@ -159,9 +159,6 @@ nav .decor { color: #472614 }
 
 .board > video.discovery { filter: brightness(1.09) }
 #layout { position:relative; isolation:isolate; perspective:1200px }
-.page-turn { position:absolute; inset:0; pointer-events:none; z-index:5; border-radius:12px;
-  background:linear-gradient(90deg,#9d79568c,#f4e2c9 9%,#fff7e9 74%,#d2ad83);
-  box-shadow:0 2px 16px #4d2b2536 }
 #dreamCinema {
   position: fixed; inset: 0; margin: 0; padding: 0; border: 0; border-radius: 0;
   width: 100%; height: 100%; max-width: none; max-height: none;
@@ -180,6 +177,7 @@ body:has(#dreamCinema[open]) { overflow: hidden }
   #dreamCinema > img, #dreamCinema > video { transition: none }
 }
 </style>
+<link rel="stylesheet" href="../page-turn.css">
 
   <link rel="stylesheet" href="../../shared/game-selection.css">
 </head>
@@ -199,6 +197,7 @@ body:has(#dreamCinema[open]) { overflow: hidden }
   <p id="replayNote">Hier erscheinen die Abschnitte, sobald du ihre Aufgaben abgeschlossen hast.</p>
   <a class="decor replay" id="replay" href="?neu=1" hidden><span class="button-label">Die Eiche</span></a>
   <a class="decor replay" id="replaySecond" href="../abschnitt-2/?neu=1" hidden><span class="button-label">Spuren der Zeit</span></a>
+  <a class="decor replay" id="replayThird" href="../abschnitt-3/?neu=1" hidden><span class="button-label">Winterschlaf</span></a>
 </details>
 <h1 id="sectionTitle" tabindex="-1">Die Eiche</h1>
 <div class="layout" id="layout">
@@ -239,7 +238,8 @@ body:has(#dreamCinema[open]) { overflow: hidden }
   </nav>
   <button class="decor replay info-close" id="infoClose" type="button" autofocus><span class="button-label">Schließen</span></button>
 </dialog>
-<script src="../spielstand.js?v=2"></script>
+<script src="../spielstand.js?v=3"></script>
+<script src="../page-turn.js"></script>
 <script>
 const videos = {
   "dream": "../../assets/die-eiche/abschnitt-1/eiche-winter.mp4",
@@ -282,6 +282,7 @@ function updateReplay() {
   const secondUnlocked = EicheProgress.secondUnlocked();
   $('replay').hidden = !firstComplete;
   $('replaySecond').hidden = !secondUnlocked;
+  $('replayThird').hidden = !EicheProgress.thirdUnlocked();
   $('replayNote').textContent = firstComplete || secondUnlocked ? 'Wähle einen Abschnitt.' :
     'Hier erscheinen die Abschnitte, sobald du sie freigespielt hast.';
 }
@@ -731,30 +732,6 @@ $('hotspots').querySelectorAll('polygon').forEach((polygon, index) => {
   });
 });
 
-const pageTurnSound = new Audio('../../assets/die-eiche/abschnitt-1/blaettern.mp3');
-pageTurnSound.preload = 'auto';
-pageTurnSound.volume = .4;
-
-function turnPage(backward = false) {
-  pageTurnSound.currentTime = 0;
-  pageTurnSound.play().catch(() => {});
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const layout = $('layout');
-  layout.querySelector('.page-turn')?.remove();
-  const sheet = document.createElement('div');
-  sheet.className = 'page-turn';
-  sheet.setAttribute('aria-hidden', 'true');
-  sheet.style.transformOrigin = backward ? 'right center' : 'left center';
-  layout.append(sheet);
-  const direction = backward ? 1 : -1;
-  const turn = sheet.animate([
-    {transform:'rotateY(0deg)', opacity:1},
-    {transform:'rotateY(' + (direction * 82) + 'deg)', opacity:.85, offset:.72},
-    {transform:'rotateY(' + (direction * 98) + 'deg)', opacity:0}
-  ], {duration:620, easing:'ease-in-out'});
-  turn.finished.then(() => sheet.remove(), () => sheet.remove());
-}
-
 const bookNextClip = $('bookNextClip');
 bookNextClip.src = '../../assets/die-eiche/abschnitt-1/weiter-knetanimation.webm';
 bookNextClip.addEventListener('error', () => { bookNextClip.hidden = true; });
@@ -782,16 +759,18 @@ function leaveBook() {
   completed = false;
 }
 $('back').onclick = () => {
+  if (EichePageTurn.busy || $('back').disabled) return;
   stopNarration();
-  if (step === 7) leaveBook();
-  step--;
-  $('mediaMessage').textContent = '';
-  render();
-  turnPage(true);
-  window.scrollTo(0,0);
+  EichePageTurn.run(() => {
+    if (step === 7) leaveBook();
+    step--;
+    $('mediaMessage').textContent = '';
+    render();
+    window.scrollTo(0,0);
+  }, true);
 };
 $('next').onclick = async () => {
-  if ($('next').disabled || $('next').dataset.advancing) return;
+  if (EichePageTurn.busy || $('next').disabled || $('next').dataset.advancing) return;
   if (playing && finishClip) {
     $('next').dataset.advancing = 'true';
     await finishClip();
@@ -802,13 +781,14 @@ $('next').onclick = async () => {
     return;
   }
   stopNarration();
-  if (step === 0) clip.classList.remove('visible');
-  step++;
-  $('mediaMessage').textContent = '';
-  render();
-  turnPage();
-  window.scrollTo(0,0);
-  if (step === 7) await openBook();
+  EichePageTurn.run(() => {
+    if (step === 0) clip.classList.remove('visible');
+    step++;
+    $('mediaMessage').textContent = '';
+    render();
+    window.scrollTo(0,0);
+    if (step === 7) openBook();
+  });
 };
 
 $('settingsBtn').onclick = () => {

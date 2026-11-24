@@ -101,3 +101,15 @@ Bei der richtigen Antwort „Sie träumt von früher“ wird die Winter-Traumani
 Im zweiten Abschnitt führt Zurück von der Herzfrage zum zugehörigen Lesetext und von dort in Abschnitt 1; auch von der zweiten Frage und vom zweiten Lesetext ist eine schrittweise Rücknavigation möglich. Bereits ausgewählte Antworten der geöffneten Frage bleiben beim Schließen und erneuten Öffnen erhalten. Die Buchstabenfelder und ihre Rahmen verwenden warme Beigetöne passend zu den Knetbuttons; die grüne Rückmeldung bei vollständig gelöstem Wort bleibt erhalten.
 
 Technische Prüfung: JavaScript-Syntax beider Abschnitte geprüft; simulierte Ablauftests für Rücknavigation, Wiederaufnahme gespeicherter Antworten und Wiederherstellung des Spielfeldes nach normalem Videoende bzw. Medienfehler bestanden. Visuelle Prüfung auf echten Geräten, im Hoch-/Querformat und mit den Zoomreglern noch offen.
+
+## Einheitliches Umblättern · 24.11.2026
+
+Heike hat die bildschirmfüllende Papier-Umblätteranimation aus „Winterschlaf“ (Vorschau v3/v4) für alle drei Abschnitte bestätigt. Abschnitt 1 ersetzt seine bisherige Animation, Abschnitt 2 erhält dieselbe neue Animation. Vorwärts- und Rückwärtsblättern sind spiegelbildlich, Seiteninhalt wechselt nach 300 ms, Animation dauert 720 ms, der vorhandene Blätterton läuft mit Lautstärke 0,22. Bei reduzierter Bewegung wechselt die Seite unmittelbar. Gemeinsame Implementierung aller drei Abschnitte: `die-eiche/page-turn.js` und `die-eiche/page-turn.css`.
+
+## Abschnitt 3 · Winterschlaf · Freigabe am 24.11.2026
+
+Die freigegebene Vorschau v4 ist als [Abschnitt 3](../../die-eiche/abschnitt-3/) eingebunden. Der Würstchen-Button am Ende von Abschnitt 2 führt zur neuen Szene. Abschnitt 3 enthält zwei Leseseiten mit Video und steuerbarem Ton, Satzdomino mit rückholbaren Teilen, Auswahlfrage, Zieh-/Tippaufgabe mit Eisweiher und Eichenzweigen, die offene Abschlussfrage mit aufklappbarem Lesetext, die Vorleseseite und den Buchausblick „Erste warme Sonnenstrahlen“. Seite 4 beginnt mit „Die Eiche steht ganz still.“ Die Fassung „Zum Nachlesen“ bleibt unverändert. Der Ausschnitt der Originalaufnahme ist technisch eingebunden; die Hörkontrolle der Schnittgrenzen steht noch aus.
+
+## Nachtrag zur Masterübersicht · 24.11.2026
+
+„Die Eiche“ umfasst drei spielbare Abschnitte: „Die Eiche“, „Spuren der Zeit“ und „Winterschlaf“. Abschnitt 3 ist in Freischaltung, Fortsetzen und Zurücksetzen aufgenommen. „Erste warme Sonnenstrahlen“ ist nur als Buchausblick enthalten und noch nicht spielbar. Silvana bleibt unverändert.

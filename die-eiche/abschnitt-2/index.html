@@ -132,6 +132,7 @@ button:disabled { cursor: default; opacity: .5 }
 dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px solid #8c4829; border-radius: 15px; background: #fff1d5; color: inherit; font-size: calc(1rem * var(--letters)) }
 .info-links { display: grid; grid-template-columns: 1fr; gap: 9px; margin: 12px 0 }
 </style>
+<link rel="stylesheet" href="../page-turn.css">
 
   <link rel="stylesheet" href="../../shared/game-selection.css">
 </head>
@@ -151,6 +152,7 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
   <p>Wähle einen Abschnitt.</p>
   <a class="action oak" id="replayPrevious" href="../abschnitt-1/?neu=1">Die Eiche</a>
   <a class="action oak" id="replayCurrent" href="?neu=1">Spuren der Zeit</a>
+  <a class="action oak" id="replayThird" href="../abschnitt-3/?neu=1" hidden>Winterschlaf</a>
 </details>
 <div id="game"><h1>Spuren der Zeit</h1>
 <div class="layout">
@@ -225,7 +227,8 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
   </nav>
   <button class="action oak info-close" id="infoClose" type="button" autofocus>Schließen</button>
 </dialog>
-<script src="../spielstand.js?v=2"></script>
+<script src="../spielstand.js?v=3"></script>
+<script src="../page-turn.js"></script>
 <script>
 const pages = [
   {
@@ -252,6 +255,11 @@ const found = new Set();
 let pageIndex = 0;
 let activeScreen = 'game';
 const saved = EicheProgress.readForVisit(2);
+function updateReplay(){get('replayThird').hidden=!EicheProgress.thirdUnlocked()}
+get('sceneMenu').addEventListener('toggle',updateReplay);
+window.addEventListener('pageshow',updateReplay);
+window.addEventListener('storage',updateReplay);
+updateReplay();
 let restoring = false;
 function checkpoint() {
   if (restoring) return;
@@ -358,23 +366,30 @@ function closeQuestion(moveFocus = true) {
   if (moveFocus) passage.focus({preventScroll:true});
 }
 
-get('showQuestion').onclick = get('hotspot').onclick = revealQuestion;
+get('showQuestion').onclick = get('hotspot').onclick = () => EichePageTurn.run(revealQuestion);
 get('next').onclick = () => {
-  scrollTo(0, 0);
-  renderPage(1, true, true);
+  EichePageTurn.run(() => {
+    scrollTo(0, 0);
+    renderPage(1, true, true);
+  });
 };
 get('back').onclick = () => {
-  scrollTo(0, 0);
-  if (!get('questionPanel').hidden) {
-    closeQuestion();
-  } else if (pageIndex === 1) {
-    renderPage(0);
-    for (const index of pages[0].correct) found.add(index);
-    feedback.textContent = 'Das stimmt!';
-    revealQuestion();
-  } else {
+  if (EichePageTurn.busy) return;
+  if (get('questionPanel').hidden && pageIndex === 0) {
     location.assign('../abschnitt-1/');
+    return;
   }
+  EichePageTurn.run(() => {
+    scrollTo(0, 0);
+    if (!get('questionPanel').hidden) {
+      closeQuestion();
+    } else {
+      renderPage(0);
+      for (const index of pages[0].correct) found.add(index);
+      feedback.textContent = 'Das stimmt!';
+      revealQuestion();
+    }
+  }, true);
 };
 get('settingsButton').onclick = () => {
   const settings = get('settings');
@@ -415,28 +430,41 @@ function bookOpened(useStill = false, animate = true) {
 }
 bookClip.addEventListener('ended', () => bookOpened());
 bookClip.addEventListener('error', () => bookOpened(true));
-get('readNext').onclick = () => showScreen('readPage','readTitle');
-get('readBack').onclick = () => { stopReading(); showScreen('game'); get('readNext').focus(); };
-get('openBook').onclick = () => {
+get('readNext').onclick = () => EichePageTurn.run(() => showScreen('readPage','readTitle'));
+get('readBack').onclick = () => {
+  if (EichePageTurn.busy) return;
   stopReading();
-  bookClip.hidden = false;
-  get('openStill').hidden = true;
-  get('bookTitle').hidden = true;
-  get('jumpButton').hidden = true;
-  showScreen('bookPage');
-  bookClip.currentTime = 0;
-  jumpClip.currentTime = 0;
-  bookClip.play().catch(() => bookOpened(true));
+  EichePageTurn.run(() => { showScreen('game'); get('readNext').focus(); }, true);
+};
+get('openBook').onclick = () => {
+  if (EichePageTurn.busy) return;
+  stopReading();
+  EichePageTurn.run(() => {
+    bookClip.hidden = false;
+    get('openStill').hidden = true;
+    get('bookTitle').hidden = true;
+    get('jumpButton').hidden = true;
+    showScreen('bookPage');
+    bookClip.currentTime = 0;
+    jumpClip.currentTime = 0;
+    bookClip.play().catch(() => bookOpened(true));
+  });
 };
 get('bookBack').onclick = () => {
+  if (EichePageTurn.busy) return;
   bookClip.pause();
   jumpClip.pause();
-  showScreen('readPage','readTitle');
+  EichePageTurn.run(() => showScreen('readPage','readTitle'), true);
 };
-get('jumpButton').onclick = () => { jumpClip.pause(); showScreen('chapterPage','chapterTitle'); };
+get('jumpButton').onclick = () => {
+  if (EichePageTurn.busy) return;
+  jumpClip.pause();
+  EicheProgress.complete(2);
+  location.assign('../abschnitt-3/');
+};
 get('infoButton').onclick = () => get('info').showModal();
 get('infoClose').onclick = () => get('info').close();
-get('chapterBack').onclick = () => { showScreen('bookPage'); bookOpened(bookClip.hidden); };
+get('chapterBack').onclick = () => EichePageTurn.run(() => { showScreen('bookPage'); bookOpened(bookClip.hidden); }, true);
 
 restoring = true;
 renderPage(saved?.pageIndex === 1 ? 1 : 0);
@@ -455,7 +483,8 @@ if (saved?.screen === 'bookPage' || saved?.screen === 'chapterPage') {
   bookOpened(true, false);
   if (saved.screen === 'chapterPage') {
     jumpClip.pause();
-    showScreen('chapterPage');
+    // Old versions saved a placeholder after the book; show the book again.
+    showScreen('bookPage');
   }
 }
 restoring = false;
