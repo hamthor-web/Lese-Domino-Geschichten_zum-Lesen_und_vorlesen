@@ -13,7 +13,7 @@ layout: null
   <meta name="apple-mobile-web-app-title" content="Lesegeschichten">
   <title>Geschichten zum Lesen und Vorlesen</title>
   <script src="shared/installieren.js?v=7" defer></script>
-  <script src="shared/geschichtenauswahl.js?v=2" defer></script>
+  <script src="shared/geschichtenauswahl.js?v=3" defer></script>
   <style>
     @font-face { font-family: Andika; src: url('vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf'); font-weight: 400; font-display: swap }
     @font-face { font-family: Andika; src: url('vorschau-einfuehrung/assets/fonts/Andika-Bold.ttf'); font-weight: 700; font-display: swap }
@@ -21,6 +21,24 @@ layout: null
     [hidden] { display: none !important }
     body { margin: 0; background: #f2e9dc; color: #291709; font: 1.1rem/1.45 Andika, sans-serif }
     main, footer { width: min(100% - 1.5rem, 54rem); margin-inline: auto; text-align: center }
+    .page-heading { position: relative; padding-inline: .75rem; text-align: center }
+    .parent-info {
+      display: block;
+      max-width: 100%;
+      min-height: 44px;
+      margin-inline-start: auto;
+      padding: .35rem .75rem;
+      border: 1px solid #795136;
+      border-radius: .7rem;
+      background: #f8e8ca;
+      color: inherit;
+      font: 700 1rem/1.25 Andika, sans-serif;
+      cursor: pointer;
+    }
+    .page-heading h1 { max-width: 54rem; margin-inline: auto }
+    @media (min-width: 80rem) {
+      .parent-info { position: absolute; inset-block-start: 0; inset-inline-end: 1rem }
+    }
     h1 { margin: .8rem 0; font: bold clamp(1.65rem, 5vw, 2.9rem)/1.15 Georgia, serif }
     .scene {
       display: grid;
@@ -89,6 +107,7 @@ layout: null
     .hilfe, .note { max-width: 35rem; margin-inline: auto; text-align: center }
     .hilfe summary { width: fit-content; margin: 0 auto; padding: .65rem .4rem; font-size: 1rem; text-decoration: underline; cursor: pointer }
     .hilfe p { margin: .25rem auto .75rem; padding: .65rem 1rem; background: #fff6df; border-radius: .75rem; text-align: left }
+    #eltern-informationen { padding-bottom: 1rem; scroll-margin-block-start: .75rem }
     .note { font-size: .95rem }
     .note-heading { margin: 1.25rem auto 0; font-size: 1.05rem }
     :focus-visible { outline: 3px solid #305d44; outline-offset: 4px }
@@ -99,8 +118,11 @@ layout: null
   </style>
 </head>
 <body>
-  <main>
+  <header class="page-heading">
+    <button class="parent-info" id="eltern-button" type="button" aria-controls="eltern-informationen" aria-expanded="false">Informationen für die Eltern</button>
     <h1>Geschichten zum Lesen und Vorlesen</h1>
+  </header>
+  <main>
     <div class="scene">
       <div class="scene-media">
         <img id="lesebild" src="assets/wuerstchen-sitzt.webp" alt="Das Kleine Würstchen sitzt mit einem aufgeschlagenen Buch vor dem Bücherregal." width="840" height="692">
@@ -120,8 +142,8 @@ layout: null
       <p>Tippe in Safari auf „Teilen“ und dann auf „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls die Option erscheint, und tippe auf „Hinzufügen“.</p>
     </details>
   </main>
-  <footer>
-    <h2 class="note note-heading">Für die Eltern und Lesebegleiter</h2>
+  <footer id="eltern-informationen" hidden>
+    <h2 class="note note-heading" tabindex="-1">Für die Eltern und Lesebegleiter</h2>
     <p class="note">Wie uns Reinhard Mey lehrte, sind wir alle nur kleine Würstchen. Doch ich denke, arm sind wir dabei nicht unbedingt. Tatsächlich sind wir alle kleine Könige, und es kommt nur darauf an, was wir daraus machen. Aus diesem Grund habe ich die Figur des Kleinen Würstchens ins Leben gerufen. Mein Wunsch ist es, dass seine Größe Ihrem Kind Freude beim Entdecken schenkt!</p>
   </footer>
 </body>

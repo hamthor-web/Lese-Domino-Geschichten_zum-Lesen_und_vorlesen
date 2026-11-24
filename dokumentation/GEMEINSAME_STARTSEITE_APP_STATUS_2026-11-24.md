@@ -22,3 +22,7 @@ GitHub Pages setzt beim Veröffentlichen dieselbe Versionskennung automatisch in
 - Oben steht „Geschichten zum Lesen und Vorlesen“. Die Würstchenszene beginnt mit etwas Abstand darunter.
 - Die Denkblasen „Die Eiche“ und „Silvana“ stehen nach dem Lesefilm über dem Würstchen. Sie ragen über die obere Bildkante hinaus, ihre kleinen Punkte zeigen zur Figur. Während des Films bleibt die Bildposition gleich.
 - Im Querformat bekommt die Würstchenszene mehr Platz. Der Elterntext zu Reinhard Mey steht unter dem Bild und ist bei Bedarf durch vertikales Scrollen erreichbar. Der bisherige Text und die zwei Spiellinks bleiben erhalten.
+
+## Informationen für die Eltern · 24. November 2026
+
+„Informationen für die Eltern“ steht oben rechts auf der gemeinsamen Startseite. Der Text zu Reinhard Mey ist zunächst eingeklappt. Beim Öffnen erscheint er unterhalb der Würstchenszene und die Seite scrollt dorthin. Die Überschrift des Texts erhält dabei den Tastaturfokus.

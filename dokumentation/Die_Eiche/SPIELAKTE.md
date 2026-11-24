@@ -127,3 +127,7 @@ In „Wer ist wo?“ verwendet die Ablagefläche „oben in den Ästen“ das he
 ## Installieren und Aktualisieren · 24.11.2026
 
 [Gemeinsame Startseite mit Installations- und Updatestatus](../GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md).
+
+## Ruhigerer Traumablauf · 24. November 2026
+
+Die drei Antwortanimationen zur Traumfrage in Abschnitt 1 zoomen in 1,8 Sekunden ein, laufen mit 80 Prozent Geschwindigkeit, halten das letzte Bild 1,5 Sekunden und zoomen in 1,8 Sekunden zurück. Die richtige Antwort läuft weiterhin bildschirmfüllend. Beim Rückzoom blendet das Winterbild ein und der Wind klingt ab. Die beiden anderen Antworten bleiben im Spielfeld. Bei reduzierter Bewegung entfallen die Zoomübergänge und die Videos behalten ihr Originaltempo.

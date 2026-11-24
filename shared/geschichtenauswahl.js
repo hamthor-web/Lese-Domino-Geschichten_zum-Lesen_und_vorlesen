@@ -1,7 +1,20 @@
 'use strict';
 
 (() => {
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const parentButton = document.getElementById('eltern-button');
+  const parentInfo = document.getElementById('eltern-informationen');
+  parentButton.addEventListener('click', () => {
+    const open = parentInfo.hidden;
+    parentInfo.hidden = !open;
+    parentButton.setAttribute('aria-expanded', String(open));
+    if (open) {
+      parentInfo.querySelector('h2').focus({preventScroll: true});
+      parentInfo.scrollIntoView({block: 'start', behavior: reducedMotion.matches ? 'instant' : 'smooth'});
+    }
+  });
+
+  if (reducedMotion.matches) return;
   try {
     if (sessionStorage.getItem('lesegeschichten-begruesst')) return;
     sessionStorage.setItem('lesegeschichten-begruesst', 'yes');

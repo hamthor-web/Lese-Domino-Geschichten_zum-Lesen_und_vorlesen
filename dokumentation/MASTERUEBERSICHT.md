@@ -30,3 +30,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Vereinfachung der gemeinsamen Startseite · 24.11.2026:** Installieren erscheint nur mit verfügbarem Browser-Installationsdialog, auf iPhone und iPad mit Safari-Hilfe. In der installierten App ist die Installation ausgeblendet. Aktualisieren erscheint nur bei erkannter neuer Version. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
 
 **Gemeinsame Startseite · Anordnung am 24.11.2026:** Geschichtenauswahl in Denkblasen über dem Würstchen. Größerer Bild- und Videobereich im Querformat, Elterntext darunter im vertikalen Seitenverlauf. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
+
+**Gemeinsame Startseite und Die Eiche · 24.11.2026:** Elterntext öffnet über eine Schaltfläche rechts oben und scrollt in den sichtbaren Bereich. Die drei Traumanimationen zoomen langsamer ein und aus, mit 1,5 Sekunden Standzeit. [Startseite](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) · [Spielakte Die Eiche](Die_Eiche/SPIELAKTE.md)

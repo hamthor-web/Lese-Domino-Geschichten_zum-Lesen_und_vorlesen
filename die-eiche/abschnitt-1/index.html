@@ -6,7 +6,7 @@
 <title>Die Eiche · Lese-Domino-Geschichten</title>
 <style>
 * { box-sizing: border-box }
-:root { --letters: 1; --board: 100%; color-scheme: light }
+:root { --dream-transition: 1800ms; --letters: 1; --board: 100%; color-scheme: light }
 body { margin: 0; background: #edf2ed; color: #293a2b; font: 18px/1.42 Verdana, Arial, sans-serif }
 main { width: min(100%, 1460px); margin: auto; padding: clamp(12px, 2vw, 24px) }
 @media (max-width: 750px) {
@@ -61,12 +61,7 @@ button:disabled { cursor: default; opacity: .5 }
 .board > img, .board > video, .board > svg { position: absolute; inset: 0; width: 100%; height: 100% }
 .board > video { object-fit: contain; opacity: 0; pointer-events: none; transition: opacity .32s ease }
 .board > video.visible { opacity: 1 }
-.board > video.dream-clip { transition-duration: 1.05s }
-@media (prefers-reduced-motion: reduce) { .board > video.dream-clip { transition-duration: 0s } }
 .board > img { pointer-events: none }
-#winter { transition: opacity 1.05s ease }
-#winter.dream-hidden { opacity: 0 }
-@media (prefers-reduced-motion: reduce) { #winter { transition: none } }
 .board > svg { z-index: 1; pointer-events: none }
 .board #hotspots, .board #hotspots polygon, .board-scroll { outline: none !important }
 .board polygon { fill: transparent; pointer-events: none }
@@ -169,12 +164,15 @@ body:has(#dreamCinema[open]) { overflow: hidden }
 #dreamCinema > img, #dreamCinema > video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
 }
-#dreamCinema > img { transition: opacity 1.05s ease; opacity: 1 }
+#dreamCinema > img { opacity: 1; transition: opacity var(--dream-transition) ease-in-out }
 #dreamCinema > img.dream-hidden { opacity: 0 }
-#dreamCinema > video { opacity: 0; transition: opacity 1.05s ease; pointer-events: none }
-#dreamCinema > video.visible { opacity: 1 }
+#dreamCinema > video, .board > video.dream-clip {
+  opacity: 0; pointer-events: none; transform: scale(.84);
+  transition: opacity var(--dream-transition) ease-in-out, transform var(--dream-transition) ease-in-out;
+}
+#dreamCinema > video.visible, .board > video.dream-clip.visible { opacity: 1; transform: scale(1) }
 @media (prefers-reduced-motion: reduce) {
-  #dreamCinema > img, #dreamCinema > video { transition: none }
+  #dreamCinema > img, #dreamCinema > video, .board > video.dream-clip { transition: none; transform: none }
 }
 </style>
 <link rel="stylesheet" href="../page-turn.css">
@@ -372,22 +370,18 @@ async function play(key, keepFrame = false, cancelSignal) {
   navState();
   $('mediaMessage').textContent = '';
   const previousScroll = window.scrollY;
-  const isDream = key === 'dream';
-  if (isDream) openDreamCinema();
+  const isDream = dreams.some(([dreamKey]) => dreamKey === key);
+  const isCinema = key === 'dream';
+  if (isCinema) openDreamCinema();
   else if (key !== 'zoom') $('board').scrollIntoView({block:'nearest'});
   const isDiscovery = step === 1;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fade = reducedMotion ? 0 : isDream ? 1050 : 320;
+  const dreamTransition = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dream-transition'));
+  const fade = reducedMotion ? 0 : isDream ? dreamTransition : 320;
   const isLightning = key === 'blitze';
-  clip.muted = key === 'zoom' || isDream || isLightning;
+  clip.muted = key === 'zoom' || isCinema || isLightning;
   clip.classList.toggle('dream-clip', isDream);
   clip.classList.toggle('discovery', isDiscovery);
-  function startDreamReturn() {
-    if (!clip.classList.contains('visible')) return;
-    $('winter').classList.remove('dream-hidden');
-    dreamWinter.classList.remove('dream-hidden');
-    clip.classList.remove('visible');
-  }
   const played = await new Promise(resolve => {
     let settled = false;
     let timer;
@@ -417,17 +411,14 @@ async function play(key, keepFrame = false, cancelSignal) {
     const failed = () => finish(false);
     const visible = () => {
       clip.classList.add('visible');
-      visualSound = isLightning ? 'thunder' : isDream ? 'wind' : null;
+      visualSound = isLightning ? 'thunder' : isCinema ? 'wind' : null;
       syncSceneSound();
-      if (isDream) {
-        $('winter').classList.add('dream-hidden');
-        dreamWinter.classList.add('dream-hidden');
-      }
+      if (isCinema) dreamWinter.classList.add('dream-hidden');
       if (isDiscovery) {
         clearTimeout(timer);
         timer = setTimeout(() => finish(true), 2000 - fade);
       } else {
-        deadline((Number.isFinite(clip.duration) ? clip.duration + 5 : 15) * 1000);
+        deadline((Number.isFinite(clip.duration) ? clip.duration / clip.playbackRate + 5 : 15) * 1000);
       }
     };
     clip.addEventListener('ended', ended);
@@ -437,21 +428,23 @@ async function play(key, keepFrame = false, cancelSignal) {
     cancelSignal?.addEventListener('abort', skipped, {once:true});
     try {
       clip.src = videos[key];
+      clip.defaultPlaybackRate = isDream && !reducedMotion ? .8 : 1;
+      clip.playbackRate = clip.defaultPlaybackRate;
       Promise.resolve(clip.play()).catch(failed);
     } catch {
       failed();
     }
   });
   if (!keepFrame || !played) {
-    if (isDream) startDreamReturn();
+    if (isCinema) dreamWinter.classList.remove('dream-hidden');
     clip.classList.remove('visible');
     if (isDiscovery) clip.pause();
     await new Promise(resolve => {
       const started = performance.now();
-      const fadeWind = isDream && visualSound === 'wind';
+      const fadeWind = isCinema && visualSound === 'wind';
       const initialVolume = sceneAudio.volume;
       const onFrame = () => {
-        const remaining = Math.max(0, 1 - (performance.now() - started) / fade);
+        const remaining = fade ? Math.max(0, 1 - (performance.now() - started) / fade) : 0;
         if (fadeWind && sceneSound === 'wind') {
           sceneAudio.volume = initialVolume * remaining;
         }
@@ -465,10 +458,7 @@ async function play(key, keepFrame = false, cancelSignal) {
     });
     clip.pause();
   }
-  if (isDream) {
-    $('winter').classList.remove('dream-hidden');
-    closeDreamCinema();
-  }
+  if (isCinema) closeDreamCinema();
   if (!played) $('mediaMessage').textContent = 'Das Video konnte gerade nicht abgespielt werden.';
   if (!keepFrame) window.scrollTo(0, previousScroll);
   playing = false;
