@@ -113,3 +113,7 @@ Die freigegebene Vorschau v4 ist als [Abschnitt 3](../../die-eiche/abschnitt-3/)
 ## Nachtrag zur Masterübersicht · 24.11.2026
 
 „Die Eiche“ umfasst drei spielbare Abschnitte: „Die Eiche“, „Spuren der Zeit“ und „Winterschlaf“. Abschnitt 3 ist in Freischaltung, Fortsetzen und Zurücksetzen aufgenommen. „Erste warme Sonnenstrahlen“ ist nur als Buchausblick enthalten und noch nicht spielbar. Silvana bleibt unverändert.
+
+## Satzdomino in Winterschlaf · 24.11.2026
+
+Sobald alle Satzteile richtig liegen, verschwindet „Satz prüfen“. Es erscheint „Gut gemacht! Lies den ganzen Satz noch einmal.“ und „Weiter“ wird verfügbar. Bei einer vollständigen falschen Reihenfolge bleibt „Satz prüfen“ zum Nachlesen und Korrigieren verfügbar.
