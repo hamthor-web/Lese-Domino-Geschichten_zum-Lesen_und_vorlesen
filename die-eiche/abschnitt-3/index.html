@@ -248,14 +248,16 @@ function render(){
  screen.innerHTML='<h1>Und wie geht es jetzt weiter?</h1><div class="book-stage"><video playsinline id="bookClip" src="'+media.book+'"></video><img id="openStill" src="'+media.still+'" hidden alt="Würstchen mit geöffnetem Buch"><h2 class="book-title" id="bookTitle" hidden>Erste<br>warme<br>Sonnenstrahlen<img src="'+media.swirl+'" alt=""></h2></div><button class="jump" id="jump" hidden aria-label="Abschnitt abschließen"><video muted playsinline src="'+media.jump+'" poster="'+media.jumpStill+'"></video></button>';
  $('next').hidden=true;let v=$('bookClip');const done=()=>{if(step!==8)return;v.hidden=true;$('openStill').hidden=false;$('bookTitle').hidden=false;$('jump').hidden=false;$('jump').querySelector('video').play().catch(()=>{});bookReady=true};v.onended=done;v.onerror=done;v.play().catch(done);$('jump').onclick=()=>{if(bookReady){EicheProgress.complete(3);checkpoint();alert('Winterschlaf ist geschafft! Hier geht die Geschichte bald weiter.');location.assign('../')}};
 }
-function drawDomino(){checkpoint();
+function drawDomino(){
  const full=joined.length===domino.length;
+ dominoChecked=full&&joined.every((part,index)=>part===index);
+ checkpoint();
  $('slots').replaceChildren(...domino.map((_,i)=>{const x=document.createElement('button');const filled=i<joined.length;x.className='slot'+(filled?' filled':'')+(dominoChecked?' verified':'');x.textContent=filled?domino[joined[i]]:'…';x.disabled=!filled;x.setAttribute('aria-label',filled?domino[joined[i]]+' zurücklegen':'Freier Satzplatz');x.onclick=()=>{joined.splice(i,1);dominoChecked=false;drawDomino()};return x}));
  $('domino').replaceChildren(...[2,0,1].map(i=>{const used=joined.includes(i),x=document.createElement('button');x.className='tile'+(used?' used':'');x.textContent=domino[i];x.disabled=used;x.setAttribute('aria-label',domino[i]+(used?', schon verwendet':''));x.onclick=()=>{if(!joined.includes(i)&&joined.length<domino.length){joined.push(i);dominoChecked=false;drawDomino()}};return x}));
  $('checkDomino').hidden=!full||dominoChecked;
- $('checkDomino').onclick=()=>{if(joined.every((n,i)=>n===i)&&full){dominoChecked=true;drawDomino()}else{status('Lies deinen Satz noch einmal. Passt das so? Tippe auf die Satzteile, die du zurücklegen möchtest.')}};
+ $('checkDomino').onclick=()=>{status('Lies deinen Satz noch einmal. Passt das so? Tippe auf die Satzteile, die du zurücklegen möchtest.')};
  $('next').disabled=!dominoChecked;
- status(dominoChecked?'Prima! Der Satz ist richtig.':full?'Lies deinen Satz noch einmal. Passt das so?':joined.length?'Tippe auf den nächsten Satzteil.':'');
+ status(dominoChecked?'Gut gemacht! Lies den ganzen Satz noch einmal.':full?'Lies deinen Satz noch einmal. Passt das so?':joined.length?'Tippe auf den nächsten Satzteil.':'');
 }
 function assign(i,t){if(placed.includes(i))return;selected=null;if((i===0?0:1)===t){placed.push(i);drawMatch();status(placed.length===3?'Alles richtig!':'Sehr gut!')}else{drawMatch();status('Huch! Dieser Platz passt noch nicht. Versuche es noch einmal.');const el=$('piece'+i);el?.animate([{transform:'translateX(0)'},{transform:'translateX(10px)'},{transform:'translateX(0)'}],{duration:280})}}
 function drawMatch(){checkpoint();
