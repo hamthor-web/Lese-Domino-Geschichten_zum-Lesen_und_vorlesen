@@ -10,3 +10,9 @@
 ## Umsetzung
 
 GitHub Pages setzt beim Veröffentlichen dieselbe Versionskennung automatisch in die Startseite und in die online abgefragte Versionsdatei ein. Dadurch zählen auch Veröffentlichungen mit Änderungen an den Geschichten. Der vorhandene Offline-Cache übernimmt die frisch geladene Startseite. Die Spielstände werden beim Aktualisieren weiterverwendet.
+
+## Vereinfachte Anzeige · 24. November 2026, 23:32 Uhr
+
+- Die installierte App blendet „Installieren“ und die Installationshilfe aus. Im Browser erscheint „Installieren“ erst, wenn der Browser einen Installationsdialog anbietet. Safari auf iPhone und iPad zeigt dafür die Hilfe „Zum Home-Bildschirm hinzufügen“.
+- „Aktualisieren“ erscheint nur, wenn die Hintergrundprüfung eine neuere veröffentlichte Version erkennt. Beim aktuellen Stand, während der Prüfung sowie offline bleibt die Schaltfläche ausgeblendet. Die Prüfung startet auch, wenn die gemeinsame Startseite wieder sichtbar wird.
+- Die Startseite lädt beim neuen Öffnen online den veröffentlichten Stand. Die Auswahllinks zu beiden Geschichten bleiben verfügbar.

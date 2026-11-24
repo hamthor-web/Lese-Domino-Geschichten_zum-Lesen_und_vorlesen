@@ -26,3 +26,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Die Eiche · 24.11.2026:** Richtige Traumanimation in bildschirmfüllender Ebene; Rücknavigation im zweiten Abschnitt schrittweise korrigiert; Buchstabenfelder beige. Technische Ablauftests bestanden, Geräteprüfung noch offen.
 
 **Gemeinsame Startseite · 24.11.2026:** Installationsstatus und automatische Prüfung auf veröffentlichte Updates in der gemeinsamen Web-App umgesetzt. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
+
+**Vereinfachung der gemeinsamen Startseite · 24.11.2026:** Installieren erscheint nur mit verfügbarem Browser-Installationsdialog, auf iPhone und iPad mit Safari-Hilfe. In der installierten App ist die Installation ausgeblendet. Aktualisieren erscheint nur bei erkannter neuer Version. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)

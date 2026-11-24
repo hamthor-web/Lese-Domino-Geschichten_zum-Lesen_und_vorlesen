@@ -2,7 +2,7 @@
 layout: null
 ---
 <!doctype html>
-<html lang="de" data-app-title="Geschichten zum Lesen und Vorlesen">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,7 @@ layout: null
   <link rel="apple-touch-icon" href="assets/silvana-icon-192.png">
   <meta name="apple-mobile-web-app-title" content="Lesegeschichten">
   <title>Geschichten zum Lesen und Vorlesen</title>
-  <script src="shared/installieren.js?v=6" defer></script>
+  <script src="shared/installieren.js?v=7" defer></script>
   <script src="shared/geschichtenauswahl.js?v=2" defer></script>
   <style>
     @font-face { font-family: Andika; src: url('vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf'); font-weight: 400; font-display: swap }
@@ -29,20 +29,14 @@ layout: null
     .choice::before, .choice::after { content: ''; position: absolute; z-index: 1; border: 1px solid #70482e; border-radius: 50%; background: #fff6df; pointer-events: none }
     .choice::before { width: 10px; height: 10px; bottom: 100%; left: 44% }
     .choice::after { width: 6px; height: 6px; bottom: calc(100% + 12px); left: 49% }
-    .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .55rem; margin: 1rem auto }
-    .actions button { min-height: 48px; padding: .4rem 1rem; background: #f8e8ca; border: 1px solid #795136; border-radius: .75rem; color: inherit; font: inherit; font-weight: bold; cursor: pointer }
-    .actions button:disabled { background: #e3e1de; border-color: #88817b; color: #45403a; cursor: default }
-    #installieren { width: min(100%, 12rem) }
-    #aktualisieren { width: min(100%, 15rem) }
-    #update-status { margin: -.45rem 0 1rem }
-    #update-status:empty { margin: 0 }
+    .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0 .55rem }
+    .actions button { min-height: 48px; max-width: 100%; margin: .25rem 0 .75rem; padding: .4rem 1rem; background: #f8e8ca; border: 1px solid #795136; border-radius: .75rem; color: inherit; font: inherit; font-weight: bold; cursor: pointer }
     .hilfe, .note { max-width: 35rem; margin-inline: auto; text-align: center }
-    .hilfe { background: #fff6df; border-radius: .75rem; padding: .65rem 1rem; text-align: left }
-    .hilfe p { margin: .4rem 0 }
+    .hilfe summary { width: fit-content; margin: 0 auto; padding: .65rem .4rem; font-size: 1rem; text-decoration: underline; cursor: pointer }
+    .hilfe p { margin: .25rem auto .75rem; padding: .65rem 1rem; background: #fff6df; border-radius: .75rem; text-align: left }
     .note { font-size: .95rem }
     .note-heading { margin: 1.25rem auto 0; font-size: 1.05rem }
     :focus-visible { outline: 3px solid #305d44; outline-offset: 4px }
-    #app-status:empty { display: none }
     @media (orientation: landscape) and (max-height: 540px) {
       .scene { width: min(100%, 43svh * 1.214) }
       h1 { margin: .4rem 0; font-size: 1.65rem }
@@ -61,17 +55,13 @@ layout: null
       <a class="choice" href="silvana/">Silvana</a>
     </nav>
     <div class="actions">
-      <button id="installieren" type="button" aria-controls="installationshilfe" aria-expanded="false">Installieren</button>
-      <button id="aktualisieren" type="button" disabled>Update wird geprüft …</button>
+      <button id="installieren" type="button" hidden>Installieren</button>
+      <button id="aktualisieren" type="button" hidden>Aktualisieren</button>
     </div>
-      <div class="hilfe" id="installationshilfe" hidden>
-        <p><strong>iPhone und iPad:</strong> Öffne „Geschichten zum Lesen und Vorlesen“ in Safari. Tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“ beziehungsweise „Zu Home-Bildschirm hinzufügen“. Aktiviere, falls angezeigt, „Als Web-App öffnen“ und tippe auf „Hinzufügen“.</p>
-        <p><strong>Mac ab macOS Sonoma:</strong> Öffne „Geschichten zum Lesen und Vorlesen“ in Safari und wähle „Ablage“ und dann „Zum Dock hinzufügen“.</p>
-        <p><strong>Firefox unter Windows:</strong> Klicke auf das Web-App-Symbol in der Adressleiste, wenn es angezeigt wird.</p>
-        <p><strong>Android und Windows:</strong> Öffne das Browsermenü in Chrome oder Edge und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“, wenn die Option angeboten wird.</p>
-      </div>
-    <p id="update-status" role="status"></p>
-    <p id="app-status" role="status"></p>
+    <details class="hilfe" id="installationshilfe" hidden>
+      <summary>Zum Home-Bildschirm hinzufügen</summary>
+      <p>Tippe in Safari auf „Teilen“ und dann auf „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls die Option erscheint, und tippe auf „Hinzufügen“.</p>
+    </details>
   </main>
   <footer>
     <h2 class="note note-heading">Für die Eltern und Lesebegleiter</h2>

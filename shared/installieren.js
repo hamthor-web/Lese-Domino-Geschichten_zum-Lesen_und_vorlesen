@@ -2,35 +2,35 @@
 
 const install = document.querySelector('#installieren');
 const help = document.querySelector('#installationshilfe');
-const status = document.querySelector('#app-status');
 const standalone = window.matchMedia('(display-mode: standalone)');
+const userAgent = navigator.userAgent;
+const appleMobile = /iPad|iPhone|iPod/.test(userAgent)
+  || (/Macintosh/.test(userAgent) && navigator.maxTouchPoints > 1);
+const mobileSafari = appleMobile && /Version\/[\d.]+.*Safari\//.test(userAgent)
+  && !/(?:CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo|GSA)\//.test(userAgent);
 let promptEvent;
 let installed = false;
 
-function showInstallState() {
-  const isInstalled = installed || standalone.matches || navigator.standalone === true;
-  install.disabled = isInstalled;
-  install.textContent = isInstalled ? 'Bereits installiert' : 'Installieren';
-  if (isInstalled) {
-    help.hidden = true;
-    install.setAttribute('aria-expanded', 'false');
-  }
+function showInstallActions() {
+  const inApp = installed || standalone.matches || navigator.standalone === true;
+  install.hidden = inApp || !promptEvent;
+  help.hidden = inApp || !!promptEvent || !mobileSafari;
 }
 
-showInstallState();
-standalone.addEventListener('change', showInstallState);
-window.addEventListener('pageshow', showInstallState);
+showInstallActions();
+standalone.addEventListener('change', showInstallActions);
+window.addEventListener('pageshow', showInstallActions);
 
 window.addEventListener('beforeinstallprompt', event => {
   event.preventDefault();
   promptEvent = event;
+  showInstallActions();
 });
 
 window.addEventListener('appinstalled', () => {
   installed = true;
   promptEvent = undefined;
-  showInstallState();
-  status.textContent = 'Die App wurde installiert.';
+  showInstallActions();
 });
 
 if ('serviceWorker' in navigator) {
@@ -38,28 +38,22 @@ if ('serviceWorker' in navigator) {
 }
 
 install.addEventListener('click', async () => {
-  status.textContent = '';
-  if (promptEvent) {
-    const event = promptEvent;
-    promptEvent = undefined;
-    try {
-      const {outcome} = await event.prompt();
-      if (outcome === 'accepted') {
-        installed = true;
-        showInstallState();
-        status.textContent = 'Die App wurde installiert.';
-      }
-      return;
-    } catch {
-      // Die Schritte über das Browsermenü bleiben verfügbar.
-    }
+  if (!promptEvent) return;
+  const event = promptEvent;
+  promptEvent = undefined;
+  install.disabled = true;
+  try {
+    const {outcome} = await event.prompt();
+    if (outcome === 'accepted') installed = true;
+  } catch {
+    // A later browser prompt can offer installation again.
+  } finally {
+    install.disabled = false;
+    showInstallActions();
   }
-  help.hidden = !help.hidden;
-  install.setAttribute('aria-expanded', String(!help.hidden));
 });
 
 const update = document.querySelector('#aktualisieren');
-const updateStatus = document.querySelector('#update-status');
 const versionPattern = /^[a-f0-9]{40}$/;
 const currentVersion = document.querySelector('meta[name="app-version"]').content;
 const pageUrl = new URL(location.href);
@@ -71,21 +65,15 @@ if (pageUrl.searchParams.has('aktualisiert')) {
   history.replaceState(null, '', pageUrl);
 }
 
-function showUpdateState(label, message = '', version) {
+function showAvailableUpdate(version) {
   availableVersion = version;
-  update.disabled = !version;
-  update.textContent = label;
-  if (updateStatus.textContent !== message) updateStatus.textContent = message;
-}
-
-function showUnavailable() {
-  showUpdateState('Updateprüfung nicht möglich');
+  update.hidden = !version;
 }
 
 async function checkForUpdate() {
   if (checkController) return;
   if (!navigator.onLine || !versionPattern.test(currentVersion)) {
-    showUnavailable();
+    showAvailableUpdate();
     return;
   }
 
@@ -100,13 +88,9 @@ async function checkForUpdate() {
     const {version} = await response.json();
     if (typeof version !== 'string' || !versionPattern.test(version)) throw new Error('Die Versionskennung fehlt.');
     if (controller !== checkController) return;
-    if (version === currentVersion) {
-      showUpdateState('Auf dem neuesten Stand');
-    } else {
-      showUpdateState('Aktualisieren', 'Eine neue Version ist verfügbar.', version);
-    }
+    showAvailableUpdate(version === currentVersion ? undefined : version);
   } catch {
-    if (controller === checkController) showUnavailable();
+    if (controller === checkController) showAvailableUpdate();
   } finally {
     clearTimeout(timeout);
     if (controller === checkController) checkController = undefined;
@@ -119,7 +103,7 @@ update.addEventListener('click', () => {
   fresh.searchParams.set('aktualisiert', availableVersion);
   checkController?.abort();
   checkController = undefined;
-  showUpdateState('Wird aktualisiert …');
+  showAvailableUpdate();
   location.replace(fresh);
 });
 
@@ -127,7 +111,7 @@ window.addEventListener('online', checkForUpdate);
 window.addEventListener('offline', () => {
   checkController?.abort();
   checkController = undefined;
-  showUnavailable();
+  showAvailableUpdate();
 });
 window.addEventListener('pageshow', event => {
   if (event.persisted) checkForUpdate();
