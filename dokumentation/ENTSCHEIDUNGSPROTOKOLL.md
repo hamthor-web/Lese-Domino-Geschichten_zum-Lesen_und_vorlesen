@@ -11,5 +11,6 @@ Stand 22.11.2026. Ausschließlich bestätigte Beschlüsse, keine Behauptung neue
 | 22.11.2026 | Dokumentation | Künftige Spielakten und Entscheidungen dieses Repositories direkt auf GitHub pflegen; ältere Dateien bewahren | [Index](README.md) |
 | 24.11.2026 | Gemeinsame Startseite | Installation und Updates zeigen ihren Status auf grau beschrifteten Schaltflächen. Aktualisieren ist bei einer verfügbaren Version möglich. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
 | 24.11.2026 | Gemeinsame Startseite · Vereinfachung | Installation nur bei verfügbarem Browserdialog oder als Safari-Hilfe für iPhone und iPad. Aktualisieren nur bei erkannter neuer Version. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
+| 24.11.2026 | Gemeinsame Startseite · Anordnung | Denkblasen über dem Würstchen, mehr Platz fürs Video im Querformat und Elterntext darunter. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
 
 Änderungen am Implementierungsstatus werden gesondert mit GitHub-Quellen belegt.

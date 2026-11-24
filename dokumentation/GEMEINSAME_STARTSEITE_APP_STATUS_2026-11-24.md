@@ -16,3 +16,9 @@ GitHub Pages setzt beim Veröffentlichen dieselbe Versionskennung automatisch in
 - Die installierte App blendet „Installieren“ und die Installationshilfe aus. Im Browser erscheint „Installieren“ erst, wenn der Browser einen Installationsdialog anbietet. Safari auf iPhone und iPad zeigt dafür die Hilfe „Zum Home-Bildschirm hinzufügen“.
 - „Aktualisieren“ erscheint nur, wenn die Hintergrundprüfung eine neuere veröffentlichte Version erkennt. Beim aktuellen Stand, während der Prüfung sowie offline bleibt die Schaltfläche ausgeblendet. Die Prüfung startet auch, wenn die gemeinsame Startseite wieder sichtbar wird.
 - Die Startseite lädt beim neuen Öffnen online den veröffentlichten Stand. Die Auswahllinks zu beiden Geschichten bleiben verfügbar.
+
+## Anordnung der gemeinsamen Startseite · 24. November 2026
+
+- Oben steht „Geschichten zum Lesen und Vorlesen“. Die Würstchenszene beginnt mit etwas Abstand darunter.
+- Die Denkblasen „Die Eiche“ und „Silvana“ stehen nach dem Lesefilm über dem Würstchen. Sie ragen über die obere Bildkante hinaus, ihre kleinen Punkte zeigen zur Figur. Während des Films bleibt die Bildposition gleich.
+- Im Querformat bekommt die Würstchenszene mehr Platz. Der Elterntext zu Reinhard Mey steht unter dem Bild und ist bei Bedarf durch vertikales Scrollen erreichbar. Der bisherige Text und die zwei Spiellinks bleiben erhalten.

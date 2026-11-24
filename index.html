@@ -22,13 +22,68 @@ layout: null
     body { margin: 0; background: #f2e9dc; color: #291709; font: 1.1rem/1.45 Andika, sans-serif }
     main, footer { width: min(100% - 1.5rem, 54rem); margin-inline: auto; text-align: center }
     h1 { margin: .8rem 0; font: bold clamp(1.65rem, 5vw, 2.9rem)/1.15 Georgia, serif }
-    .scene { display: grid; width: min(100%, 39rem, 57svh * 1.214); aspect-ratio: 840 / 692; margin-inline: auto; overflow: hidden; border-radius: 1rem }
-    .scene > :is(img, video) { grid-area: 1 / 1; display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain }
-    .choices { position: relative; display: flex; justify-content: center; flex-wrap: wrap; gap: .8rem; margin: .65rem auto 1rem }
-    .choice { position: relative; display: grid; place-items: center; width: min(45%, 13rem); min-height: 58px; padding: .45rem; border: 2px solid #70482e; border-radius: 47% 49% 44% 46%; background: #fff6df; color: #452716; font-size: clamp(1.25rem, 5vw, 1.8rem); font-weight: bold; text-decoration: none }
-    .choice::before, .choice::after { content: ''; position: absolute; z-index: 1; border: 1px solid #70482e; border-radius: 50%; background: #fff6df; pointer-events: none }
-    .choice::before { width: 10px; height: 10px; bottom: 100%; left: 44% }
-    .choice::after { width: 6px; height: 6px; bottom: calc(100% + 12px); left: 49% }
+    .scene {
+      display: grid;
+      width: min(100%, 42rem, 70svh * 840 / 692);
+      margin: clamp(.9rem, 3svh, 1.8rem) auto 1rem;
+    }
+    .scene-media {
+      grid-area: 1 / 1;
+      margin-top: 2.4rem;
+      display: grid;
+      aspect-ratio: 840 / 692;
+      overflow: hidden;
+      border-radius: 1rem;
+    }
+    .scene-media > :is(img, video) {
+      grid-area: 1 / 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      object-fit: contain;
+    }
+    .choices {
+      grid-area: 1 / 1;
+      position: relative;
+      z-index: 1;
+      align-self: start;
+      justify-self: center;
+      width: min(100%, 31rem);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(.55rem, 5vw, 3rem);
+      padding-inline: .3rem;
+    }
+    .choice {
+      --tail-near: 70%;
+      --tail-far: 76%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 58px;
+      padding: .5rem;
+      border: 2px solid #70482e;
+      border-radius: 47% 49% 44% 46%;
+      background: #fff6df;
+      color: #452716;
+      font-size: clamp(1.25rem, calc(1rem + 1.3vw), 1.95rem);
+      line-height: 1.18;
+      font-weight: bold;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+    .choice:last-child { --tail-near: 29%; --tail-far: 23% }
+    .choice::before, .choice::after {
+      content: '';
+      position: absolute;
+      border: 1px solid #70482e;
+      border-radius: 50%;
+      background: #fff6df;
+      pointer-events: none;
+    }
+    .choice::before { width: 10px; height: 10px; top: calc(100% + 3px); left: var(--tail-near) }
+    .choice::after { width: 6px; height: 6px; top: calc(100% + 15px); left: var(--tail-far) }
     .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0 .55rem }
     .actions button { min-height: 48px; max-width: 100%; margin: .25rem 0 .75rem; padding: .4rem 1rem; background: #f8e8ca; border: 1px solid #795136; border-radius: .75rem; color: inherit; font: inherit; font-weight: bold; cursor: pointer }
     .hilfe, .note { max-width: 35rem; margin-inline: auto; text-align: center }
@@ -38,7 +93,7 @@ layout: null
     .note-heading { margin: 1.25rem auto 0; font-size: 1.05rem }
     :focus-visible { outline: 3px solid #305d44; outline-offset: 4px }
     @media (orientation: landscape) and (max-height: 540px) {
-      .scene { width: min(100%, 43svh * 1.214) }
+      .scene { width: min(100%, 82svh * 840 / 692) }
       h1 { margin: .4rem 0; font-size: 1.65rem }
     }
   </style>
@@ -47,13 +102,15 @@ layout: null
   <main>
     <h1>Geschichten zum Lesen und Vorlesen</h1>
     <div class="scene">
-      <img id="lesebild" src="assets/wuerstchen-sitzt.webp" alt="Das Kleine Würstchen sitzt mit einem aufgeschlagenen Buch vor dem Bücherregal." width="840" height="692">
-      <video id="begrüßung" src="assets/wuerstchen-liest.mp4" poster="assets/wuerstchen-sitzt.webp" preload="none" muted playsinline aria-hidden="true" hidden></video>
+      <div class="scene-media">
+        <img id="lesebild" src="assets/wuerstchen-sitzt.webp" alt="Das Kleine Würstchen sitzt mit einem aufgeschlagenen Buch vor dem Bücherregal." width="840" height="692">
+        <video id="begrüßung" src="assets/wuerstchen-liest.mp4" poster="assets/wuerstchen-sitzt.webp" preload="none" muted playsinline aria-hidden="true" hidden></video>
+      </div>
+      <nav id="geschichten" class="choices" aria-label="Geschichte auswählen">
+        <a class="choice" href="die-eiche/">Die Eiche</a>
+        <a class="choice" href="silvana/">Silvana</a>
+      </nav>
     </div>
-    <nav id="geschichten" class="choices" aria-label="Geschichte auswählen">
-      <a class="choice" href="die-eiche/">Die Eiche</a>
-      <a class="choice" href="silvana/">Silvana</a>
-    </nav>
     <div class="actions">
       <button id="installieren" type="button" hidden>Installieren</button>
       <button id="aktualisieren" type="button" hidden>Aktualisieren</button>

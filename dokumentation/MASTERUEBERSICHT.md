@@ -28,3 +28,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Gemeinsame Startseite · 24.11.2026:** Installationsstatus und automatische Prüfung auf veröffentlichte Updates in der gemeinsamen Web-App umgesetzt. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
 
 **Vereinfachung der gemeinsamen Startseite · 24.11.2026:** Installieren erscheint nur mit verfügbarem Browser-Installationsdialog, auf iPhone und iPad mit Safari-Hilfe. In der installierten App ist die Installation ausgeblendet. Aktualisieren erscheint nur bei erkannter neuer Version. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
+
+**Gemeinsame Startseite · Anordnung am 24.11.2026:** Geschichtenauswahl in Denkblasen über dem Würstchen. Größerer Bild- und Videobereich im Querformat, Elterntext darunter im vertikalen Seitenverlauf. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
