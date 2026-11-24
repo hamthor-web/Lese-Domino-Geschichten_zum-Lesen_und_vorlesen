@@ -131,3 +131,7 @@ In „Wer ist wo?“ verwendet die Ablagefläche „oben in den Ästen“ das he
 ## Ruhigerer Traumablauf · 24. November 2026
 
 Die drei Antwortanimationen zur Traumfrage in Abschnitt 1 zoomen in 1,8 Sekunden ein, laufen mit 80 Prozent Geschwindigkeit, halten das letzte Bild 1,5 Sekunden und zoomen in 1,8 Sekunden zurück. Die richtige Antwort läuft weiterhin bildschirmfüllend. Beim Rückzoom blendet das Winterbild ein und der Wind klingt ab. Die beiden anderen Antworten bleiben im Spielfeld. Bei reduzierter Bewegung entfallen die Zoomübergänge und die Videos behalten ihr Originaltempo.
+
+## Papierkorb beim Wortsortieren · 25. November 2026
+
+In „Winterschlaf“ sortieren die Kinder vier Wortkarten. „Kinder“ kommt aufs Eis, „Krähen“ und „Tauben“ in die Äste, „Trauben“ zum Knetkorb „Nicht im Lesetext“. Eine richtige Karte verschwindet im Korb. Bei einer falschen Karte schüttelt sich der Korb, spuckt die Karte wieder aus und schließt den Deckel. Die Karte kehrt zu den übrigen Wörtern zurück. Zuordnen geht durch Ziehen oder durch Antippen der Karte und der Ablagefläche. Bei reduzierter Bewegung zeigt der Korb sein Standbild und die Aufgabe gibt weiterhin Textfeedback.

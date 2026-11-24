@@ -188,6 +188,30 @@ video.scene-film{pointer-events:none}
 .target .target-results:empty{display:none}
 .target:focus-visible{outline:3px solid #547950;outline-offset:3px}
 @media(max-width:450px){.target{min-height:125px;padding:8px}.target[data-target="1"]{padding-right:5%}}
+  .match-cards{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(7rem,calc(6rem * var(--letters)))),1fr))}
+  .match-cards .tile{min-width:0;overflow-wrap:anywhere}
+  .target.target-bin{aspect-ratio:auto;display:grid;grid-template-columns:auto minmax(0,1fr);justify-content:stretch;justify-items:center;align-items:center}
+  .target-bin .target-label{overflow-wrap:anywhere}
+  .bin-art{position:relative;display:block;width:clamp(74px,24vw,108px);aspect-ratio:245/345}
+  .bin-art img{display:block;width:100%;height:100%;object-fit:contain}
+  .bin-art.shake{animation:bin-shake 3s ease-in-out;transform-origin:50% 85%}
+  .bin-word{position:absolute;z-index:1;top:40%;left:50%;width:max-content;padding:3px 7px;border:1px solid #ae8054;border-radius:6px;background:#fae8c7;color:#382619;pointer-events:none}
+  .bin-word.accept{animation:bin-accept 3s both}
+  .bin-word.reject{animation:bin-reject 3s both}
+  .spat-card{visibility:hidden}
+  @keyframes bin-shake{0%,14%,43%,100%{transform:none}19%,30%{transform:rotate(-6deg)}25%,36%{transform:rotate(6deg)}}
+  @keyframes bin-accept{
+    0%{opacity:1;transform:translate(-50%,-100%)}
+    18%{opacity:1;transform:translate(-50%,-100%)}
+    38%,100%{opacity:0;transform:translate(-50%,60%) scale(.38)}
+  }
+  @keyframes bin-reject{
+    0%,20%{opacity:1;transform:translate(-50%,-100%)}
+    28%{opacity:1;transform:translate(-50%,10%) scale(.7)}
+    46%{opacity:1;transform:translate(48%,-140%) rotate(17deg)}
+    64%,100%{opacity:0;transform:translate(100%,-95%) rotate(24deg)}
+  }
+  @media(prefers-reduced-motion:reduce){.bin-art.shake,.bin-word{animation:none}}
 </style><link rel="stylesheet" href="../page-turn.css"><link rel="stylesheet" href="../../shared/game-selection.css"></head>
 <body><main>
 <header class="topbar"><div class="brand"><strong>Die Eiche</strong>Geschichten zum Lesen und Vorlesen</div><button class="info" id="infoButton" aria-label="Informationen und Kontakt">i</button><button class="action" id="settingsButton" aria-expanded="false">Aa · Größe ändern</button></header>
@@ -204,7 +228,17 @@ const a='Der See hat eine Decke aus Eis. Kinder laufen darauf Schlittschuh. Sie 
 const b='Sie steht ganz still. Nur der Wind bewegt ihre Zweige. Oben in den Ästen streiten sich Krähen und Tauben. Jeder will den besten Platz.';
 const original='Auf dem Eis, zu dem das Wasser des Sees gefroren war, liefen die Kinder Schlittschuhe. Dicke Mützen hatten sie auf dem Kopf und vor Begeisterung und Anstrengung rote Wangen und blitzende Augen. Von all dem schien die Eiche nichts zu bemerken. Oder vielleicht doch?\n\nKaum eine Bewegung war in ihr zu sehen. Nur der Wind ließ ihre Zweige leicht rauschen, und die Krähen, die sich mit den Tauben um die besten Plätze im Geäst zankten.';
 const domino=['Die Kinder auf dem Eis','haben dicke Mützen','und rote Wangen'];
-const pieces=['Kinder','Krähen','Tauben'];let step=0,placed=[],joined=[],dominoChecked=false,answer=-1,selected=null,bookReady=false,filmMuted=false;
+const pieces = [
+ {name:'Kinder', target:0},
+ {name:'Krähen', target:1},
+ {name:'Tauben', target:1},
+ {name:'Trauben', target:2},
+];
+const matchTargets = ['auf dem Eis', 'oben in den Ästen', 'Nicht im Lesetext'];
+const binStill = '../../assets/die-eiche/abschnitt-3/papierkorb.webp';
+const binMovie = '../../assets/die-eiche/abschnitt-3/papierkorb-deckel.webp';
+let binMovieBytes;
+let step=0,placed=[],joined=[],dominoChecked=false,answer=-1,selected=null,bookReady=false,filmMuted=false;
 function board(kind='image'){return '<div class="board-scroll"><div class="board">'+(kind==='image'?'<img src="'+media.image+'" alt="Winterliche Eiche am gefrorenen See, Kinder und Vögel">':'<video class="scene-film" playsinline preload="metadata" src="'+media[kind]+'"></video><div class="film-controls" aria-label="Filmsteuerung"><button id="filmToggle" aria-label="Film abspielen">Abspielen</button><button id="filmRestart" aria-label="Film von vorne abspielen">↻</button><input id="filmSeek" type="range" min="0" max="1000" value="0" aria-label="Wiedergabeposition"><span id="filmTime" class="film-time">0:00</span><button id="filmSound" aria-label="Ton ausschalten" aria-pressed="true">🔊</button></div>')+'</div></div>'}
 function playVideo(){
  const v=screen.querySelector('video');if(!v)return;
@@ -242,7 +276,7 @@ function render(){
  screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="task"><h2>Wer streitet um die besten Plätze?</h2><div class="choices" id="choices"></div><p id="feedback" class="feedback" role="status"></p></section></div>';
  const choices=['Krähen und Trauben','Krähen und Tauben','Tauben und Kraken'];choices.forEach((t,i)=>{const x=document.createElement('button');x.className='answer';x.textContent=t;x.setAttribute('aria-pressed',String(answer===i));x.onclick=()=>{if(i===1){answer=i;render()}else showFeedback('Lies noch einmal!')};$('choices').append(x)});$('next').disabled=answer!==1;if(answer===1)showFeedback('Genau! Die Krähen und Tauben streiten.');return}
  if(step===5){
- screen.innerHTML='<h1>Wer ist wo?</h1><div class="layout">'+board()+'<section class="task"><h2>Ziehe die Kinder und die Vögel an den richtigen Platz.</h2><p>Du kannst auch erst die Karte und dann den Platz antippen.</p><div class="cards" id="pieces"></div><div class="placement" id="targets"></div><p id="feedback" class="feedback" role="status"></p></section></div>';drawMatch();return}
+ screen.innerHTML='<h1>Wer ist wo?</h1><div class="layout">'+board()+'<section class="task"><h2>Ziehe jede Karte an den richtigen Platz. Ein Wort steht nicht im Lesetext.</h2><p>Du kannst auch erst die Karte und dann den Platz antippen.</p><div class="cards match-cards" id="pieces"></div><div class="placement" id="targets"></div><p id="feedback" class="feedback" role="status"></p></section></div>';drawMatch();return}
  if(step===6){screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="read-column"><p class="paper"><strong>Merkt die Eiche etwas von dem Trubel?</strong><br>Was meinst du? Erzähle, was du denkst.</p><details class="read-again"><summary class="action oak">Zum Nachlesen</summary><article class="paper"><p>'+a+'</p><p>'+b+'</p></article></details></section></div>';$('next').textContent='Zum Vorlesen';return}
  if(step===7){screen.innerHTML='<h1>Winterschlaf</h1><div class="listen-content"><h2>Winterschlaf zum Anhören</h2><p class="listen-intro">Das hast du prima gemacht! Lehne dich zurück und höre der Geschichte zu.</p><audio id="narration" controls preload="metadata" src="'+media.audio+'"></audio><article class="paper original" style="white-space:pre-line">'+original+'</article></div>';return}
  screen.innerHTML='<h1>Und wie geht es jetzt weiter?</h1><div class="book-stage"><video playsinline id="bookClip" src="'+media.book+'"></video><img id="openStill" src="'+media.still+'" hidden alt="Würstchen mit geöffnetem Buch"><h2 class="book-title" id="bookTitle" hidden>Erste<br>warme<br>Sonnenstrahlen<img src="'+media.swirl+'" alt=""></h2></div><button class="jump" id="jump" hidden aria-label="Abschnitt abschließen"><video muted playsinline src="'+media.jump+'" poster="'+media.jumpStill+'"></video></button>';
@@ -263,14 +297,195 @@ function drawDomino(){
  $('next').disabled=!dominoChecked;
  showFeedback(dominoChecked?'Gut gemacht! Lies den ganzen Satz noch einmal.':full?'Lies deinen Satz noch einmal. Passt das so?':joined.length?'Tippe auf den nächsten Satzteil.':'');
 }
-function assign(i,t){if(placed.includes(i))return;selected=null;if((i===0?0:1)===t){placed.push(i);drawMatch();showFeedback(placed.length===3?'Alles richtig!':'Sehr gut!')}else{drawMatch();showFeedback('Huch! Dieser Platz passt noch nicht. Versuche es noch einmal.');const el=$('piece'+i);el?.animate([{transform:'translateX(0)'},{transform:'translateX(10px)'},{transform:'translateX(0)'}],{duration:280})}}
-function drawMatch(){checkpoint();
- $('pieces').replaceChildren(...pieces.map((name,i)=>{let x=document.createElement('button');x.id='piece'+i;x.className='tile drag-card'+(selected===i?' selected':'');x.textContent=name;x.disabled=placed.includes(i);x.hidden=x.disabled;x.onclick=()=>{selected=i;drawMatch()};x.onpointerdown=e=>{if(x.disabled||e.button!==0)return;let startX=e.clientX,startY=e.clientY,ghost=null;x.setPointerCapture(e.pointerId);x.onpointermove=ev=>{if(!ghost&&Math.hypot(ev.clientX-startX,ev.clientY-startY)>7){ghost=x.cloneNode(true);ghost.removeAttribute('id');ghost.classList.add('drag-ghost');document.body.append(ghost)}if(ghost){ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px'}};x.onpointerup=ev=>{if(ghost){ghost.remove();let target=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('[data-target]');if(target)assign(i,+target.dataset.target);else{selected=null;drawMatch()}}else{selected=i;drawMatch()}x.onpointermove=x.onpointerup=null};x.onpointercancel=()=>{ghost?.remove();x.onpointermove=x.onpointerup=null}};return x}));
- $('targets').replaceChildren(...['auf dem Eis','oben in den Ästen'].map((name,t)=>{let x=document.createElement('button');x.className='target';x.dataset.target=t;let label=document.createElement('span');label.className='target-label';label.textContent=name;let list=document.createElement('span');list.className='target-results';list.textContent=placed.filter(i=>(i===0?0:1)===t).map(i=>pieces[i]+' ✓').join(' · ');x.append(label,list);x.onclick=()=>{if(selected!==null)assign(selected,t)};return x}));$('next').disabled=placed.length!==3;if(placed.length===3)showFeedback('Alles richtig!');}
+function loadBinMovie() {
+ if (!binMovieBytes) {
+   binMovieBytes = fetch(binMovie).then(response => {
+     if (!response.ok) throw new Error('Papierkorb nicht verfügbar');
+     return response.blob();
+   }).catch(() => {
+     binMovieBytes = undefined;
+     return null;
+   });
+ }
+ return binMovieBytes;
+}
+
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const matchComplete = () => pieces.every((_, index) => placed.includes(index));
+const matchBusy = () => $('targets').querySelector('[aria-busy="true"]') !== null;
+
+function selectPiece(index) {
+ if (matchBusy()) return;
+ selected = index;
+ $('pieces').querySelectorAll('button').forEach(card => {
+   const active = Number(card.dataset.piece) === index;
+   card.classList.toggle('selected', active);
+   card.setAttribute('aria-pressed', String(active));
+ });
+}
+
+async function playBin(target, index, accepted) {
+ if (reduceMotion.matches) return;
+ target.setAttribute('aria-busy', 'true');
+ $('next').disabled = true;
+ const bytes = await loadBinMovie();
+ if (!target.isConnected) return;
+ if (bytes) {
+   const image = target.querySelector('img');
+   const art = image.parentElement;
+   const url = URL.createObjectURL(bytes);
+   const word = document.createElement('span');
+   word.className = 'bin-word ' + (accepted ? 'accept' : 'reject');
+   word.textContent = pieces[index].name;
+   word.setAttribute('aria-hidden', 'true');
+   if (!accepted) {
+     const card = $('piece' + index);
+     card.classList.add('spat-card');
+     art.classList.add('shake');
+     // The original card reappears at the end of the spit.
+     setTimeout(() => card.classList.remove('spat-card'), 1880);
+   }
+   art.append(word);
+   image.src = url;
+   await new Promise(resolve => setTimeout(resolve, 3000));
+   image.src = binStill;
+   URL.revokeObjectURL(url);
+   word.remove();
+   art.classList.remove('shake');
+ }
+ target.removeAttribute('aria-busy');
+ if (target.isConnected) $('next').disabled = !matchComplete();
+}
+
+async function assign(index, targetIndex) {
+ if (matchBusy() || placed.includes(index)) return;
+ const piece = pieces[index];
+ const correct = piece.target === targetIndex;
+ const usedKeyboard = document.activeElement?.matches('#targets button, #pieces button');
+ selected = null;
+ if (correct) placed.push(index);
+ drawMatch();
+
+ if (targetIndex === 2) {
+   const hint = piece.target === 1
+     ? 'Schau noch einmal nach: Wer streitet oben in den Ästen?'
+     : 'Schau noch einmal nach: Wer läuft auf dem Eis Schlittschuh?';
+   const message = correct ? 'Erwischt! Die Trauben haben sich dazugemogelt.' : hint;
+   showFeedback(message);
+   const target = $('targets').querySelector('[data-target="2"]');
+   await playBin(target, index, correct);
+   if (!target.isConnected) return;
+   if (correct && matchComplete()) showFeedback(message + ' Alles richtig!');
+ } else if (correct) {
+   showFeedback(matchComplete() ? 'Alles richtig!' : 'Sehr gut!');
+ } else {
+   showFeedback('Huch! Dieser Platz passt noch nicht. Versuche es noch einmal.');
+   if (!reduceMotion.matches) {
+     $('piece' + index).animate({transform:['translateX(0)','translateX(10px)','translateX(0)']}, {duration:280});
+   }
+ }
+
+ if (usedKeyboard) {
+   const focusTarget = correct ? $('pieces').querySelector('button:not([hidden])') || $('next') : $('piece' + index);
+   focusTarget?.focus({preventScroll:true});
+ }
+}
+
+function makePiece(index) {
+ const card = document.createElement('button');
+ card.id = 'piece' + index;
+ card.dataset.piece = index;
+ card.className = 'tile drag-card';
+ card.textContent = pieces[index].name;
+ card.disabled = placed.includes(index);
+ card.hidden = card.disabled;
+ card.setAttribute('aria-pressed', 'false');
+ card.onclick = event => { if (event.detail === 0) selectPiece(index); };
+
+ card.onpointerdown = event => {
+   if (card.disabled || event.button !== 0 || matchBusy()) return;
+   const {clientX:startX, clientY:startY, pointerId} = event;
+   let ghost, scrollFrame, pointerY;
+   card.setPointerCapture(pointerId);
+   const scrollAtEdge = () => {
+     const margin = Math.min(68, innerHeight / 5);
+     const proximity = pointerY < margin ? pointerY - margin : Math.max(0, pointerY - innerHeight + margin);
+     if (proximity) window.scrollBy(0, proximity / 4);
+     scrollFrame = requestAnimationFrame(scrollAtEdge);
+   };
+   const cleanUp = () => {
+     ghost?.remove();
+     cancelAnimationFrame(scrollFrame);
+     card.onpointermove = card.onpointerup = card.onpointercancel = card.onlostpointercapture = null;
+   };
+   card.onpointermove = move => {
+     if (move.pointerId !== pointerId) return;
+     pointerY = move.clientY;
+     if (!ghost && Math.hypot(move.clientX - startX, move.clientY - startY) > 7) {
+       ghost = card.cloneNode(true);
+       ghost.removeAttribute('id');
+       ghost.classList.add('drag-ghost');
+       document.body.append(ghost);
+       scrollFrame = requestAnimationFrame(scrollAtEdge);
+     }
+     if (ghost) {
+       ghost.style.left = move.clientX + 'px';
+       ghost.style.top = move.clientY + 'px';
+     }
+   };
+   card.onpointerup = release => {
+     if (release.pointerId !== pointerId) return;
+     const dragged = Boolean(ghost);
+     cleanUp();
+     if (dragged) {
+       const target = document.elementFromPoint(release.clientX, release.clientY)?.closest('#targets [data-target]');
+       if (target) assign(index, Number(target.dataset.target));
+       else selectPiece(null);
+     } else {
+       selectPiece(index);
+     }
+   };
+   card.onpointercancel = card.onlostpointercapture = cleanUp;
+ };
+ return card;
+}
+
+function drawMatch() {
+ checkpoint();
+ if (!reduceMotion.matches) loadBinMovie();
+ $('pieces').replaceChildren(...[2,3,0,1].map(makePiece));
+ $('targets').replaceChildren(...matchTargets.map((name, targetIndex) => {
+   const target = document.createElement('button');
+   target.className = 'target';
+   target.dataset.target = targetIndex;
+   const label = document.createElement('span');
+   label.className = 'target-label';
+   label.textContent = name;
+   if (targetIndex === 2) {
+     target.classList.add('target-bin');
+     const art = document.createElement('span');
+     art.className = 'bin-art';
+     const image = new Image();
+     image.src = binStill;
+     image.alt = '';
+     art.append(image);
+     target.append(art, label);
+   } else {
+     const list = document.createElement('span');
+     list.className = 'target-results';
+     list.textContent = placed.filter(i => pieces[i].target === targetIndex).map(i => pieces[i].name + ' ✓').join(' · ');
+     target.append(label, list);
+   }
+   target.onclick = () => { if (selected !== null) assign(selected, targetIndex); };
+   return target;
+ }));
+ $('next').disabled = !matchComplete();
+ if (matchComplete()) showFeedback('Alles richtig!');
+}
  $('back').onclick=()=>go(step-1);$('next').onclick=()=>go(step+1);$('restart').onclick=()=>{joined=[];dominoChecked=false;placed=[];answer=-1;selected=null;go(0);document.querySelector('details').open=false};
  $('settingsButton').onclick=()=>{$('settings').hidden=!$('settings').hidden;$('settingsButton').setAttribute('aria-expanded',String(!$('settings').hidden))};
  for(const [id,prop,percent] of [['letters','--letters',false],['boardSize','--board',true]]){$(id).oninput=()=>{document.documentElement.style.setProperty(prop,percent?$(id).value+'%':$(id).value/100);$(id).nextElementSibling.value=$(id).value+' %'}}
  $('infoButton').onclick=()=>$('info').showModal();$('closeInfo').onclick=()=>$('info').close();
- const saved=EicheProgress.readForVisit(3);if(saved&&Number.isInteger(saved.step)&&saved.step>=0&&saved.step<=8){step=saved.step;placed=Array.isArray(saved.placed)?saved.placed:[];joined=Array.isArray(saved.joined)?saved.joined:[];dominoChecked=Boolean(saved.dominoChecked);answer=saved.answer===1?1:-1;filmMuted=Boolean(saved.filmMuted)}
+ const saved=EicheProgress.readForVisit(3);if(saved&&Number.isInteger(saved.step)&&saved.step>=0&&saved.step<=8){step=saved.step;placed=Array.isArray(saved.placed)?[...new Set(saved.placed.filter(i=>Number.isInteger(i)&&pieces[i]))]:[];joined=Array.isArray(saved.joined)?saved.joined:[];dominoChecked=Boolean(saved.dominoChecked);answer=saved.answer===1?1:-1;filmMuted=Boolean(saved.filmMuted)}
  render();
 </script></body></html>
