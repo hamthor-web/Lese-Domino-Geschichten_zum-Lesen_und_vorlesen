@@ -1,14 +1,11 @@
 (() => {
   const resume = document.getElementById('eiche-resume');
-  const restart = document.getElementById('eiche-restart');
   const second = document.getElementById('eiche-second');
 
   function updateStart() {
     const section = EicheProgress.latest();
-    resume.hidden = section === null;
-    resume.href = './abschnitt-' + (section ?? 1) + '/';
-    const canReplay = section !== null || EicheProgress.secondUnlocked();
-    restart.textContent = canReplay ? 'Spiel neu starten' : 'Spiel beginnen';
+    resume.disabled = section === null;
+    resume.onclick = () => { if (section !== null) location.assign('./abschnitt-' + section + '/'); };
     second.hidden = !EicheProgress.secondUnlocked();
   }
 

@@ -8,24 +8,32 @@ html body.story-welcome {
 .story-welcome [hidden] { display: none !important; }
 
 .story-entry {
-  width: 100%;
+  width: min(100%, 42rem);
+  margin-inline: auto;
   min-width: 0;
-  padding-block: clamp(.6rem, 3vh, 2rem);
+  padding: .75rem;
+  display: grid;
+  gap: .65rem;
 }
 
 .story-entry .welcome {
-  width: min(100%, 36rem);
-  padding-block: clamp(1.25rem, 5vw, 2.8rem);
+  width: 100%;
+  padding: 2rem 17% 2.5rem;
 }
+.story-entry .mascot img { width: clamp(7rem, 32vw, 12rem); }
+.story-entry .greeting p { font-size: clamp(1rem, 3.4vw, 1.45rem); }
+.story-entry .greeting h1 { font-size: clamp(2.4rem, 8vw, 4rem); }
 
 .story-entry .aktionen {
-  width: min(calc(100% - 2rem), 35rem);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
-  margin: .5rem auto 0;
+  margin: 0 auto;
+  max-width: 24rem;
 }
 
 .story-entry .aktionen > :is(a, button) { min-height: 48px; }
+.story-entry .start:disabled { opacity: .55; cursor: default; }
 .story-entry #app-status { grid-column: 1 / -1; text-align: center; }
 .story-entry .reading-entry {
   width: min(calc(100% - 2rem), 35rem);
@@ -38,14 +46,25 @@ html body.story-welcome {
 .story-entry .story-reading .original { text-align: left; white-space: pre-wrap; }
 
 @media (min-width: 36rem) and (orientation: landscape) {
-  .story-entry .welcome {
-    width: min(100%, 48rem);
-    padding-inline: min(15vw, 7.5rem);
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  .story-entry {
+    width: min(100%, 76rem);
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: center;
+    gap: .65rem 1rem;
+  }
+  .story-entry .welcome {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.5rem 23% 2rem;
+    gap: .15rem;
   }
   .story-entry .mascot { grid-row: auto; }
-  .story-entry .mascot img { width: clamp(7rem, 24vh, 12rem); }
+  .story-entry .mascot img { width: clamp(5rem, 23vh, 11rem); }
+  .story-entry .greeting p { font-size: clamp(1rem, 2.5vh, 1.45rem); }
+  .story-entry .greeting h1 { font-size: clamp(2rem, 6vh, 4rem); }
+  .story-entry .aktionen { grid-column: 2; align-self: end; }
+  .story-entry .reading-entry { grid-column: 2; align-self: start; margin-top: 0; }
 }
 
 .story-entry .reading-entry button {
@@ -67,6 +86,21 @@ html body.story-welcome {
   --parchment-glanz-inset: .4rem;
 }
 
-@media (max-width: 23rem) {
-  .story-entry .welcome-actions { grid-template-columns: minmax(0, 1fr); }
+.story-entry .aktionen .start { font-size: clamp(1rem, 3.5vw, 1.23rem); }
+html[data-app="eiche"] .story-entry .start { width: min(100%, 16rem); justify-self: center; }
+.story-entry .welcome-actions { max-width: 16rem; }
+.story-entry .greeting { min-width: 0; max-width: 100%; overflow-wrap: break-word; }
+.story-entry .greeting h1 { white-space: normal; }
+
+@media (min-width: 24rem) {
+  .story-entry .aktionen { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 34rem; }
+  .story-entry .aktionen > .start { grid-column: span 2; }
+  .story-entry .aktionen > #zuruecksetzen { grid-column: 2 / span 2; }
+  .story-entry .aktionen:has(#eiche-second:not([hidden])) > #zuruecksetzen { grid-column: span 2; }
+}
+
+@media (min-width: 36rem) and (orientation: landscape) {
+  .story-entry .aktionen .start { font-size: clamp(1rem, 2.3vh, 1.23rem); }
+  .story-entry .welcome { padding-block: 1.1rem 1.6rem; }
+  .story-entry .mascot img { width: clamp(4.5rem, 21vh, 11rem); }
 }

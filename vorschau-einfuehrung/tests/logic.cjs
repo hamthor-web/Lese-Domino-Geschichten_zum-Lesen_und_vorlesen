@@ -10,7 +10,7 @@ const context=vm.createContext({
   SpeechSynthesisUtterance:function(text){this.text=text},
   addEventListener(){}
  },
- SilvanaProgress:{finish(){}},
+ SilvanaProgress:{finish(){},isCurrent(){return true}},
  localStorage:{setItem(){}}
 });
 vm.runInContext(fs.readFileSync('../shared/story-speech.js','utf8'),context);

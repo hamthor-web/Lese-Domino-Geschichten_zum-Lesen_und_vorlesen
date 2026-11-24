@@ -33,14 +33,14 @@ async function run(){
   }
  }
  // Wiederbesuch mit gespeichertem Stand darf das Bild nicht nach unten schieben.
- await page.reload();await stable();await page.locator('#resume').waitFor();
+ await page.reload();await stable();await page.locator('#toRead').waitFor();
  const hero=await page.locator('#introTitle').boundingBox();
- assert.ok((await page.locator('.restore').boundingBox()).y>=hero.y+hero.height);
+ assert.equal(await page.locator('.restore').count(),0);
  assert.ok((await page.locator('#settingsToggle').boundingBox()).y>=hero.y+hero.height);
  console.log('PASS: Titelbild unmittelbar unter dem Namenskopf vor sämtlichen Bedienelementen; 24 Ansichten und Wiederbesuch mit gespeichertem Stand.');
  await page.setViewportSize({width:412,height:915});
  await page.evaluate(()=>{for(const id of ['textSize','boardSize']){const e=document.getElementById(id);e.value=100;e.dispatchEvent(new Event('input',{bubbles:true}));}});
- await stable();await page.locator('#new').click();await page.locator('#toRead').click();
+ await stable();await page.locator('#toRead').click();
  async function navigation(){
   const r=await page.locator('.scene-navigation').evaluate(g=>{const ns=g.querySelector('.primary, .completion-video').getBoundingClientRect(),bs=g.querySelector('.secondary').getBoundingClientRect();return {next:{x:ns.x,y:ns.y,w:ns.width,h:ns.height},back:{x:bs.x,y:bs.y,w:bs.width,h:bs.height}}});
   assert.ok(r.back.x+r.back.w<=r.next.x||r.next.y+r.next.h<=r.back.y+1,'Weiter rechts oder über Zurück');
@@ -140,8 +140,7 @@ async function run(){
 
  // Falls Autoplay gesperrt ist, bleibt die Navigation über den Textbutton erreichbar.
  await page.addInitScript(()=>{HTMLMediaElement.prototype.play=()=>Promise.reject(new DOMException('Autoplay gesperrt','NotAllowedError'));});
- await page.goto(base+'vorschau-einfuehrung/');
- await page.locator('#resume').click();
+ await page.goto(base+'vorschau-einfuehrung/?abschnitt=abschluss');
  await next.scrollIntoViewIfNeeded();
  await page.locator('#completionVideoFallback').waitFor({state:'visible'});
  await next.press('Enter');

@@ -26,3 +26,7 @@ Für eine Freigabe aktuelle GitHub-Version, Szeneübergänge, Hoch-/Querformat, 
 ## Startseite und Vorlesefunktion · 23.11.2026
 
 Das Begrüßungspergament und die darunterliegenden Schaltflächen werden vertikal zentriert. „Geschichte vorlesen“ verwendet die vollständige Textfassung aus Szene 14 mit der Browserstimme. Der Text lässt sich auf Wunsch mitlesen. Der Zugang zur gemeinsamen Spielauswahl bleibt unten rechts auch bei geöffnetem Szenenmenü erreichbar.
+
+## Einheitliche Startseite und Speicherstand · 24.11.2026
+
+Die drei Hauptschaltflächen heißen „Spiel beginnen“, „Spiel fortsetzen“ und „Spiel zurücksetzen“. Beginnen startet vorn; abgeschlossene Szenen bleiben im Dropdown erhalten. Fortsetzen verwendet einen persistent gespeicherten Szenenpfad und Bildschirmcheckpoint statt nur den Browserverlauf. Ohne Spielstand ist die Schaltfläche sichtbar, aber deaktiviert. Der zusätzliche Hinweis „Du warst schon hier“ samt Abfrage entfällt. Zurücksetzen löscht nach Bestätigung nur den Silvana-Fortschritt. Der vorhandene Spinnwebenrahmen bleibt erhalten. Im Hochformat stehen Pergament und Bedienelemente untereinander, im Querformat nebeneinander; der Text bleibt in der Pergamentmitte. Ein alter Spielstand kann nur insoweit wiederhergestellt werden, wie Daten tatsächlich gespeichert wurden. Browserprüfung auf den Zielgeräten noch offen.

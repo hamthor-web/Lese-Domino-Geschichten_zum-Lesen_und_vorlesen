@@ -7,6 +7,7 @@
   <link rel="manifest" href="../manifest.webmanifest">
   <link rel="apple-touch-icon" href="../assets/silvana-icon-192.png">
   <script src="../shared/progress.js" defer></script>
+  <script src="start.js" defer></script>
   <script src="../shared/geschichte-reset.js" defer></script>
   <title>Silvana · Das Land der glitzernden Spinnweben</title>
   <style>
@@ -118,7 +119,8 @@
     </div>
     </header>
     <div class="aktionen welcome-actions parchment-actions">
-      <a class="start" href="../vorschau-einfuehrung/">Spiel beginnen</a>
+      <a class="start" href="../vorschau-einfuehrung/?neu=1">Spiel beginnen</a>
+      <button class="start" id="silvana-resume" type="button" disabled>Spiel fortsetzen</button>
       <button class="start" id="zuruecksetzen" type="button">Spiel zurücksetzen</button>
       <p id="app-status" role="status"></p>
     </div>

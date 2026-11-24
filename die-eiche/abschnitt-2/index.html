@@ -257,6 +257,7 @@ function checkpoint() {
   if (restoring) return;
   EicheProgress.save(2, {screen: activeScreen, pageIndex, question: !get('questionPanel').hidden, answers: [...found], feedback: feedback.textContent});
 }
+window.addEventListener('pageshow', event => { if (event.persisted) checkpoint(); });
 let revealTimer;
 
 function centerBoard() {

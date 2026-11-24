@@ -781,6 +781,7 @@ $('infoClose').onclick = () => $('info').close();
 $('sceneMenu').addEventListener('toggle', updateReplay);
 window.addEventListener('storage', updateReplay);
 window.addEventListener('pageshow', updateReplay);
+window.addEventListener('pageshow', event => { if (event.persisted) checkpoint(); });
 window.addEventListener('pagehide', stopNarration);
 function checkpoint() {
   EicheProgress.save(1, {step, found, dreamCorrect, dreamSelection, wordFeedback, optional, arrangements});

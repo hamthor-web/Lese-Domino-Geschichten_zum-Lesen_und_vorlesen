@@ -81,3 +81,7 @@ Die Antwortbuttons zu „Was träumt die Eiche?“ bleiben gleich hoch und richt
 ## Fortsetzen, neu spielen und zurücksetzen · 23.11.2026
 
 „Spiel fortsetzen“ öffnet den zuletzt gespielten Abschnitt am gespeicherten Bildschirm. „Spiel neu starten“ öffnet die erste Seite von Abschnitt 1. Freigeschaltete Abschnitte bleiben erhalten. Sobald Abschnitt 2 freigespielt ist, lässt er sich auf der Startseite und in der Abschnittsauswahl direkt anwählen. Über die Abschnittsauswahl beginnt ein Abschnitt mit einem einzigen Tipp auf seiner ersten Seite. „Spiel zurücksetzen“ löscht nach Bestätigung Zwischenstände und Freischaltungen. Das Begrüßungspergament und die darunterliegenden Schaltflächen werden vertikal zentriert. Der Zugang zur gemeinsamen Spielauswahl bleibt unten rechts auch bei geöffnetem Abschnittsmenü erreichbar.
+
+## Einheitliche Startseiten · 24.11.2026
+
+Die drei Hauptschaltflächen heißen in beiden Geschichten „Spiel beginnen“, „Spiel fortsetzen“ und „Spiel zurücksetzen“. Beginnen startet vorn, ohne Freischaltungen zu löschen. Fortsetzen öffnet den zuletzt gespeicherten Bildschirm und bleibt ohne Spielstand sichtbar, aber deaktiviert. Zurücksetzen löscht nach Bestätigung ausschließlich die Spielstände dieser Geschichte. Der freigeschaltete Abschnitt 2 bleibt direkt anwählbar. Die Knetrahmen bleiben unverzerrt. Die Begrüßung bleibt innerhalb der Pergamentmitte; im Querformat steht das Pergament links, die Bedienung rechts, im Hochformat nacheinander. Browserprüfung auf den Zielgeräten noch offen.
