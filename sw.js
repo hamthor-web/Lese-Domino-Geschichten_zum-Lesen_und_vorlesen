@@ -19,10 +19,15 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const request = event.request;
+  const url = new URL(request.url);
   if (request.method !== 'GET' || !request.url.startsWith(scope) ||
-      request.cache === 'no-store' || new URL(request.url).searchParams.has('aktualisiert') ||
+      request.cache === 'no-store' ||
       request.headers.has('range') ||
       request.destination === 'video' || request.destination === 'audio') return;
+
+  // A refreshed start page also becomes the normal offline entry.
+  const cacheUrl = new URL(url);
+  if (request.mode === 'navigate') cacheUrl.searchParams.delete('aktualisiert');
 
   event.respondWith((async () => {
     try {
@@ -30,14 +35,14 @@ self.addEventListener('fetch', event => {
       if (response.ok && response.status === 200) {
         try {
           const cache = await caches.open(cacheName);
-          await cache.put(request, response.clone());
+          await cache.put(cacheUrl, response.clone());
         } catch {
           // A full cache must not prevent loading the online response.
         }
       }
       return response;
     } catch {
-      return await caches.match(request, {cacheName}) || Response.error();
+      return await caches.match(cacheUrl, {cacheName}) || Response.error();
     }
   })());
 });

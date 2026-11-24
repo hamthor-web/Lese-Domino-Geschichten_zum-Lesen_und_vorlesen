@@ -123,3 +123,7 @@ In „Wer ist wo?“ verwendet die Ablagefläche „oben in den Ästen“ das he
 ## Auswahlfrage in Winterschlaf · 24.11.2026
 
 „Wer streitet um die besten Plätze?“ bietet „Krähen und Trauben“, „Krähen und Tauben“ und „Tauben und Kraken“ zur Auswahl. Richtig ist „Krähen und Tauben“. Die ähnlich klingenden Antworten laden zum genauen Lesen ein.
+
+## Installieren und Aktualisieren · 24.11.2026
+
+[Gemeinsame Startseite mit Installations- und Updatestatus](../GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md).

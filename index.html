@@ -1,14 +1,18 @@
+---
+layout: null
+---
 <!doctype html>
 <html lang="de" data-app-title="Geschichten zum Lesen und Vorlesen">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="app-version" content="{{ site.github.build_revision }}">
   <meta name="theme-color" content="#f2e9dc">
   <link rel="manifest" href="manifest.webmanifest?v=2">
   <link rel="apple-touch-icon" href="assets/silvana-icon-192.png">
   <meta name="apple-mobile-web-app-title" content="Lesegeschichten">
   <title>Geschichten zum Lesen und Vorlesen</title>
-  <script src="shared/installieren.js?v=5" defer></script>
+  <script src="shared/installieren.js?v=6" defer></script>
   <script src="shared/geschichtenauswahl.js?v=2" defer></script>
   <style>
     @font-face { font-family: Andika; src: url('vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf'); font-weight: 400; font-display: swap }
@@ -27,6 +31,11 @@
     .choice::after { width: 6px; height: 6px; bottom: calc(100% + 12px); left: 49% }
     .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .55rem; margin: 1rem auto }
     .actions button { min-height: 48px; padding: .4rem 1rem; background: #f8e8ca; border: 1px solid #795136; border-radius: .75rem; color: inherit; font: inherit; font-weight: bold; cursor: pointer }
+    .actions button:disabled { background: #e3e1de; border-color: #88817b; color: #45403a; cursor: default }
+    #installieren { width: min(100%, 12rem) }
+    #aktualisieren { width: min(100%, 15rem) }
+    #update-status { margin: -.45rem 0 1rem }
+    #update-status:empty { margin: 0 }
     .hilfe, .note { max-width: 35rem; margin-inline: auto; text-align: center }
     .hilfe { background: #fff6df; border-radius: .75rem; padding: .65rem 1rem; text-align: left }
     .hilfe p { margin: .4rem 0 }
@@ -53,7 +62,7 @@
     </nav>
     <div class="actions">
       <button id="installieren" type="button" aria-controls="installationshilfe" aria-expanded="false">Installieren</button>
-      <button id="aktualisieren" type="button">Aktualisieren</button>
+      <button id="aktualisieren" type="button" disabled>Update wird geprüft …</button>
     </div>
       <div class="hilfe" id="installationshilfe" hidden>
         <p><strong>iPhone und iPad:</strong> Öffne „Geschichten zum Lesen und Vorlesen“ in Safari. Tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“ beziehungsweise „Zu Home-Bildschirm hinzufügen“. Aktiviere, falls angezeigt, „Als Web-App öffnen“ und tippe auf „Hinzufügen“.</p>
@@ -61,6 +70,7 @@
         <p><strong>Firefox unter Windows:</strong> Klicke auf das Web-App-Symbol in der Adressleiste, wenn es angezeigt wird.</p>
         <p><strong>Android und Windows:</strong> Öffne das Browsermenü in Chrome oder Edge und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“, wenn die Option angeboten wird.</p>
       </div>
+    <p id="update-status" role="status"></p>
     <p id="app-status" role="status"></p>
   </main>
   <footer>

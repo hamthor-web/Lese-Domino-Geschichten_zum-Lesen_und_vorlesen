@@ -34,3 +34,7 @@ Die drei Hauptschaltflächen heißen „Spiel beginnen“, „Spiel fortsetzen�
 ## Pergamentlayout · 24.11.2026
 
 Auf Heikes Bildschirmfotos wurde der untere Textabstand im Querformat als zu gering und die obere Leerfläche im Hochformat als zu groß bestätigt. Die gemeinsame Startseiten-CSS erhält deshalb einen größeren unteren Sicherheitsabstand, etwas mehr seitlichen Innenabstand sowie im Hochformat ein größeres Würstchen und einen weiter oben beginnenden Seitenaufbau. Buttonmotive und Fortschritte bleiben unverändert. Sichtprüfung auf den Zielgeräten nach Bereitstellung noch offen.
+
+## Installieren und Aktualisieren · 24.11.2026
+
+[Gemeinsame Startseite mit Installations- und Updatestatus](../GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md).

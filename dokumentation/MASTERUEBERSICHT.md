@@ -24,3 +24,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Layout-Nachbesserung am 24.11.2026:** Mehr Abstand des Begrüßungstextes zum unteren Pergamentrand und größeres Würstchen mit weniger oberer Leerfläche im Hochformat. Visuelle Geräteprüfung noch offen.
 
 **Die Eiche · 24.11.2026:** Richtige Traumanimation in bildschirmfüllender Ebene; Rücknavigation im zweiten Abschnitt schrittweise korrigiert; Buchstabenfelder beige. Technische Ablauftests bestanden, Geräteprüfung noch offen.
+
+**Gemeinsame Startseite · 24.11.2026:** Installationsstatus und automatische Prüfung auf veröffentlichte Updates in der gemeinsamen Web-App umgesetzt. [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
