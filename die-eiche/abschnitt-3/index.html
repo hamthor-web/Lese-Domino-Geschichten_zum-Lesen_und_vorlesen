@@ -188,6 +188,12 @@ video.scene-film{pointer-events:none}
 .target .target-results:empty{display:none}
 .target:focus-visible{outline:3px solid #547950;outline-offset:3px}
 @media(max-width:450px){.target{min-height:125px;padding:8px}.target[data-target="1"]{padding-right:5%}}
+  .matching{container-type:inline-size;min-width:0}
+  .matching .target-label{overflow-wrap:anywhere}
+  @container (min-width:20rem){
+    .matching .placement{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .matching .target-bin{grid-column:1/-1}
+  }
   .match-cards{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(7rem,calc(6rem * var(--letters)))),1fr))}
   .match-cards .tile{min-width:0;overflow-wrap:anywhere}
   .target.target-bin{aspect-ratio:auto;display:grid;grid-template-columns:auto minmax(0,1fr);justify-content:stretch;justify-items:center;align-items:center}
@@ -276,7 +282,7 @@ function render(){
  screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="task"><h2>Wer streitet um die besten Plätze?</h2><div class="choices" id="choices"></div><p id="feedback" class="feedback" role="status"></p></section></div>';
  const choices=['Krähen und Trauben','Krähen und Tauben','Tauben und Kraken'];choices.forEach((t,i)=>{const x=document.createElement('button');x.className='answer';x.textContent=t;x.setAttribute('aria-pressed',String(answer===i));x.onclick=()=>{if(i===1){answer=i;render()}else showFeedback('Lies noch einmal!')};$('choices').append(x)});$('next').disabled=answer!==1;if(answer===1)showFeedback('Genau! Die Krähen und Tauben streiten.');return}
  if(step===5){
- screen.innerHTML='<h1>Wer ist wo?</h1><div class="layout">'+board()+'<section class="task"><h2>Ziehe jede Karte an den richtigen Platz. Ein Wort steht nicht im Lesetext.</h2><p>Du kannst auch erst die Karte und dann den Platz antippen.</p><div class="cards match-cards" id="pieces"></div><div class="placement" id="targets"></div><p id="feedback" class="feedback" role="status"></p></section></div>';drawMatch();return}
+ screen.innerHTML='<h1>Wer ist wo?</h1><div class="layout">'+board()+'<section class="task matching"><h2>Ziehe jede Karte an den richtigen Platz. Ein Wort steht nicht im Lesetext.</h2><p>Du kannst auch erst die Karte und dann den Platz antippen.</p><div class="cards match-cards" id="pieces"></div><div class="placement" id="targets"></div><p id="feedback" class="feedback" role="status"></p></section></div>';drawMatch();return}
  if(step===6){screen.innerHTML='<h1>Winterschlaf</h1><div class="layout">'+board()+'<section class="read-column"><p class="paper"><strong>Merkt die Eiche etwas von dem Trubel?</strong><br>Was meinst du? Erzähle, was du denkst.</p><details class="read-again"><summary class="action oak">Zum Nachlesen</summary><article class="paper"><p>'+a+'</p><p>'+b+'</p></article></details></section></div>';$('next').textContent='Zum Vorlesen';return}
  if(step===7){screen.innerHTML='<h1>Winterschlaf</h1><div class="listen-content"><h2>Winterschlaf zum Anhören</h2><p class="listen-intro">Das hast du prima gemacht! Lehne dich zurück und höre der Geschichte zu.</p><audio id="narration" controls preload="metadata" src="'+media.audio+'"></audio><article class="paper original" style="white-space:pre-line">'+original+'</article></div>';return}
  screen.innerHTML='<h1>Und wie geht es jetzt weiter?</h1><div class="book-stage"><video playsinline id="bookClip" src="'+media.book+'"></video><img id="openStill" src="'+media.still+'" hidden alt="Würstchen mit geöffnetem Buch"><h2 class="book-title" id="bookTitle" hidden>Erste<br>warme<br>Sonnenstrahlen<img src="'+media.swirl+'" alt=""></h2></div><button class="jump" id="jump" hidden aria-label="Abschnitt abschließen"><video muted playsinline src="'+media.jump+'" poster="'+media.jumpStill+'"></video></button>';
