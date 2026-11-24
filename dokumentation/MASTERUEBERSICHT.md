@@ -18,3 +18,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Gemeinsamer Webstand am 23.11.2026:** „Die Eiche“ enthält zwei spielbare Abschnitte mit gespeichertem Zwischenstand, Neustart bei erhaltener Freischaltung und bestätigtem Zurücksetzen. „Silvana“ bietet die vollständige Vorlesefassung mit Browserstimme jetzt auch auf der Startseite. Beide Startseiten wurden neu angeordnet. [Die Eiche](Die_Eiche/SPIELAKTE.md) · [Silvana](Spinnwebenreichtum/SPIELAKTE.md)
 
 **Gemeinsamer Webstand am 24.11.2026:** Startseiten mit identischen drei Hauptaktionen und adaptiver Anordnung; individuelle Buttonmotive erhalten. Silvana speichert nun auch den zuletzt geöffneten Szenenbildschirm persistent; die doppelte Wiederaufnahmeabfrage entfällt. Zielgeräteprüfung noch offen. [Die Eiche](Die_Eiche/SPIELAKTE.md) · [Silvana](Spinnwebenreichtum/SPIELAKTE.md)
+
+**Korrektur am 24.11.2026:** Die Eiche zeigt wie Silvana ausschließlich die drei Hauptaktionen auf der Startseite. Freigeschaltete Abschnitte bleiben im Spielmenü erreichbar.

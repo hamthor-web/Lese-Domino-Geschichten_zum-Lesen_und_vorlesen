@@ -85,3 +85,7 @@ Die Antwortbuttons zu „Was träumt die Eiche?“ bleiben gleich hoch und richt
 ## Einheitliche Startseiten · 24.11.2026
 
 Die drei Hauptschaltflächen heißen in beiden Geschichten „Spiel beginnen“, „Spiel fortsetzen“ und „Spiel zurücksetzen“. Beginnen startet vorn, ohne Freischaltungen zu löschen. Fortsetzen öffnet den zuletzt gespeicherten Bildschirm und bleibt ohne Spielstand sichtbar, aber deaktiviert. Zurücksetzen löscht nach Bestätigung ausschließlich die Spielstände dieser Geschichte. Der freigeschaltete Abschnitt 2 bleibt direkt anwählbar. Die Knetrahmen bleiben unverzerrt. Die Begrüßung bleibt innerhalb der Pergamentmitte; im Querformat steht das Pergament links, die Bedienung rechts, im Hochformat nacheinander. Browserprüfung auf den Zielgeräten noch offen.
+
+## Korrektur der Startseite · 24.11.2026
+
+Nur die drei Hauptschaltflächen bleiben sichtbar. Der zusätzliche Button „Abschnitt 2 spielen“ entfällt. Freigeschaltete Abschnitte bleiben unverändert im Dropdown innerhalb des Spiels erreichbar; die Freischaltungen und Spielstände werden durch diese Anpassung nicht gelöscht.

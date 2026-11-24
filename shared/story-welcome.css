@@ -96,7 +96,6 @@ html[data-app="eiche"] .story-entry .start { width: min(100%, 16rem); justify-se
   .story-entry .aktionen { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 34rem; }
   .story-entry .aktionen > .start { grid-column: span 2; }
   .story-entry .aktionen > #zuruecksetzen { grid-column: 2 / span 2; }
-  .story-entry .aktionen:has(#eiche-second:not([hidden])) > #zuruecksetzen { grid-column: span 2; }
 }
 
 @media (min-width: 36rem) and (orientation: landscape) {
