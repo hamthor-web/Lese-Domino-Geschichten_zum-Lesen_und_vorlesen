@@ -117,3 +117,5 @@ Die freigegebene Vorschau v4 ist als [Abschnitt 3](../../die-eiche/abschnitt-3/)
 ## Satzdomino in Winterschlaf · 24.11.2026
 
 Sobald alle Satzteile richtig liegen, verschwindet „Satz prüfen“. Es erscheint „Gut gemacht! Lies den ganzen Satz noch einmal.“ und „Weiter“ wird verfügbar. Bei einer vollständigen falschen Reihenfolge bleibt „Satz prüfen“ zum Nachlesen und Korrigieren verfügbar.
+
+In „Wer ist wo?“ verwendet die Ablagefläche „oben in den Ästen“ das hellblaue Zweigmotiv.
