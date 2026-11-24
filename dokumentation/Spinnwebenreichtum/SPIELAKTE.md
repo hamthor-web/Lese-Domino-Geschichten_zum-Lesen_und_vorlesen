@@ -30,3 +30,7 @@ Das Begrüßungspergament und die darunterliegenden Schaltflächen werden vertik
 ## Einheitliche Startseite und Speicherstand · 24.11.2026
 
 Die drei Hauptschaltflächen heißen „Spiel beginnen“, „Spiel fortsetzen“ und „Spiel zurücksetzen“. Beginnen startet vorn; abgeschlossene Szenen bleiben im Dropdown erhalten. Fortsetzen verwendet einen persistent gespeicherten Szenenpfad und Bildschirmcheckpoint statt nur den Browserverlauf. Ohne Spielstand ist die Schaltfläche sichtbar, aber deaktiviert. Der zusätzliche Hinweis „Du warst schon hier“ samt Abfrage entfällt. Zurücksetzen löscht nach Bestätigung nur den Silvana-Fortschritt. Der vorhandene Spinnwebenrahmen bleibt erhalten. Im Hochformat stehen Pergament und Bedienelemente untereinander, im Querformat nebeneinander; der Text bleibt in der Pergamentmitte. Ein alter Spielstand kann nur insoweit wiederhergestellt werden, wie Daten tatsächlich gespeichert wurden. Browserprüfung auf den Zielgeräten noch offen.
+
+## Pergamentlayout · 24.11.2026
+
+Auf Heikes Bildschirmfotos wurde der untere Textabstand im Querformat als zu gering und die obere Leerfläche im Hochformat als zu groß bestätigt. Die gemeinsame Startseiten-CSS erhält deshalb einen größeren unteren Sicherheitsabstand, etwas mehr seitlichen Innenabstand sowie im Hochformat ein größeres Würstchen und einen weiter oben beginnenden Seitenaufbau. Buttonmotive und Fortschritte bleiben unverändert. Sichtprüfung auf den Zielgeräten nach Bereitstellung noch offen.

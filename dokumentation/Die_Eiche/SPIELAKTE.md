@@ -89,3 +89,7 @@ Die drei Hauptschaltflächen heißen in beiden Geschichten „Spiel beginnen“,
 ## Korrektur der Startseite · 24.11.2026
 
 Nur die drei Hauptschaltflächen bleiben sichtbar. Der zusätzliche Button „Abschnitt 2 spielen“ entfällt. Freigeschaltete Abschnitte bleiben unverändert im Dropdown innerhalb des Spiels erreichbar; die Freischaltungen und Spielstände werden durch diese Anpassung nicht gelöscht.
+
+## Pergamentlayout · 24.11.2026
+
+Auf Heikes Bildschirmfotos wurde der untere Textabstand im Querformat als zu gering und die obere Leerfläche im Hochformat als zu groß bestätigt. Die gemeinsame Startseiten-CSS erhält deshalb einen größeren unteren Sicherheitsabstand, etwas mehr seitlichen Innenabstand sowie im Hochformat ein größeres Würstchen und einen weiter oben beginnenden Seitenaufbau. Buttonmotive und Fortschritte bleiben unverändert. Sichtprüfung auf den Zielgeräten nach Bereitstellung noch offen.

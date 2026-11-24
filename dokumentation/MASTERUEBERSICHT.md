@@ -20,3 +20,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Gemeinsamer Webstand am 24.11.2026:** Startseiten mit identischen drei Hauptaktionen und adaptiver Anordnung; individuelle Buttonmotive erhalten. Silvana speichert nun auch den zuletzt geöffneten Szenenbildschirm persistent; die doppelte Wiederaufnahmeabfrage entfällt. Zielgeräteprüfung noch offen. [Die Eiche](Die_Eiche/SPIELAKTE.md) · [Silvana](Spinnwebenreichtum/SPIELAKTE.md)
 
 **Korrektur am 24.11.2026:** Die Eiche zeigt wie Silvana ausschließlich die drei Hauptaktionen auf der Startseite. Freigeschaltete Abschnitte bleiben im Spielmenü erreichbar.
+
+**Layout-Nachbesserung am 24.11.2026:** Mehr Abstand des Begrüßungstextes zum unteren Pergamentrand und größeres Würstchen mit weniger oberer Leerfläche im Hochformat. Visuelle Geräteprüfung noch offen.
