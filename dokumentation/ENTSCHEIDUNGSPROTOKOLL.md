@@ -13,5 +13,6 @@ Stand 22.11.2026. Ausschließlich bestätigte Beschlüsse, keine Behauptung neue
 | 24.11.2026 | Gemeinsame Startseite · Vereinfachung | Installation nur bei verfügbarem Browserdialog oder als Safari-Hilfe für iPhone und iPad. Aktualisieren nur bei erkannter neuer Version. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
 | 24.11.2026 | Gemeinsame Startseite · Anordnung | Denkblasen über dem Würstchen, mehr Platz fürs Video im Querformat und Elterntext darunter. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
 | 24.11.2026 | Gemeinsame Startseite und Die Eiche | Elterntext per Schaltfläche öffnen und dorthin scrollen. Die Animationen der Traumfrage langsamer ein- und auszoomen und ein bis zwei Sekunden verharren lassen. | [Startseite](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) · [Spielakte Die Eiche](Die_Eiche/SPIELAKTE.md) |
+| 24.11.2026 | Gemeinsame Startseite | Der Button zum Elterntext heißt „Warum ist hier ein Würstchen?“. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
 
 Änderungen am Implementierungsstatus werden gesondert mit GitHub-Quellen belegt.

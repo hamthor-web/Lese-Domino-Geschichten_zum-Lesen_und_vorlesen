@@ -26,3 +26,5 @@ GitHub Pages setzt beim Veröffentlichen dieselbe Versionskennung automatisch in
 ## Informationen für die Eltern · 24. November 2026
 
 „Informationen für die Eltern“ steht oben rechts auf der gemeinsamen Startseite. Der Text zu Reinhard Mey ist zunächst eingeklappt. Beim Öffnen erscheint er unterhalb der Würstchenszene und die Seite scrollt dorthin. Die Überschrift des Texts erhält dabei den Tastaturfokus.
+
+Die anschließend bestätigte Beschriftung der Schaltfläche lautet „Warum ist hier ein Würstchen?“. Über dem aufgeklappten Text steht „Für die Eltern und Lesebegleiter“.
