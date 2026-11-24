@@ -93,3 +93,11 @@ Nur die drei Hauptschaltflächen bleiben sichtbar. Der zusätzliche Button „Ab
 ## Pergamentlayout · 24.11.2026
 
 Auf Heikes Bildschirmfotos wurde der untere Textabstand im Querformat als zu gering und die obere Leerfläche im Hochformat als zu groß bestätigt. Die gemeinsame Startseiten-CSS erhält deshalb einen größeren unteren Sicherheitsabstand, etwas mehr seitlichen Innenabstand sowie im Hochformat ein größeres Würstchen und einen weiter oben beginnenden Seitenaufbau. Buttonmotive und Fortschritte bleiben unverändert. Sichtprüfung auf den Zielgeräten nach Bereitstellung noch offen.
+
+## Traumanimation, Rücknavigation und Buchstabenfelder · 24.11.2026
+
+Bei der richtigen Antwort „Sie träumt von früher“ wird die Winter-Traumanimation in einer bildschirmfüllenden Ebene abgespielt. Alle anderen Spiel- und Navigationsfelder sind währenddessen verdeckt und nicht bedienbar. Das Video behält sein Seitenverhältnis, die sanfte Überblendung, die 1,5 Sekunden Standzeit am Ende und die gemeinsame Wind-Ausblendung. Ein Tipp auf die Animation oder Escape überspringt sie; danach kehrt das Spiel zur Frage zurück und Weiter ist verfügbar. Falsche Traumantworten bleiben wie zuvor im normalen Spielfeld.
+
+Im zweiten Abschnitt führt Zurück von der Herzfrage zum zugehörigen Lesetext und von dort in Abschnitt 1; auch von der zweiten Frage und vom zweiten Lesetext ist eine schrittweise Rücknavigation möglich. Bereits ausgewählte Antworten der geöffneten Frage bleiben beim Schließen und erneuten Öffnen erhalten. Die Buchstabenfelder und ihre Rahmen verwenden warme Beigetöne passend zu den Knetbuttons; die grüne Rückmeldung bei vollständig gelöstem Wort bleibt erhalten.
+
+Technische Prüfung: JavaScript-Syntax beider Abschnitte geprüft; simulierte Ablauftests für Rücknavigation, Wiederaufnahme gespeicherter Antworten und Wiederherstellung des Spielfeldes nach normalem Videoende bzw. Medienfehler bestanden. Visuelle Prüfung auf echten Geräten, im Hoch-/Querformat und mit den Zoomreglern noch offen.

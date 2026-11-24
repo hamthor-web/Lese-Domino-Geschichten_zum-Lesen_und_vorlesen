@@ -22,3 +22,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Korrektur am 24.11.2026:** Die Eiche zeigt wie Silvana ausschließlich die drei Hauptaktionen auf der Startseite. Freigeschaltete Abschnitte bleiben im Spielmenü erreichbar.
 
 **Layout-Nachbesserung am 24.11.2026:** Mehr Abstand des Begrüßungstextes zum unteren Pergamentrand und größeres Würstchen mit weniger oberer Leerfläche im Hochformat. Visuelle Geräteprüfung noch offen.
+
+**Die Eiche · 24.11.2026:** Richtige Traumanimation in bildschirmfüllender Ebene; Rücknavigation im zweiten Abschnitt schrittweise korrigiert; Buchstabenfelder beige. Technische Ablauftests bestanden, Geräteprüfung noch offen.

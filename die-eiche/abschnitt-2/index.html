@@ -174,7 +174,7 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
   </section>
 </div>
 <nav aria-label="Spielnavigation">
-  <button class="action oak" id="back" disabled>Zurück</button>
+  <button class="action oak" id="back">Zurück</button>
   <span class="counter" id="counter" aria-live="polite">1 / 4</span>
   <button class="action oak" id="next" hidden>Weiter</button>
   <button class="action oak" id="readNext" hidden>Weiter zum Vorlesen</button>
@@ -275,7 +275,7 @@ function renderPage(index, returningFromHeart = false, moveFocus = false) {
   get('questionPanel').hidden = true;
   get('showQuestion').hidden = false;
   get('hotspot').hidden = true;
-  get('back').disabled = index === 0;
+  get('back').disabled = false;
   get('counter').textContent = (index + 1) + ' / 4';
   get('next').hidden = true;
   get('readNext').hidden = true;
@@ -309,7 +309,7 @@ function revealQuestion() {
     button.className = pageIndex === 0 ? 'action oak choice' : 'answer';
     button.textContent = page.answers[index];
     button.dataset.answerIndex = String(index);
-    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-pressed', String(found.has(index)));
     button.onclick = () => {
       if (found.has(index) || found.size === page.correct.length) return;
       if (!page.correct.includes(index)) {
@@ -335,12 +335,27 @@ function revealQuestion() {
   }));
   get('choices').classList.toggle('short-answers', pageIndex === 0);
   get('questionPanel').hidden = false;
+  get('back').disabled = false;
+  const solved = found.size === page.correct.length;
+  get('next').hidden = pageIndex !== 0 || !solved;
+  get('readNext').hidden = pageIndex !== 1 || !solved;
   checkpoint();
   if (restoring) return;
   get('question').focus({preventScroll: true});
   if (get('question').getBoundingClientRect().bottom > innerHeight) {
     get('question').scrollIntoView({block: 'nearest'});
   }
+}
+
+function closeQuestion(moveFocus = true) {
+  get('questionPanel').hidden = true;
+  get('showQuestion').hidden = false;
+  get('hotspot').hidden = pageIndex === 0;
+  get('next').hidden = true;
+  get('readNext').hidden = true;
+  board.classList.remove('closeup');
+  checkpoint();
+  if (moveFocus) passage.focus({preventScroll:true});
 }
 
 get('showQuestion').onclick = get('hotspot').onclick = revealQuestion;
@@ -350,7 +365,16 @@ get('next').onclick = () => {
 };
 get('back').onclick = () => {
   scrollTo(0, 0);
-  renderPage(0, false, true);
+  if (!get('questionPanel').hidden) {
+    closeQuestion();
+  } else if (pageIndex === 1) {
+    renderPage(0);
+    for (const index of pages[0].correct) found.add(index);
+    feedback.textContent = 'Das stimmt!';
+    revealQuestion();
+  } else {
+    location.assign('../abschnitt-1/');
+  }
 };
 get('settingsButton').onclick = () => {
   const settings = get('settings');
@@ -416,13 +440,14 @@ get('chapterBack').onclick = () => { showScreen('bookPage'); bookOpened(bookClip
 
 restoring = true;
 renderPage(saved?.pageIndex === 1 ? 1 : 0);
-if (saved?.question) {
+if (saved?.question || saved?.answers?.length) {
   revealQuestion();
   for (const index of saved.answers ?? []) {
     const button = [...get('choices').children].find(choice => choice.dataset.answerIndex === String(index));
     button?.onclick();
   }
   if (typeof saved.feedback === 'string') feedback.textContent = saved.feedback;
+  if (!saved.question) closeQuestion(false);
 }
 if (saved?.screen === 'readPage') showScreen('readPage');
 if (saved?.screen === 'bookPage' || saved?.screen === 'chapterPage') {
