@@ -28,3 +28,7 @@ GitHub Pages setzt beim Veröffentlichen dieselbe Versionskennung automatisch in
 „Informationen für die Eltern“ steht oben rechts auf der gemeinsamen Startseite. Der Text zu Reinhard Mey ist zunächst eingeklappt. Beim Öffnen erscheint er unterhalb der Würstchenszene und die Seite scrollt dorthin. Die Überschrift des Texts erhält dabei den Tastaturfokus.
 
 Die anschließend bestätigte Beschriftung der Schaltfläche lautet „Warum ist hier ein Würstchen?“. Über dem aufgeklappten Text steht „Für die Eltern und Lesebegleiter“.
+
+## Gemeinsame Startseite zentriert · 25. November 2026
+
+Überschrift, Würstchenbild und Geschichtenauswahl bilden eine vertikal zentrierte Gruppe. Die Denkblasen rücken weiter nach außen und in den freien Raum an der oberen Bildkante. Der Infobutton „Warum ist hier ein Würstchen?“ sitzt rechts oben und öffnet den Elterntext unterhalb der Startansicht. Bei geringer Bildschirmhöhe passt sich die Bildgröße an.

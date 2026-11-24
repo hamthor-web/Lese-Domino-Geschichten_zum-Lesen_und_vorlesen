@@ -129,6 +129,16 @@ dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px
 .board{aspect-ratio:auto;background:transparent;overflow:visible}
 .board img,.board video{width:100%;height:auto;display:block;object-fit:contain;border-radius:16px}
 .board video{background:#d7e3e9}
+.board.with-carving::after {
+  content:'';
+  position:absolute;
+  left:23.4116%;
+  top:41.4365%;
+  width:6.2155%;
+  height:5.1565%;
+  background:url('../../assets/die-eiche/abschnitt-3/gravur-ha.webp') center / 100% 100% no-repeat;
+  pointer-events:none;
+}
 .entry .board-scroll{max-width:min(100%,calc(81svh * 1.333));margin:auto}
 .entry .board{position:relative}
 .entry h1{text-align:center}
@@ -245,7 +255,7 @@ const binStill = '../../assets/die-eiche/abschnitt-3/papierkorb.webp';
 const binMovie = '../../assets/die-eiche/abschnitt-3/papierkorb-deckel.webp';
 let binMovieBytes;
 let step=0,placed=[],joined=[],dominoChecked=false,answer=-1,selected=null,bookReady=false,filmMuted=false;
-function board(kind='image'){return '<div class="board-scroll"><div class="board">'+(kind==='image'?'<img src="'+media.image+'" alt="Winterliche Eiche am gefrorenen See, Kinder und Vögel">':'<video class="scene-film" playsinline preload="metadata" src="'+media[kind]+'"></video><div class="film-controls" aria-label="Filmsteuerung"><button id="filmToggle" aria-label="Film abspielen">Abspielen</button><button id="filmRestart" aria-label="Film von vorne abspielen">↻</button><input id="filmSeek" type="range" min="0" max="1000" value="0" aria-label="Wiedergabeposition"><span id="filmTime" class="film-time">0:00</span><button id="filmSound" aria-label="Ton ausschalten" aria-pressed="true">🔊</button></div>')+'</div></div>'}
+function board(kind='image'){return '<div class="board-scroll"><div class="board'+(kind==='image'?' with-carving':'')+'">'+(kind==='image'?'<img src="'+media.image+'" alt="Winterliche Eiche mit H und A im Herz, Kinder und Vögel am gefrorenen See">':'<video class="scene-film" playsinline preload="metadata" src="'+media[kind]+'"></video><div class="film-controls" aria-label="Filmsteuerung"><button id="filmToggle" aria-label="Film abspielen">Abspielen</button><button id="filmRestart" aria-label="Film von vorne abspielen">↻</button><input id="filmSeek" type="range" min="0" max="1000" value="0" aria-label="Wiedergabeposition"><span id="filmTime" class="film-time">0:00</span><button id="filmSound" aria-label="Ton ausschalten" aria-pressed="true">🔊</button></div>')+'</div></div>'}
 function playVideo(){
  const v=screen.querySelector('video');if(!v)return;
  const toggle=$('filmToggle'),restart=$('filmRestart'),seek=$('filmSeek'),sound=$('filmSound'),time=$('filmTime');

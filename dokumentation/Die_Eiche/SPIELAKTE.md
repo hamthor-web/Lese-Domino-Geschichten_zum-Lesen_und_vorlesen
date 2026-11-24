@@ -135,3 +135,7 @@ Die drei Antwortanimationen zur Traumfrage in Abschnitt 1 zoomen in 1,8 Sekunden
 ## Papierkorb beim Wortsortieren · 25. November 2026
 
 In „Winterschlaf“ sortieren die Kinder vier Wortkarten. „Kinder“ kommt aufs Eis, „Krähen“ und „Tauben“ in die Äste, „Trauben“ zum Knetkorb „Nicht im Lesetext“. Eine richtige Karte verschwindet im Korb. Bei einer falschen Karte schüttelt sich der Korb, spuckt die Karte wieder aus und schließt den Deckel. Die Karte kehrt zu den übrigen Wörtern zurück. Zuordnen geht durch Ziehen oder durch Antippen der Karte und der Ablagefläche. Bei reduzierter Bewegung zeigt der Korb sein Standbild und die Aufgabe gibt weiterhin Textfeedback.
+
+## Einheitliche Initialen in der Eichenrinde · 25. November 2026
+
+Wo ein Herz mit Initialen zu sehen ist, lautet die Gravur „H&A“. In „Spuren der Zeit“ und im Vogelclip von „Winterschlaf“ steht bereits „H&A“. Auf dem Winterbild in „Winterschlaf“ ersetzt die korrigierte Gravur „A+M“. Die Korrektur liegt ausschließlich über den Buchstaben im vorhandenen Herz. Eichen ohne lesbare Gravur behalten ihre Darstellung.

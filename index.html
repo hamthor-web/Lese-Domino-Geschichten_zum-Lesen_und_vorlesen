@@ -21,7 +21,16 @@ layout: null
     [hidden] { display: none !important }
     body { margin: 0; background: #f2e9dc; color: #291709; font: 1.1rem/1.45 Andika, sans-serif }
     main, footer { width: min(100% - 1.5rem, 54rem); margin-inline: auto; text-align: center }
-    .page-heading { position: relative; padding-inline: .75rem; text-align: center }
+    .landing { min-height: 100svh; display: flex; flex-direction: column }
+    .parent-tools { padding: .65rem .75rem 0 }
+    .landing-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-block: clamp(.65rem, 2svh, 1.5rem);
+    }
+    .page-heading { padding-inline: .75rem; text-align: center }
     .parent-info {
       display: block;
       max-width: 100%;
@@ -36,18 +45,18 @@ layout: null
       cursor: pointer;
     }
     .page-heading h1 { max-width: 54rem; margin-inline: auto }
-    @media (min-width: 80rem) {
-      .parent-info { position: absolute; inset-block-start: 0; inset-inline-end: 1rem }
-    }
     h1 { margin: .8rem 0; font: bold clamp(1.65rem, 5vw, 2.9rem)/1.15 Georgia, serif }
     .scene {
       display: grid;
-      width: min(100%, 42rem, 70svh * 840 / 692);
+      --media-width: min(42rem, 70svh * 840 / 692);
+      width: min(100%, calc(var(--media-width) + clamp(2rem, 9vw, 6rem)));
       margin: clamp(.9rem, 3svh, 1.8rem) auto 1rem;
     }
     .scene-media {
       grid-area: 1 / 1;
-      margin-top: 2.4rem;
+      justify-self: center;
+      width: min(100%, var(--media-width));
+      margin-top: clamp(3rem, 6svh, 4rem);
       display: grid;
       aspect-ratio: 840 / 692;
       overflow: hidden;
@@ -67,7 +76,7 @@ layout: null
       z-index: 1;
       align-self: start;
       justify-self: center;
-      width: min(100%, 31rem);
+      width: 100%;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: clamp(.55rem, 5vw, 3rem);
@@ -79,6 +88,8 @@ layout: null
       position: relative;
       display: grid;
       place-items: center;
+      justify-self: start;
+      width: min(100%, 13.25rem);
       min-height: 58px;
       padding: .5rem;
       border: 2px solid #70482e;
@@ -91,7 +102,7 @@ layout: null
       text-decoration: none;
       overflow-wrap: anywhere;
     }
-    .choice:last-child { --tail-near: 29%; --tail-far: 23% }
+    .choice:last-child { --tail-near: 29%; --tail-far: 23%; justify-self: end }
     .choice::before, .choice::after {
       content: '';
       position: absolute;
@@ -112,36 +123,43 @@ layout: null
     .note-heading { margin: 1.25rem auto 0; font-size: 1.05rem }
     :focus-visible { outline: 3px solid #305d44; outline-offset: 4px }
     @media (orientation: landscape) and (max-height: 540px) {
-      .scene { width: min(100%, 82svh * 840 / 692) }
+      .scene { --media-width: max(48svh, calc(100svh - 9.25rem)) * 840 / 692; margin-block: .6rem }
+      .scene-media { margin-top: 2.7rem }
       h1 { margin: .4rem 0; font-size: 1.65rem }
     }
   </style>
 </head>
 <body>
-  <header class="page-heading">
-    <button class="parent-info" id="eltern-button" type="button" aria-controls="eltern-informationen" aria-expanded="false">Warum ist hier ein Würstchen?</button>
-    <h1>Geschichten zum Lesen und Vorlesen</h1>
-  </header>
-  <main>
-    <div class="scene">
-      <div class="scene-media">
-        <img id="lesebild" src="assets/wuerstchen-sitzt.webp" alt="Das Kleine Würstchen sitzt mit einem aufgeschlagenen Buch vor dem Bücherregal." width="840" height="692">
-        <video id="begrüßung" src="assets/wuerstchen-liest.mp4" poster="assets/wuerstchen-sitzt.webp" preload="none" muted playsinline aria-hidden="true" hidden></video>
-      </div>
-      <nav id="geschichten" class="choices" aria-label="Geschichte auswählen">
-        <a class="choice" href="die-eiche/">Die Eiche</a>
-        <a class="choice" href="silvana/">Silvana</a>
-      </nav>
+  <div class="landing">
+    <div class="parent-tools">
+      <button class="parent-info" id="eltern-button" type="button" aria-controls="eltern-informationen" aria-expanded="false">Warum ist hier ein Würstchen?</button>
     </div>
-    <div class="actions">
-      <button id="installieren" type="button" hidden>Installieren</button>
-      <button id="aktualisieren" type="button" hidden>Aktualisieren</button>
+    <div class="landing-content">
+      <header class="page-heading">
+        <h1>Geschichten zum Lesen und Vorlesen</h1>
+      </header>
+      <main>
+        <div class="scene">
+          <div class="scene-media">
+            <img id="lesebild" src="assets/wuerstchen-sitzt.webp" alt="Das Kleine Würstchen sitzt mit einem aufgeschlagenen Buch vor dem Bücherregal." width="840" height="692">
+            <video id="begrüßung" src="assets/wuerstchen-liest.mp4" poster="assets/wuerstchen-sitzt.webp" preload="none" muted playsinline aria-hidden="true" hidden></video>
+          </div>
+          <nav id="geschichten" class="choices" aria-label="Geschichte auswählen">
+            <a class="choice" href="die-eiche/">Die Eiche</a>
+            <a class="choice" href="silvana/">Silvana</a>
+          </nav>
+        </div>
+        <div class="actions">
+          <button id="installieren" type="button" hidden>Installieren</button>
+          <button id="aktualisieren" type="button" hidden>Aktualisieren</button>
+        </div>
+        <details class="hilfe" id="installationshilfe" hidden>
+          <summary>Zum Home-Bildschirm hinzufügen</summary>
+          <p>Tippe in Safari auf „Teilen“ und dann auf „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls die Option erscheint, und tippe auf „Hinzufügen“.</p>
+        </details>
+      </main>
     </div>
-    <details class="hilfe" id="installationshilfe" hidden>
-      <summary>Zum Home-Bildschirm hinzufügen</summary>
-      <p>Tippe in Safari auf „Teilen“ und dann auf „Zum Home-Bildschirm“. Aktiviere „Als Web-App öffnen“, falls die Option erscheint, und tippe auf „Hinzufügen“.</p>
-    </details>
-  </main>
+  </div>
   <footer id="eltern-informationen" hidden>
     <h2 class="note note-heading" tabindex="-1">Für die Eltern und Lesebegleiter</h2>
     <p class="note">Wie uns Reinhard Mey lehrte, sind wir alle nur kleine Würstchen. Doch ich denke, arm sind wir dabei nicht unbedingt. Tatsächlich sind wir alle kleine Könige, und es kommt nur darauf an, was wir daraus machen. Aus diesem Grund habe ich die Figur des Kleinen Würstchens ins Leben gerufen. Mein Wunsch ist es, dass seine Größe Ihrem Kind Freude beim Entdecken schenkt!</p>
