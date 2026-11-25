@@ -460,7 +460,7 @@ get('jumpButton').onclick = () => {
   if (EichePageTurn.busy) return;
   jumpClip.pause();
   EicheProgress.complete(2);
-  location.assign('../abschnitt-3/');
+  location.assign('../abschnitt-3/?neu=1');
 };
 get('infoButton').onclick = () => get('info').showModal();
 get('infoClose').onclick = () => get('info').close();
