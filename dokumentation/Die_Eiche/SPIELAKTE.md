@@ -139,3 +139,7 @@ In „Winterschlaf“ sortieren die Kinder vier Wortkarten. „Kinder“ kommt a
 ## Einheitliche Initialen in der Eichenrinde · 25. November 2026
 
 Wo ein Herz mit Initialen zu sehen ist, lautet die Gravur „H&A“. In „Spuren der Zeit“ und im Vogelclip von „Winterschlaf“ steht bereits „H&A“. Auf dem Winterbild in „Winterschlaf“ ersetzt die korrigierte Gravur „A+M“. Die Korrektur liegt ausschließlich über den Buchstaben im vorhandenen Herz. Eichen ohne lesbare Gravur behalten ihre Darstellung.
+
+## Weiter-Navigation beim erneuten Spielen · 25. November 2026
+
+Fehler: Der Übergang zu Abschnitt 2 oder 3 lud den alten Zwischenstand des Zielabschnitts und übersprang dadurch Seiten. Beide Vorwärtsübergänge übergeben nun `?neu=1`, sodass der Zielabschnitt auf seiner ersten Seite beginnt. Freischaltungen bleiben erhalten; „Spiel fortsetzen“ lädt weiterhin den zuletzt gespeicherten Abschnitt und dessen Zwischenstand. Die separate Testfassung mit eigenem Speicherstand wurde von Heike praktisch ausprobiert und am 25.11.2026 zur Veröffentlichung freigegeben. Die beiden getesteten Änderungen sind im Hauptzweig übernommen. Kein vollständiger unabhängiger Geräte- oder Offline-Test dokumentiert. Die Testfassung bleibt erhalten.
