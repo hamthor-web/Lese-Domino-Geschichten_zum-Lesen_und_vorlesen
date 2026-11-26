@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Die Eiche · Buchprobe</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../geschichtenbuch-test-4/preview.css">
+  <link rel="stylesheet" href="probe.css">
+  <script type="module" src="probe.js"></script>
+</head>
+<body>
+  <header>
+    <label>Abschnitt
+      <select id="chapter">
+        <option value="1">Die Eiche</option>
+        <option value="2">Spuren der Zeit</option>
+        <option value="3">Winterschlaf</option>
+      </select>
+    </label>
+    <button type="button" id="compare" aria-pressed="false">Mehr Platz</button>
+  </header>
+  <main>
+    <storybook-reader aria-hidden="true" inert></storybook-reader>
+    <iframe id="game" title="Die Eiche – spielbarer Abschnitt" allow="autoplay; fullscreen"></iframe>
+  </main>
+</body>
+</html>

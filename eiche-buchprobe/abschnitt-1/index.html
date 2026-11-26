@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die Eiche · Lese-Domino-Geschichten</title>
+<style>
+* { box-sizing: border-box }
+:root { --dream-transition: 1800ms; --letters: 1; --board: 100%; color-scheme: light }
+body { margin: 0; background: #edf2ed; color: #293a2b; font: 18px/1.42 Verdana, Arial, sans-serif }
+main { width: min(100%, 1460px); margin: auto; padding: clamp(12px, 2vw, 24px) }
+@media (max-width: 750px) {
+  body { min-height: 100svh; display: flex; align-items: safe center }
+  main { margin-block: auto; padding-block: clamp(22px, 6svh, 60px) }
+  header { gap: 12px; margin-bottom: 8px }
+}
+header, nav, .settings, .choices, .optional { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem }
+header, nav { justify-content: space-between }
+.topbar { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 10px }
+.brand { display: grid; font-size: calc(1rem * var(--letters)) }
+.brand strong { font-size: calc(1.35rem * var(--letters)) }
+.info { width: 48px; min-height: 48px; border-radius: 50%; border: 2px solid #8c4829; color: #60391f; background: #fae4bd; font-weight: bold; grid-column: 3; grid-row: 1 }
+.scene-menu { margin: 12px 0; font-size: calc(1rem * var(--letters)) }
+.scene-menu summary.decor, .replay { width: min(100%, 340px); cursor: pointer; list-style: none }
+.scene-menu summary::-webkit-details-marker { display: none }
+.scene-menu p { margin-block: 8px }
+.scene-menu a { color: inherit; text-decoration: none }
+footer { margin-top: 16px; text-align: center; font-size: calc(.95rem * var(--letters)) }
+dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px solid #8c4829; border-radius: 15px; background: #fff1d5; color: inherit; font-size: calc(1rem * var(--letters)) }
+.info-links { display: grid; gap: 9px; margin: 12px 0 }
+@media (max-width: 620px) {
+  .topbar { grid-template-columns: minmax(0,1fr) auto }
+  .topbar .info { grid-column: 2 }
+  .topbar .tool { grid-column: 1 / -1; justify-self: start }
+}
+h1, h2, p { margin: 0 }
+h1 { font-size: calc(clamp(1.4rem, 3vw, 2.1rem) * var(--letters)) }
+h2 { font-size: calc(1.35rem * var(--letters)) }
+button { font: inherit; color: inherit; cursor: pointer; min-height: 44px }
+button:disabled { cursor: default; opacity: .5 }
+:focus-visible { outline: 3px solid #1c63a2; outline-offset: 2px }
+.tool, .decor { position: relative; isolation: isolate; background: none; border: 0; font-weight: bold }
+.tool { min-width: min(100%, 240px); min-height: 56px; padding: 9px 14px 9px 49px; background: url('../../assets/die-eiche/abschnitt-1/werkzeug-button.png') center / contain no-repeat; font-size: calc(1.15rem * var(--letters)); text-align: center; hyphens: none }
+.settings { padding-block: 10px; font-size: calc(1rem * var(--letters)) }
+.settings label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px }
+.settings input { width: 115px; height: 44px; accent-color: #8c4829 }
+.layout { display: grid; align-items: start; gap: clamp(10px,2vw,20px); margin-top: 12px }
+@media (min-width: 900px) {
+  .layout.reading { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr) }
+  .layout.reading .scene { grid-area: 1 / 1 / 2 / 2 }
+  .layout.reading .read-column { grid-area: 1 / 2 / 2 / 3 }
+}
+.scene, .read-column { min-width: 0 }
+.finds { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(4px,1vw,12px); margin: 10px 0 0; padding: 0; list-style: none }
+.finds li { display: grid; place-items: center; min-height: 48px; aspect-ratio: 2.49; padding: .15em 8%; text-align: center; background: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') center / contain no-repeat; color: #492e20; font-size: calc(clamp(.83rem,1.45vw,1.2rem) * var(--letters)); font-weight: bold; overflow-wrap: anywhere }
+.finds .current { text-decoration: underline; text-underline-offset: .2em }
+.finds .found { color: #284b2c }
+.search { text-align: center; font-size: calc(1.15rem * var(--letters)); font-weight: bold; margin-bottom: 6px }
+.board-scroll { overflow: auto; border-radius: 16px }
+.board { width: var(--board); margin-inline: auto; aspect-ratio: 1000 / 562.8; position: relative; overflow: hidden; background: #d7e3e9 }
+.board > img, .board > video, .board > svg { position: absolute; inset: 0; width: 100%; height: 100% }
+.board > video { object-fit: contain; opacity: 0; pointer-events: none; transition: opacity .32s ease }
+.board > video.visible { opacity: 1 }
+.board > img { pointer-events: none }
+.board > svg { z-index: 1; pointer-events: none }
+.board #hotspots, .board #hotspots polygon, .board-scroll { outline: none !important }
+.board polygon { fill: transparent; pointer-events: none }
+.board polygon.active { pointer-events: fill; cursor: pointer }
+.intro-title { position:absolute; z-index:2; left:70%; top:76%; transform:translate(-50%,-50%); white-space:nowrap; color:#fff3dd; text-shadow:0 2px 5px #152838,0 0 14px #152838; font:italic 700 min(calc(9cqw * var(--letters)), 12cqw)/1.08 "Palatino Linotype", Palatino, Georgia, "Noto Serif", serif }
+.book-title img { display:block; width:72%; height:auto; margin:.18em auto 0 }
+.book-title { position: absolute; z-index: 2; inset: 36% 8% 19% 65%; display: grid; place-content: center; color: #4b2d16; text-align: center; font: italic 700 min(calc(5.1cqw * var(--letters)), 6.5cqw)/1.15 'Palatino Linotype', Palatino, Georgia, 'Noto Serif', serif }
+.board { container-type: inline-size }
+.paper { color: #34271a; font-size: calc(clamp(1.15rem, 1.85vw, 1.45rem) * var(--letters)); padding: 12px; border: clamp(18px,4vw,50px) solid transparent; border-image: url('../../assets/die-eiche/abschnitt-1/lesekartenhintergrund.png') 215 205 215 205 fill / 1 / 0 stretch; line-height: 1.48 }
+.activity { font-size: calc(1.06rem * var(--letters)); text-align: center }
+.activity h2 { margin-bottom: .22em }
+.choices { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 10px }
+.decor { display: grid; place-items: center; width: 100%; min-width: 0; padding: 0; aspect-ratio: 2.49; container-type: inline-size }
+.button-label { display: block; width: 100%; padding: .2em 12%; font-size: min(calc(clamp(1.125rem, 10cqw, 1.65rem) * var(--letters)), 15cqw); line-height: 1.12; text-align: center; text-wrap: balance; word-break: normal; overflow-wrap: normal; hyphens: none }
+.scene-menu summary .button-label { padding-inline: 10%; font-size: min(calc(clamp(1.125rem, 7cqw, 1.5rem) * var(--letters)), 7.4cqw) }
+.button-label > span { display: block }
+.info-close { margin: 0 auto }
+.decor::before { content: ''; position: absolute; inset: 0; z-index: -1; background: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') center / contain no-repeat }
+.decor.banner { display: block; aspect-ratio: auto; }
+.decor.banner .button-label {
+  display: grid;
+  place-items: center;
+  width: auto;
+  margin-inline-start: 13.5cqw;
+  padding: .2em 10%;
+  border: solid transparent;
+  border-width: 12.23cqw 0 13.54cqw;
+  /* Only the middle of the parchment extends with the text. */
+  border-image: url('../../assets/die-eiche/abschnitt-1/aktionsbutton.png') 205 0 227 fill / 1 / 0 stretch;
+  font-size: calc(clamp(1.125rem, 6.5cqw, 1.5rem) * var(--letters));
+  overflow-wrap: anywhere;
+}
+.decor.banner .button-label > span { grid-area: 1 / 1; width: 100% }
+.decor.banner .size-reference { visibility: hidden }
+.decor.banner::before {
+  /* Show the figure from the original artwork at its original proportions. */
+  inset: 50% auto auto 0;
+  z-index: 1;
+  width: 17cqw;
+  aspect-ratio: 282 / 529;
+  transform: translateY(-50%);
+  pointer-events: none;
+  background: url('../../assets/die-eiche/abschnitt-1/banner-button.png') left center / calc(1798 / 282 * 100%) 100% no-repeat;
+  clip-path: polygon(
+    0 0, 86% 0, 86% 25%, 86% 36%, 91% 39%, 99% 40%, 100% 47%,
+    95% 56%, 82% 59%, 78% 73%, 67% 88%, 77% 90%, 77% 100%, 0 100%
+  );
+}
+.choices { grid-auto-rows: auto; align-items: start }
+.dream-answer { min-width: 0 }
+.dream-answer .feedback { margin: 6px 4px 10px; color: #60391f }
+@media (max-width: 899px) {
+  .choices { grid-template-columns: minmax(0, min(100%, 400px)); justify-content: center }
+}
+.clouds { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; width: min(100%, 580px); margin: 10px auto 0 }
+@media (orientation: landscape) {
+  .clouds { grid-template-columns: repeat(3,minmax(0,1fr)); width: 100% }
+  .cloud .tile, .cloud .slot { font-size: min(1em, max(12px, 12cqw)) }
+  .cloud { container-type: inline-size }
+}
+.cloud { display: grid; gap: 7px; align-content: start; justify-items: center; min-width: 0; padding: clamp(4px,1.2vw,15px); border: 2px solid #dfc4a1; border-radius: 24px; background: #fff7e9 }
+.cloud.complete { background: #ebf5ea }
+.tiles, .slots { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 4px; width: min(100%, 350px) }
+.tile, .slot { min-width: 0; padding: 0; color: #60391f; font-weight: bold; text-align: center }
+.tile { background: #fae4bd; border: 1px solid #b38962; border-radius: 8px }
+.tile:disabled, .slot:disabled { color: #60391f; opacity: 1 }
+.tile.used { visibility: hidden }
+.slot { border: 0; border-bottom: 2px solid #b38962; background: transparent; opacity: 1 !important }
+.board.book { aspect-ratio: 712 / 714; width: min(var(--board), 72svh); background: transparent }
+.board.book #clip { transition: none }
+.feedback { margin-top: 8px; font-weight: bold }
+.narration { width: min(100%, 270px); margin: 10px auto }
+.activity.listen-content { font-size: calc(1.06rem * var(--letters)); margin-top: 12px }
+.listen-content .listen-intro { margin: .65em 0; font-size: calc(1.12rem * var(--letters)) }
+.listen-content .eiche-narration { display: block; width: min(100%, 36rem); min-height: 54px; margin: .7rem auto 1rem }
+.original { text-align: left; white-space: pre-line; max-width: 820px; margin: 10px auto }
+.feedback:empty { display: none }
+.optional { justify-content: center; margin-top: 8px }
+.optional p { flex-basis: 100% }
+.optional button { width: 110px }
+nav { margin-top: 10px; flex-wrap: nowrap }
+nav[aria-label="Spielnavigation"] > button { width: min(39vw, 235px) }
+nav .decor { color: #472614 }
+#next.book-next { aspect-ratio: 1078 / 716 }
+#next.book-next video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none }
+#next.book-next:has(video:not([hidden]))::before,
+#next.book-next:has(video:not([hidden])) .button-label { visibility: hidden }
+[hidden] { display: none !important }
+@media (prefers-reduced-motion: reduce) { .board > video { transition: none } }
+
+.board > video.discovery { filter: brightness(1.09) }
+#layout { position:relative; isolation:isolate; perspective:1200px }
+#dreamCinema {
+  position: fixed; inset: 0; margin: 0; padding: 0; border: 0; border-radius: 0;
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  background: #172226; overflow: hidden;
+}
+#dreamCinema::backdrop { background: #172226 }
+body:has(#dreamCinema[open]) { overflow: hidden }
+#dreamCinema > img, #dreamCinema > video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+}
+#dreamCinema > img { opacity: 1; transition: opacity var(--dream-transition) ease-in-out }
+#dreamCinema > img.dream-hidden { opacity: 0 }
+#dreamCinema > video, .board > video.dream-clip {
+  opacity: 0; pointer-events: none; transform: scale(.84);
+  transition: opacity var(--dream-transition) ease-in-out, transform var(--dream-transition) ease-in-out;
+}
+#dreamCinema > video.visible, .board > video.dream-clip.visible { opacity: 1; transform: scale(1) }
+@media (prefers-reduced-motion: reduce) {
+  #dreamCinema > img, #dreamCinema > video, .board > video.dream-clip { transition: none; transform: none }
+}
+</style>
+<link rel="stylesheet" href="../../die-eiche/page-turn.css">
+
+  <link rel="stylesheet" href="../../shared/game-selection.css">
+<link rel="stylesheet" href="../abschnitt.css"></head>
+<body>
+<main>
+<header class="topbar">
+  <div class="brand"><strong>Die Eiche</strong><span>Geschichten zum Lesen und Vorlesen</span></div>
+  <button class="info" id="infoBtn" type="button" aria-label="Informationen und Kontakt" aria-haspopup="dialog" aria-controls="info">i</button>
+  <button type="button" class="tool" id="settingsBtn" aria-controls="settings" aria-expanded="false">Aa · Größe ändern</button>
+</header>
+<div class="settings" id="settings" hidden>
+<label>Schriftgröße <input id="font" type="range" min="100" max="150" step="5" value="100"><output id="fontValue">100 %</output></label>
+<label>Spielfeldgröße <input id="size" type="range" min="75" max="135" step="5" value="100"><output id="sizeValue">100 %</output></label>
+</div>
+<details class="scene-menu" id="sceneMenu">
+  <summary class="decor"><span class="button-label"><span>Anderen Abschnitt</span> <span>noch einmal erleben</span></span></summary>
+  <p id="replayNote">Hier erscheinen die Abschnitte, sobald du ihre Aufgaben abgeschlossen hast.</p>
+  <a class="decor replay" id="replay" href="?neu=1" hidden><span class="button-label">Die Eiche</span></a>
+  <a class="decor replay" id="replaySecond" href="../abschnitt-2/?neu=1" hidden><span class="button-label">Spuren der Zeit</span></a>
+  <a class="decor replay" id="replayThird" href="../abschnitt-3/?neu=1" hidden><span class="button-label">Winterschlaf</span></a>
+</details>
+<h1 id="sectionTitle" tabindex="-1">Die Eiche</h1>
+<div class="layout" id="layout">
+<div class="read-column" id="readColumn" hidden><article class="paper"><p id="reading"></p></article>
+<ol class="finds" id="finds" aria-label="Suchfortschritt" hidden><li>Wurzeln</li><li>See</li><li>Äste</li></ol></div>
+<section class="scene">
+<p class="search" id="search" aria-live="polite" hidden></p>
+<div class="board-scroll" id="scrollBoard" tabindex="0" aria-label="Winterbild">
+<div class="board" id="board">
+<img id="winter" alt="Eine alte Eiche an einem gefrorenen See">
+<video id="clip" playsinline preload="none" aria-hidden="true"></video>
+<img id="bookStill" src="../../assets/die-eiche/abschnitt-2/buch-standbild.jpg" alt="" hidden>
+<svg id="hotspots" viewBox="0 0 1000 562.8" preserveAspectRatio="none" aria-label="Suchflächen im Winterbild" hidden><polygon id="zone-roots" role="button" aria-label="Bildbereich" points="68.7,354.8 76.4,350.9 94.2,342.4 108.1,337.8 120.5,334.7 136.8,330 145.3,328.5 152.2,326.9 157.6,326.2 163,326.2 168.5,326.2 174.6,324.6 180.8,323.8 186.2,323.8 193.2,323.8 199.4,325.4 205.6,326.2 213.3,326.9 220.3,327.7 225.7,328.5 232.6,329.3 239.6,329.3 245.8,330 253.5,330.8 262,330.8 269,330.8 274.4,331.6 280.6,332.3 286,333.1 293.7,333.1 300.7,336.2 305.3,339.3 310.8,344.7 316.2,350.9 321.6,354 327,357.1 332.4,358.6 337.1,361 340.1,365.6 341.7,371 344,375.7 345.6,381.8 347.9,386.5 352.5,389.6 358.7,388.8 364.9,388.8 370.3,388.8 377.3,389.6 385,391.9 389.6,395 394.3,401.2 395.8,407.4 397.4,413.6 397.4,419 396.6,425.9 392,431.3 385,437.5 379.6,442.2 371.1,446.8 364.9,448.4 359.5,448.4 353.3,448.4 344.8,448.4 338.6,448.4 333.2,448.4 325.5,448.4 316.9,446 310,442.2 304.6,439.1 299.9,434.4 297.6,429 293,423.6 287.6,421.3 279.8,419.7 274.4,419.7 273.6,429 272.1,435.2 269.8,443.7 266.7,448.4 261.3,450.7 255.9,451.4 250.4,452.2 244.3,451.4 234.2,449.1 229.6,443.7 227.2,439.1 221.8,436 214.9,430.6 210.2,425.2 206.4,420.5 200.2,419.7 194.8,422.8 189.3,424.4 180.8,425.9 174.6,423.6 170.8,419.7 164.6,421.3 160,423.6 153,426.7 147.6,428.2 142.2,427.5 136,425.9 126.7,419 122.8,412.8 120.5,408.1 113.6,407.4 102.7,407.4 95.8,408.1 89.6,408.1 82.6,407.4 77.2,406.6 70.2,403.5 64.8,401.2 59.4,395 57.9,389.6 57.1,384.2 57.9,378.7 58.6,373.3 61,367.9"></polygon><polygon id="zone-lake" role="button" aria-label="Bildbereich" points="330.9,339.9 337.1,341.5 344.8,345.3 350.2,347.7 354.8,351.5 358.7,357.7 361,362.4 365.7,365.4 370.3,368.5 375.7,370.1 383.5,373.2 387.3,377 393.5,378.6 400.5,378.6 409,378.6 415.9,379.4 422.1,380.1 428.3,380.1 437.6,383.2 443,386.3 447.6,389.4 452.3,392.5 456.9,397.9 459.2,404.9 459.2,411.1 458.5,418.8 457.7,424.2 455.4,428.9 449.2,431.2 439.9,432 429.9,431.2 424.4,431.2 419,431.2 413.6,431.2 408.2,432 398.2,437.4 393.5,442 388.9,445.9 381.9,452.8 376.5,455.2 367.2,456.7 361.8,456.7 356.4,456.7 351,455.2 345.6,455.2 339.4,457.5 334,458.2 328.5,458.2 323.9,462.9 320,469.8 325.5,474.5 330.9,476 336.3,477.6 344,480.7 349.4,482.2 354.8,484.5 362.6,487.6 369.5,490 374.9,493.1 380.4,494.6 385,496.9 390.4,497.7 401.2,497.7 409,497.7 422.1,497.7 428.3,497.7 436,498.5 445.3,499.2 450.7,499.2 456.2,500.8 465.4,503.9 471.6,505.4 476.3,507.7 481.7,507.7 489.4,507.7 501,508.5 506.4,508.5 512.6,508.5 518,508.5 528.1,508.5 538.1,508.5 543.5,509.3 555.1,510.1 560.6,510.1 566.7,510.1 574.5,510.1 579.9,510.8 585.3,510.8 590.7,510.8 595.4,513.2 601.5,513.2 608.5,513.2 613.9,513.2 620.1,513.2 625.5,513.2 630.9,513.2 640.2,512.4 646.4,511.6 652.6,509.3 656.5,503.9 659.5,499.2 663.4,494.6 668.1,491.5 674.2,487.6 682.8,483.8 688.2,483 693.6,481.5 700.5,481.5 706.7,481.5 711.4,485.3 713.7,491.5 717.6,496.1 723.7,493.1 732.2,484.5 740.8,476.8 746.2,471.4 750,467.5 754.7,463.7 760.9,459 766.3,455.9 774.8,453.6 781.7,452.1 787.9,452.8 794.1,455.2 800.3,456.7 808,457.5 813.4,458.2 818.9,459.8 822.7,465.2 833.6,471.4 842.8,472.2 852.9,471.4 859.9,470.6 867.6,468.3 873,466 882.3,463.7 890,461.3 895.4,459.8 900.8,457.5 903.9,452.8 907.8,449 914.8,445.9 919.4,443.6 925.6,442.8 932.5,441.2 941.1,438.9 951.1,438.1 958.8,438.1 965,437.4 971.2,435 975.9,432.7 983.6,430.4 991.3,418.8 992.1,411.8 992.1,404.1 989.8,397.9 983.6,392.5 978.2,388.6 973.5,380.1 969.7,375.5 965,372.4 958.8,367.8 953.4,365.4 947.2,364.7 938.7,361.6 933.3,358.5 926.4,356.9 919.4,356.2 912.4,356.2 902.4,355.4 897,352.3 892.3,350 887.7,347.7 881.5,346.9 873,346.1 866.8,344.6 857.5,343.8 852.1,343 845.9,343 840.5,343 834.3,343 827.4,341.5 822,341.5 815,341.5 807.3,341.5 801.8,341.5 791,341.5 781.7,340.7 775.6,339.9 767,339.9 759.3,339.9 753.9,339.2 745.4,339.2 740,339.2 728.4,340.7 721.4,340.7 716,339.9 705.2,343 699.8,343.8 693.6,343.8 683.5,343.8 675,342.2 667.3,340.7 659.5,338.4 653.4,334.5 645.6,330.6 639.4,326.8 634,323.7 624.7,319.8 619.3,319 610.8,318.3 603.1,318.3 596.1,318.3 590.7,318.3 582.2,318.3 573.7,318.3 566.7,319.8 555.9,319.8 546.6,319.8 541.2,319.8 533.5,319.8 528.1,319.8 521.1,319.8 513.4,319.8 505.6,319 499.5,318.3 494,316.7"></polygon><polygon id="zone-branches" role="button" aria-label="Bildbereich" points="177,244 173.1,250.2 164.6,253.3 156.9,255.6 150.7,257.2 142.2,258.7 135.2,258.7 129.8,257.9 122.8,255.6 117.4,254.1 112.8,251.8 108.1,248.7 102.7,246.3 95.8,244.8 87.3,243.3 79.5,241.7 74.1,238.6 70.2,234.7 68.7,228.6 67.9,223.1 67.9,216.2 67.1,210 63.3,204.6 60.2,194.5 59.4,186.8 58.6,181.4 57.9,176 56.3,170.6 56.3,163.6 56.3,158.2 57.1,152 57.9,146.6 60.2,141.2 61.7,135.8 63.3,130.3 64.1,123.4 68.7,114.1 71,109.5 71.8,104 73.3,97.9 77.2,90.1 81.1,83.9 84.9,80.1 91.1,76.2 95.8,73.1 100.4,70.8 105,68.5 110.5,66.9 116.6,63.8 121.3,60 127.5,57.6 132.9,53.8 139.1,51.5 146,49.1 153,48.4 160,47.6 165.4,46 170,42.2 173.9,38.3 179.3,32.9 184.7,31.3 190.1,29.8 197.1,29 201.7,26.7 207.1,24.4 212.5,22.8 219.5,22.1 227.2,21.3 232.6,19.7 238.1,17.4 243.5,15.1 248.9,15.1 255.1,15.9 261.3,17.4 266.7,19 273.6,19.7 281.4,19.7 287.6,19.7 293.7,21.3 299.2,22.1 304.6,24.4 311.5,26.7 318.5,30.6 325.5,35.2 330.1,40.6 337.1,42.2 344,42.2 351.7,41.4 357.9,42.2 365.7,43.7 371.9,44.5 378,44.5 382.7,46.8 387.3,49.9 392,53 398.9,59.2 404.3,63.8 409.8,66.2 414.4,69.2 420.6,71.6 426,73.1 433,73.9 439.1,74.7 446.1,78.5 449.2,84.7 453.8,90.1 457.7,95.5 463.1,101.7 469.3,107.1 473.2,111 477.8,117.2 482.4,121.8 487.9,127.2 494.8,129.6 500.2,133.4 504.9,138.1 508.7,141.9 513.4,146.6 518.8,150.4 524.2,153.5 528.9,156.6 532.7,161.3 534.3,167.5 535,176 535.8,181.4 536.6,188.3 534.3,193.8 531.2,198.4 525.8,203.8 520.3,209.2 516.5,213.9 511.1,220.1 505.6,225.5 501,228.6 495.6,231.7 489.4,237.1 486.3,244 482.4,250.2 478.6,255.6 475.5,261 468.5,266.5 463.9,268.8 457.7,270.3 450,271.9 444.6,273.4 439.1,273.4 433.7,272.6 428.3,271.9 422.1,270.3 412.8,269.5 405.9,268 398.9,265.7 389.6,263.4 383.5,261 377.3,258.7 371.9,254.1 363.3,249.4 353.3,247.9 345.6,247.1 339.4,247.9 328.5,251.8 320.8,255.6 314.6,257.9 308.4,259.5 300.7,260.3 298.4,254.9 297.6,248.7 293,244.8 286.8,244.8 277.5,243.3 268.2,241.7 262.8,240.9 257.4,239.4 251.2,239.4 245,238.6 238.1,239.4 231.9,239.4 226.5,239.4 220.3,240.2 214.1,240.2 208.7,241.7"></polygon></svg>
+<p class="intro-title" id="introTitle" hidden>Die Eiche</p>
+<div class="book-title" id="bookTitle" hidden><span>Spuren<br>der Zeit</span><img src="../../assets/die-eiche/abschnitt-1/buchtitel.png" alt=""></div>
+</div>
+</div>
+<p class="feedback" id="mediaMessage" role="status"></p>
+</section>
+<section class="activity" id="activity" hidden></section>
+</div>
+<nav aria-label="Spielnavigation">
+<button class="decor" id="back"><span class="button-label">Zurück</span></button>
+<span id="counter" aria-live="polite"></span>
+<button class="decor" id="next" aria-label="Weiter"><span class="button-label">Weiter</span><video id="bookNextClip" muted playsinline preload="auto" aria-hidden="true" hidden></video></button>
+</nav>
+<footer>In deinem Tempo. Ohne Zeitdruck.</footer>
+</main>
+<dialog id="dreamCinema" aria-label="Traumanimation – zum Überspringen tippen oder Escape drücken"><img id="dreamWinter" alt=""></dialog>
+<dialog id="info" aria-labelledby="infoTitle">
+  <h2 id="infoTitle">Informationen &amp; Kontakt</h2>
+  <p>Die Eiche · Heike Amthor</p>
+  <nav class="info-links" aria-label="Informationen zur App">
+    <a href="https://lesespiele.heike-amthor.de/impressum" target="_blank" rel="noopener">Impressum</a>
+    <a href="https://lesespiele.heike-amthor.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+    <a href="https://lesespiele.heike-amthor.de/" target="_blank" rel="noopener">Website der Entwicklerin</a>
+    <a href="mailto:lesespiele.heike.amthor@gmx.de">Nachricht an die Entwicklerin</a>
+  </nav>
+  <button class="decor replay info-close" id="infoClose" type="button" autofocus><span class="button-label">Schließen</span></button>
+</dialog>
+<script src="../spielstand.js?v=3"></script>
+<script src="../../die-eiche/page-turn.js"></script>
+<script>
+const videos = {
+  "dream": "../../assets/die-eiche/abschnitt-1/eiche-winter.mp4",
+  "banana": "../../assets/die-eiche/abschnitt-1/banana.mp4",
+  "blitze": "../../assets/die-eiche/abschnitt-1/blitze.mp4",
+  "blumen": "../../assets/die-eiche/abschnitt-1/blumen.mp4",
+  "book": "../../assets/die-eiche/abschnittsuebergang_wuerstchen_oeffnet_buch_mit_ton.mp4",
+  "branches": "../../assets/die-eiche/abschnitt-1/branches.mp4",
+  "lake": "../../assets/die-eiche/abschnitt-1/lake.mp4",
+  "roots": "../../assets/die-eiche/abschnitt-1/roots.mp4",
+  "socks": "../../assets/die-eiche/abschnitt-1/socks.mp4",
+  "weizen": "../../assets/die-eiche/abschnitt-1/weizen.mp4",
+  "zoom": "../../assets/die-eiche/abschnitt-1/zoom.mp4"
+};
+const texts = ["Vor der Stadt liegt ein kleiner, klarer See. Am Ufer steht eine alte Eiche. Ihre Wurzeln reichen tief in die Erde. Ihre Äste sind dick und krumm. Sie ragen hoch in den Himmel.", "Es ist Winter. Die Natur schläft. Auch die Eiche schläft. Vielleicht träumt sie von früher.", "Ihre Äste haben keine Blätter und sind schwarz. Der Himmel ist hellblau. Die Äste sehen aus wie Blitze."];
+const originalText = "Die Eiche\nAn dem kleinen, klaren See vor den Toren der Stadt stand, etwas abseits der anderen Bäume, eine Eiche. Alt war sie schon, ihre Wurzeln tief im Boden verankert und das knorrige Geäst weit in den Himmel gestreckt. Es war Winter und die Natur schlief einen erholsamen Schlaf.\nAuch die Eiche ruhte. Vielleicht träumte sie von den Erlebnissen der vergangenen Jahrzehnte. Kahl und schwarz hoben sich ihre Äste gegen den eisblauen Himmel ab, zackig wie die Blitze eines Donnergottes.";
+const discover = [['roots','Wurzeln'],['lake','See'],['branches','Äste']];
+const dreams = [['socks','Die Eiche trägt Wollsocken.'],['banana','An den Ästen wachsen Bananen.'],['dream','Sie träumt von früher.']];
+const words = [['blumen','EMULBN'],['weizen','NEZIEW'],['blitze','TZEILB']];
+const praise = 'Klasse, gleich beim ersten Mal das richtige Wort gefunden!';
+const $ = id => document.getElementById(id);
+const clip = $('clip');
+const introStill = new Image();
+introStill.src = '../../assets/die-eiche/abschnitt-1/einfuehrung-standbild.jpg';
+let introReady = false;
+const activity = $('activity');
+let step = 0;
+let playing = false;
+let found = 0;
+let dreamCorrect = false;
+let dreamSelection = -1;
+let finishClip;
+let wordFeedback = '';
+let optional = null;
+let completed = false;
+let openedBook = false;
+const arrangements = words.map(() => ({indices: Array(6).fill(null), solved: false}));
+function updateReplay() {
+  const firstComplete = EicheProgress.isComplete(1);
+  const secondUnlocked = EicheProgress.secondUnlocked();
+  $('replay').hidden = !firstComplete;
+  $('replaySecond').hidden = !secondUnlocked;
+  $('replayThird').hidden = !EicheProgress.thirdUnlocked();
+  $('replayNote').textContent = firstComplete || secondUnlocked ? 'Wähle einen Abschnitt.' :
+    'Hier erscheinen die Abschnitte, sobald du sie freigespielt hast.';
+}
+const winterImage = '../../assets/die-eiche/abschnitt-1/winter.png';
+$('winter').src = winterImage;
+
+function navState() {
+  $('back').disabled = playing || step === 0;
+  $('next').classList.toggle('book-next', step === 7);
+  $('next').hidden = step === 7 && (!openedBook || completed);
+  $('next').disabled = (step === 7 && !openedBook) || (playing && !(step === 3 && dreamCorrect)) || completed || (step === 1 && found < 3) ||
+    (step === 3 && !dreamCorrect) || (step === 5 && !arrangements[2].solved);
+  $('counter').textContent = (step + 1) + ' / 8';
+  activity.inert = playing;
+  document.querySelectorAll('#hotspots polygon').forEach((polygon, index) => {
+    const active = step === 1 && !playing && index === found;
+    polygon.classList.toggle('active', active);
+    // All shapes stay out of the tab order until the current target is available.
+    polygon.setAttribute('tabindex', active ? '0' : '-1');
+  });
+}
+
+const sceneSounds = {
+  birds: { file: 'meisen-ab-2s.mp3', volume: .6, loop: false },
+  wind: { file: 'wind.mp3', volume: .15, loop: true },
+  thunder: { file: 'blitz-und-donner.mp3', volume: .65, loop: false }
+};
+const sceneAudio = new Audio();
+let sceneSound = null;
+let visualSound = null;
+
+function syncSceneSound() {
+  const thunderTail = step === 5 && visualSound === 'thunder';
+  const sound = document.hidden ? null :
+    visualSound && (playing || thunderTail) ? visualSound :
+    step === 0 ? 'birds' : null;
+  if (sound !== sceneSound) {
+    sceneAudio.pause();
+    sceneSound = sound;
+    if (sound) {
+      const {file, volume, loop} = sceneSounds[sound];
+      sceneAudio.src = '../../assets/die-eiche/abschnitt-1/' + file;
+      sceneAudio.volume = volume;
+      sceneAudio.loop = loop;
+    }
+  }
+  if (!sound || !sceneAudio.paused || sceneAudio.ended) return;
+  sceneAudio.play().catch(() => {});
+}
+
+sceneAudio.addEventListener('ended', () => {
+  if (visualSound !== 'thunder') return;
+  visualSound = null;
+  syncSceneSound();
+});
+document.addEventListener('visibilitychange', syncSceneSound);
+window.addEventListener('pageshow', syncSceneSound);
+window.addEventListener('pagehide', () => sceneAudio.pause());
+document.addEventListener('click', syncSceneSound);
+
+const dreamCinema = $('dreamCinema');
+const dreamWinter = $('dreamWinter');
+dreamCinema.addEventListener('cancel', event => {
+  event.preventDefault();
+  finishClip?.();
+});
+dreamCinema.addEventListener('click', () => finishClip?.());
+
+function openDreamCinema() {
+  dreamWinter.src = $('winter').src;
+  dreamWinter.classList.remove('dream-hidden');
+  clip.classList.remove('visible');
+  dreamCinema.append(clip);
+  dreamCinema.showModal();
+}
+function closeDreamCinema() {
+  $('board').insertBefore(clip, $('bookStill'));
+  dreamWinter.classList.remove('dream-hidden');
+  if (dreamCinema.open) dreamCinema.close();
+}
+
+async function play(key, keepFrame = false, cancelSignal) {
+  if (playing) return false;
+  playing = true;
+  visualSound = null;
+  syncSceneSound();
+  navState();
+  $('mediaMessage').textContent = '';
+  const previousScroll = window.scrollY;
+  const isDream = dreams.some(([dreamKey]) => dreamKey === key);
+  const isCinema = key === 'dream';
+  if (isCinema) openDreamCinema();
+  else if (key !== 'zoom') $('board').scrollIntoView({block:'nearest'});
+  const isDiscovery = step === 1;
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dreamTransition = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--dream-transition'));
+  const fade = reducedMotion ? 0 : isDream ? dreamTransition : 320;
+  const isLightning = key === 'blitze';
+  clip.muted = key === 'zoom' || isCinema || isLightning;
+  clip.classList.toggle('dream-clip', isDream);
+  clip.classList.toggle('discovery', isDiscovery);
+  const played = await new Promise(resolve => {
+    let settled = false;
+    let timer;
+    const finish = success => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      cancelSignal?.removeEventListener('abort', skipped);
+      clip.removeEventListener('ended', ended);
+      clip.removeEventListener('error', failed);
+      clip.removeEventListener('playing', visible);
+      resolve(success);
+    };
+    const deadline = duration => {
+      clearTimeout(timer);
+      timer = setTimeout(failed, duration);
+    };
+    const ended = () => {
+      if (!isDream) {
+        finish(true);
+        return;
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => finish(true), 1500);
+    };
+    const skipped = () => finish(true);
+    const failed = () => finish(false);
+    const visible = () => {
+      clip.classList.add('visible');
+      visualSound = isLightning ? 'thunder' : isCinema ? 'wind' : null;
+      syncSceneSound();
+      if (isCinema) dreamWinter.classList.add('dream-hidden');
+      if (isDiscovery) {
+        clearTimeout(timer);
+        timer = setTimeout(() => finish(true), 2000 - fade);
+      } else {
+        deadline((Number.isFinite(clip.duration) ? clip.duration / clip.playbackRate + 5 : 15) * 1000);
+      }
+    };
+    clip.addEventListener('ended', ended);
+    clip.addEventListener('error', failed);
+    clip.addEventListener('playing', visible, {once:true});
+    deadline(10000);
+    cancelSignal?.addEventListener('abort', skipped, {once:true});
+    try {
+      clip.src = videos[key];
+      clip.defaultPlaybackRate = isDream && !reducedMotion ? .8 : 1;
+      clip.playbackRate = clip.defaultPlaybackRate;
+      Promise.resolve(clip.play()).catch(failed);
+    } catch {
+      failed();
+    }
+  });
+  if (!keepFrame || !played) {
+    if (isCinema) dreamWinter.classList.remove('dream-hidden');
+    clip.classList.remove('visible');
+    if (isDiscovery) clip.pause();
+    await new Promise(resolve => {
+      const started = performance.now();
+      const fadeWind = isCinema && visualSound === 'wind';
+      const initialVolume = sceneAudio.volume;
+      const onFrame = () => {
+        const remaining = fade ? Math.max(0, 1 - (performance.now() - started) / fade) : 0;
+        if (fadeWind && sceneSound === 'wind') {
+          sceneAudio.volume = initialVolume * remaining;
+        }
+      };
+      const interval = fadeWind ? setInterval(onFrame, 16) : null;
+      setTimeout(() => {
+        clearInterval(interval);
+        if (fadeWind && sceneSound === 'wind') sceneAudio.volume = 0;
+        resolve();
+      }, fade);
+    });
+    clip.pause();
+  }
+  if (isCinema) closeDreamCinema();
+  if (!played) $('mediaMessage').textContent = 'Das Video konnte gerade nicht abgespielt werden.';
+  if (!keepFrame) window.scrollTo(0, previousScroll);
+  playing = false;
+  if (!isLightning || !played) visualSound = null;
+  syncSceneSound();
+  navState();
+  return played;
+}
+
+function dream() {
+  activity.innerHTML = '<h2>Was träumt die Eiche?</h2><div class="choices"></div>';
+  const choices = activity.querySelector('.choices');
+  const hints = [
+    'Das ist schon möglich. Steht das aber so im Text?',
+    'Auch schön, aber stimmt das?',
+    'Genau! Die Eiche träumt von früher.'
+  ];
+  const feedback = [];
+  const showHint = index => {
+    feedback.forEach((hint, position) => {
+      hint.textContent = index === position ? hints[position] : '';
+    });
+  };
+  for (const [index, [key, label]] of dreams.entries()) {
+    const answer = document.createElement('div');
+    answer.className = 'dream-answer';
+    const button = document.createElement('button');
+    button.className = 'decor banner';
+    const caption = document.createElement('span');
+    caption.className = 'button-label';
+    const text = document.createElement('span');
+    text.textContent = label;
+    caption.append(text);
+    // Reserve space for the largest wrapped answer in each button.
+    for (const [otherKey, otherLabel] of dreams) {
+      if (otherKey === key) continue;
+      const reference = document.createElement('span');
+      reference.className = 'size-reference';
+      reference.setAttribute('aria-hidden', 'true');
+      reference.textContent = otherLabel;
+      caption.append(reference);
+    }
+    button.append(caption);
+    const hint = document.createElement('p');
+    hint.className = 'feedback';
+    hint.setAttribute('role', 'status');
+    feedback.push(hint);
+    answer.append(button, hint);
+    choices.append(answer);
+    button.onclick = async () => {
+      if (playing) return;
+      const correct = index === 2;
+      const controller = new AbortController();
+      if (correct) dreamCorrect = true;
+      dreamSelection = index;
+      checkpoint();
+      if (correct) showHint(index);
+      const playback = play(key, false, controller.signal);
+      finishClip = async () => {
+        controller.abort();
+        await playback;
+      };
+      await playback;
+      finishClip = undefined;
+      if (step !== 3) return;
+      dreamSelection = index;
+      showHint(index);
+      if (!correct) button.focus({preventScroll:true});
+      else $('next').focus({preventScroll:true});
+    };
+  }
+  showHint(dreamSelection);
+}
+
+function puzzle() {
+  checkpoint();
+  const solved = arrangements[2].solved;
+  const left = arrangements.filter(item => !item.solved).length;
+  activity.innerHTML = '<h2>Welches Wort passt?</h2><p>Die Äste sehen aus wie …</p><div class="clouds"></div><p class="feedback" role="status"></p>';
+  const clouds = activity.querySelector('.clouds');
+  words.forEach(([word, letters], i) => {
+    const entry = arrangements[i];
+    const blocked = entry.solved || (solved && optional !== true);
+    const cloud = document.createElement('div');
+    cloud.className = 'cloud' + (entry.solved ? ' complete' : '');
+    cloud.setAttribute('role','group');
+    cloud.setAttribute('aria-label','Wolke ' + (i + 1));
+    cloud.innerHTML = '<div class="tiles"></div><div class="slots"></div>';
+    const tiles = cloud.querySelector('.tiles');
+    const slots = cloud.querySelector('.slots');
+    [...letters].forEach((letter, index) => {
+      const button = document.createElement('button');
+      button.className = 'tile';
+      button.textContent = letter;
+      button.disabled = blocked || entry.indices.includes(index);
+      button.classList.toggle('used', entry.indices.includes(index));
+      button.onclick = () => addLetter(i,index);
+      tiles.append(button);
+      const slot = document.createElement('button');
+      slot.className = 'slot';
+      const placed = entry.indices[index];
+      slot.textContent = letters[placed] || '';
+      slot.disabled = blocked || placed === null;
+      if (placed !== null) slot.setAttribute('aria-label', letters[placed] + ' zurücklegen');
+      slot.onclick = () => {
+        if (playing) return;
+        const from = slot.getBoundingClientRect();
+        entry.indices[index] = null;
+        if (!solved) wordFeedback = '';
+        puzzle();
+        const tile = activity.querySelectorAll('.cloud')[i].querySelectorAll('.tile')[placed];
+        const to = tile.getBoundingClientRect();
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          tile.animate([
+            {transform: 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px)'},
+            {transform: 'none'}
+          ], {duration: 230, easing: 'ease-out'});
+        }
+        tile.focus({preventScroll:true});
+      };
+      slots.append(slot);
+    });
+    clouds.append(cloud);
+  });
+  activity.querySelector('.feedback').textContent = wordFeedback;
+  if (solved && left && optional === null) {
+    const options = document.createElement('div');
+    options.className = 'optional';
+    options.innerHTML = '<p>Möchtest du ' + (left === 1 ? 'das andere Wort' : 'die anderen Wörter') + ' auch noch legen?</p>';
+    for (const [label, choice] of [['Ja',true],['Nein',false]]) {
+      const button = document.createElement('button');
+      button.className = 'decor';
+      const caption = document.createElement('span');
+      caption.className = 'button-label';
+      caption.textContent = label;
+      button.append(caption);
+      button.onclick = () => {
+        optional = choice;
+        puzzle();
+        if (choice) focusTile(arrangements.findIndex(item => !item.solved));
+        else $('next').focus({preventScroll:true});
+      };
+      options.append(button);
+    }
+    activity.append(options);
+  }
+}
+
+function focusTile(i) {
+  activity.querySelectorAll('.cloud')[i]?.querySelector('.tile:not(:disabled)')?.focus({preventScroll:true});
+}
+
+async function addLetter(i,index) {
+  if (playing) return;
+  const entry = arrangements[i];
+  const [word,letters] = words[i];
+  const empty = entry.indices.indexOf(null);
+  if (empty === -1 || entry.solved || entry.indices.includes(index)) return;
+  entry.indices[empty] = index;
+  if (entry.indices.includes(null)) {
+    puzzle();
+    focusTile(i);
+    return;
+  }
+  if (entry.indices.map(n => letters[n]).join('') !== word.toUpperCase()) {
+    wordFeedback = 'Versuch es noch einmal.';
+    puzzle();
+    activity.querySelectorAll('.cloud')[i].querySelector('.slot')?.focus({preventScroll:true});
+    return;
+  }
+  const first = arrangements.every(item => !item.solved);
+  const animation = play(word);
+  entry.solved = true;
+  if (i === 2) wordFeedback = first ? praise : 'Die Äste sehen aus wie Blitze.';
+  else if (!arrangements[2].solved) wordFeedback = 'Versuch es noch einmal.';
+  puzzle();
+  await animation;
+  navState();
+  if (i === 2) (activity.querySelector('.optional button') || $('next')).focus({preventScroll:true});
+}
+
+// Eingesprochener Originaltext: Abschnitt 1 endet nach „Donnergottes“. Die Beschreibung der Rinde und des Herzens gehört in Abschnitt 2.
+// Die vollständige WAV-Aufnahme bleibt unangetastet und dient späteren Abschnitten.
+const narrationSource = '../../assets/die-eiche/abschnitt-1/vorleseton.mp3';
+let narration;
+function stopNarration() {
+  if (!narration) return;
+  narration.pause();
+  narration.currentTime = 0;
+  narration = undefined;
+}
+function readAloud() {
+  activity.innerHTML = '<h2>Die Eiche zum Anhören</h2><p class="listen-intro">Prima! Und nun lehne dich zurück und höre der Geschichte zu.</p><audio class="eiche-narration" controls preload="none" aria-label="Originalgeschichte, Abschnitt 1"></audio><p class="feedback" role="status"></p><article class="paper original"></article>';
+  const player = activity.querySelector('audio');
+  const feedback = activity.querySelector('.feedback');
+  activity.querySelector('.original').textContent = originalText;
+  player.src = narrationSource;
+  narration = player;
+  player.addEventListener('error', () => { feedback.textContent = 'Die Tonaufnahme konnte nicht geladen werden.'; });
+  player.addEventListener('ended', () => { feedback.textContent = 'Du hast den ersten Abschnitt gehört.'; });
+}
+
+async function showIntro() {
+  introReady = false;
+  render();
+  const played = await play('zoom', true);
+  if (played && introStill.decode) await introStill.decode().catch(() => {});
+  if (step !== 0) return;
+  introReady = played;
+  render();
+  clip.classList.remove('visible');
+}
+
+function render() {
+  checkpoint();
+  if (step !== 5 && !playing) visualSound = null;
+  syncSceneSound();
+  $('winter').src = step === 0 && introReady ? introStill.src : winterImage;
+  $('introTitle').hidden = step !== 0 || !introReady;
+  const reading = [1,2,4].indexOf(step);
+  $('layout').classList.toggle('reading', reading !== -1);
+  $('readColumn').hidden = reading === -1;
+  if (reading !== -1) $('reading').textContent = texts[reading];
+  $('search').hidden = step !== 1;
+  if (step === 1) $('search').textContent = found === 3 ? 'Du hast alles gefunden!' : 'Tippe im Bild auf: ' + discover[found][1];
+  $('hotspots').toggleAttribute('hidden', step !== 1);
+  $('finds').hidden = step !== 1;
+  [...$('finds').children].forEach((item, index) => {
+    item.classList.toggle('found', index < found);
+    item.classList.toggle('current', index === found);
+    item.textContent = discover[index][1] + (index < found ? ' ✓' : '');
+  });
+  $('winter').hidden = step === 7;
+  $('board').classList.toggle('book', step === 7);
+  $('sectionTitle').textContent = step === 7 ? 'Und wie geht es jetzt weiter?' : 'Die Eiche';
+  $('bookTitle').hidden = step !== 7 || !openedBook;
+  activity.hidden = step !== 3 && step !== 5 && step !== 6 && !(step === 7 && completed);
+  activity.classList.toggle('listen-content', step === 6);
+  $('layout').querySelector('.scene').hidden = step === 6;
+  activity.replaceChildren();
+  if (step === 3) dream();
+  if (step === 5) puzzle();
+  if (step === 6) readAloud();
+  if (step === 7 && completed) activity.textContent = 'Abschnitt 1 ist geschafft.';
+  navState();
+}
+
+$('hotspots').querySelectorAll('polygon').forEach((polygon, index) => {
+  async function discoverTarget() {
+    if (playing || index !== found || step !== 1) return;
+    found++;
+    checkpoint();
+    await play(discover[index][0]);
+    render();
+  }
+  polygon.addEventListener('click', discoverTarget);
+  polygon.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    discoverTarget();
+  });
+});
+
+const bookNextClip = $('bookNextClip');
+bookNextClip.src = '../../assets/die-eiche/abschnitt-1/weiter-knetanimation.webm';
+bookNextClip.addEventListener('error', () => { bookNextClip.hidden = true; });
+
+async function openBook() {
+    EicheProgress.complete(1);
+    updateReplay();
+    const bookPlayed = await play('book', true);
+    openedBook = true;
+    $('bookStill').hidden = bookPlayed;
+    if (bookPlayed && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      bookNextClip.currentTime = 0;
+      bookNextClip.hidden = Boolean(bookNextClip.error);
+      if (!bookNextClip.hidden) bookNextClip.play().catch(() => { bookNextClip.hidden = true; });
+    }
+    render();
+}
+
+function leaveBook() {
+  bookNextClip.pause();
+  bookNextClip.hidden = true;
+  clip.classList.remove('visible');
+  openedBook = false;
+  $('bookStill').hidden = true;
+  completed = false;
+}
+$('back').onclick = () => {
+  if (EichePageTurn.busy || $('back').disabled) return;
+  stopNarration();
+  EichePageTurn.run(() => {
+    if (step === 7) leaveBook();
+    step--;
+    $('mediaMessage').textContent = '';
+    render();
+    window.scrollTo(0,0);
+  }, true);
+};
+$('next').onclick = async () => {
+  if (EichePageTurn.busy || $('next').disabled || $('next').dataset.advancing) return;
+  if (playing && finishClip) {
+    $('next').dataset.advancing = 'true';
+    await finishClip();
+    delete $('next').dataset.advancing;
+  }
+  if (step === 7) {
+    window.location.assign('../abschnitt-2/?neu=1');
+    return;
+  }
+  stopNarration();
+  EichePageTurn.run(() => {
+    if (step === 0) clip.classList.remove('visible');
+    step++;
+    $('mediaMessage').textContent = '';
+    render();
+    window.scrollTo(0,0);
+    if (step === 7) openBook();
+  });
+};
+
+$('settingsBtn').onclick = () => {
+  $('settings').hidden = !$('settings').hidden;
+  $('settingsBtn').setAttribute('aria-expanded', String(!$('settings').hidden));
+};
+$('font').oninput = event => {
+  document.documentElement.style.setProperty('--letters', event.target.value / 100);
+  $('fontValue').textContent = event.target.value + ' %';
+};
+$('size').oninput = event => {
+  document.documentElement.style.setProperty('--board', event.target.value + '%');
+  $('sizeValue').textContent = event.target.value + ' %';
+};
+$('infoBtn').onclick = () => $('info').showModal();
+$('infoClose').onclick = () => $('info').close();
+$('sceneMenu').addEventListener('toggle', updateReplay);
+window.addEventListener('storage', updateReplay);
+window.addEventListener('pageshow', updateReplay);
+window.addEventListener('pageshow', event => { if (event.persisted) checkpoint(); });
+window.addEventListener('pagehide', stopNarration);
+function checkpoint() {
+  EicheProgress.save(1, {step, found, dreamCorrect, dreamSelection, wordFeedback, optional, arrangements});
+}
+
+const saved = EicheProgress.readForVisit(1);
+if (saved && Number.isInteger(saved.step) && saved.step >= 0 && saved.step <= 7) {
+  ({step, found, dreamCorrect, dreamSelection, wordFeedback, optional} = saved);
+  saved.arrangements?.forEach((entry, i) => {
+    if (arrangements[i] && entry.indices?.length === 6) Object.assign(arrangements[i], entry);
+  });
+}
+if (step === 7) {
+  EicheProgress.complete(1);
+  openedBook = true;
+  $('bookStill').hidden = false;
+}
+updateReplay();
+render();
+if (step === 0) showIntro();
+</script>
+
+  <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
+</body>
+</html>

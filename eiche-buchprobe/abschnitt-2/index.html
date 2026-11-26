@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die Eiche · Spuren der Zeit</title>
+<style>
+* { box-sizing: border-box }
+:root { --letters: 1; --board: 100%; --paper: url("../../assets/die-eiche/abschnitt-2/lesekarte.webp"); color-scheme: light }
+body { margin: 0; background: #edf2ed; color: #293a2b; font: 18px/1.42 Verdana, Arial, sans-serif }
+main { max-width: 1460px; margin: auto; padding: clamp(12px, 2vw, 24px) }
+header, nav, .settings { display: flex; flex-wrap: wrap; align-items: center; gap: 12px }
+header, nav { justify-content: space-between }
+header { margin-bottom: 14px }
+.brand { font-size: calc(1rem * var(--letters)) }
+.brand strong { display: block; font-size: calc(1.35rem * var(--letters)) }
+h1, p { margin: 0 }
+h1 { font-size: calc(clamp(1.35rem, 2.6vw, 2.05rem) * var(--letters)); margin-bottom: 12px }
+.layout { display: grid; gap: clamp(14px, 2vw, 24px); align-items: start }
+@media (min-width: 900px), (orientation: landscape) and (min-width: 760px) {
+  .layout { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr) }
+}
+.board-scroll { overflow: auto; min-width: 0; border-radius: 16px }
+.board { position: relative; width: var(--board); margin-inline: auto; aspect-ratio: 1671 / 941; overflow: hidden; background: #d7e3e9; border-radius: 16px }
+.board img { width: 100%; height: 100%; display: block; transform-origin: 27.7% 54.5%; transition: transform 1.25s ease-in-out }
+.board.closeup img { transform: translate(22.3%, -4.5%) scale(2.48) }
+.hotspot { position: absolute; inset: 0; width: 100%; background: transparent; border: 0; border-radius: inherit }
+.hotspot:focus-visible { outline-offset: -5px }
+.paper { color: #34271a; padding: clamp(8px, 1.3vw, 12px); border: clamp(18px, 4vw, 50px) solid transparent; border-image: var(--paper) 235 270 fill / 1 / 0 stretch; font-size: calc(clamp(1.16rem, 1.75vw, 1.45rem) * var(--letters)); overflow-wrap: anywhere }
+.read-column { min-width: 0 }
+.activity { margin-top: 14px }
+.activity h2 { margin: 0 0 8px; font-size: calc(1.23rem * var(--letters)); line-height: 1.35 }
+.instruction, .feedback { font-size: calc(1rem * var(--letters)); margin: 8px 0 }
+.feedback { font-weight: bold; color: #284b2c }
+.choices { display: grid; gap: 9px; margin-top: 10px }
+button { font: inherit; cursor: pointer; color: #382619; min-height: 48px }
+button:focus-visible, input:focus-visible { outline: 3px solid #1c63a2; outline-offset: 2px }
+.action { padding: 10px 16px; border: 2px solid #9a6944; border-radius: 12px; background: #fae4bd; font-weight: 700; font-size: calc(1rem * var(--letters)) }
+.answer { width: 100%; padding: 3px 8px; min-height: 68px; border: 18px solid transparent; border-image: var(--paper) 235 270 fill / 1 / 0 stretch; background: none; font-size: calc(1.1rem * var(--letters)); font-weight: 700; line-height: 1.22; overflow-wrap: anywhere }
+.answer[aria-pressed="true"] { color: #214a26; box-shadow: inset 0 0 0 3px #547950; border-radius: 11px }
+.answer[aria-pressed="true"]::after { content: " ✓" }
+.settings { margin: 12px 0; font-size: calc(1rem * var(--letters)) }
+.settings label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px }
+.settings input { width: 112px; height: 44px; accent-color: #865129 }
+nav { margin-top: 16px }
+[hidden] { display: none !important }
+@media (prefers-reduced-motion: reduce) { .board img { transition: none } }
+
+.action.oak, #settingsButton {
+  display: inline-grid; place-items: center; text-align: center;
+  border: 0; border-radius: 0; background: transparent center / contain no-repeat;
+  max-width: 100%; line-height: 1.15;
+}
+.action.oak {
+  width: min(100%, calc(15rem * var(--letters))); aspect-ratio: 2.65;
+  background-image: url("../../assets/die-eiche/abschnitt-2/knetrahmen.webp"); padding: 12% 12%;
+  padding: calc(.6rem * var(--letters)) 1.05rem 0;
+}
+#settingsButton {
+  width: min(100%, calc(22rem * var(--letters))); aspect-ratio: 6.08;
+  min-height: 58px; padding: .25rem .75rem .25rem 3.4rem;
+  background-image: url("../../assets/die-eiche/abschnitt-2/groesse.webp");
+}
+.extra { max-width: 920px; margin-inline: auto }
+.extra h2 { font-size: calc(1.4rem * var(--letters)) }
+.extra p { margin-block: .65em }
+.book-stage { position: relative; width: min(100%, 68svh, 630px); margin: auto; aspect-ratio: 712 / 714 }
+.book-stage video, .book-stage img { display: block; width: 100%; border-radius: 14px }
+.book-title {
+  position: absolute; left: 78.8%; top: 56.9%; width: 27%;
+  transform: translate(-50%,-50%); text-align: center; margin: 0;
+  font: italic bold min(calc(5.8cqw * var(--letters)), 7cqw)/1.12 Georgia, serif;
+  color: #4e2e19;
+}
+.book-stage { container-type: inline-size }
+.jump {
+  display: block; width: min(46vw, 185px); padding: 0; background: #f5ede5;
+  border: 0; border-radius: 14px; overflow: hidden; margin-inline-start: auto;
+}
+.jump video { display: block; width: 100%; pointer-events: none }
+
+.listen-intro { font-size: calc(1.12rem * var(--letters)); font-weight: 700 }
+#narration { display: block; width: min(100%, 36rem); min-height: 54px; margin-bottom: 1rem }
+.book-title { left: 78.5%; width: 26%; font-size: min(calc(3.55cqw * var(--letters)), 4.2cqw); white-space: nowrap }
+.book-title img { width: 72%; margin: .3em auto 0; border-radius: 0 }
+.jump { background: transparent; border-radius: 0 }
+
+main { width: min(100%, 1460px) }
+.topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; margin-bottom: 8px }
+.brand { display: grid }
+.info { grid-area: 1 / 3; width: 48px; min-height: 48px; border-radius: 50%; border: 2px solid #8c4829; background: #fae4bd; color: #60391f; font-weight: bold }
+#settingsButton { grid-area: 1 / 2; width: min(100%, 22rem); min-width: min(100%, 240px); font-size: calc(.98rem * var(--letters)) }
+@media (max-width: 620px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) auto }
+  .info { grid-column: 2 }
+  #settingsButton { grid-area: 2 / 1 / 3 / -1; justify-self: start }
+}
+.scene-menu { margin: 12px 0; font-size: calc(1rem * var(--letters)) }
+.scene-menu summary.action, .scene-menu .oak { width: min(100%, 340px); cursor: pointer; list-style: none; aspect-ratio: 2.49; padding: .15em clamp(14px, 4vw, 38px) 0; text-decoration: none }
+.scene-menu summary::-webkit-details-marker { display: none }
+.scene-menu p { margin-block: 8px }
+.scene-menu a { color: #382619 }
+.scene-menu .oak + .oak { margin-top: 6px }
+h1 { font-size: calc(clamp(1.4rem, 3vw, 2.1rem) * var(--letters)) }
+h2 { font-size: calc(1.35rem * var(--letters)) }
+.activity { text-align: center; font-size: calc(1.06rem * var(--letters)) }
+.activity h2 { margin-bottom: .22em }
+.action.oak:not(.choice) { aspect-ratio: 2.49 }
+.action.choice { width: 100%; margin: 0; padding-inline: 8%; aspect-ratio: 2.49 }
+.choice[aria-pressed="true"] { color: #214a26; text-decoration: underline }
+@media (min-width: 760px) {
+  .short-answers { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px }
+  .short-answers .choice { overflow-wrap: anywhere }
+}
+.extra { max-width: none }
+.listen-content { text-align: center; font-size: calc(1.06rem * var(--letters)); margin-top: 12px }
+.listen-intro { font-weight: normal }
+#narration { margin: .7rem auto 1rem }
+.original { text-align: left; max-width: 820px; margin: 10px auto }
+footer { margin-top: 16px; text-align: center; font-size: calc(.95rem * var(--letters)) }
+nav { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(4px, 1.2vw, 12px); margin-top: 10px }
+nav > button { grid-column: 1; grid-row: 1 }
+nav > button:last-child, #next, #readNext { grid-column: 3; justify-self: end }
+nav > .oak { width: min(100%, 235px); min-height: 52px; padding: .3em 10% 0; text-wrap: balance }
+#readNext { min-height: 65px }
+#jumpButton { max-width: 100% }
+@media (max-width: 430px) {
+  #readNext { grid-column: 1 / -1; grid-row: 2 }
+}
+button:disabled { cursor: default; opacity: .5 }
+.counter { grid-column: 2; grid-row: 1; font-size: calc(.95rem * var(--letters)); white-space: nowrap }
+dialog { width: min(92vw, 560px); max-height: 90svh; overflow: auto; border: 2px solid #8c4829; border-radius: 15px; background: #fff1d5; color: inherit; font-size: calc(1rem * var(--letters)) }
+.info-links { display: grid; grid-template-columns: 1fr; gap: 9px; margin: 12px 0 }
+</style>
+<link rel="stylesheet" href="../../die-eiche/page-turn.css">
+
+  <link rel="stylesheet" href="../../shared/game-selection.css">
+<link rel="stylesheet" href="../abschnitt.css"></head>
+<body>
+<main>
+<header class="topbar">
+  <div class="brand"><strong>Die Eiche</strong>Geschichten zum Lesen und Vorlesen</div>
+  <button class="info" id="infoButton" type="button" aria-label="Informationen und Kontakt" aria-haspopup="dialog" aria-controls="info">i</button>
+  <button class="action" id="settingsButton" aria-controls="settings" aria-expanded="false">Aa · Größe ändern</button>
+</header>
+<div class="settings" id="settings" hidden>
+  <label>Schriftgröße <input id="letters" type="range" min="100" max="150" step="5" value="100"><output for="letters">100 %</output></label>
+  <label>Spielfeldgröße <input id="boardSize" type="range" min="75" max="135" step="5" value="100"><output for="boardSize">100 %</output></label>
+</div>
+<details class="scene-menu" id="sceneMenu">
+  <summary class="action oak"><span>Anderen Abschnitt<br>noch einmal erleben</span></summary>
+  <p>Wähle einen Abschnitt.</p>
+  <a class="action oak" id="replayPrevious" href="../abschnitt-1/?neu=1">Die Eiche</a>
+  <a class="action oak" id="replayCurrent" href="?neu=1">Spuren der Zeit</a>
+  <a class="action oak" id="replayThird" href="../abschnitt-3/?neu=1" hidden>Winterschlaf</a>
+</details>
+<div id="game"><h1>Spuren der Zeit</h1>
+<div class="layout">
+  <div class="board-scroll" id="boardScroll" tabindex="0" aria-label="Winterbild">
+    <div class="board" id="board">
+      <img src="../../assets/die-eiche/abschnitt-2/wintereiche.webp" alt="Verschneite Eiche am See. In ihrer Rinde ist ein kleines Herz mit zwei Buchstaben zu sehen.">
+      <button class="hotspot" id="hotspot" aria-label="Frage zur Eiche anzeigen" hidden></button>
+    </div>
+  </div>
+  <section class="read-column" id="reading" aria-label="Lesetext und Aufgabe">
+    <p class="paper" id="passage" tabindex="-1"></p>
+    <div class="activity">
+      <button class="action oak" id="showQuestion">Zur Frage</button>
+      <section id="questionPanel" aria-labelledby="question" hidden>
+        <h2 id="question" tabindex="-1"></h2>
+        <p id="instruction" class="instruction" hidden>Tippe alle Sätze an, die zur Geschichte passen.</p>
+        <div class="choices" id="choices"></div>
+        <p class="feedback" id="feedback" role="status"></p>
+      </section>
+    </div>
+  </section>
+</div>
+<nav aria-label="Spielnavigation">
+  <button class="action oak" id="back">Zurück</button>
+  <span class="counter" id="counter" aria-live="polite">1 / 4</span>
+  <button class="action oak" id="next" hidden>Weiter</button>
+  <button class="action oak" id="readNext" hidden>Weiter zum Vorlesen</button>
+</nav>
+
+</div>
+<section id="readPage" class="extra" hidden aria-labelledby="readTitle">
+  <h1 id="readTitle" tabindex="-1">Spuren der Zeit</h1>
+  <div class="listen-content">
+  <h2>Spuren der Zeit zum Anhören</h2>
+  <p class="listen-intro">Das hast du gut gemacht! Mach es dir gemütlich und hör, wie die Geschichte weitergeht.</p>
+  <audio id="narration" controls preload="metadata" aria-label="Originalaufnahme: Spuren der Zeit" src="../../assets/die-eiche/abschnitt-2/vorleseton.flac"></audio>
+  <article class="paper original" id="originalText">Ihre Rinde zeigte die Spuren der Zeit, rissig und mit einem Herz, das vor langer Zeit ein Liebespaar zusammen mit seinen Initialen hineingeschnitzt hatte. Wie eine alte, schlecht verheilte Narbe sah es inzwischen aus, aber die Eiche spürte es schon lange nicht mehr. Und wenn sie sich damals darüber geärgert hatte, so verletzt zu werden, hatte sie das schon längst wieder vergessen. Sie konnte sowieso nichts dagegen tun, nichts, als sich selbst zu heilen. Und auf diese Weise immer stärker zu werden.</article>
+  </div>
+  <nav aria-label="Spielnavigation">
+    <button class="action oak" id="readBack">Zurück</button>
+    <span class="counter">3 / 4</span>
+    <button class="action oak" id="openBook">Weiter</button>
+  </nav>
+</section>
+<section id="bookPage" class="extra" hidden aria-label="Übergang zu Winterschlaf">
+  <div class="book-stage">
+    <video id="bookClip" src="../../assets/die-eiche/abschnitt-2/buchoeffnen.mp4" playsinline preload="metadata"></video>
+    <img id="openStill" src="../../assets/die-eiche/abschnitt-2/buch-standbild.jpg" alt="Würstchen hält ein geöffnetes Buch" hidden>
+    <h1 class="book-title" id="bookTitle" tabindex="-1" hidden><span>Winterschlaf</span><img src="../../assets/die-eiche/abschnitt-2/kringel.png" alt=""></h1>
+  </div>
+  <nav aria-label="Spielnavigation">
+    <button class="action oak" id="bookBack">Zurück</button>
+    <span class="counter">4 / 4</span>
+    <button class="jump" id="jumpButton" aria-label="Weiter zu Winterschlaf" hidden><video id="jumpClip" src="../../assets/die-eiche/abschnitt-2/weiter-huepfen.webm" poster="../../assets/die-eiche/abschnitt-2/weiter-standbild.png" playsinline muted preload="none" tabindex="-1"></video></button>
+  </nav>
+</section>
+<section id="chapterPage" class="extra" hidden>
+  <h1 id="chapterTitle" tabindex="-1">Winterschlaf</h1>
+  <p class="paper">Hier beginnt der nächste Abschnitt.</p>
+  <button class="action oak" id="chapterBack">Zurück</button>
+</section>
+<footer>In deinem Tempo. Ohne Zeitdruck.</footer>
+</main>
+<dialog id="info" aria-labelledby="infoTitle">
+  <h2 id="infoTitle">Informationen &amp; Kontakt</h2>
+  <p>Die Eiche · Heike Amthor</p>
+  <nav class="info-links" aria-label="Informationen zur App">
+    <a href="https://lesespiele.heike-amthor.de/impressum" target="_blank" rel="noopener">Impressum</a>
+    <a href="https://lesespiele.heike-amthor.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+    <a href="https://lesespiele.heike-amthor.de/" target="_blank" rel="noopener">Website der Entwicklerin</a>
+    <a href="mailto:lesespiele.heike.amthor@gmx.de">Nachricht an die Entwicklerin</a>
+  </nav>
+  <button class="action oak info-close" id="infoClose" type="button" autofocus>Schließen</button>
+</dialog>
+<script src="../spielstand.js?v=3"></script>
+<script src="../../die-eiche/page-turn.js"></script>
+<script>
+const pages = [
+  {
+    text: 'Die Rinde der Eiche ist alt und hat viele Risse. Vor langer Zeit hat ein Liebespaar ein Herz hineingeritzt. Auch zwei Buchstaben für ihre Namen stehen darin.',
+    question: 'Wer hat das Herz in die Rinde geritzt?',
+    answers: ['Liebespaar', 'Specht', 'Händler'],
+    answerOrder: [1, 0, 2],
+    correct: [0]
+  },
+  {
+    text: 'Jetzt sieht das Herz aus wie eine alte Narbe. Früher hat es der Eiche vielleicht wehgetan. Aber die Wunde ist längst heil. Die Eiche ist weitergewachsen. Sie ist stärker geworden.',
+    question: 'Was ist in den vielen Jahren passiert?',
+    answers: ['Die Eiche ist stärker geworden.', 'Die Eiche hat sich immer wieder geärgert.', 'Die Eiche hat die Wunde geheilt.'],
+    correct: [0, 2]
+  }
+];
+const get = id => document.getElementById(id);
+const board = get('board');
+const boardScroll = get('boardScroll');
+const reading = get('reading');
+const passage = get('passage');
+const feedback = get('feedback');
+const found = new Set();
+let pageIndex = 0;
+let activeScreen = 'game';
+const saved = EicheProgress.readForVisit(2);
+function updateReplay(){get('replayThird').hidden=!EicheProgress.thirdUnlocked()}
+get('sceneMenu').addEventListener('toggle',updateReplay);
+window.addEventListener('pageshow',updateReplay);
+window.addEventListener('storage',updateReplay);
+updateReplay();
+let restoring = false;
+function checkpoint() {
+  if (restoring) return;
+  EicheProgress.save(2, {screen: activeScreen, pageIndex, question: !get('questionPanel').hidden, answers: [...found], feedback: feedback.textContent});
+}
+window.addEventListener('pageshow', event => { if (event.persisted) checkpoint(); });
+let revealTimer;
+
+function centerBoard() {
+  boardScroll.scrollLeft = (boardScroll.scrollWidth - boardScroll.clientWidth) / 2;
+}
+new ResizeObserver(centerBoard).observe(board);
+
+function renderPage(index, returningFromHeart = false, moveFocus = false) {
+  clearTimeout(revealTimer);
+  pageIndex = index;
+  found.clear();
+  passage.textContent = pages[index].text;
+  feedback.textContent = '';
+  reading.hidden = returningFromHeart;
+  get('questionPanel').hidden = true;
+  get('showQuestion').hidden = false;
+  get('hotspot').hidden = true;
+  get('back').disabled = false;
+  get('counter').textContent = (index + 1) + ' / 4';
+  get('next').hidden = true;
+  get('readNext').hidden = true;
+  board.classList.remove('closeup');
+  function showReading() {
+    reading.hidden = false;
+    get('hotspot').hidden = index === 0;
+    if (moveFocus) passage.focus({preventScroll: true});
+  }
+  if (returningFromHeart && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealTimer = setTimeout(showReading, 1250);
+  } else {
+    showReading();
+  }
+  checkpoint();
+}
+
+function revealQuestion() {
+  const page = pages[pageIndex];
+  if (pageIndex === 0) {
+    board.classList.add('closeup');
+    centerBoard();
+  }
+  get('hotspot').hidden = true;
+  get('showQuestion').hidden = true;
+  get('question').textContent = page.question;
+  get('instruction').hidden = pageIndex === 0;
+  const answerOrder = page.answerOrder ?? [...page.answers.keys()];
+  get('choices').replaceChildren(...answerOrder.map(index => {
+    const button = document.createElement('button');
+    button.className = pageIndex === 0 ? 'action oak choice' : 'answer';
+    button.textContent = page.answers[index];
+    button.dataset.answerIndex = String(index);
+    button.setAttribute('aria-pressed', String(found.has(index)));
+    button.onclick = () => {
+      if (found.has(index) || found.size === page.correct.length) return;
+      if (!page.correct.includes(index)) {
+        feedback.textContent = 'Lies noch einmal!';
+        checkpoint();
+        return;
+      }
+      found.add(index);
+      button.setAttribute('aria-pressed', 'true');
+      if (pageIndex === 0) {
+        feedback.textContent = 'Das stimmt!';
+        get('next').hidden = false;
+      } else if (found.size === 1) {
+        feedback.textContent = 'Das stimmt. Stimmt noch ein Satz?';
+      } else {
+        feedback.textContent = 'Genau so ist es.';
+        get('readNext').hidden = false;
+        if (!restoring) EicheProgress.complete(2);
+      }
+      checkpoint();
+    };
+    return button;
+  }));
+  get('choices').classList.toggle('short-answers', pageIndex === 0);
+  get('questionPanel').hidden = false;
+  get('back').disabled = false;
+  const solved = found.size === page.correct.length;
+  get('next').hidden = pageIndex !== 0 || !solved;
+  get('readNext').hidden = pageIndex !== 1 || !solved;
+  checkpoint();
+  if (restoring) return;
+  get('question').focus({preventScroll: true});
+  if (get('question').getBoundingClientRect().bottom > innerHeight) {
+    get('question').scrollIntoView({block: 'nearest'});
+  }
+}
+
+function closeQuestion(moveFocus = true) {
+  get('questionPanel').hidden = true;
+  get('showQuestion').hidden = false;
+  get('hotspot').hidden = pageIndex === 0;
+  get('next').hidden = true;
+  get('readNext').hidden = true;
+  board.classList.remove('closeup');
+  checkpoint();
+  if (moveFocus) passage.focus({preventScroll:true});
+}
+
+get('showQuestion').onclick = get('hotspot').onclick = () => EichePageTurn.run(revealQuestion);
+get('next').onclick = () => {
+  EichePageTurn.run(() => {
+    scrollTo(0, 0);
+    renderPage(1, true, true);
+  });
+};
+get('back').onclick = () => {
+  if (EichePageTurn.busy) return;
+  if (get('questionPanel').hidden && pageIndex === 0) {
+    location.assign('../abschnitt-1/');
+    return;
+  }
+  EichePageTurn.run(() => {
+    scrollTo(0, 0);
+    if (!get('questionPanel').hidden) {
+      closeQuestion();
+    } else {
+      renderPage(0);
+      for (const index of pages[0].correct) found.add(index);
+      feedback.textContent = 'Das stimmt!';
+      revealQuestion();
+    }
+  }, true);
+};
+get('settingsButton').onclick = () => {
+  const settings = get('settings');
+  settings.hidden = !settings.hidden;
+  get('settingsButton').setAttribute('aria-expanded', String(!settings.hidden));
+};
+for (const [id, property, usePercent] of [['letters', '--letters', false], ['boardSize', '--board', true]]) {
+  const input = get(id);
+  input.oninput = () => {
+    document.documentElement.style.setProperty(property, usePercent ? input.value + '%' : input.value / 100);
+    input.nextElementSibling.value = input.value + ' %';
+  };
+}
+const bookClip = get('bookClip');
+const jumpClip = get('jumpClip');
+const narration = get('narration');
+function showScreen(id, heading) {
+  activeScreen = id;
+  for (const screen of ['game', 'readPage', 'bookPage', 'chapterPage']) {
+    get(screen).hidden = screen !== id;
+  }
+  scrollTo(0, 0);
+  if (heading) get(heading).focus({preventScroll: true});
+  checkpoint();
+}
+function stopReading() {
+  narration.pause();
+  narration.currentTime = 0;
+}
+function bookOpened(useStill = false, animate = true) {
+  if (get('bookPage').hidden) return;
+  bookClip.hidden = useStill;
+  get('openStill').hidden = !useStill;
+  get('bookTitle').hidden = false;
+  get('jumpButton').hidden = false;
+  get('bookTitle').focus({preventScroll: true});
+  if (animate) jumpClip.play().catch(() => {});
+}
+bookClip.addEventListener('ended', () => bookOpened());
+bookClip.addEventListener('error', () => bookOpened(true));
+get('readNext').onclick = () => EichePageTurn.run(() => showScreen('readPage','readTitle'));
+get('readBack').onclick = () => {
+  if (EichePageTurn.busy) return;
+  stopReading();
+  EichePageTurn.run(() => { showScreen('game'); get('readNext').focus(); }, true);
+};
+get('openBook').onclick = () => {
+  if (EichePageTurn.busy) return;
+  stopReading();
+  EichePageTurn.run(() => {
+    bookClip.hidden = false;
+    get('openStill').hidden = true;
+    get('bookTitle').hidden = true;
+    get('jumpButton').hidden = true;
+    showScreen('bookPage');
+    bookClip.currentTime = 0;
+    jumpClip.currentTime = 0;
+    bookClip.play().catch(() => bookOpened(true));
+  });
+};
+get('bookBack').onclick = () => {
+  if (EichePageTurn.busy) return;
+  bookClip.pause();
+  jumpClip.pause();
+  EichePageTurn.run(() => showScreen('readPage','readTitle'), true);
+};
+get('jumpButton').onclick = () => {
+  if (EichePageTurn.busy) return;
+  jumpClip.pause();
+  EicheProgress.complete(2);
+  location.assign('../abschnitt-3/?neu=1');
+};
+get('infoButton').onclick = () => get('info').showModal();
+get('infoClose').onclick = () => get('info').close();
+get('chapterBack').onclick = () => EichePageTurn.run(() => { showScreen('bookPage'); bookOpened(bookClip.hidden); }, true);
+
+restoring = true;
+renderPage(saved?.pageIndex === 1 ? 1 : 0);
+if (saved?.question || saved?.answers?.length) {
+  revealQuestion();
+  for (const index of saved.answers ?? []) {
+    const button = [...get('choices').children].find(choice => choice.dataset.answerIndex === String(index));
+    button?.onclick();
+  }
+  if (typeof saved.feedback === 'string') feedback.textContent = saved.feedback;
+  if (!saved.question) closeQuestion(false);
+}
+if (saved?.screen === 'readPage') showScreen('readPage');
+if (saved?.screen === 'bookPage' || saved?.screen === 'chapterPage') {
+  showScreen('bookPage');
+  bookOpened(true, false);
+  if (saved.screen === 'chapterPage') {
+    jumpClip.pause();
+    // Old versions saved a placeholder after the book; show the book again.
+    showScreen('bookPage');
+  }
+}
+restoring = false;
+checkpoint();
+
+</script>
+
+  <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
+</body>
+</html>
