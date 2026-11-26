@@ -1,0 +1,2 @@
+# Geschichtenbuch – Test 2: Lederbuch
+Bestätigt: alte märchenhafte Lederbindung mit sichtbarem gewölbtem Rücken und äußeren Deckelkanten, sichtbaren Papierstapeln, warmem Papier; Blätterecken statt separater Navigation. Nur Platzhaltertexte. Test 1 bleibt unverändert. CSS-Lederprägung und Messingecken sind Gestaltungsvorschläge. Mechanik aus Test 1 übernommen; räumliche Rotation, noch keine echte Papierkrümmung. Browser-/Geräteprüfung ausstehend. Keine Änderungen an Silvana oder Eiche.
