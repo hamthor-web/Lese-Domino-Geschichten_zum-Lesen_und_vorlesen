@@ -1,0 +1,20 @@
+@font-face {
+  font-family: Andika;
+  src: url('../vorschau-einfuehrung/assets/fonts/Andika-Regular.ttf');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Andika;
+  src: url('../vorschau-einfuehrung/assets/fonts/Andika-Bold.ttf');
+  font-weight: 700;
+  font-display: swap;
+}
+
+body {
+  margin: 0;
+  color: #f2dfc1;
+  background: radial-gradient(ellipse at 48% 40%, #4c392b, #241911 72%, #18120e);
+  font-family: Andika, sans-serif;
+}
