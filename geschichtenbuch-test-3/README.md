@@ -1,0 +1,2 @@
+# Test 3 – Altes Märchenbuch
+Fotovorlage vom 26.11.2026: schwerer abgenutzter Lederband, unregelmäßige gealterte Papierlagen, sichtbarer Rücken. Eigenständige gezeichnete SVG-Materialebenen, keine Wiederverwendung des Fotos. Buchmechanik getrennt, Blätterecken, zwei Zoomregler, Hoch-/Querformat; nur Platzhalter. Test 1/2 und Geschichten unverändert. Browser- und Geräteabnahme offen; Animation noch keine physikalische Papierkrümmung.
