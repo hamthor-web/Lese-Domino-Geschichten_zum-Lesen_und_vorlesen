@@ -64,8 +64,8 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: /den essen/}).click();
     await next.click();
     await page.getByText(/Ein Specht hört kleine Tiere unter der Rinde/).waitFor();
-    await next.click();
     await page.emulateMedia({reducedMotion: 'no-preference'});
+    await next.click();
     await page.getByText(/Am Abend geht die Sonne unter/).waitFor();
     const insects = page.locator('#oak-animals .mosquitoes');
     assert.match(await insects.getAttribute('src'), /sommer-muecken\.webp/);
