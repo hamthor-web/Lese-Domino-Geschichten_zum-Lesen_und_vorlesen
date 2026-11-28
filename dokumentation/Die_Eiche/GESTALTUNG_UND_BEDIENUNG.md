@@ -19,6 +19,11 @@ Stand 28.11.2026. Gilt für neue und überarbeitete Eichenabschnitte. Der freige
 
 Zusammengehörige Antwortbuttons nach der längsten Beschriftung ausrichten. Für lange Texte Umbruch vorsehen, damit der Text vollständig in der Mitte des Rahmens bleibt. Proportionen der Rahmen und Grafiken erhalten.
 
+## Abschnittswahl und Spielstand
+
+- Oben unter den Einstellungen steht „Anderen Abschnitt noch einmal erleben“ im plastischen Eichenrahmen. Das Menü bietet die bereits erreichbaren Abschnitte an und startet den gewählten Abschnitt von vorn.
+- Seitenwechsel und abgelegte Karten werden beim Spielen gespeichert. Nach dem Verlassen des Spiels führt „Spiel fortsetzen“ zum zuletzt gespielten Abschnitt und seiner gespeicherten Seite zurück. Der Spielstand liegt im verwendeten Browser.
+
 ## Vorlesen und Buchübergang
 
 - Die Vorleseseite beginnt mit „Mach es dir gemütlich und höre der Geschichte zu“.

@@ -88,6 +88,13 @@ nav > button:last-child { justify-self: end }
   font-size: calc(1rem * var(--letters)); font-weight: 700; line-height: 1.2;
   text-wrap: balance; overflow-wrap: anywhere;
 }
+.scene-menu { width: min(100%, 21.25rem); margin-block: .75rem }
+.scene-menu summary, .scene-menu a {
+  width: 100%; min-height: 66px; padding: .8rem 12%; color: var(--ink); text-decoration: none;
+}
+.scene-menu summary { list-style: none }
+.scene-menu summary::-webkit-details-marker { display: none }
+.scene-choices { display: grid; gap: .35rem; margin-top: .35rem }
 .game-button[aria-pressed="true"] { color: #1f5626; text-decoration: underline }
 .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; margin-top: .55rem }
 .choices .game-button { min-height: 68px; padding: .85em 12% }

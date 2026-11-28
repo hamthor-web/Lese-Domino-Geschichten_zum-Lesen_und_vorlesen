@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Die Eiche · Erste warme Sonnenstrahlen</title>
-  <link rel="stylesheet" href="abschnitt.css">
+  <link rel="stylesheet" href="abschnitt.css?v=2">
   <link rel="stylesheet" href="../../shared/game-selection.css">
   <script src="../spielstand.js?v=4" defer></script>
   <script src="abschnitt.js?v=3" defer></script>
@@ -21,6 +21,16 @@
       <label>Schriftgröße <input id="letters" type="range" min="100" max="150" step="5" value="100"><output for="letters">100 %</output></label>
       <label>Spielfeldgröße <input id="boardSize" type="range" min="75" max="100" step="5" value="100"><output for="boardSize">100 %</output></label>
     </div>
+
+    <details class="scene-menu">
+      <summary class="game-button"><span>Anderen Abschnitt<br>noch einmal erleben</span></summary>
+      <div class="scene-choices">
+        <a class="game-button" href="../abschnitt-1/?neu=1">Die Eiche</a>
+        <a class="game-button" href="../abschnitt-2/?neu=1">Spuren der Zeit</a>
+        <a class="game-button" href="../abschnitt-3/?neu=1">Winterschlaf</a>
+        <a class="game-button" href="?neu=1">Erste warme Sonnenstrahlen</a>
+      </div>
+    </details>
 
     <h1>Erste warme Sonnenstrahlen</h1>
     <div class="layout" id="layout">
