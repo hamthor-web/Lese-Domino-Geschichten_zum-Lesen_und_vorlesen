@@ -1,7 +1,9 @@
 # Die Eiche – verbindlicher Kapitelübergang mit Würstchen und Buch
 
 **Entscheidung:** Am 22.11.2026 ausdrücklich bestätigt („so sei es – pack das auf GitHub hoch“). Gilt für die Kapitelübergänge der Geschichte **Die Eiche**.  
-**Stand:** Gestaltungs- und Ablaufentscheidung; **noch nicht in den Spielcode eingebaut**.
+**Webstand am 28.11.2026:** Das Video ist in den ersten drei Abschnitten eingebunden. Abschnitt 1 nutzt [die Vorlage](../../assets/die-eiche/abschnittsuebergang_wuerstchen_oeffnet_buch_mit_ton.mp4), Abschnitte 2 und 3 nutzen [eine bytegleiche Kopie](../../assets/die-eiche/abschnitt-2/buchoeffnen.mp4). Abschnitt 3 kündigt „Erste warme Sonnenstrahlen“ an.
+
+## Ursprüngliche Entscheidung vom 22.11.2026
 
 ## Referenzvideo
 

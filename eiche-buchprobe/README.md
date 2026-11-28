@@ -1,5 +1,7 @@
 # Die Eiche · Buchprobe auf dem Bildschirm
 
+> **Status seit 28.11.2026:** Historische Testfassung. Die animierte Buchansicht als Spielfläche wurde wegen des Platzverlusts verworfen. [Entscheidung](../dokumentation/MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md)
+
 Testabzug der drei spielbaren Web-Abschnitte „Die Eiche“, „Spuren der Zeit“ und „Winterschlaf“ aus Commit `b86404a`. Die Abschnitte verwenden ihre vorhandenen Lesetexte, Suchbilder, Aufgaben, Tonaufnahmen, Animationen und interne Seitennavigation. Die Probe verwendet die Buchhülle von Test 4. Sie legt das vorhandene Spielfeld auf eine Einzel- oder Doppelseite und behält für die Abschnitte ihre bisherige Blätterlogik.
 
 Der Abschnitt lässt sich für die Abnahme direkt auswählen. „Mehr Platz“ gibt derselben laufenden Szene die ganze Fläche unter der Vergleichsleiste. „Buch zeigen“ setzt sie wieder in die Buchhülle. Beide Ansichten verwenden denselben Spielstand in der Probe. Auf der Buchfläche stehen die Lesetexte direkt auf dem Papier. Auf breiteren Querformat-Ansichten liegen Bild und Lesetext nebeneinander. Inhalte sind bei Bedarf vertikal scrollbar.

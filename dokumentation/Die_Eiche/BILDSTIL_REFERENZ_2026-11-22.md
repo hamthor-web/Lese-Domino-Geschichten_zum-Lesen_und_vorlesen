@@ -2,6 +2,8 @@
 
 **Status:** Von der Nutzerin ausdrücklich bestätigte Gestaltungsentscheidung. Gilt nur für die Geschichte **„Die Eiche“** innerhalb der Lese-Domino-Geschichtensammlung. Ergänzt die bestehenden Dateien `SPIELAKTE.md` und `ENTSCHEIDUNGEN.md`, ohne frühere Festlegungen zu ersetzen.
 
+> Aktualisierung vom 28.11.2026: Beide [Originalreferenzen](Referenzbilder/README.md) liegen im Repository. Seit der Entscheidung vom 25.11. gilt für lesbare Herzgravuren **H&A**. Die unten erwähnte Gravur „A+M“ dokumentiert den früheren Bildstand.
+
 ## Maßgebliche Referenzbilder
 Die Nutzerin hat am **22.11.2026** zwei konkrete, bereits erzeugte Bilder nochmals gezeigt und erklärt: „Dieser Stil gefällt mir eigentlich am besten. Können wir den jetzt für die Eiche immer verwenden?“ Diese beiden Bilder (1. **Herbst: Frau am Stamm neben dem See**, 2. **Winter: schlittschuhlaufende Kinder auf dem See**) sind **gleichrangige verbindliche visuelle Referenzen**, nicht bloß beliebige Beispiele für Claymation. Die Originalbilddateien stammen aus dem zugehörigen Chat; sie wurden mit diesem Dokument noch **nicht als Binärdateien ins Repository übertragen**.
 
