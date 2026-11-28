@@ -470,10 +470,6 @@ filmToggle.addEventListener('click', () => {
     video.pause();
   }
 });
-byId('filmRestart').addEventListener('click', () => {
-  video.currentTime = 0;
-  playFilm();
-});
 seek.addEventListener('input', () => {
   if (!seek.disabled) video.currentTime = Number(seek.value) / 1000 * video.duration;
 });
