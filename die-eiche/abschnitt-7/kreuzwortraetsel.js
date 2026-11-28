@@ -11,10 +11,8 @@ const words = [
 ];
 const section = 7;
 const byId = id => document.getElementById(id);
-const crossword = byId('crossword');
 const grid = byId('grid');
 const feedback = byId('feedback');
-const storyDialog = byId('story-dialog');
 const readButton = byId('read');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const board = new Map();
@@ -49,7 +47,6 @@ grid.style.setProperty('--columns', 2 + Math.max(...Array.from(board.values(), c
 grid.style.gridTemplateRows = 'repeat(' + (2 + Math.max(...Array.from(board.values(), cell => cell.row))) + ', var(--tile))';
 
 const saved = EicheProgress.readForVisit(section);
-let currentPage = saved?.page === 'crossword' ? 'crossword' : 'reading';
 let selected = words[saved?.selected]?.index ?? 0;
 
 function letterFrom(value) {
@@ -109,7 +106,7 @@ for (const word of words) {
 
 function save() {
   const letters = Object.fromEntries(Array.from(board.values(), cell => [cell.key, cell.input.value]));
-  EicheProgress.save(section, {page: currentPage, selected, solved: [...solved], letters});
+  EicheProgress.save(section, {page: 'crossword', selected, solved: [...solved], letters});
 }
 
 function select(index, focus = false) {
@@ -154,7 +151,7 @@ function markSolved(word, animate) {
 function renderProgress() {
   byId('progress').value = solved.size;
   byId('count').textContent = solved.size + ' von ' + words.length + ' Wörtern gefunden';
-  byId('replay').hidden = currentPage !== 'crossword' || solved.size !== words.length;
+  byId('replay').hidden = solved.size !== words.length;
 }
 
 function enterLetter(cell) {
@@ -201,10 +198,6 @@ function presentReward(image, marker) {
   return new Promise(resolve => {
     let start;
     function draw(now) {
-      if (crossword.hidden) {
-        resolve();
-        return;
-      }
       start ??= now;
       const elapsed = now - start;
       const moving = !motion.matches;
@@ -227,35 +220,18 @@ async function playRewards() {
   showingReward = true;
   while (rewardQueue.length) {
     const {word, marker} = rewardQueue.shift();
-    if (!crossword.hidden) {
-      const image = document.createElement('img');
-      image.className = 'reward';
-      image.alt = '';
-      image.src = word.imageUrl;
-      feedback.textContent = word.answer + ' ist richtig!';
-      document.body.append(image);
-      await presentReward(image, marker);
-      image.remove();
-    }
+    const image = document.createElement('img');
+    image.className = 'reward';
+    image.alt = '';
+    image.src = word.imageUrl;
+    feedback.textContent = word.answer + ' ist richtig!';
+    document.body.append(image);
+    await presentReward(image, marker);
+    image.remove();
     marker.style.visibility = '';
   }
   showingReward = false;
   if (solved.size === words.length) feedback.textContent = 'Wunderbar! Du hast alle sieben Wörter gefunden.';
-}
-
-function showPage(page, focus = false) {
-  currentPage = page;
-  const playing = page === 'crossword';
-  byId('reading').hidden = playing;
-  crossword.hidden = !playing;
-  byId('back-to-reading').hidden = !playing;
-  if (!playing) speech.stop();
-  renderProgress();
-  if (focus) {
-    byId(playing ? 'crossword-title' : 'reading-title').focus({preventScroll: true});
-    document.querySelector('.summer-scene').scrollIntoView({block: 'start'});
-  }
-  save();
 }
 
 for (const word of words) {
@@ -266,14 +242,7 @@ if (solved.size === words.length) {
   feedback.textContent = 'Wunderbar! Du hast alle sieben Wörter gefunden.';
 }
 select(selected);
-showPage(currentPage);
-byId('start-crossword').onclick = () => showPage('crossword', true);
-byId('back-to-reading').onclick = () => showPage('reading', true);
-byId('reread').onclick = () => {
-  speech.stop();
-  storyDialog.showModal();
-};
-byId('story-copy').replaceChildren(...byId('story').cloneNode(true).children);
+renderProgress();
 byId('replay').onclick = () => {
   if (confirm('Abschnitt noch einmal beginnen?')) location.assign('?neu=1');
 };

@@ -33,9 +33,6 @@ html body.summer-page { padding-block-end: env(safe-area-inset-bottom, 0px); }
   font: bold clamp(1.25rem, 3cqw, 2.4rem)/1.1 Georgia, serif;
 }
 .summer-content h2 { margin: .28rem 0 .55rem; font: clamp(1rem, 1.9cqw, 1.5rem)/1.2 Georgia, serif; }
-#reading { max-width: 39rem; margin-inline: auto; }
-#story p { margin-block: .55em; }
-#start-crossword { display: block; margin: .75rem auto 0; }
 .crossword-progress { display: flex; align-items: center; gap: .5rem; font-size: .84rem; }
 .crossword-progress progress { flex: 1; min-width: 0; accent-color: #587b36; height: .8rem; }
 .crossword-layout {
@@ -135,7 +132,6 @@ html body.summer-page { padding-block-end: env(safe-area-inset-bottom, 0px); }
   }
   .board-panel { grid-row: 2; }
   #clues { grid-row: 3; }
-  #reread { grid-row: 4; justify-self: center; }
   #grid { --tile: min(10.2cqw, 2.65rem); --gutter: .45cqw; }
   .clue { min-height: 42px; font-size: 1rem; }
 }
@@ -146,5 +142,4 @@ html body.summer-page { padding-block-end: env(safe-area-inset-bottom, 0px); }
   .summer-content h1, .summer-content h2 { text-shadow: 0 1px 5px #e8f5a5, 0 1px 5px #e8f5a5; }
   .crossword-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
   .clue { min-height: 28px; }
-  #story { line-height: 1.38; }
 }
