@@ -5,6 +5,7 @@ const {spawn} = require('node:child_process');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const live = process.env.SILVANA_BASE_URL;
 const base = live || 'http://127.0.0.1:8768/';
+const welcome = new URL('silvana/', base).href;
 const server = live ? null : spawn('python3', ['-m', 'http.server', '8768', '--bind', '127.0.0.1'], {stdio: 'ignore'});
 const scenes = [
   ['vorschau-einfuehrung', [0, 1, 2, 3]], ['szene-2', [1, 2, 3, 4]],
@@ -77,9 +78,13 @@ async function checkAppInfo(page, description) {
   const trigger = page.getByRole('button', {name: 'Informationen & Kontakt', exact: true});
   const dialog = page.getByRole('dialog', {name: 'Informationen & Kontakt'});
   const bounds = await trigger.boundingBox();
+  const header = await page.locator('.has-app-info').boundingBox();
   const {width, height} = page.viewportSize();
-  assert.ok(bounds && bounds.x > width / 2 && bounds.x + bounds.width <= width &&
-    bounds.y < 32 && bounds.width >= 44, description + ' i-Button');
+  assert.ok(bounds && header && bounds.x >= header.x + header.width / 2 &&
+    bounds.x + bounds.width <= Math.min(width, header.x + header.width) &&
+    bounds.y >= Math.max(0, header.y) && bounds.y - header.y < 32 &&
+    bounds.y + bounds.height <= height && bounds.width >= 44 && bounds.height >= 44,
+    description + ' i-Button ' + JSON.stringify({bounds, header}));
   const historyState = await page.evaluate(() => history.state);
   await trigger.tap();
   await dialog.waitFor();
@@ -104,9 +109,9 @@ async function checkAppInfo(page, description) {
   try {
     for (let i = 0; i < 120; i++) {
       try {
-        if ((await (await fetch(base + '?test=' + Date.now())).text()).includes('parchment-actions.js')) break;
+        if ((await (await fetch(welcome + '?test=' + Date.now())).text()).includes('parchment-actions.js')) break;
       } catch {}
-      if (i === 119) throw Error('Aktueller Spielstand nicht erreichbar');
+      if (i === 119) throw Error('Silvana-Begrüßung mit Pergament-Schaltflächen nicht erreichbar');
       await delay(500);
     }
     browser = await chromium.launch({channel: 'chrome'});
@@ -129,7 +134,7 @@ async function checkAppInfo(page, description) {
     page.on('pageerror', error => errors.push(page.url() + ': ' + error.message));
     for (const [width, height] of devices) {
       await page.setViewportSize({width, height});
-      await page.goto(base);
+      await page.goto(welcome);
       await layout(page);
       await checkActions(page, 'Begrüßung ' + width + '×' + height);
       await checkAppInfo(page, 'Begrüßung ' + width + '×' + height);

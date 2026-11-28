@@ -36,35 +36,70 @@ function localServer() {
   const errors = [];
   page.on('pageerror', err => errors.push(err.message));
   const button = id => page.locator('#' + id);
-  const startLabel = 'Lass uns das Spiel mit der Geschichte beginnen!';
+  const selection = page.getByRole('navigation', {name: 'Geschichte auswählen'});
+  const silvana = new URL('silvana/', base).href;
+  const startLabel = 'Spiel beginnen';
+  const intro = url => url.pathname === '/vorschau-einfuehrung/' && url.searchParams.get('neu') === '1';
+  await page.goto(base);
+  assert.equal(await page.locator('h1').textContent(), 'Geschichten zum Lesen und Vorlesen');
+  // The landing animation can hide both links until the clip finishes.
+  await selection.getByRole('link', {name: 'Die Eiche', exact: true}).waitFor({state: 'visible'});
+  await selection.getByRole('link', {name: 'Silvana', exact: true}).click();
+  await page.waitForURL(silvana);
   for (const [width, height] of [[320, 640], [844, 390], [768, 1024], [1440, 900]]) {
     await page.setViewportSize({width, height});
-    await page.goto(base);
     assert.equal(await page.locator('h1').textContent(), 'Silvana');
     await page.waitForFunction(() => document.querySelector('.mascot img').naturalWidth > 0);
-    assert(await page.getByRole('link', {name: startLabel}).isVisible());
-    assert(await page.locator('footer p.note').evaluate(note =>
-      note.getBoundingClientRect().top >= document.querySelector('main').getBoundingClientRect().bottom));
+    assert(await page.getByRole('link', {name: startLabel, exact: true}).isVisible());
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   }
-  await page.getByRole('link', {name: startLabel}).click();
-  await page.waitForURL('**/vorschau-einfuehrung/');
-  const phone = await browser.newPage({hasTouch: true, isMobile: true, viewport: {width: 393, height: 780}});
+  await page.getByRole('link', {name: startLabel, exact: true}).click();
+  await page.waitForURL(intro);
+
+  const phone = await browser.newPage({
+    hasTouch: true, isMobile: true, viewport: {width: 393, height: 780},
+    reducedMotion: 'reduce', serviceWorkers: 'block',
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1'
+  });
   await phone.addInitScript(() => {
     window.addEventListener('beforeinstallprompt', event => {
       event.preventDefault();
       event.stopImmediatePropagation();
     });
   });
+  const oldVersion = 'a'.repeat(40);
+  const newVersion = 'b'.repeat(40);
+  await phone.route(base + 'app-version.json?*', route => route.fulfill({json: {version: newVersion}}));
+  await phone.route(url => url.pathname === '/', async route => {
+    const response = await route.fetch();
+    const version = new URL(route.request().url()).searchParams.has('aktualisiert') ? newVersion : oldVersion;
+    const body = (await response.text()).replace('{{ site.github.build_revision }}', version);
+    await route.fulfill({response, body});
+  });
   await phone.goto(base);
-  await phone.getByRole('button', {name: 'Installieren'}).tap();
-  assert(await phone.getByText('iPhone und iPad:', {exact: true}).isVisible());
-  await phone.getByRole('button', {name: 'Installieren'}).tap();
-  assert.equal(await phone.locator('#installationshilfe').isVisible(), false);
+  await phone.getByText('Zum Home-Bildschirm hinzufügen', {exact: true}).tap();
+  assert(await phone.getByText(/Tippe in Safari auf/).isVisible());
+  await phone.getByText('Zum Home-Bildschirm hinzufügen', {exact: true}).tap();
+  assert.equal(await phone.getByText(/Tippe in Safari auf/).isVisible(), false);
+  const parentInfo = phone.getByRole('button', {name: 'Warum ist hier ein Würstchen?'});
+  await parentInfo.tap();
+  assert(await phone.getByRole('heading', {name: 'Für die Eltern und Lesebegleiter'}).isVisible());
+  assert(await phone.locator('footer p.note').evaluate(note =>
+    note.getBoundingClientRect().top >= document.querySelector('main').getBoundingClientRect().bottom));
+  await parentInfo.tap();
+  const reload = phone.waitForRequest(request => request.isNavigationRequest() &&
+    new URL(request.url()).searchParams.get('aktualisiert') === newVersion);
   await phone.getByRole('button', {name: 'Aktualisieren'}).tap();
-  await phone.getByText('Silvana wurde neu geladen.', {exact: true}).waitFor();
-  await phone.getByRole('link', {name: startLabel}).tap();
-  await phone.waitForURL('**/vorschau-einfuehrung/');
+  await reload;
+  await phone.waitForFunction(() =>
+    document.querySelector('meta[name="app-version"]').content === 'b'.repeat(40) &&
+    !new URL(location.href).searchParams.has('aktualisiert'));
+  assert.equal(await phone.getByRole('button', {name: 'Aktualisieren'}).isVisible(), false);
+  await phone.getByRole('navigation', {name: 'Geschichte auswählen'})
+    .getByRole('link', {name: 'Silvana', exact: true}).tap();
+  await phone.waitForURL(silvana);
+  await phone.getByRole('link', {name: startLabel, exact: true}).tap();
+  await phone.waitForURL(intro);
   await phone.close();
   const chapterStarts = [
     'Hinter den dunklen Bergen', 'Vier Straßen voller Schlaglöcher', 'In den Wäldern', 'Vor langer Zeit',
@@ -270,8 +305,7 @@ function localServer() {
     assert.equal(await button('sceneMenu14').textContent(),'2. Erkenntnis');
     assert.equal(await page.locator('.scene-menu nav a').count(), 2);
   }
-  await page.goto(base);
-  assert(await page.getByRole('heading', {name: 'Für die Eltern und Lesebegleiter'}).isVisible());
+  await page.goto(silvana);
   page.once('dialog', dialog => dialog.accept());
   await button('zuruecksetzen').click();
   await page.getByText('Der Spielfortschritt wurde zurückgesetzt.').waitFor();
