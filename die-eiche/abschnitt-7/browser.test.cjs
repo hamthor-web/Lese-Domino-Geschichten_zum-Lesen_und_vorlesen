@@ -29,19 +29,13 @@ module.exports = async function checkSummer(context, base) {
     await page.goto(oak + 'abschnitt-6/');
     await page.getByRole('button', {name: 'Weiter zu Sommer'}).click();
     await page.waitForURL(summer);
-    await page.getByRole('heading', {name: 'Lies selbst', exact: true}).waitFor();
-    assert.equal(await page.locator('#story p').count(), 4);
-    await page.getByRole('button', {name: 'Weiter zum Kreuzworträtsel'}).click();
+    await page.getByRole('heading', {name: 'Kreuzworträtsel', exact: true}).waitFor();
+    await clues.first().waitFor();
+    assert.equal(await page.getByRole('heading', {name: 'Lies selbst'}).count(), 0);
+    assert.equal(await page.getByRole('button', {name: /Lesetext/}).count(), 0);
     await page.emulateMedia({reducedMotion: 'no-preference'});
     assert.match(await count.innerText(), /^0 von 7/);
     assert.equal(await page.locator('.marker, .reward, #clues img').count(), 0);
-
-    await page.getByRole('button', {name: 'Lesetext erneut lesen'}).click();
-    const dialog = page.getByRole('dialog');
-    await dialog.waitFor();
-    assert.equal(await dialog.locator('p').count(), 4);
-    await dialog.getByRole('button', {name: 'Schließen'}).click();
-    await dialog.waitFor({state: 'hidden'});
 
     await page.evaluate(() => {
       if (!window.speechSynthesis) return;
@@ -86,6 +80,11 @@ module.exports = async function checkSummer(context, base) {
     await playWord(0);
     await clues.nth(2).click();
     await tile(0, 2).fill('E');
+    await page.evaluate(() => {
+      const key = 'die-eiche-checkpoint-v1-7';
+      const checkpoint = JSON.parse(localStorage.getItem(key));
+      localStorage.setItem(key, JSON.stringify({...checkpoint, page: 'reading'}));
+    });
     await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
     await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
     await page.getByRole('button', {name: 'Spiel fortsetzen'}).click();
@@ -115,8 +114,8 @@ module.exports = async function checkSummer(context, base) {
     const replayMenu = page.getByText('Anderen Abschnitt', {exact: false}).first();
     await replayMenu.click();
     await page.getByRole('link', {name: 'Sommer', exact: true}).click();
-    await page.getByRole('heading', {name: 'Lies selbst', exact: true}).waitFor();
-    await page.getByRole('button', {name: 'Weiter zum Kreuzworträtsel'}).click();
+    await page.getByRole('heading', {name: 'Kreuzworträtsel', exact: true}).waitFor();
+    await clues.first().waitFor();
     assert.match(await count.innerText(), /^0 von 7/);
 
     await page.goto(oak);

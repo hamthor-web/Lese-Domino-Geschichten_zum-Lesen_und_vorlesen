@@ -6,10 +6,10 @@
   <title>Die Eiche · Sommer</title>
   <link rel="stylesheet" href="../abschnitt-4/abschnitt.css?v=2">
   <link rel="stylesheet" href="../../shared/game-selection.css">
-  <link rel="stylesheet" href="sommer.css">
+  <link rel="stylesheet" href="sommer.css?v=2">
   <script src="../spielstand.js?v=7" defer></script>
   <script src="../../shared/story-speech.js" defer></script>
-  <script src="kreuzwortraetsel.js" defer></script>
+  <script src="kreuzwortraetsel.js?v=2" defer></script>
 </head>
 <body class="summer-page">
   <main class="summer">
@@ -34,18 +34,8 @@
       <div class="summer-art" aria-hidden="true"></div>
       <div class="summer-content">
         <h1 id="summer-title">Sommer in der Eiche</h1>
-        <section id="reading" aria-labelledby="reading-title">
-          <h2 id="reading-title" tabindex="-1">Lies selbst</h2>
-          <div id="story">
-            <p>Im Sommer finden viele Tiere Schutz in der Eiche. Zwei Tauben bauen ein Nest. Sie haben den Streit mit den Krähen gewonnen. Nun legen sie Eier. Nach fast drei Wochen schlüpfen zwei kleine Küken.</p>
-            <p>Käfer krabbeln über die raue Rinde. Sie suchen süßen Baumsaft.</p>
-            <p>Ein Specht hört kleine Tiere unter der Rinde. Er klopft mit dem Schnabel gegen den Stamm und holt sie heraus. So entsteht ein Loch im Baum. Später ziehen Stare dort ein.</p>
-            <p>Am Abend geht die Sonne unter. Ihr Licht fällt durch die Blätter wie ein heller Vorhang. Darin tanzen viele kleine Mücken.</p>
-          </div>
-          <button class="game-button summer-action" id="start-crossword" type="button">Weiter zum Kreuzworträtsel</button>
-        </section>
-        <section id="crossword" aria-labelledby="crossword-title" hidden>
-          <h2 id="crossword-title" tabindex="-1">Kreuzworträtsel</h2>
+        <section id="crossword" aria-labelledby="crossword-title">
+          <h2 id="crossword-title">Kreuzworträtsel</h2>
           <div class="crossword-progress">
             <progress id="progress" max="7" value="0" aria-label="Gefundene Wörter"></progress>
             <span id="count"></span>
@@ -57,7 +47,6 @@
                 <button class="summer-action" id="read" type="button">Frage vorlesen</button>
               </div>
               <div id="clues" role="group" aria-label="Fragen"></div>
-              <button class="summer-action" id="reread" type="button">Lesetext erneut lesen</button>
             </div>
             <div class="board-panel">
               <div id="grid" role="group" aria-label="Buchstabenfelder"></div>
@@ -70,15 +59,8 @@
 
     <nav class="summer-nav" aria-label="Abschnittsseiten">
       <a class="game-button" href="../abschnitt-6/">Zurück zu Die Freude der Eiche</a>
-      <button class="game-button" id="back-to-reading" type="button" hidden>Zurück zum Lesetext</button>
       <button class="game-button" id="replay" type="button" hidden>Abschnitt noch einmal</button>
     </nav>
   </main>
-
-  <dialog id="story-dialog" aria-labelledby="story-dialog-title">
-    <h2 id="story-dialog-title">Sommer in der Eiche</h2>
-    <div id="story-copy"></div>
-    <form method="dialog"><button class="game-button" type="submit">Schließen</button></form>
-  </dialog>
 </body>
 </html>
