@@ -1,5 +1,5 @@
 window.EicheProgress = (() => {
-  const sections = [1, 2, 3, 4];
+  const sections = [1, 2, 3, 4, 5];
   const prefix = 'die-eiche-checkpoint-v1-';
   const resetKey = 'die-eiche-reset-v1';
   const latestKey = 'die-eiche-last-section';
@@ -31,9 +31,16 @@ window.EicheProgress = (() => {
     if (sections.includes(section) && read(section)) return section;
     return sections.filter(n => read(n)).sort((a,b) => (read(b).updated ?? 0) - (read(a).updated ?? 0))[0] ?? null;
   }
+  function updateReplay() {
+    for (const link of document.querySelectorAll('[data-replay-section]')) {
+      const section = Number(link.dataset.replaySection);
+      link.hidden = !isComplete(section - 1) && !isComplete(section) && !read(section);
+    }
+  }
   function complete(section) {
     if (localStorageValue(resetKey) !== version) return;
     try { localStorage.setItem(completionKey(section), 'yes'); } catch {}
+    dispatchEvent(new Event('eiche-complete'));
   }
   function isComplete(section) {
     return localStorageValue(completionKey(section)) === 'yes';
@@ -52,7 +59,10 @@ window.EicheProgress = (() => {
     }
     localStorage.removeItem(latestKey);
   }
+  addEventListener('eiche-complete', updateReplay);
+  addEventListener('storage', updateReplay);
   addEventListener('pageshow', event => {
+    updateReplay();
     if (event.persisted && localStorageValue(resetKey) !== version) location.reload();
   });
   return {readForVisit, save, latest, complete, isComplete, secondUnlocked, thirdUnlocked, reset};

@@ -2,6 +2,7 @@
 
 const assert = require('node:assert/strict');
 const {spawn} = require('node:child_process');
+const checkSpring = require('../die-eiche/abschnitt-5/browser.test.cjs');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const live = process.env.SILVANA_BASE_URL;
 const base = (live || 'http://127.0.0.1:8768/').replace(/\/?$/, '/');
@@ -160,6 +161,7 @@ async function checkAppInfo(page, description) {
     page.on('pageerror', error => errors.push(page.url() + ': ' + error.message));
     const welcome = await checkStoryEntrances(page);
     console.log('PASS: Spielauswahl, beide Begrüßungsseiten und erste Abschnitte erreichbar.');
+    if (!live) await checkSpring(context, base);
     for (const [width, height] of devices) {
       await page.setViewportSize({width, height});
       await page.goto(welcome);

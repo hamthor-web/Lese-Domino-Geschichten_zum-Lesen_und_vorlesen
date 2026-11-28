@@ -134,7 +134,7 @@ function render() {
   next.hidden = false;
   next.textContent = ({
     read1: 'Zur Frage', read2: 'Zum Domino', read3: 'Zur Aufgabe', film: 'Zur Frage',
-    odd: 'Zum Vorlesen', listen: 'Zum nächsten Abschnitt', finish: 'Abschnitt noch einmal'
+    odd: 'Zum Vorlesen', listen: 'Zum nächsten Abschnitt', finish: 'Zum Frühling'
   })[page] || 'Weiter';
 
   if (page.startsWith('read')) {
@@ -482,8 +482,7 @@ byId('back').addEventListener('click', () => {
 });
 next.addEventListener('click', () => {
   if (state.page === 'finish') {
-    state = fresh();
-    setPage('read1');
+    location.assign('../abschnitt-5/?neu=1');
     return;
   }
   const pages = route();

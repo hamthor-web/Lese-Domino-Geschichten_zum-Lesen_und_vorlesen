@@ -154,3 +154,10 @@ Fehler: Der Übergang zu Abschnitt 2 oder 3 lud den alten Zwischenstand des Ziel
 - **Medien:** Der Knospenfilm an der ganzen Eiche startet einmal automatisch und lässt sich über den Wiedergabestreifen wiederholen. Über der Vorleseseite steht „Mach es dir gemütlich und höre der Geschichte zu“. Eine eigene Kapitelaufnahme bleibt offen. Derzeit liest die verfügbare deutsche Browserstimme.
 - **Ausblick:** Würstchen öffnet das Buch mit Originalton. Auf der rechten Seite stehen „Der“, „Frühling“ und „beginnt“ mittig auf drei Zeilen, mit dem Kringel darunter. Abschnitt 5 ist in Vorbereitung.
 - **Geprüft:** Im Browser wurden Kapitelübergang, Eisfrage, Wortpaare per Maus und Touch, Satzreihenfolge, Videowiederholung, Fortschritt und Info-Dialog geprüft. Die Quer- und Hochformatprüfung erfolgte mit simulierten Ansichtsgrößen.
+
+## 28. November 2026 · Der Frühling beginnt
+
+- **Implementiert:** [Abschnitt 5](../../die-eiche/abschnitt-5/) beginnt nach dem Buchausblick in „Erste warme Sonnenstrahlen“ mit der ersten Lesekarte. Die freigegebene Vorschau enthält elf Seiten mit drei Lesetexten, fünf Fragen, Fisch- und Knospenfilm, vier Bildunterschieden, dem vollständigen Vorlesetext und der Schlussanimation.
+- **Spielstand:** Seiten, gelöste Fragen und gefundene Bildunterschiede bleiben beim Verlassen erhalten. „Spiel fortsetzen“ lädt den Zwischenstand. Der Buchübergang und „Anderen Abschnitt noch einmal erleben“ starten den Zielabschnitt auf seiner ersten Seite. „Spiel zurücksetzen“ erfasst Abschnitt 5.
+- **Info und Ausblick:** Das runde Info-I enthält Impressum, Datenschutz, Website und E-Mail. Würstchen öffnet das Buch mit Originalton. Auf der rechten Buchseite erscheint „Die Freude der Eiche“. Abschnitt 6 bleibt in Vorbereitung.
+- **Browserprüfung:** Der automatisierte Test prüft den Start über Abschnitt 4 bei vorhandenem Spielstand, die Aufgaben, das Fortsetzen mit teilweise gelöstem Suchbild, die Abschnittswahl, den vollständigen Info-Dialog, den Buchausblick und das Zurücksetzen. Er läuft in der bestehenden Prüfung der Schaltflächen.

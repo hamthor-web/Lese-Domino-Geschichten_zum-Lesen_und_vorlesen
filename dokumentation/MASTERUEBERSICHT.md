@@ -37,4 +37,4 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 
 **Die Eiche und gemeinsame Startseite · 25.11.2026:** Lesbare Initialen an den Eichen vereinheitlicht. Die Startansicht mit Würstchen, Titel und Denkblasen ist vertikal zentriert. [Spielakte Die Eiche](Die_Eiche/SPIELAKTE.md) · [Startseite](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
 
-**Die Eiche · 28.11.2026:** [„Erste warme Sonnenstrahlen“](../die-eiche/abschnitt-4/) ist als vierter Abschnitt umgesetzt. „Der Frühling beginnt“ erscheint als Buchausblick auf Abschnitt 5. Die [Gestaltungs- und Bedienregeln](Die_Eiche/GESTALTUNG_UND_BEDIENUNG.md) gelten für die weitere Umsetzung.
+**Die Eiche · 28.11.2026:** [„Erste warme Sonnenstrahlen“](../die-eiche/abschnitt-4/) ist als vierter Abschnitt umgesetzt. [„Der Frühling beginnt“](../die-eiche/abschnitt-5/) ist als fünfter Abschnitt eingebunden und über das Buch am Ende von Abschnitt 4 erreichbar. „Die Freude der Eiche“ erscheint als Buchausblick. Die [Gestaltungs- und Bedienregeln](Die_Eiche/GESTALTUNG_UND_BEDIENUNG.md) gelten für die weitere Umsetzung.
