@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Die Eiche · Der Frühling beginnt</title>
   <link rel="stylesheet" href="../abschnitt-4/abschnitt.css?v=2">
-  <link rel="stylesheet" href="abschnitt.css">
+  <link rel="stylesheet" href="abschnitt.css?v=2">
   <link rel="stylesheet" href="../../shared/game-selection.css">
   <script src="../spielstand.js?v=5" defer></script>
   <script src="../../shared/story-speech.js" defer></script>
-  <script src="abschnitt.js" defer></script>
+  <script src="abschnitt.js?v=2" defer></script>
 </head>
 <body>
   <main>
@@ -43,7 +43,11 @@
       </figure>
       <figure id="film" class="art" hidden>
         <video id="springVideo" muted playsinline preload="metadata"></video>
-        <button id="filmToggle" class="game-button" type="button">Abspielen</button>
+        <div class="film-controls" role="group" aria-label="Filmsteuerung">
+          <button id="filmToggle" class="game-button film-toggle" type="button">Abspielen</button>
+          <label><span class="sr-only">Wiedergabeposition</span><input id="filmSeek" type="range" min="0" max="1000" value="0" disabled></label>
+          <output id="filmTime">0:00</output>
+        </div>
       </figure>
       <section id="screen" aria-labelledby="stepTitle"></section>
     </div>

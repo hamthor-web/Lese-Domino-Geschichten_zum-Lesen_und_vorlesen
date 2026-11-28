@@ -34,6 +34,9 @@ const back = byId('back');
 const next = byId('next');
 const film = byId('springVideo');
 const filmToggle = byId('filmToggle');
+const seek = byId('filmSeek');
+const filmTime = byId('filmTime');
+const formatTime = seconds => Math.floor(seconds / 60) + ':' + String(Math.floor(seconds % 60)).padStart(2, '0');
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const speech = createStorySpeech(() => {
   const feedback = byId('speechFeedback');
@@ -157,7 +160,11 @@ function drawBook() {
 }
 
 function updateFilmControl() {
+  const ready = Number.isFinite(film.duration) && film.duration > 0;
   filmToggle.textContent = film.ended ? 'Noch einmal ansehen' : film.paused ? 'Abspielen' : 'Pause';
+  seek.disabled = !ready;
+  seek.value = ready ? Math.round(film.currentTime / film.duration * 1000) : 0;
+  filmTime.value = formatTime(film.currentTime) + (ready ? ' / ' + formatTime(film.duration) : '');
 }
 
 function playFilm() {
@@ -223,7 +230,12 @@ screen.addEventListener('click', event => {
   else if (button.dataset.speech === 'stop') speech.stop();
 });
 
-for (const event of ['play', 'pause', 'ended']) film.addEventListener(event, updateFilmControl);
+for (const event of ['loadedmetadata', 'play', 'pause', 'ended', 'timeupdate', 'seeked']) {
+  film.addEventListener(event, updateFilmControl);
+}
+seek.addEventListener('input', () => {
+  if (!seek.disabled) film.currentTime = Number(seek.value) / 1000 * film.duration;
+});
 filmToggle.addEventListener('click', () => {
   if (film.paused) {
     if (film.ended) film.currentTime = 0;

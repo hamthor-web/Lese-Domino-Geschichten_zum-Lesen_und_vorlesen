@@ -1,5 +1,4 @@
-#film { text-align: center }
-#filmToggle { margin-top: .5rem; min-width: 9rem; padding-inline: 1rem }
+#filmToggle { min-width: 9rem; padding-inline: 1rem }
 #film .bud {
   width: 50%;
   margin-inline: auto;
