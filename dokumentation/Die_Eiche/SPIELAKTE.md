@@ -169,3 +169,11 @@ Fehler: Der Übergang zu Abschnitt 2 oder 3 lud den alten Zwischenstand des Ziel
 - **Spielstand:** „Spiel fortsetzen“ lädt die gespeicherte Seite, die gelösten Wortpaare und das gefundene Quatschwort. Ein neuer Besuch über den Buchübergang oder die Abschnittswahl beginnt auf der ersten Leseseite. „Spiel zurücksetzen“ erfasst auch Abschnitt 6.
 - **Buchausblick:** Würstchen öffnet das Buch mit Originalton. Auf der rechten Seite erscheint „Sommer“ mit Kringel.
 - **Browserprüfung:** Der bestehende Browserlauf prüft den Einstieg über Abschnitt 5, das Verlassen über die Spielauswahl, das Wiederaufnehmen einer teilweise gelösten Wortaufgabe, das Neuladen der Vorlese- und Buchseite und das Zurücksetzen.
+
+## 28. November 2026 · Sommer
+
+- **Geplant und bestätigt:** Der Lesetext über die Tiere im Sommer bildet die Grundlage für vier waagerechte und drei senkrechte Lösungswörter. Das Raster liegt direkt auf der Knetwiese. Für Hoch- und Querformat gibt es passende Fassungen derselben Szene. Im Hochformat behalten Eiche und Vordergrund ihre Proportionen.
+- **Implementiert:** [Abschnitt 7](../../die-eiche/abschnitt-7/) beginnt nach Würstchens Buchausblick „Sommer“ mit dem Lesetext. Das Kreuzworträtsel erkennt richtige Wörter automatisch, markiert gelöste Buchstaben grün und zeigt jeweils das zugehörige Knetmotiv. Das Bild bleibt etwa 1,5 Sekunden groß sichtbar und fliegt in etwa einer Sekunde an den Wortanfang. Die Fragen können vorgelesen werden. Der Lesetext bleibt über eine Schaltfläche erreichbar.
+- **Spielstand:** „Spiel fortsetzen“ lädt die Leseseite oder das Rätsel mit Eingaben und bereits platzierten Bildern. Abschnittswahl und Buchübergang beginnen eine neue Runde. „Spiel zurücksetzen“ erfasst auch Abschnitt 7.
+- **Getestet:** Das Rätsel wurde in Chromium bei 1440 × 900, 844 × 390, 393 × 852 und 320 × 640 visuell geprüft. Der [Browser-Test](../../die-eiche/abschnitt-7/browser.test.cjs) prüft alle sieben Wörter und Flugziele, den Formatwechsel während eines Flugs, den Buchübergang, Lesetext, Vorleseaufruf mit simulierter Stimme, Abschluss, Wiederholen, Fortsetzen und Zurücksetzen. Er läuft mit `shared/parchment-actions.test.cjs`.
+- **Veröffentlicht:** Die Webfassung wird über GitHub Pages ausgeliefert, sobald die Änderung im Hauptzweig bereitgestellt ist. Eine Android-Veröffentlichung ist für diesen Abschnitt nicht erfolgt.

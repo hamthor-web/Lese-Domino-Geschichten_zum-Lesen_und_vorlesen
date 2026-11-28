@@ -77,7 +77,6 @@
 }
 .story-title { margin-top: .55rem; font-size: calc(1.14rem * var(--letters)) }
 .book-stage { width: min(var(--board), 50svh, 34rem) }
-.book-notice { text-align: center }
 @media (max-width: 620px) {
   #film { max-width: min(var(--board), 42svh) }
   .compound-bank { grid-template-columns: repeat(3, minmax(0, 1fr)) }
