@@ -1,5 +1,5 @@
 window.EicheProgress = (() => {
-  const sections = [1, 2, 3, 4, 5, 6];
+  const sections = [1, 2, 3, 4, 5, 6, 7];
   const prefix = 'die-eiche-checkpoint-v1-';
   const resetKey = 'die-eiche-reset-v1';
   const latestKey = 'die-eiche-last-section';

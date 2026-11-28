@@ -245,7 +245,6 @@ function drawBook() {
     clip.hidden = true;
     byId('bookStill').hidden = false;
     byId('bookTitle').hidden = false;
-    byId('bookNotice').hidden = false;
     next.hidden = false;
   }
 
@@ -268,7 +267,7 @@ function render() {
   back.disabled = page === 0;
   next.hidden = false;
   next.disabled = false;
-  next.textContent = page === lastPage ? 'Abschnitt noch einmal' : 'Weiter';
+  next.textContent = page === lastPage ? 'Weiter zu Sommer' : 'Weiter';
 
   if (page === 0) {
     screen.innerHTML = paper('Lies selbst', '<p>' + reading + '</p>');
@@ -393,10 +392,7 @@ filmSound.addEventListener('click', () => {
 back.addEventListener('click', () => navigate(state.page - 1));
 next.addEventListener('click', () => {
   if (state.page < lastPage) navigate(state.page + 1);
-  else if (window.confirm('Abschnitt noch einmal beginnen?')) {
-    state = emptyState();
-    navigate(0);
-  }
+  else location.assign('../abschnitt-7/?neu=1');
 });
 addEventListener('pagehide', () => {
   speech.stop();
