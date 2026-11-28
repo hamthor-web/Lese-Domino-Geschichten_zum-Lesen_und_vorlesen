@@ -11,6 +11,7 @@ const words = [
 ];
 const section = 7;
 const byId = id => document.getElementById(id);
+const crosswordScene = byId('summer-crossword');
 const grid = byId('grid');
 const feedback = byId('feedback');
 const readButton = byId('read');
@@ -46,7 +47,7 @@ for (const [index, word] of words.entries()) {
 grid.style.setProperty('--columns', 2 + Math.max(...Array.from(board.values(), cell => cell.column)));
 grid.style.gridTemplateRows = 'repeat(' + (2 + Math.max(...Array.from(board.values(), cell => cell.row))) + ', var(--tile))';
 
-const saved = EicheProgress.readForVisit(section);
+const saved = summerStory.savedCrossword;
 let selected = words[saved?.selected]?.index ?? 0;
 
 function letterFrom(value) {
@@ -106,7 +107,7 @@ for (const word of words) {
 
 function save() {
   const letters = Object.fromEntries(Array.from(board.values(), cell => [cell.key, cell.input.value]));
-  EicheProgress.save(section, {page: 'crossword', selected, solved: [...solved], letters});
+  summerStory.saveCrossword({selected, letters});
 }
 
 function select(index, focus = false) {
@@ -198,6 +199,10 @@ function presentReward(image, marker) {
   return new Promise(resolve => {
     let start;
     function draw(now) {
+      if (crosswordScene.hidden) {
+        resolve();
+        return;
+      }
       start ??= now;
       const elapsed = now - start;
       const moving = !motion.matches;
@@ -220,14 +225,16 @@ async function playRewards() {
   showingReward = true;
   while (rewardQueue.length) {
     const {word, marker} = rewardQueue.shift();
-    const image = document.createElement('img');
-    image.className = 'reward';
-    image.alt = '';
-    image.src = word.imageUrl;
-    feedback.textContent = word.answer + ' ist richtig!';
-    document.body.append(image);
-    await presentReward(image, marker);
-    image.remove();
+    if (!crosswordScene.hidden) {
+      const image = document.createElement('img');
+      image.className = 'reward';
+      image.alt = '';
+      image.src = word.imageUrl;
+      feedback.textContent = word.answer + ' ist richtig!';
+      document.body.append(image);
+      await presentReward(image, marker);
+      image.remove();
+    }
     marker.style.visibility = '';
   }
   showingReward = false;
@@ -246,4 +253,5 @@ renderProgress();
 byId('replay').onclick = () => {
   if (confirm('Abschnitt noch einmal beginnen?')) location.assign('?neu=1');
 };
+byId('summer-back').addEventListener('click', () => speech.stop());
 addEventListener('pagehide', () => speech.stop());
