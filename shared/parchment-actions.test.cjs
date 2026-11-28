@@ -5,7 +5,6 @@ const {spawn} = require('node:child_process');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const live = process.env.SILVANA_BASE_URL;
 const base = (live || 'http://127.0.0.1:8768/').replace(/\/?$/, '/');
-const welcome = new URL('silvana/', base);
 const server = live ? null : spawn('python3', ['-m', 'http.server', '8768', '--bind', '127.0.0.1'], {stdio: 'ignore'});
 const scenes = [
   ['vorschau-einfuehrung', [0, 1, 2, 3]], ['szene-2', [1, 2, 3, 4]],
@@ -19,6 +18,33 @@ const scenes = [
 const devices = [[320, 640], [412, 915], [844, 390], [768, 1024], [1024, 768], [1440, 900]];
 const zooms = [[100, 100], [160, 100], [100, 160], [160, 160]];
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function checkStoryEntrances(page) {
+  const stories = [
+    ['Die Eiche', 'die-eiche/', 'die-eiche/abschnitt-1/'],
+    ['Silvana', 'silvana/', 'vorschau-einfuehrung/']
+  ];
+  let silvanaWelcome;
+  const selection = page.getByRole('navigation', {name: 'Geschichte auswählen'});
+  for (const [name, welcomePath, firstPath] of stories) {
+    const response = await page.goto(base);
+    assert.ok(response?.ok(), 'Spielauswahl nicht erreichbar: ' + base);
+    const link = selection.getByRole('link', {name, exact: true});
+    const welcome = new URL(welcomePath, base);
+    assert.equal(await link.evaluate(element => element.href), welcome.href, name + ' · Adresse der Begrüßungsseite');
+    await link.click();
+    await page.waitForURL(welcome.href);
+    assert.equal(await page.getByRole('heading', {level: 1}).innerText(), name);
+    if (name === 'Silvana') silvanaWelcome = page.url();
+    const start = page.getByRole('link', {name: 'Spiel beginnen', exact: true});
+    assert.ok(await start.isVisible(), name + ' · Spiel beginnen fehlt');
+    await start.click();
+    const first = new URL(firstPath, base);
+    await page.waitForURL(url => url.origin === first.origin && url.pathname === first.pathname);
+    assert.ok(await page.getByRole('heading', {level: 1}).isVisible(), name + ' · Erster Abschnitt nicht sichtbar');
+  }
+  return silvanaWelcome;
+}
 
 async function layout(page) {
   await page.evaluate(() => document.fonts.ready);
@@ -108,10 +134,10 @@ async function checkAppInfo(page, description) {
   try {
     for (let i = 0; i < 120; i++) {
       try {
-        const response = await fetch(new URL('?test=' + Date.now(), welcome));
-        if (response.ok && (await response.text()).includes('parchment-actions.js')) break;
+        const response = await fetch(new URL('?test=' + Date.now(), base));
+        if (response.ok) break;
       } catch {}
-      if (i === 119) throw Error('Silvana-Einstieg nicht erreichbar: ' + welcome.href);
+      if (i === 119) throw Error('Spielauswahl nicht erreichbar: ' + base);
       await delay(500);
     }
     browser = await chromium.launch({channel: 'chrome'});
@@ -132,9 +158,11 @@ async function checkAppInfo(page, description) {
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(page.url() + ': ' + error.message));
+    const welcome = await checkStoryEntrances(page);
+    console.log('PASS: Spielauswahl, beide Begrüßungsseiten und erste Abschnitte erreichbar.');
     for (const [width, height] of devices) {
       await page.setViewportSize({width, height});
-      await page.goto(welcome.href);
+      await page.goto(welcome);
       await layout(page);
       await checkActions(page, 'Begrüßung ' + width + '×' + height);
       await checkAppInfo(page, 'Begrüßung ' + width + '×' + height);
