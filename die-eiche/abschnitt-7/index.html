@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="sommer.css?v=6">
   <script src="../spielstand.js?v=7" defer></script>
   <script src="../../shared/story-speech.js" defer></script>
-  <script src="sommer-geschichte.js?v=5" defer></script>
+  <script src="sommer-geschichte.js?v=6" defer></script>
   <script src="kreuzwortraetsel.js?v=3" defer></script>
 </head>
 <body class="summer-page">
@@ -50,8 +50,9 @@
         <div id="summer-film" hidden>
           <video id="summer-video" playsinline preload="metadata" width="1056" height="594"></video>
           <div class="film-controls" role="group" aria-label="Filmsteuerung">
-            <button class="game-button" id="summer-film-toggle" type="button">Abspielen</button>
+            <button class="game-button" id="summer-film-toggle" type="button">Noch einmal ansehen</button>
             <label><span class="sr-only">Wiedergabeposition</span><input id="summer-film-seek" type="range" min="0" max="5" step="0.05" value="0" disabled></label>
+            <button class="game-button" id="summer-film-sound" type="button">Ton ausschalten</button>
           </div>
           <p class="feedback" id="summer-film-feedback" role="status"></p>
         </div>

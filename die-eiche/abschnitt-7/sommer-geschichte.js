@@ -11,7 +11,8 @@ const summerStory = (() => {
   ];
   const readingFilms = {
     1: {file: 'sommer-kaefer-krabbelt', description: 'Ein Käfer krabbelt über die Eichenrinde.'},
-    2: {file: 'sommer-specht-haemmert', description: 'Ein Specht klopft neben der Baumhöhle gegen den Stamm.'}
+    2: {file: 'sommer-specht-haemmert', description: 'Ein Specht klopft neben der Baumhöhle gegen den Stamm.'},
+    3: {file: 'sommer-muecken-tanzen', description: 'Mücken tanzen im Licht unter der Eiche.'}
   };
   const original = [
     'Im Sommer fanden allerlei Tiere in ihrem Blätterdach Zuflucht. Das Taubenpaar, das sich von den Krähen nicht vertreiben lassen hatte, baute ein Nest und legte seine Eier hinein, aus denen nach fast drei Wochen zwei wunderhübsche Küken schlüpften.',
@@ -64,11 +65,13 @@ const summerStory = (() => {
   const filmToggle = byId('summer-film-toggle');
   const filmSeek = byId('summer-film-seek');
   const filmFeedback = byId('summer-film-feedback');
+  const filmSound = byId('summer-film-sound');
   const next = byId('summer-next');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let selected = null;
   let drag = null;
   let suppressClick = false;
+  let mutedByChoice = false;
 
   function save() {
     EicheProgress.save(7, {step, answers: [...answers], placed: [...placed], crossword});
@@ -244,10 +247,23 @@ const summerStory = (() => {
 
   function updateFilmControls() {
     const ready = Number.isFinite(film.duration) && film.duration > 0;
-    filmToggle.textContent = film.paused ? 'Abspielen' : 'Pause';
     filmSeek.disabled = !ready;
     filmSeek.max = ready ? film.duration : 5;
     filmSeek.value = film.currentTime;
+  }
+
+  function playFilm(allowMutedFallback = false) {
+    const source = film.src;
+    filmFeedback.textContent = '';
+    film.play().catch(error => {
+      if (error.name === 'AbortError' || film.src !== source || byId('summer-film').hidden) return;
+      if (allowMutedFallback && error.name === 'NotAllowedError' && !film.muted) {
+        film.muted = true;
+        playFilm();
+        return;
+      }
+      if (error.name !== 'NotAllowedError') filmFeedback.textContent = 'Das Video kann gerade nicht abgespielt werden.';
+    });
   }
 
   function showReadingFilm(clip) {
@@ -259,24 +275,26 @@ const summerStory = (() => {
     film.setAttribute('aria-label', clip.description);
     film.poster = assetPath + clip.file + '.webp';
     film.src = assetPath + clip.file + '.mp4';
+    film.muted = mutedByChoice;
     updateFilmControls();
+    if (!motion.matches) playFilm(true);
   }
 
   for (const event of ['loadedmetadata', 'play', 'pause', 'ended', 'timeupdate']) {
     film.addEventListener(event, updateFilmControls);
   }
   filmToggle.onclick = () => {
-    if (!film.paused) {
-      film.pause();
-      return;
-    }
-    filmFeedback.textContent = '';
-    if (film.ended) film.currentTime = 0;
-    film.play().catch(error => {
-      if (error.name !== 'AbortError') filmFeedback.textContent = 'Das Video kann gerade nicht abgespielt werden.';
-    });
+    film.currentTime = 0;
+    playFilm();
   };
   filmSeek.oninput = () => { film.currentTime = Number(filmSeek.value); };
+  film.addEventListener('volumechange', () => {
+    filmSound.textContent = film.muted ? 'Ton einschalten' : 'Ton ausschalten';
+  });
+  filmSound.onclick = () => {
+    mutedByChoice = !film.muted;
+    film.muted = mutedByChoice;
+  };
 
   const speech = createStorySpeech(() => {
     const note = byId('summer-speech-status');
@@ -313,7 +331,6 @@ const summerStory = (() => {
       woodpecker.className = 'oak-animal woodpecker';
       overlays.append(woodpecker);
     }
-    if (page.read === 3) showAnimal('mosquitoes');
   }
 
   function changePage(direction) {

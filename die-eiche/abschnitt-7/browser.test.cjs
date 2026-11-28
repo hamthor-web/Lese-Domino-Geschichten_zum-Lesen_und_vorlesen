@@ -35,7 +35,6 @@ module.exports = async function checkSummer(context, base) {
       assert.match(await clip.getAttribute('src'), new RegExp(file + '\\.mp4$'));
       assert.ok(await clip.isVisible());
       assert.ok(!await page.locator('#oak-stage').isVisible());
-      await page.getByRole('button', {name: 'Abspielen', exact: true}).click();
       await page.waitForFunction(() => document.querySelector('#summer-video').currentTime > .05);
     }
     await page.getByText(/Im Sommer finden viele Tiere Schutz/).waitFor();
@@ -63,6 +62,7 @@ module.exports = async function checkSummer(context, base) {
     await info.waitFor();
     assert.equal(await info.getByRole('link').count(), 4);
     await info.getByRole('button', {name: 'Schließen'}).click();
+    await page.emulateMedia({reducedMotion: 'no-preference'});
 
     await next.click();
     await page.getByRole('button', {name: 'Specht', exact: true}).click();
@@ -71,6 +71,11 @@ module.exports = async function checkSummer(context, base) {
     await next.click();
     await page.getByText(/Käfer krabbeln über die raue Rinde/).waitFor();
     await playFilm('sommer-kaefer-krabbelt');
+    await page.getByRole('button', {name: 'Ton ausschalten', exact: true}).click();
+    assert.ok(await clip.evaluate(video => video.muted));
+    await clip.evaluate(video => { video.currentTime = 2; });
+    await page.getByRole('button', {name: 'Noch einmal ansehen', exact: true}).click();
+    assert.ok(await clip.evaluate(video => video.currentTime < 1));
     await next.click();
     assert.ok(await clip.evaluate(video => video.paused));
     assert.ok(!await clip.isVisible());
@@ -89,15 +94,15 @@ module.exports = async function checkSummer(context, base) {
     await next.click();
     await page.getByText(/Ein Specht hört kleine Tiere unter der Rinde/).waitFor();
     await playFilm('sommer-specht-haemmert');
-    await page.emulateMedia({reducedMotion: 'no-preference'});
     await next.click();
     await page.getByText(/Am Abend geht die Sonne unter/).waitFor();
+    await playFilm('sommer-muecken-tanzen');
+    assert.ok(await clip.evaluate(video => video.muted));
+    await page.getByRole('button', {name: 'Ton einschalten', exact: true}).click();
+    assert.ok(!await clip.evaluate(video => video.muted));
+    await next.click();
     assert.ok(await clip.evaluate(video => video.paused));
     assert.ok(!await clip.isVisible());
-    const insects = page.locator('#oak-animals .mosquitoes');
-    assert.match(await insects.getAttribute('src'), /sommer-muecken\.webp/);
-    await insects.evaluate(img => img.decode());
-    await next.click();
     await page.emulateMedia({reducedMotion: 'reduce'});
     const token = name => page.getByRole('group', {name: 'Tiere', exact: true}).getByRole('button', {name, exact: true});
     const spot = name => page.getByRole('group', {name: 'Plätze an der Eiche'}).getByRole('button', {name, exact: true});
