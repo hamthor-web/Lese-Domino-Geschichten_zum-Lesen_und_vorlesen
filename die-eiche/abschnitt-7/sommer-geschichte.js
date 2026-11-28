@@ -18,13 +18,25 @@ const summerStory = (() => {
     birds: {question: 'Wer hat den Streit mit den Krähen gewonnen?', answers: ['Tauben', 'Käfer', 'Specht'], correct: 0},
     beetles: {question: 'Warum suchen die Käfer süßen Saft?', answers: [
       'Weil sie den essen möchten.', 'Weil sie ein Haus daraus bauen.', 'Weil sie darin baden möchten.', 'Weil sie ihre Schuhe damit kleben wollen.'
-    ], correct: 0}
+    ], correct: 0, retryMessages: [
+      'Denk noch mal nach: Kann das stimmen?',
+      'Meinst du wirklich?',
+      'Klingt lustig, aber ist das wahr?',
+      'Gute Idee, aber denk noch mal nach!'
+    ]}
   };
   const animals = {
     pigeons: {name: 'Tauben', place: 'Nest', image: 'sommer-tauben'},
     beetle: {name: 'Käfer', place: 'Rinde', image: 'sommer-kaefer'},
     starlings: {name: 'Stare', place: 'Loch im Baum', image: 'sommer-stare'},
     mosquitoes: {name: 'Mücken', place: 'Lichtvorhang', image: 'sommer-muecken-still'}
+  };
+  const animalCards = {
+    pigeons: animals.pigeons,
+    butterflies: {name: 'Schmetterlinge', image: 'sommer-schmetterlinge'},
+    beetle: animals.beetle,
+    starlings: animals.starlings,
+    mosquitoes: animals.mosquitoes
   };
   const pages = [
     {read: 0}, {choice: 'birds'}, {read: 1}, {choice: 'beetles'}, {read: 2},
@@ -107,13 +119,16 @@ const summerStory = (() => {
     options.className = 'choices summer-choices';
     screen.append(options);
     const note = status(answers.has(id) ? 'Richtig!' : '');
+    const retryMessages = choice.retryMessages ?? ['Lies noch einmal und versuche es erneut.'];
+    let wrongAttempts = 0;
     next.disabled = !answers.has(id);
     choice.answers.forEach((text, index) => {
       const option = button(text);
       option.setAttribute('aria-pressed', String(answers.has(id) && index === choice.correct));
       option.onclick = () => {
         if (index !== choice.correct) {
-          note.textContent = 'Lies noch einmal und versuche es erneut.';
+          note.textContent = retryMessages[wrongAttempts % retryMessages.length];
+          wrongAttempts += 1;
           return;
         }
         answers.add(id);
@@ -134,7 +149,7 @@ const summerStory = (() => {
   }
 
   function showMatch() {
-    paper('Wo sind die Tiere?', ['Ziehe jedes Tier an seinen Platz. Du kannst auch erst das Tier und dann seinen Platz antippen.']);
+    paper('Wo sind die Tiere?', ['Ziehe die Tiere aus dem Text an ihren Platz. Du kannst auch erst das Tier und dann seinen Platz antippen.']);
     const bank = document.createElement('div');
     bank.className = 'summer-animal-bank';
     bank.setAttribute('role', 'group');
@@ -153,7 +168,14 @@ const summerStory = (() => {
       }
     }
 
-    for (const [id, animal] of Object.entries(animals)) {
+    stage.onclick = () => {
+      if (selected !== 'butterflies') return;
+      selected = null;
+      update();
+      note.textContent = 'Die passen gut hier hin. Aber hast du wirklich im Text etwas über Schmetterlinge gelesen?';
+    };
+
+    for (const [id, animal] of Object.entries(animalCards)) {
       const token = button(animal.name);
       token.prepend(image(animal.image));
       token.dataset.animal = id;
@@ -166,11 +188,14 @@ const summerStory = (() => {
         if (!event.detail) targets.querySelector('button:not(:disabled)')?.focus();
       };
       bank.append(token);
+    }
+    for (const [id, animal] of Object.entries(animals)) {
       const target = button('');
       target.setAttribute('aria-label', animal.place);
       target.dataset.place = id;
       target.classList.add('oak-target', id);
       target.onclick = () => {
+        if (selected === 'butterflies') return;
         if (!selected) {
           note.textContent = 'Wähle zuerst ein Tier.';
           return;
@@ -185,9 +210,9 @@ const summerStory = (() => {
         showAnimal(id);
         update();
         note.textContent = placed.size === Object.keys(animals).length
-          ? 'Alle Tiere haben ihren Platz gefunden.' : animal.name + ' · ' + animal.place;
+          ? 'Alle Tiere aus dem Text haben ihren Platz gefunden.' : animal.name + ' · ' + animal.place;
         save();
-        if (restoreFocus) (bank.querySelector('button:not(:disabled)') ?? next).focus();
+        if (restoreFocus) (next.disabled ? bank.querySelector('button:not(:disabled)') : next).focus();
       };
       targets.append(target);
       if (placed.has(id)) showAnimal(id);
@@ -225,6 +250,7 @@ const summerStory = (() => {
     byId('story-title').hidden = byId('summer-layout').hidden = Boolean(page.crossword);
     overlays.replaceChildren();
     targets.replaceChildren();
+    stage.onclick = null;
     targets.hidden = !page.match;
     if (page.crossword) return;
     if (page.read !== undefined) paper('Lies selbst', [reading[page.read]]);
@@ -240,11 +266,6 @@ const summerStory = (() => {
       overlays.append(woodpecker, chicks);
     }
     if (page.read === 3) showAnimal('mosquitoes');
-    if (page.read === 3 || page.listen) {
-      const butterflies = image('sommer-schmetterlinge');
-      butterflies.className = 'summer-butterflies';
-      overlays.append(butterflies);
-    }
   }
 
   function changePage(direction) {
@@ -271,7 +292,7 @@ const summerStory = (() => {
     if (drag?.id !== event.pointerId) return;
     if (!drag.ghost) {
       if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 8) return;
-      drag.ghost = image(animals[drag.token.dataset.animal].image);
+      drag.ghost = image(animalCards[drag.token.dataset.animal].image);
       drag.ghost.className = 'summer-drag-ghost';
       document.body.append(drag.ghost);
       suppressClick = true;
@@ -287,7 +308,13 @@ const summerStory = (() => {
     ghost.remove();
     setTimeout(() => { suppressClick = false; }, 0);
     if (event.type !== 'pointerup') return;
-    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-place]');
+    const destination = document.elementFromPoint(event.clientX, event.clientY);
+    if (token.dataset.animal === 'butterflies' && stage.contains(destination)) {
+      selected = 'butterflies';
+      stage.click();
+      return;
+    }
+    const target = destination?.closest('[data-place]');
     if (target && stage.contains(target)) {
       selected = token.dataset.animal;
       target.click();

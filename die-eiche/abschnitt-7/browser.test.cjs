@@ -64,8 +64,16 @@ module.exports = async function checkSummer(context, base) {
     await page.getByText(/Käfer krabbeln über die raue Rinde/).waitFor();
     await next.click();
     assert.equal(await page.locator('.summer-choices button').count(), 4);
-    await page.getByRole('button', {name: /darin baden/}).click();
-    assert.ok(await next.isDisabled());
+    for (const [answer, prompt] of [
+      [/darin baden/, 'Denk noch mal nach: Kann das stimmen?'],
+      [/ein Haus/, 'Meinst du wirklich?'],
+      [/Schuhe/, 'Klingt lustig, aber ist das wahr?'],
+      [/darin baden/, 'Gute Idee, aber denk noch mal nach!']
+    ]) {
+      await page.getByRole('button', {name: answer}).click();
+      await page.getByRole('status').filter({hasText: prompt}).waitFor();
+      assert.ok(await next.isDisabled());
+    }
     await page.getByRole('button', {name: /den essen/}).click();
     await next.click();
     await page.getByText(/Ein Specht hört kleine Tiere unter der Rinde/).waitFor();
@@ -79,8 +87,14 @@ module.exports = async function checkSummer(context, base) {
     await page.emulateMedia({reducedMotion: 'reduce'});
     const token = name => page.getByRole('group', {name: 'Tiere', exact: true}).getByRole('button', {name, exact: true});
     const spot = name => page.getByRole('group', {name: 'Plätze an der Eiche'}).getByRole('button', {name, exact: true});
+    const butterflyHint = 'Die passen gut hier hin. Aber hast du wirklich im Text etwas über Schmetterlinge gelesen?';
     assert.deepEqual(await page.locator('.oak-target').allTextContents(), ['', '', '', '']);
     assert.equal(await spot('Nest').evaluate(node => getComputedStyle(node).backgroundColor), 'rgba(0, 0, 0, 0)');
+    await token('Schmetterlinge').tap();
+    await spot('Nest').tap();
+    await page.getByRole('status').filter({hasText: butterflyHint}).waitFor();
+    assert.equal(await page.locator('#oak-animals img').count(), 0);
+    assert.ok(await next.isDisabled());
     await token('Tauben').tap();
     await spot('Rinde').tap();
     assert.ok(await next.isDisabled());
@@ -93,13 +107,19 @@ module.exports = async function checkSummer(context, base) {
     assert.equal(await page.locator('#oak-animals .pigeons').count(), 1);
 
     await page.setViewportSize({width: 1100, height: 800});
-    await token('Käfer').scrollIntoViewIfNeeded();
-    const source = await token('Käfer').boundingBox();
-    const destination = await spot('Rinde').boundingBox();
-    await page.mouse.move(source.x + source.width / 2, source.y + source.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(destination.x + destination.width / 2, destination.y + destination.height / 2, {steps: 12});
-    await page.mouse.up();
+    async function dragTo(animal, target, horizontal = .5, vertical = .5) {
+      await token(animal).scrollIntoViewIfNeeded();
+      const source = await token(animal).boundingBox();
+      const destination = await target.boundingBox();
+      await page.mouse.move(source.x + source.width / 2, source.y + source.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(destination.x + destination.width * horizontal, destination.y + destination.height * vertical, {steps: 12});
+      await page.mouse.up();
+    }
+    await dragTo('Schmetterlinge', artwork, .15, .8);
+    await page.getByRole('status').filter({hasText: butterflyHint}).waitFor();
+    assert.equal(await page.locator('#oak-animals img').count(), 1);
+    await dragTo('Käfer', spot('Rinde'));
     assert.ok(await token('Käfer').isDisabled());
     await token('Stare').tap();
     await spot('Loch im Baum').tap();
@@ -110,7 +130,7 @@ module.exports = async function checkSummer(context, base) {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await next.click();
     const original = page.locator('#summer-screen .paper p');
-    assert.equal(await page.locator('#oak-animals img').count(), 7);
+    assert.equal(await page.locator('#oak-animals img').count(), 6);
     await page.locator('#oak-animals img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
     assert.equal(await original.count(), 3);
     assert.match(await original.first().innerText(), /^Im Sommer fanden allerlei Tiere/);
