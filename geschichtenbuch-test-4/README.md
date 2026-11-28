@@ -1,5 +1,7 @@
 # Märchenbuch · Test 4
 
+> **Status seit 28.11.2026:** Historische Testfassung. Die animierte Buchansicht als Spielfläche wurde wegen des Platzverlusts verworfen. [Entscheidung](../dokumentation/MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md)
+
 Eigenständige Leseprobe mit Platzhaltertexten. Die drei älteren Tests dokumentieren die Vorgeschichte. Die Integration in „Die Eiche“ und „Silvana“ ist ein späterer Arbeitsschritt.
 
 ## Gestaltung vom 26. November 2026

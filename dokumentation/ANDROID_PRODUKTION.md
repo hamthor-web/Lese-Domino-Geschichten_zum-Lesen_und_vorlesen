@@ -5,7 +5,8 @@
 ## Umfang und Entscheidungen vor dem ersten Build
 
 - Ausgangspunkt ist [die gemeinsame Spielauswahl](../index.html) mit Silvana und Die Eiche. Für Android ist eine gemeinsame App entsprechend der Webfassung vorgesehen. Das genaue Angebot der ersten Version wird vor dem Build festgelegt. Der [Webstand](MASTERUEBERSICHT.md) umfasst 14 Silvana-Szenen und die ersten drei Eichen-Abschnitte.
-- Beim Festlegen des Umfangs die [offene Buchabnahme](Die_Eiche/NACHTRAG_BUCHPROBE_2026-11-26.md), den Eichen-Buchausblick und das [Monatsdomino-Konzept](../KONZEPT_EICHE_MONATSDOMINO.md) ausdrücklich berücksichtigen. Für den Build nur zur Aufnahme freigegebene Spielpfade und Medien bündeln.
+- Für Android die verfügbare Bildschirmfläche direkt für Lesen und Spielen nutzen. Die [animierte Buchansicht als Spielfläche](MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md) wurde wegen des Platzverlusts verworfen. Die Buchtests und die Eichen-Buchprobe bleiben außerhalb des Builds.
+- Beim Festlegen des Umfangs den Eichen-Buchausblick und das [Monatsdomino-Konzept](../KONZEPT_EICHE_MONATSDOMINO.md) berücksichtigen. Für den Build die freigegebenen Spielpfade und Medien bündeln.
 - Vor der Einrichtung prüfen, ob bereits ein Store-Eintrag für genau diese App besteht. Paketname (`applicationId`), App-Titel, Sprache, Zielgruppe und Store-Eintrag dokumentieren. Bei einem vorhandenen Eintrag Paketname und Signierung mit dem bestehenden Eintrag abgleichen.
 - Android-Ansatz anhand eines kleinen Geräteprototyps festlegen. Dafür Medienwiedergabe und Vorlesestimme, Offline-Umfang und Spielstände prüfen. Das Webspiel speichert Spielstände lokal im Browser. Die Übernahme vorhandener PWA-Spielstände in die Android-App hängt vom gewählten Ansatz ab und muss separat geprüft werden. Der [Web-Service-Worker](../sw.js) behandelt Audio und Video außerhalb seines Caches.
 

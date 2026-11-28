@@ -4,7 +4,8 @@
 - [Webeinstieg](../../die-eiche/) mit drei spielbaren Abschnitten: [Die Eiche](../../die-eiche/abschnitt-1/), [Spuren der Zeit](../../die-eiche/abschnitt-2/) und [Winterschlaf](../../die-eiche/abschnitt-3/). „Erste warme Sonnenstrahlen“ ist der Buchausblick am Ende des dritten Abschnitts.
 - Die Weiter-Übergänge zu Abschnitt 2 und 3 starten in `main` auf der ersten Seite. „Spiel fortsetzen“ nutzt den gespeicherten Zwischenstand. Der praktisch ausprobierte Navigationsfall ist unten dokumentiert. Die vollständige Geräte-, Hör- und Offline-Abnahme steht aus.
 - Für neue Bilder gelten die [beiden abgelegten Stilvorlagen](Referenzbilder/README.md). Wo die Herzgravur lesbar ist, gilt seit 25.11. **H&A**.
-- Die [Buchprobe](NACHTRAG_BUCHPROBE_2026-11-26.md) dient dem Flächenvergleich. Das [Monatsdomino](../../KONZEPT_EICHE_MONATSDOMINO.md) ist eine offene Konzeptidee.
+- Die animierte Buchansicht wurde nach der [Buchprobe](NACHTRAG_BUCHPROBE_2026-11-26.md) wegen des Platzverlusts verworfen. Der [Kapitelübergang mit Würstchen](KAPITELUEBERGANG_BUCH_2026-11-22.md) ist eine eigene Gestaltungsvorgabe.
+- Das [Monatsdomino](../../KONZEPT_EICHE_MONATSDOMINO.md) ist eine offene Konzeptidee.
 
 ## Rolle
 Eigene Geschichte in der gemeinsamen Web-App neben „Das Land der glitzernden Spinnweben“ (Silvana). Das Grundkonzept sieht zehn Abschnitte vor.

@@ -8,7 +8,7 @@ Die [gemeinsame Web-Startseite](../index.html) bietet die Auswahl zwischen beide
 | **Silvana** · Das Land der glitzernden Spinnweben | [Spieleinstieg](../silvana/) mit 14 technisch umgesetzten Szenen. Die Startseite bietet zusätzlich die vollständige Vorlesefassung per Browserstimme. | Vollständiger Durchlauf und Hörkontrolle auf Zielgeräten offen. [Spielakte](Spinnwebenreichtum/SPIELAKTE.md) |
 | **Die Eiche** | [Spieleinstieg](../die-eiche/) mit drei spielbaren Abschnitten: „Die Eiche“, „Spuren der Zeit“ und „Winterschlaf“. | „Erste warme Sonnenstrahlen“ ist im Spiel ein Buchausblick. Das [Grundkonzept](Die_Eiche/GRUNDKONZEPT_DRAMATURGIE_2026-11-22.md) sieht zehn Abschnitte vor. [Spielakte](Die_Eiche/SPIELAKTE.md) |
 
-- **Geschichtenbuch:** [Testfassung 4](MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md) und [Buchprobe mit den drei Eichen-Abschnitten](Die_Eiche/NACHTRAG_BUCHPROBE_2026-11-26.md) dienen der visuellen Abnahme.
+- **Spielfläche:** Die animierte Buchansicht für Silvana und Die Eiche wurde verworfen. Der Buchrahmen nimmt zu viel nutzbare Bildschirmfläche ein. Spiele und Aufgaben nutzen die verfügbare Fläche direkt. [Entscheidung und Flächenvergleich](MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md)
 - **Monatsdomino:** Eine freiwillige Abschlussübung mit kurzer Rahmenhandlung ist eine [Konzeptidee](../KONZEPT_EICHE_MONATSDOMINO.md). Die Entscheidung über die Integration ist offen.
 - **Android:** Der [Produktionsplan](ANDROID_PRODUKTION.md) beschreibt die Schritte von der Auswahl eines Webstands bis zur Play-Freigabe.
 

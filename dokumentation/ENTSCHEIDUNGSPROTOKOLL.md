@@ -1,5 +1,5 @@
-# Entscheidung sprotokoll
-Stand 22.11.2026. Ausschließlich bestätigte Beschlüsse, keine Behauptung neuer Codeänderungen.
+# Entscheidungsprotokoll
+Stand 28.11.2026. Ausschließlich bestätigte Beschlüsse, keine Behauptung neuer Codeänderungen.
 
 | Datum | Bereich | Beschluss | Quelle |
 | --- | --- | --- | --- |
@@ -16,5 +16,6 @@ Stand 22.11.2026. Ausschließlich bestätigte Beschlüsse, keine Behauptung neue
 | 24.11.2026 | Gemeinsame Startseite | Der Button zum Elterntext heißt „Warum ist hier ein Würstchen?“. | [Spielaktennachtrag](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
 | 25.11.2026 | Die Eiche · Winterschlaf | Der Knet-Papierkorb nimmt „Trauben“ an. Falsche Karten schüttelt er ab und spuckt sie wieder aus. | [Spielakte](Die_Eiche/SPIELAKTE.md) |
 | 25.11.2026 | Die Eiche und gemeinsame Startseite | Einheitliche Gravur „H&A“. Startbildschirm vertikal zentrieren und Denkblasen weiter in den freien Randbereich rücken. | [Die Eiche](Die_Eiche/SPIELAKTE.md) · [Startseite](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) |
+| 28.11.2026 | Spielfläche | Die animierte Buchansicht für Silvana und Die Eiche ist verworfen, weil sie zu viel nutzbare Bildschirmfläche einnimmt. | [Flächenvergleich und Entscheidung](MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md) |
 
 Änderungen am Implementierungsstatus werden gesondert mit GitHub-Quellen belegt.
