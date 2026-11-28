@@ -30,6 +30,14 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: 'Weiter zu Sommer'}).click();
     await page.waitForURL(summer);
     const next = page.getByRole('button', {name: 'Weiter', exact: true});
+    const clip = page.locator('#summer-video');
+    async function playFilm(file) {
+      assert.match(await clip.getAttribute('src'), new RegExp(file + '\\.mp4$'));
+      assert.ok(await clip.isVisible());
+      assert.ok(!await page.locator('#oak-stage').isVisible());
+      await page.getByRole('button', {name: 'Abspielen', exact: true}).click();
+      await page.waitForFunction(() => document.querySelector('#summer-video').currentTime > .05);
+    }
     await page.getByText(/Im Sommer finden viele Tiere Schutz/).waitFor();
     await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
     await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
@@ -62,7 +70,10 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: 'Tauben', exact: true}).click();
     await next.click();
     await page.getByText(/Käfer krabbeln über die raue Rinde/).waitFor();
+    await playFilm('sommer-kaefer-krabbelt');
     await next.click();
+    assert.ok(await clip.evaluate(video => video.paused));
+    assert.ok(!await clip.isVisible());
     assert.equal(await page.locator('.summer-choices button').count(), 4);
     for (const [answer, prompt] of [
       [/darin baden/, 'Denk noch mal nach: Kann das stimmen?'],
@@ -77,12 +88,12 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: /den essen/}).click();
     await next.click();
     await page.getByText(/Ein Specht hört kleine Tiere unter der Rinde/).waitFor();
-    const woodpeckerAtHollow = page.locator('#oak-animals .woodpecker.at-hollow');
-    await woodpeckerAtHollow.evaluate(img => img.decode());
+    await playFilm('sommer-specht-haemmert');
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await next.click();
     await page.getByText(/Am Abend geht die Sonne unter/).waitFor();
-    assert.equal(await woodpeckerAtHollow.count(), 0);
+    assert.ok(await clip.evaluate(video => video.paused));
+    assert.ok(!await clip.isVisible());
     const insects = page.locator('#oak-animals .mosquitoes');
     assert.match(await insects.getAttribute('src'), /sommer-muecken\.webp/);
     await insects.evaluate(img => img.decode());

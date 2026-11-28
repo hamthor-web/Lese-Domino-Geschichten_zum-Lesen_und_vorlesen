@@ -9,6 +9,10 @@ const summerStory = (() => {
     'Ein Specht hört kleine Tiere unter der Rinde. Er klopft mit dem Schnabel gegen den Stamm und holt sie heraus. So entsteht ein Loch im Baum. Später ziehen Stare dort ein.',
     'Am Abend geht die Sonne unter. Ihr Licht fällt durch die Blätter wie ein heller Vorhang. Darin tanzen viele kleine Mücken.'
   ];
+  const readingFilms = {
+    1: {file: 'sommer-kaefer-krabbelt', description: 'Ein Käfer krabbelt über die Eichenrinde.'},
+    2: {file: 'sommer-specht-haemmert', description: 'Ein Specht klopft neben der Baumhöhle gegen den Stamm.'}
+  };
   const original = [
     'Im Sommer fanden allerlei Tiere in ihrem Blätterdach Zuflucht. Das Taubenpaar, das sich von den Krähen nicht vertreiben lassen hatte, baute ein Nest und legte seine Eier hinein, aus denen nach fast drei Wochen zwei wunderhübsche Küken schlüpften.',
     'Käfer krabbelten an der Borke des Baums herum, um nach süßem Saft zu suchen, den der Stamm mitunter absonderte. Ein Specht hatte unter der Rinde das Krabbeln von Insektenlarven, die hier ihr Unwesen trieben, gehört und hämmerte sie energisch heraus. Die Höhle, die dabei entstand, bot Staren einen Unterschlupf.',
@@ -56,6 +60,10 @@ const summerStory = (() => {
   const stage = byId('oak-stage');
   const overlays = byId('oak-animals');
   const targets = byId('oak-targets');
+  const film = byId('summer-video');
+  const filmToggle = byId('summer-film-toggle');
+  const filmSeek = byId('summer-film-seek');
+  const filmFeedback = byId('summer-film-feedback');
   const next = byId('summer-next');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let selected = null;
@@ -234,6 +242,42 @@ const summerStory = (() => {
     status(speech.available ? '' : 'Auf diesem Gerät kannst du die Geschichte mitlesen.').id = 'summer-speech-status';
   }
 
+  function updateFilmControls() {
+    const ready = Number.isFinite(film.duration) && film.duration > 0;
+    filmToggle.textContent = film.paused ? 'Abspielen' : 'Pause';
+    filmSeek.disabled = !ready;
+    filmSeek.max = ready ? film.duration : 5;
+    filmSeek.value = film.currentTime;
+  }
+
+  function showReadingFilm(clip) {
+    film.pause();
+    stage.hidden = Boolean(clip);
+    byId('summer-film').hidden = !clip;
+    if (!clip) return;
+    filmFeedback.textContent = '';
+    film.setAttribute('aria-label', clip.description);
+    film.poster = assetPath + clip.file + '.webp';
+    film.src = assetPath + clip.file + '.mp4';
+    updateFilmControls();
+  }
+
+  for (const event of ['loadedmetadata', 'play', 'pause', 'ended', 'timeupdate']) {
+    film.addEventListener(event, updateFilmControls);
+  }
+  filmToggle.onclick = () => {
+    if (!film.paused) {
+      film.pause();
+      return;
+    }
+    filmFeedback.textContent = '';
+    if (film.ended) film.currentTime = 0;
+    film.play().catch(error => {
+      if (error.name !== 'AbortError') filmFeedback.textContent = 'Das Video kann gerade nicht abgespielt werden.';
+    });
+  };
+  filmSeek.oninput = () => { film.currentTime = Number(filmSeek.value); };
+
   const speech = createStorySpeech(() => {
     const note = byId('summer-speech-status');
     if (note) note.textContent = speech.state === 'error' ? 'Die Vorlesestimme ist gerade nicht verfügbar.' : '';
@@ -252,6 +296,7 @@ const summerStory = (() => {
     targets.replaceChildren();
     stage.onclick = null;
     targets.hidden = !page.match;
+    showReadingFilm(readingFilms[page.read]);
     if (page.crossword) return;
     if (page.read !== undefined) paper('Lies selbst', [reading[page.read]]);
     if (page.choice) showChoice(page.choice);
@@ -263,10 +308,9 @@ const summerStory = (() => {
       chicks.className = 'oak-animal chicks';
       overlays.append(chicks);
     }
-    if (page.read === 2 || page.listen) {
+    if (page.listen) {
       const woodpecker = image('sommer-specht', 'Specht auf einem Eichenast');
       woodpecker.className = 'oak-animal woodpecker';
-      woodpecker.classList.toggle('at-hollow', page.read === 2);
       overlays.append(woodpecker);
     }
     if (page.read === 3) showAnimal('mosquitoes');
@@ -349,7 +393,10 @@ const summerStory = (() => {
       input.nextElementSibling.value = input.value + ' %';
     });
   }
-  addEventListener('pagehide', () => speech.stop());
+  addEventListener('pagehide', () => {
+    speech.stop();
+    film.pause();
+  });
   render();
   save();
 

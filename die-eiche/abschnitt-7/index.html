@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="sommer.css?v=6">
   <script src="../spielstand.js?v=7" defer></script>
   <script src="../../shared/story-speech.js" defer></script>
-  <script src="sommer-geschichte.js?v=4" defer></script>
+  <script src="sommer-geschichte.js?v=5" defer></script>
   <script src="kreuzwortraetsel.js?v=3" defer></script>
 </head>
 <body class="summer-page">
@@ -46,6 +46,14 @@
             alt="Eine Eiche im sommerlichen Abendlicht." width="1440" height="810">
           <div id="oak-animals"></div>
           <div id="oak-targets" role="group" aria-label="Plätze an der Eiche" hidden></div>
+        </div>
+        <div id="summer-film" hidden>
+          <video id="summer-video" playsinline preload="metadata" width="1056" height="594"></video>
+          <div class="film-controls" role="group" aria-label="Filmsteuerung">
+            <button class="game-button" id="summer-film-toggle" type="button">Abspielen</button>
+            <label><span class="sr-only">Wiedergabeposition</span><input id="summer-film-seek" type="range" min="0" max="5" step="0.05" value="0" disabled></label>
+          </div>
+          <p class="feedback" id="summer-film-feedback" role="status"></p>
         </div>
       </figure>
       <section id="summer-screen" aria-labelledby="summer-step"></section>

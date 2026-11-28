@@ -187,7 +187,6 @@ html body.summer-page { padding-block-end: env(safe-area-inset-bottom, 0px); }
 .oak-stage .oak-animal.starlings { width: 20%; }
 .oak-stage .oak-animal.mosquitoes { width: 32%; }
 .oak-stage .woodpecker { width: 12%; --x: 21%; --y: 29%; }
-.oak-stage .woodpecker.at-hollow { width: 14%; --x: 29%; --y: 56%; }
 .oak-stage .chicks { width: 8%; --x: 59%; --y: 28%; }
 .oak-stage:has(.chicks) .oak-animal.pigeons { --x: 55%; top: 21%; }
 .oak-stage .oak-target {
