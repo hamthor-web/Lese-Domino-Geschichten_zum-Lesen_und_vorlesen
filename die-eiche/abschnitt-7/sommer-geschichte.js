@@ -37,7 +37,7 @@ const summerStory = (() => {
     ? saved.filter(id => Object.hasOwn(options, id)) : []);
   const answers = readFlags(visits?.answers, choices);
   const placed = readFlags(visits?.placed, animals);
-  let crossword = visits?.crossword ?? visits;
+  let crossword = visits?.page === 'crossword' ? visits : visits?.crossword ?? null;
 
   const byId = id => document.getElementById(id);
   const screen = byId('summer-screen');
@@ -150,7 +150,6 @@ const summerStory = (() => {
       for (const target of targets.children) {
         const done = placed.has(target.dataset.place);
         target.disabled = done;
-        target.classList.toggle('placed', done);
       }
     }
 
@@ -167,7 +166,8 @@ const summerStory = (() => {
         if (!event.detail) targets.querySelector('button:not(:disabled)')?.focus();
       };
       bank.append(token);
-      const target = button(animal.place);
+      const target = button('');
+      target.setAttribute('aria-label', animal.place);
       target.dataset.place = id;
       target.classList.add('oak-target', id);
       target.onclick = () => {
@@ -196,7 +196,7 @@ const summerStory = (() => {
   }
 
   function showOriginal() {
-    paper('Mach es dir gemütlich und höre der Geschichte zu!', original);
+    paper('Mach es dir gemütlich und höre der Geschichte zu', original);
     const controls = document.createElement('div');
     controls.className = 'read-aloud';
     const play = button('Vorlesen');
@@ -230,9 +230,17 @@ const summerStory = (() => {
     if (page.read !== undefined) paper('Lies selbst', [reading[page.read]]);
     if (page.choice) showChoice(page.choice);
     if (page.match) showMatch();
-    if (page.listen) showOriginal();
+    if (page.listen) {
+      showOriginal();
+      for (const id of Object.keys(animals)) showAnimal(id);
+      const woodpecker = image('sommer-specht', 'Specht auf einem Eichenast');
+      woodpecker.className = 'oak-animal woodpecker';
+      const chicks = image('kueken', 'Zwei Küken im Nest');
+      chicks.className = 'oak-animal chicks';
+      overlays.append(woodpecker, chicks);
+    }
+    if (page.read === 3) showAnimal('mosquitoes');
     if (page.read === 3 || page.listen) {
-      showAnimal('mosquitoes');
       const butterflies = image('sommer-schmetterlinge');
       butterflies.className = 'summer-butterflies';
       overlays.append(butterflies);
@@ -312,6 +320,7 @@ const summerStory = (() => {
   }
   addEventListener('pagehide', () => speech.stop());
   render();
+  save();
 
   return {savedCrossword: crossword, saveCrossword};
 })();

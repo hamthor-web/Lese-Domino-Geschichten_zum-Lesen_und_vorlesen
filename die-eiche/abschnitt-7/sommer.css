@@ -148,6 +148,12 @@ html body.summer-page { padding-block-end: env(safe-area-inset-bottom, 0px); }
 .summer > .game-selection-link { margin-block: .85rem .5rem; }
 .summer-layout { align-items: start; }
 .summer-layout .art { transition: none; }
+#summer-screen .read-aloud {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  max-width: 23rem;
+}
 .summer-choices { grid-auto-rows: 1fr; }
 .summer-choices .game-button { padding-inline: 14%; }
 .summer .summer-nav {
@@ -180,22 +186,25 @@ html body.summer-page { padding-block-end: env(safe-area-inset-bottom, 0px); }
 .oak-stage .oak-animal.beetle { width: 9%; }
 .oak-stage .oak-animal.starlings { width: 20%; }
 .oak-stage .oak-animal.mosquitoes { width: 32%; }
+.oak-stage .woodpecker { width: 12%; --x: 21%; --y: 29%; }
+.oak-stage .chicks { width: 8%; --x: 59%; --y: 28%; }
+.oak-stage:has(.chicks) .oak-animal.pigeons { --x: 55%; top: 21%; }
 .oak-stage .summer-butterflies { width: 18%; left: 19%; top: 66%; }
 .oak-stage .oak-target {
   position: absolute;
   transform: translate(-50%, -50%);
-  width: min(23%, 8.4rem);
-  min-width: 52px;
-  min-height: 44px;
-  padding: .2rem .35rem;
-  border: 1px solid #66441b;
-  border-radius: .75rem;
-  background: #fff3d5ed;
-  font-size: clamp(.72rem, 1.6vw, .99rem);
+  width: var(--target-width, 22%);
+  height: var(--target-height, 23%);
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 35%;
+  background: transparent;
   pointer-events: auto;
 }
-.oak-stage .oak-target.mosquitoes { min-width: 88px; }
-.oak-stage .oak-target.placed { opacity: 0; pointer-events: none; }
+.oak-stage .oak-target.starlings { --target-width: 17%; }
+.oak-stage .oak-target.mosquitoes { --target-width: 29%; --target-height: 32%; }
+.oak-stage .oak-target:disabled { pointer-events: none; }
 .summer-animal-bank {
   display: grid;
   grid-template-columns: repeat(4,minmax(0,1fr));

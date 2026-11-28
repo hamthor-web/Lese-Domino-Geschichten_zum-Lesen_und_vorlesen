@@ -31,6 +31,11 @@ module.exports = async function checkSummer(context, base) {
     await page.waitForURL(summer);
     const next = page.getByRole('button', {name: 'Weiter', exact: true});
     await page.getByText(/Im Sommer finden viele Tiere Schutz/).waitFor();
+    await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
+    await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
+    await page.getByRole('button', {name: 'Spiel fortsetzen'}).click();
+    await page.waitForURL(summer);
+    await page.getByText(/Im Sommer finden viele Tiere Schutz/).waitFor();
     assert.equal(await page.getByRole('heading', {name: 'Kreuzworträtsel', exact: true}).count(), 0);
     const paperText = page.locator('.paper p');
     const artwork = page.locator('#oak-stage');
@@ -74,11 +79,16 @@ module.exports = async function checkSummer(context, base) {
     await page.emulateMedia({reducedMotion: 'reduce'});
     const token = name => page.getByRole('group', {name: 'Tiere', exact: true}).getByRole('button', {name, exact: true});
     const spot = name => page.getByRole('group', {name: 'Plätze an der Eiche'}).getByRole('button', {name, exact: true});
+    assert.deepEqual(await page.locator('.oak-target').allTextContents(), ['', '', '', '']);
+    assert.equal(await spot('Nest').evaluate(node => getComputedStyle(node).backgroundColor), 'rgba(0, 0, 0, 0)');
     await token('Tauben').tap();
     await spot('Rinde').tap();
     assert.ok(await next.isDisabled());
     await spot('Nest').tap();
-    await page.reload();
+    await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
+    await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
+    await page.getByRole('button', {name: 'Spiel fortsetzen'}).click();
+    await page.waitForURL(summer);
     assert.ok(await token('Tauben').isDisabled());
     assert.equal(await page.locator('#oak-animals .pigeons').count(), 1);
 
@@ -100,6 +110,8 @@ module.exports = async function checkSummer(context, base) {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await next.click();
     const original = page.locator('#summer-screen .paper p');
+    assert.equal(await page.locator('#oak-animals img').count(), 7);
+    await page.locator('#oak-animals img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
     assert.equal(await original.count(), 3);
     assert.match(await original.first().innerText(), /^Im Sommer fanden allerlei Tiere/);
     assert.match(await original.last().innerText(), /Mücken ihren abendlichen Reigen\.$/);
