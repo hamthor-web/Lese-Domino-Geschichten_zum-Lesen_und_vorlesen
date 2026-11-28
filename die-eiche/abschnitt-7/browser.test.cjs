@@ -30,6 +30,18 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: 'Weiter zu Sommer'}).click();
     await page.waitForURL(summer);
     const next = page.getByRole('button', {name: 'Weiter', exact: true});
+    const clip = page.locator('#summer-video');
+    async function playFilm(file) {
+      assert.match(await clip.getAttribute('src'), new RegExp(file + '\\.mp4$'));
+      assert.ok(await clip.isVisible());
+      assert.ok(!await page.locator('#oak-stage').isVisible());
+      await page.waitForFunction(() => document.querySelector('#summer-video').currentTime > .05);
+    }
+    await page.getByText(/Im Sommer finden viele Tiere Schutz/).waitFor();
+    await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
+    await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
+    await page.getByRole('button', {name: 'Spiel fortsetzen'}).click();
+    await page.waitForURL(summer);
     await page.getByText(/Im Sommer finden viele Tiere Schutz/).waitFor();
     assert.equal(await page.getByRole('heading', {name: 'Kreuzworträtsel', exact: true}).count(), 0);
     const paperText = page.locator('.paper p');
@@ -50,6 +62,7 @@ module.exports = async function checkSummer(context, base) {
     await info.waitFor();
     assert.equal(await info.getByRole('link').count(), 4);
     await info.getByRole('button', {name: 'Schließen'}).click();
+    await page.emulateMedia({reducedMotion: 'no-preference'});
 
     await next.click();
     await page.getByRole('button', {name: 'Specht', exact: true}).click();
@@ -57,39 +70,75 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: 'Tauben', exact: true}).click();
     await next.click();
     await page.getByText(/Käfer krabbeln über die raue Rinde/).waitFor();
+    await playFilm('sommer-kaefer-krabbelt');
+    await page.getByRole('button', {name: 'Ton ausschalten', exact: true}).click();
+    assert.ok(await clip.evaluate(video => video.muted));
+    await clip.evaluate(video => { video.currentTime = 2; });
+    await page.getByRole('button', {name: 'Noch einmal ansehen', exact: true}).click();
+    assert.ok(await clip.evaluate(video => video.currentTime < 1));
     await next.click();
+    assert.ok(await clip.evaluate(video => video.paused));
+    assert.ok(!await clip.isVisible());
     assert.equal(await page.locator('.summer-choices button').count(), 4);
-    await page.getByRole('button', {name: /darin baden/}).click();
-    assert.ok(await next.isDisabled());
+    for (const [answer, prompt] of [
+      [/darin baden/, 'Denk noch mal nach: Kann das stimmen?'],
+      [/ein Haus/, 'Meinst du wirklich?'],
+      [/Schuhe/, 'Klingt lustig, aber ist das wahr?'],
+      [/darin baden/, 'Gute Idee, aber denk noch mal nach!']
+    ]) {
+      await page.getByRole('button', {name: answer}).click();
+      await page.getByRole('status').filter({hasText: prompt}).waitFor();
+      assert.ok(await next.isDisabled());
+    }
     await page.getByRole('button', {name: /den essen/}).click();
     await next.click();
     await page.getByText(/Ein Specht hört kleine Tiere unter der Rinde/).waitFor();
-    await page.emulateMedia({reducedMotion: 'no-preference'});
+    await playFilm('sommer-specht-haemmert');
     await next.click();
     await page.getByText(/Am Abend geht die Sonne unter/).waitFor();
-    const insects = page.locator('#oak-animals .mosquitoes');
-    assert.match(await insects.getAttribute('src'), /sommer-muecken\.webp/);
-    await insects.evaluate(img => img.decode());
+    await playFilm('sommer-muecken-tanzen');
+    assert.ok(await clip.evaluate(video => video.muted));
+    await page.getByRole('button', {name: 'Ton einschalten', exact: true}).click();
+    assert.ok(!await clip.evaluate(video => video.muted));
     await next.click();
+    assert.ok(await clip.evaluate(video => video.paused));
+    assert.ok(!await clip.isVisible());
     await page.emulateMedia({reducedMotion: 'reduce'});
     const token = name => page.getByRole('group', {name: 'Tiere', exact: true}).getByRole('button', {name, exact: true});
     const spot = name => page.getByRole('group', {name: 'Plätze an der Eiche'}).getByRole('button', {name, exact: true});
+    const butterflyHint = 'Die passen gut hier hin. Aber hast du wirklich im Text etwas über Schmetterlinge gelesen?';
+    assert.deepEqual(await page.locator('.oak-target').allTextContents(), ['', '', '', '']);
+    assert.equal(await spot('Nest').evaluate(node => getComputedStyle(node).backgroundColor), 'rgba(0, 0, 0, 0)');
+    await token('Schmetterlinge').tap();
+    await spot('Nest').tap();
+    await page.getByRole('status').filter({hasText: butterflyHint}).waitFor();
+    assert.equal(await page.locator('#oak-animals img').count(), 0);
+    assert.ok(await next.isDisabled());
     await token('Tauben').tap();
     await spot('Rinde').tap();
     assert.ok(await next.isDisabled());
     await spot('Nest').tap();
-    await page.reload();
+    await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
+    await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
+    await page.getByRole('button', {name: 'Spiel fortsetzen'}).click();
+    await page.waitForURL(summer);
     assert.ok(await token('Tauben').isDisabled());
     assert.equal(await page.locator('#oak-animals .pigeons').count(), 1);
 
     await page.setViewportSize({width: 1100, height: 800});
-    await token('Käfer').scrollIntoViewIfNeeded();
-    const source = await token('Käfer').boundingBox();
-    const destination = await spot('Rinde').boundingBox();
-    await page.mouse.move(source.x + source.width / 2, source.y + source.height / 2);
-    await page.mouse.down();
-    await page.mouse.move(destination.x + destination.width / 2, destination.y + destination.height / 2, {steps: 12});
-    await page.mouse.up();
+    async function dragTo(animal, target, horizontal = .5, vertical = .5) {
+      await token(animal).scrollIntoViewIfNeeded();
+      const source = await token(animal).boundingBox();
+      const destination = await target.boundingBox();
+      await page.mouse.move(source.x + source.width / 2, source.y + source.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(destination.x + destination.width * horizontal, destination.y + destination.height * vertical, {steps: 12});
+      await page.mouse.up();
+    }
+    await dragTo('Schmetterlinge', artwork, .15, .8);
+    await page.getByRole('status').filter({hasText: butterflyHint}).waitFor();
+    assert.equal(await page.locator('#oak-animals img').count(), 1);
+    await dragTo('Käfer', spot('Rinde'));
     assert.ok(await token('Käfer').isDisabled());
     await token('Stare').tap();
     await spot('Loch im Baum').tap();
@@ -100,6 +149,8 @@ module.exports = async function checkSummer(context, base) {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await next.click();
     const original = page.locator('#summer-screen .paper p');
+    assert.equal(await page.locator('#oak-animals img').count(), 6);
+    await page.locator('#oak-animals img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
     assert.equal(await original.count(), 3);
     assert.match(await original.first().innerText(), /^Im Sommer fanden allerlei Tiere/);
     assert.match(await original.last().innerText(), /Mücken ihren abendlichen Reigen\.$/);

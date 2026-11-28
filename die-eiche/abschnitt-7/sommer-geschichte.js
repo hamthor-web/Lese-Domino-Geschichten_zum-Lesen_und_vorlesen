@@ -9,6 +9,11 @@ const summerStory = (() => {
     'Ein Specht hört kleine Tiere unter der Rinde. Er klopft mit dem Schnabel gegen den Stamm und holt sie heraus. So entsteht ein Loch im Baum. Später ziehen Stare dort ein.',
     'Am Abend geht die Sonne unter. Ihr Licht fällt durch die Blätter wie ein heller Vorhang. Darin tanzen viele kleine Mücken.'
   ];
+  const readingFilms = {
+    1: {file: 'sommer-kaefer-krabbelt', description: 'Ein Käfer krabbelt über die Eichenrinde.'},
+    2: {file: 'sommer-specht-haemmert', description: 'Ein Specht klopft neben der Baumhöhle gegen den Stamm.'},
+    3: {file: 'sommer-muecken-tanzen', description: 'Mücken tanzen im Licht unter der Eiche.'}
+  };
   const original = [
     'Im Sommer fanden allerlei Tiere in ihrem Blätterdach Zuflucht. Das Taubenpaar, das sich von den Krähen nicht vertreiben lassen hatte, baute ein Nest und legte seine Eier hinein, aus denen nach fast drei Wochen zwei wunderhübsche Küken schlüpften.',
     'Käfer krabbelten an der Borke des Baums herum, um nach süßem Saft zu suchen, den der Stamm mitunter absonderte. Ein Specht hatte unter der Rinde das Krabbeln von Insektenlarven, die hier ihr Unwesen trieben, gehört und hämmerte sie energisch heraus. Die Höhle, die dabei entstand, bot Staren einen Unterschlupf.',
@@ -18,13 +23,25 @@ const summerStory = (() => {
     birds: {question: 'Wer hat den Streit mit den Krähen gewonnen?', answers: ['Tauben', 'Käfer', 'Specht'], correct: 0},
     beetles: {question: 'Warum suchen die Käfer süßen Saft?', answers: [
       'Weil sie den essen möchten.', 'Weil sie ein Haus daraus bauen.', 'Weil sie darin baden möchten.', 'Weil sie ihre Schuhe damit kleben wollen.'
-    ], correct: 0}
+    ], correct: 0, retryMessages: [
+      'Denk noch mal nach: Kann das stimmen?',
+      'Meinst du wirklich?',
+      'Klingt lustig, aber ist das wahr?',
+      'Gute Idee, aber denk noch mal nach!'
+    ]}
   };
   const animals = {
     pigeons: {name: 'Tauben', place: 'Nest', image: 'sommer-tauben'},
     beetle: {name: 'Käfer', place: 'Rinde', image: 'sommer-kaefer'},
     starlings: {name: 'Stare', place: 'Loch im Baum', image: 'sommer-stare'},
     mosquitoes: {name: 'Mücken', place: 'Lichtvorhang', image: 'sommer-muecken-still'}
+  };
+  const animalCards = {
+    pigeons: animals.pigeons,
+    butterflies: {name: 'Schmetterlinge', image: 'sommer-schmetterlinge'},
+    beetle: animals.beetle,
+    starlings: animals.starlings,
+    mosquitoes: animals.mosquitoes
   };
   const pages = [
     {read: 0}, {choice: 'birds'}, {read: 1}, {choice: 'beetles'}, {read: 2},
@@ -37,18 +54,24 @@ const summerStory = (() => {
     ? saved.filter(id => Object.hasOwn(options, id)) : []);
   const answers = readFlags(visits?.answers, choices);
   const placed = readFlags(visits?.placed, animals);
-  let crossword = visits?.crossword ?? visits;
+  let crossword = visits?.page === 'crossword' ? visits : visits?.crossword ?? null;
 
   const byId = id => document.getElementById(id);
   const screen = byId('summer-screen');
   const stage = byId('oak-stage');
   const overlays = byId('oak-animals');
   const targets = byId('oak-targets');
+  const film = byId('summer-video');
+  const filmToggle = byId('summer-film-toggle');
+  const filmSeek = byId('summer-film-seek');
+  const filmFeedback = byId('summer-film-feedback');
+  const filmSound = byId('summer-film-sound');
   const next = byId('summer-next');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let selected = null;
   let drag = null;
   let suppressClick = false;
+  let mutedByChoice = false;
 
   function save() {
     EicheProgress.save(7, {step, answers: [...answers], placed: [...placed], crossword});
@@ -107,13 +130,16 @@ const summerStory = (() => {
     options.className = 'choices summer-choices';
     screen.append(options);
     const note = status(answers.has(id) ? 'Richtig!' : '');
+    const retryMessages = choice.retryMessages ?? ['Lies noch einmal und versuche es erneut.'];
+    let wrongAttempts = 0;
     next.disabled = !answers.has(id);
     choice.answers.forEach((text, index) => {
       const option = button(text);
       option.setAttribute('aria-pressed', String(answers.has(id) && index === choice.correct));
       option.onclick = () => {
         if (index !== choice.correct) {
-          note.textContent = 'Lies noch einmal und versuche es erneut.';
+          note.textContent = retryMessages[wrongAttempts % retryMessages.length];
+          wrongAttempts += 1;
           return;
         }
         answers.add(id);
@@ -134,7 +160,7 @@ const summerStory = (() => {
   }
 
   function showMatch() {
-    paper('Wo sind die Tiere?', ['Ziehe jedes Tier an seinen Platz. Du kannst auch erst das Tier und dann seinen Platz antippen.']);
+    paper('Wo sind die Tiere?', ['Ziehe die Tiere aus dem Text an ihren Platz. Du kannst auch erst das Tier und dann seinen Platz antippen.']);
     const bank = document.createElement('div');
     bank.className = 'summer-animal-bank';
     bank.setAttribute('role', 'group');
@@ -150,11 +176,17 @@ const summerStory = (() => {
       for (const target of targets.children) {
         const done = placed.has(target.dataset.place);
         target.disabled = done;
-        target.classList.toggle('placed', done);
       }
     }
 
-    for (const [id, animal] of Object.entries(animals)) {
+    stage.onclick = () => {
+      if (selected !== 'butterflies') return;
+      selected = null;
+      update();
+      note.textContent = 'Die passen gut hier hin. Aber hast du wirklich im Text etwas über Schmetterlinge gelesen?';
+    };
+
+    for (const [id, animal] of Object.entries(animalCards)) {
       const token = button(animal.name);
       token.prepend(image(animal.image));
       token.dataset.animal = id;
@@ -167,10 +199,14 @@ const summerStory = (() => {
         if (!event.detail) targets.querySelector('button:not(:disabled)')?.focus();
       };
       bank.append(token);
-      const target = button(animal.place);
+    }
+    for (const [id, animal] of Object.entries(animals)) {
+      const target = button('');
+      target.setAttribute('aria-label', animal.place);
       target.dataset.place = id;
       target.classList.add('oak-target', id);
       target.onclick = () => {
+        if (selected === 'butterflies') return;
         if (!selected) {
           note.textContent = 'Wähle zuerst ein Tier.';
           return;
@@ -185,9 +221,9 @@ const summerStory = (() => {
         showAnimal(id);
         update();
         note.textContent = placed.size === Object.keys(animals).length
-          ? 'Alle Tiere haben ihren Platz gefunden.' : animal.name + ' · ' + animal.place;
+          ? 'Alle Tiere aus dem Text haben ihren Platz gefunden.' : animal.name + ' · ' + animal.place;
         save();
-        if (restoreFocus) (bank.querySelector('button:not(:disabled)') ?? next).focus();
+        if (restoreFocus) (next.disabled ? bank.querySelector('button:not(:disabled)') : next).focus();
       };
       targets.append(target);
       if (placed.has(id)) showAnimal(id);
@@ -196,7 +232,7 @@ const summerStory = (() => {
   }
 
   function showOriginal() {
-    paper('Mach es dir gemütlich und höre der Geschichte zu!', original);
+    paper('Mach es dir gemütlich und höre der Geschichte zu', original);
     const controls = document.createElement('div');
     controls.className = 'read-aloud';
     const play = button('Vorlesen');
@@ -208,6 +244,57 @@ const summerStory = (() => {
     stop.onclick = speech.stop;
     status(speech.available ? '' : 'Auf diesem Gerät kannst du die Geschichte mitlesen.').id = 'summer-speech-status';
   }
+
+  function updateFilmControls() {
+    const ready = Number.isFinite(film.duration) && film.duration > 0;
+    filmSeek.disabled = !ready;
+    filmSeek.max = ready ? film.duration : 5;
+    filmSeek.value = film.currentTime;
+  }
+
+  function playFilm(allowMutedFallback = false) {
+    const source = film.src;
+    filmFeedback.textContent = '';
+    film.play().catch(error => {
+      if (error.name === 'AbortError' || film.src !== source || byId('summer-film').hidden) return;
+      if (allowMutedFallback && error.name === 'NotAllowedError' && !film.muted) {
+        film.muted = true;
+        playFilm();
+        return;
+      }
+      if (error.name !== 'NotAllowedError') filmFeedback.textContent = 'Das Video kann gerade nicht abgespielt werden.';
+    });
+  }
+
+  function showReadingFilm(clip) {
+    film.pause();
+    stage.hidden = Boolean(clip);
+    byId('summer-film').hidden = !clip;
+    if (!clip) return;
+    filmFeedback.textContent = '';
+    film.setAttribute('aria-label', clip.description);
+    film.poster = assetPath + clip.file + '.webp';
+    film.src = assetPath + clip.file + '.mp4';
+    film.muted = mutedByChoice;
+    updateFilmControls();
+    if (!motion.matches) playFilm(true);
+  }
+
+  for (const event of ['loadedmetadata', 'play', 'pause', 'ended', 'timeupdate']) {
+    film.addEventListener(event, updateFilmControls);
+  }
+  filmToggle.onclick = () => {
+    film.currentTime = 0;
+    playFilm();
+  };
+  filmSeek.oninput = () => { film.currentTime = Number(filmSeek.value); };
+  film.addEventListener('volumechange', () => {
+    filmSound.textContent = film.muted ? 'Ton einschalten' : 'Ton ausschalten';
+  });
+  filmSound.onclick = () => {
+    mutedByChoice = !film.muted;
+    film.muted = mutedByChoice;
+  };
 
   const speech = createStorySpeech(() => {
     const note = byId('summer-speech-status');
@@ -225,17 +312,24 @@ const summerStory = (() => {
     byId('story-title').hidden = byId('summer-layout').hidden = Boolean(page.crossword);
     overlays.replaceChildren();
     targets.replaceChildren();
+    stage.onclick = null;
     targets.hidden = !page.match;
+    showReadingFilm(readingFilms[page.read]);
     if (page.crossword) return;
     if (page.read !== undefined) paper('Lies selbst', [reading[page.read]]);
     if (page.choice) showChoice(page.choice);
     if (page.match) showMatch();
-    if (page.listen) showOriginal();
-    if (page.read === 3 || page.listen) {
-      showAnimal('mosquitoes');
-      const butterflies = image('sommer-schmetterlinge');
-      butterflies.className = 'summer-butterflies';
-      overlays.append(butterflies);
+    if (page.listen) {
+      showOriginal();
+      for (const id of Object.keys(animals)) showAnimal(id);
+      const chicks = image('kueken', 'Zwei Küken im Nest');
+      chicks.className = 'oak-animal chicks';
+      overlays.append(chicks);
+    }
+    if (page.listen) {
+      const woodpecker = image('sommer-specht', 'Specht auf einem Eichenast');
+      woodpecker.className = 'oak-animal woodpecker';
+      overlays.append(woodpecker);
     }
   }
 
@@ -263,7 +357,7 @@ const summerStory = (() => {
     if (drag?.id !== event.pointerId) return;
     if (!drag.ghost) {
       if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 8) return;
-      drag.ghost = image(animals[drag.token.dataset.animal].image);
+      drag.ghost = image(animalCards[drag.token.dataset.animal].image);
       drag.ghost.className = 'summer-drag-ghost';
       document.body.append(drag.ghost);
       suppressClick = true;
@@ -279,7 +373,13 @@ const summerStory = (() => {
     ghost.remove();
     setTimeout(() => { suppressClick = false; }, 0);
     if (event.type !== 'pointerup') return;
-    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data-place]');
+    const destination = document.elementFromPoint(event.clientX, event.clientY);
+    if (token.dataset.animal === 'butterflies' && stage.contains(destination)) {
+      selected = 'butterflies';
+      stage.click();
+      return;
+    }
+    const target = destination?.closest('[data-place]');
     if (target && stage.contains(target)) {
       selected = token.dataset.animal;
       target.click();
@@ -310,8 +410,12 @@ const summerStory = (() => {
       input.nextElementSibling.value = input.value + ' %';
     });
   }
-  addEventListener('pagehide', () => speech.stop());
+  addEventListener('pagehide', () => {
+    speech.stop();
+    film.pause();
+  });
   render();
+  save();
 
   return {savedCrossword: crossword, saveCrossword};
 })();
