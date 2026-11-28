@@ -1,17 +1,20 @@
 # Masterübersicht – Lese-Domino-Geschichten
-Stand 22.11.2026 – Grundkonzept „Die Eiche“ dokumentiert; keine Spielcodeänderung.
+Stand 28.11.2026 · Abgleich mit dem Hauptzweig `main`.
 
-| Geschichte | Aktueller nachgewiesener Stand | Bildwelt |
+Die [gemeinsame Web-Startseite](../index.html) bietet die Auswahl zwischen beiden Geschichten. Jede Geschichte hat ihren eigenen Einstieg, ihre eigene Bildwelt und einen eigenen Spielstand. Die Browserinstallation (PWA) ist in der [Dokumentation zur gemeinsamen Startseite](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md) beschrieben.
+
+| Geschichte | Im Webspiel umgesetzt | Planung und Abnahme |
 | --- | --- | --- |
-| Das Land der glitzernden Spinnweben (Silvana) | Alle 14 Szenen laut [Nachtrag vom 19.11.](../SPIELAKTE_SZENE14_2026-11-19.md) technisch umgesetzt; Geräte- und Hörqualität separat zu prüfen | Märchenhaft, Pastell, eigene Spinnwebenbuttons |
-| Die Eiche | [Dramaturgisches Grundkonzept für zehn Abschnitte](Die_Eiche/GRUNDKONZEPT_DRAMATURGIE_2026-11-22.md) am 22.11. bestätigt; Einzelaufgaben in Ausarbeitung; keine Implementierung dadurch | Plastischer handgemachter Kinderbuch-/Stop-Motion-Stil |
-| Weitere Geschichten | Zukunftsidee, noch unbestimmt | Je Geschichte eigene Bildwelt möglich |
+| **Silvana** · Das Land der glitzernden Spinnweben | [Spieleinstieg](../silvana/) mit 14 technisch umgesetzten Szenen. Die Startseite bietet zusätzlich die vollständige Vorlesefassung per Browserstimme. | Vollständiger Durchlauf und Hörkontrolle auf Zielgeräten offen. [Spielakte](Spinnwebenreichtum/SPIELAKTE.md) |
+| **Die Eiche** | [Spieleinstieg](../die-eiche/) mit drei spielbaren Abschnitten: „Die Eiche“, „Spuren der Zeit“ und „Winterschlaf“. | „Erste warme Sonnenstrahlen“ ist im Spiel ein Buchausblick. Das [Grundkonzept](Die_Eiche/GRUNDKONZEPT_DRAMATURGIE_2026-11-22.md) sieht zehn Abschnitte vor. [Spielakte](Die_Eiche/SPIELAKTE.md) |
 
-Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienregeln und voneinander getrennten Geschichten.
+- **Geschichtenbuch:** [Testfassung 4](MASTERUEBERSICHT_NACHTRAG_GESCHICHTENBUCH_2026-11-26.md) und [Buchprobe mit den drei Eichen-Abschnitten](Die_Eiche/NACHTRAG_BUCHPROBE_2026-11-26.md) dienen der visuellen Abnahme.
+- **Monatsdomino:** Eine freiwillige Abschlussübung mit kurzer Rahmenhandlung ist eine [Konzeptidee](../KONZEPT_EICHE_MONATSDOMINO.md). Die Entscheidung über die Integration ist offen.
+- **Android:** Der [Produktionsplan](ANDROID_PRODUKTION.md) beschreibt die Schritte von der Auswahl eines Webstands bis zur Play-Freigabe.
 
-**Achtung:** Die ältere [Zusammenfassung](../Lese-Domino-Zusammenfassung.md) nennt teilweise sechs Szenen. Bei Abweichungen spätere Nachträge und den aktuellen Quellcode prüfen, statt alte Zahlen ungeprüft zu übernehmen.
+## Entwicklungsverlauf vom 22. bis 25. November 2026
 
-**Die Eiche – Kapitelübergang:** Am 22.11.2026 ist das wiederkehrende Würstchen-Buch-Video mit Ton und manueller Weiter-Schaltung als [Ablaufkonzept](Die_Eiche/KAPITELUEBERGANG_BUCH_2026-11-22.md) bestätigt worden. Das Referenzvideo liegt noch nicht als Binärdatei im Repository, und die Funktion ist noch nicht programmiert.
+**Die Eiche – Kapitelübergang:** Am 22.11.2026 ist das wiederkehrende Würstchen-Buch-Video mit Ton und manueller Weiter-Schaltung als [Ablaufkonzept](Die_Eiche/KAPITELUEBERGANG_BUCH_2026-11-22.md) bestätigt worden. Das Referenzvideo wurde später eingebunden, siehe [aktueller Medienstand](Die_Eiche/KAPITELUEBERGANG_BUCH_2026-11-22.md).
 
 **Die Eiche – Webstand am 23.11.2026:** Der erste Abschnitt ist spielbar. Die richtige Traumantwort startet das Wintervideo. Der Vorlesebildschirm lädt mit einer eigenen Meldung zum Zuhören ein. [Spielakte](Die_Eiche/SPIELAKTE.md)
 

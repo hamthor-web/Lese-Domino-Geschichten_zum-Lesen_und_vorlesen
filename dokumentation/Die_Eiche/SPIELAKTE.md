@@ -1,8 +1,15 @@
 # Spielakte – Die Eiche
-Stand 22.11.2026 – Dramaturgisches Grundkonzept bestätigt; noch kein neuer Spielcode.
+## Aktueller Stand · 28.11.2026
+
+- [Webeinstieg](../../die-eiche/) mit drei spielbaren Abschnitten: [Die Eiche](../../die-eiche/abschnitt-1/), [Spuren der Zeit](../../die-eiche/abschnitt-2/) und [Winterschlaf](../../die-eiche/abschnitt-3/). „Erste warme Sonnenstrahlen“ ist der Buchausblick am Ende des dritten Abschnitts.
+- Die Weiter-Übergänge zu Abschnitt 2 und 3 starten in `main` auf der ersten Seite. „Spiel fortsetzen“ nutzt den gespeicherten Zwischenstand. Der praktisch ausprobierte Navigationsfall ist unten dokumentiert. Die vollständige Geräte-, Hör- und Offline-Abnahme steht aus.
+- Für neue Bilder gelten die [beiden abgelegten Stilvorlagen](Referenzbilder/README.md). Wo die Herzgravur lesbar ist, gilt seit 25.11. **H&A**.
+- Die [Buchprobe](NACHTRAG_BUCHPROBE_2026-11-26.md) dient dem Flächenvergleich. Das [Monatsdomino](../../KONZEPT_EICHE_MONATSDOMINO.md) ist eine offene Konzeptidee.
 
 ## Rolle
-Geplante weitere Geschichte in einer künftigen gemeinsamen Lese-Domino-Geschichten-App neben „Das Land der glitzernden Spinnweben“; später sollen weitere Geschichten dazukommen.
+Eigene Geschichte in der gemeinsamen Web-App neben „Das Land der glitzernden Spinnweben“ (Silvana). Das Grundkonzept sieht zehn Abschnitte vor.
+
+## Entscheidungen und Entwicklungsverlauf
 
 ## Verbindlicher Bildstil
 Eigene **handgemachte plastische 3D-Kinderbuchwelt im Stop-Motion-Stil**, angelehnt an die gezeigte Würstchen-/Herbstblätter-Ästhetik. Kein allgemeiner Stilwechsel für andere Geschichten.
@@ -15,7 +22,7 @@ Eigene **handgemachte plastische 3D-Kinderbuchwelt im Stop-Motion-Stil**, angele
 ## Gemeinsame Grundlage
 Bewährte Lesbarkeit, Bedienung, Buttonmaß-Logik, unabhängige Schrift- und Spielfeldgrößenregler. Die eigentliche Button-Dekoration darf passend zur Eiche gestaltet werden; Spinnwebenmotive gehören zur anderen Geschichte.
 
-## Offen, nicht als beschlossen behandeln
+## Offene Punkte zum Konzeptstand vom 22.11.2026
 - Endgültige Einzelaufgaben, Dialoge, Interaktionen und Übergänge innerhalb der zehn geplanten Abschnitte.
 - Prüfung der Aufgaben gegen die vollständige Original- und Lesefassung.
 - Illustrationen/Bildbestand und Animationen der einzelnen Abschnitte.
@@ -27,7 +34,7 @@ Die Geschichte „Die Eiche“ wurde bereits als Stoff besprochen; eine vollstä
 [Entscheidungen](ENTSCHEIDUNGEN.md)
 
 ## Kapitelübergang – bestätigt am 22.11.2026
-[Würstchen öffnet das Buch: verbindlicher Ablauf](KAPITELUEBERGANG_BUCH_2026-11-22.md). Originalvideo mit Ton; Titel erscheint erst beim geöffneten Buch; das letzte Bild bleibt stehen, bis das Kind auf „Weiter“ tippt. Der gleiche Übergang ist für alle Abschnitte vorgesehen. **Referenz-MP4 liegt in diesem Arbeitschat vor, ist aber noch nicht nach GitHub übertragen.** Technische Integration ausstehend.
+[Würstchen öffnet das Buch: verbindlicher Ablauf](KAPITELUEBERGANG_BUCH_2026-11-22.md). Originalvideo mit Ton; Titel erscheint erst beim geöffneten Buch; das letzte Bild bleibt stehen, bis das Kind auf „Weiter“ tippt. Der gleiche Übergang ist für alle Abschnitte vorgesehen. Die Videodatei wurde später in die ersten drei Abschnitte eingebunden. Der verlinkte Ablauf enthält die aktuellen Medienpfade.
 
 ## Szenentitel – bestätigt am 23.11.2026
 Die erste Szene heißt **„Die Eiche“**. Der Titel erscheint in der Szenenüberschrift und auf der Schaltfläche zum erneuten Spielen.
@@ -138,7 +145,7 @@ In „Winterschlaf“ sortieren die Kinder vier Wortkarten. „Kinder“ kommt a
 
 ## Einheitliche Initialen in der Eichenrinde · 25. November 2026
 
-Wo ein Herz mit Initialen zu sehen ist, lautet die Gravur „H&A“. In „Spuren der Zeit“ und im Vogelclip von „Winterschlaf“ steht bereits „H&A“. Auf dem Winterbild in „Winterschlaf“ ersetzt die korrigierte Gravur „A+M“. Die Korrektur liegt ausschließlich über den Buchstaben im vorhandenen Herz. Eichen ohne lesbare Gravur behalten ihre Darstellung.
+Wo ein Herz mit Initialen zu sehen ist, lautet die Gravur „H&A“. In „Spuren der Zeit“ und im Vogelclip von „Winterschlaf“ steht bereits „H&A“. Auf dem Winterbild in „Winterschlaf“ wurde „A+M“ durch „H&A“ ersetzt. Die Korrektur liegt ausschließlich über den Buchstaben im vorhandenen Herz. Eichen ohne lesbare Gravur behalten ihre Darstellung.
 
 ## Weiter-Navigation beim erneuten Spielen · 25. November 2026
 
