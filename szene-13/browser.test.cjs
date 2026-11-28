@@ -36,15 +36,14 @@ function localServer() {
   const errors = [];
   page.on('pageerror', err => errors.push(err.message));
   const button = id => page.locator('#' + id);
-  const startLabel = 'Lass uns das Spiel mit der Geschichte beginnen!';
+  const welcome = base + 'silvana/';
+  const startLabel = 'Spiel beginnen';
   for (const [width, height] of [[320, 640], [844, 390], [768, 1024], [1440, 900]]) {
     await page.setViewportSize({width, height});
-    await page.goto(base);
+    await page.goto(welcome);
     assert.equal(await page.locator('h1').textContent(), 'Silvana');
     await page.waitForFunction(() => document.querySelector('.mascot img').naturalWidth > 0);
     assert(await page.getByRole('link', {name: startLabel}).isVisible());
-    assert(await page.locator('footer p.note').evaluate(note =>
-      note.getBoundingClientRect().top >= document.querySelector('main').getBoundingClientRect().bottom));
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   }
   await page.getByRole('link', {name: startLabel}).click();
@@ -52,17 +51,37 @@ function localServer() {
   const phone = await browser.newPage({hasTouch: true, isMobile: true, viewport: {width: 393, height: 780}});
   await phone.addInitScript(() => {
     window.addEventListener('beforeinstallprompt', event => {
+      if (!event.isTrusted) return;
       event.preventDefault();
       event.stopImmediatePropagation();
     });
   });
+  const currentVersion = 'a'.repeat(40);
+  const nextVersion = 'b'.repeat(40);
+  await phone.route(url => url.pathname === '/', async route => {
+    const response = await route.fetch();
+    const html = (await response.text()).replace('{{ site.github.build_revision }}', currentVersion);
+    await route.fulfill({response, body: html});
+  });
+  await phone.route(url => url.pathname === '/app-version.json', route => route.fulfill({json: {version: nextVersion}}));
   await phone.goto(base);
+  await phone.evaluate(() => {
+    const event = new Event('beforeinstallprompt', {cancelable: true});
+    event.prompt = () => { window.installPromptOpened = true; };
+    event.userChoice = Promise.resolve({outcome: 'accepted'});
+    window.dispatchEvent(event);
+  });
   await phone.getByRole('button', {name: 'Installieren'}).tap();
-  assert(await phone.getByText('iPhone und iPad:', {exact: true}).isVisible());
-  await phone.getByRole('button', {name: 'Installieren'}).tap();
+  await phone.waitForFunction(() => window.installPromptOpened === true);
   assert.equal(await phone.locator('#installationshilfe').isVisible(), false);
+  const updated = phone.waitForRequest(request =>
+    new URL(request.url()).searchParams.get('aktualisiert') === nextVersion);
   await phone.getByRole('button', {name: 'Aktualisieren'}).tap();
-  await phone.getByText('Silvana wurde neu geladen.', {exact: true}).waitFor();
+  await updated;
+  await phone.waitForURL(base);
+  await phone.getByRole('button', {name: 'Warum ist hier ein Würstchen?'}).tap();
+  assert(await phone.getByRole('heading', {name: 'Für die Eltern und Lesebegleiter'}).isVisible());
+  await phone.getByRole('link', {name: 'Silvana', exact: true}).tap();
   await phone.getByRole('link', {name: startLabel}).tap();
   await phone.waitForURL('**/vorschau-einfuehrung/');
   await phone.close();
@@ -270,8 +289,7 @@ function localServer() {
     assert.equal(await button('sceneMenu14').textContent(),'2. Erkenntnis');
     assert.equal(await page.locator('.scene-menu nav a').count(), 2);
   }
-  await page.goto(base);
-  assert(await page.getByRole('heading', {name: 'Für die Eltern und Lesebegleiter'}).isVisible());
+  await page.goto(welcome);
   page.once('dialog', dialog => dialog.accept());
   await button('zuruecksetzen').click();
   await page.getByText('Der Spielfortschritt wurde zurückgesetzt.').waitFor();
