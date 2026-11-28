@@ -77,9 +77,12 @@ module.exports = async function checkSummer(context, base) {
     await page.getByRole('button', {name: /den essen/}).click();
     await next.click();
     await page.getByText(/Ein Specht hört kleine Tiere unter der Rinde/).waitFor();
+    const woodpeckerAtHollow = page.locator('#oak-animals .woodpecker.at-hollow');
+    await woodpeckerAtHollow.evaluate(img => img.decode());
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await next.click();
     await page.getByText(/Am Abend geht die Sonne unter/).waitFor();
+    assert.equal(await woodpeckerAtHollow.count(), 0);
     const insects = page.locator('#oak-animals .mosquitoes');
     assert.match(await insects.getAttribute('src'), /sommer-muecken\.webp/);
     await insects.evaluate(img => img.decode());

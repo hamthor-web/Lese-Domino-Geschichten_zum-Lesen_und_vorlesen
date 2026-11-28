@@ -259,11 +259,15 @@ const summerStory = (() => {
     if (page.listen) {
       showOriginal();
       for (const id of Object.keys(animals)) showAnimal(id);
-      const woodpecker = image('sommer-specht', 'Specht auf einem Eichenast');
-      woodpecker.className = 'oak-animal woodpecker';
       const chicks = image('kueken', 'Zwei Küken im Nest');
       chicks.className = 'oak-animal chicks';
-      overlays.append(woodpecker, chicks);
+      overlays.append(chicks);
+    }
+    if (page.read === 2 || page.listen) {
+      const woodpecker = image('sommer-specht', 'Specht auf einem Eichenast');
+      woodpecker.className = 'oak-animal woodpecker';
+      woodpecker.classList.toggle('at-hollow', page.read === 2);
+      overlays.append(woodpecker);
     }
     if (page.read === 3) showAnimal('mosquitoes');
   }
