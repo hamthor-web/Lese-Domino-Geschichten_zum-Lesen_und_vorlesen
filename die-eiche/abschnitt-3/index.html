@@ -235,13 +235,14 @@ video.scene-film{pointer-events:none}
 <details class="scene-menu"><summary class="action oak">Anderen Abschnitt<br>noch einmal erleben</summary><a class="action oak" href="../abschnitt-1/?neu=1">Die Eiche</a><a class="action oak" href="../abschnitt-2/?neu=1">Spuren der Zeit</a><button class="action oak" id="restart">Winterschlaf</button>
   <a class="action oak" href="../abschnitt-4/?neu=1" data-replay-section="4" hidden>Erste warme Sonnenstrahlen</a>
   <a class="action oak" href="../abschnitt-5/?neu=1" data-replay-section="5" hidden>Der Frühling beginnt</a>
+  <a class="action oak" href="../abschnitt-6/?neu=1" data-replay-section="6" hidden>Die Freude der Eiche</a>
 </details>
 <section id="screen"></section>
 <nav><button id="back" class="action oak">Zurück</button><span class="counter" id="counter" aria-live="polite"></span><button id="next" class="action oak">Weiter</button></nav>
 <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
 <footer>In deinem Tempo. Ohne Zeitdruck.</footer>
 </main><dialog id="info"><h2>Informationen &amp; Kontakt</h2><p>Die Eiche · Heike Amthor</p><p>Sprecherin: Nadine Weder.</p><button class="action oak" id="closeInfo">Schließen</button></dialog>
-<script src="../spielstand.js?v=5"></script><script src="../page-turn.js"></script><script>
+<script src="../spielstand.js?v=6"></script><script src="../page-turn.js"></script><script>
 const $=id=>document.getElementById(id), screen=$('screen'), media={image:'../../assets/die-eiche/abschnitt-3/winterbild.webp',skate:'../../assets/die-eiche/abschnitt-3/schlittschuh.mp4',birds:'../../assets/die-eiche/abschnitt-3/voegel.mp4',turn:'../../assets/die-eiche/abschnitt-1/blaettern.mp3',book:'../../assets/die-eiche/abschnitt-2/buchoeffnen.mp4',still:'../../assets/die-eiche/abschnitt-2/buch-standbild.jpg',swirl:'../../assets/die-eiche/abschnitt-2/kringel.png',jump:'../../assets/die-eiche/abschnitt-2/weiter-huepfen.webm',jumpStill:'../../assets/die-eiche/abschnitt-2/weiter-standbild.png',audio:'../../assets/die-eiche/abschnitt-3/vorleseton.mp3'};
 const a='Der See hat eine Decke aus Eis. Kinder laufen darauf Schlittschuh. Sie tragen dicke Mützen. Ihre Wangen sind rot. Ihre Augen leuchten vor Freude. Die Eiche scheint nichts zu merken. Oder merkt sie es doch?';
 const b='Sie steht ganz still. Nur der Wind bewegt ihre Zweige. Oben in den Ästen streiten sich Krähen und Tauben. Jeder will den besten Platz.';

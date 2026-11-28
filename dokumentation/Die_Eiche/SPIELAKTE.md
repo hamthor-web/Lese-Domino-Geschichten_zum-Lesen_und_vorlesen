@@ -159,5 +159,13 @@ Fehler: Der Übergang zu Abschnitt 2 oder 3 lud den alten Zwischenstand des Ziel
 
 - **Implementiert:** [Abschnitt 5](../../die-eiche/abschnitt-5/) beginnt nach dem Buchausblick in „Erste warme Sonnenstrahlen“ mit der ersten Lesekarte. Die freigegebene Vorschau enthält elf Seiten mit drei Lesetexten, fünf Fragen, Fisch- und Knospenfilm, vier Bildunterschieden, dem vollständigen Vorlesetext und der Schlussanimation.
 - **Spielstand:** Seiten, gelöste Fragen und gefundene Bildunterschiede bleiben beim Verlassen erhalten. „Spiel fortsetzen“ lädt den Zwischenstand. Der Buchübergang und „Anderen Abschnitt noch einmal erleben“ starten den Zielabschnitt auf seiner ersten Seite. „Spiel zurücksetzen“ erfasst Abschnitt 5.
-- **Info und Ausblick:** Das runde Info-I enthält Impressum, Datenschutz, Website und E-Mail. Würstchen öffnet das Buch mit Originalton. Auf der rechten Buchseite erscheint „Die Freude der Eiche“. Abschnitt 6 bleibt in Vorbereitung.
+- **Info und Ausblick:** Das runde Info-I enthält Impressum, Datenschutz, Website und E-Mail. Würstchen öffnet das Buch mit Originalton. Auf der rechten Buchseite erscheint „Die Freude der Eiche“. Der Weiter-Button führt zu Abschnitt 6.
 - **Browserprüfung:** Der automatisierte Test prüft den Start über Abschnitt 4 bei vorhandenem Spielstand, die Aufgaben, das Fortsetzen mit teilweise gelöstem Suchbild, die Abschnittswahl, den vollständigen Info-Dialog, den Buchausblick und das Zurücksetzen. Er läuft in der bestehenden Prüfung der Schaltflächen.
+
+## 28. November 2026 · Die Freude der Eiche
+
+- **Implementiert:** [Abschnitt 6](../../die-eiche/abschnitt-6/) folgt auf den Buchausblick von Abschnitt 5. Er enthält Lesetext und Eichenfilm mit Blätterrauschen, eine Runde zusammengesetzter Wörter und den Originaltext zum Vorlesen.
+- **Wortaufgabe:** Mutterliebe, Eichenbaum, hellgrün und Sonnenschein werden in der passenden Reihenfolge zusammengesetzt. Fehlversuche erscheinen im Knetbutton mit grünem Fragezeichen und wechselnder Rückmeldung. Wolkensocken und Sockenwolken zeigen jeweils ihr Knetbild.
+- **Spielstand:** „Spiel fortsetzen“ lädt die gespeicherte Seite, die gelösten Wortpaare und das gefundene Quatschwort. Ein neuer Besuch über den Buchübergang oder die Abschnittswahl beginnt auf der ersten Leseseite. „Spiel zurücksetzen“ erfasst auch Abschnitt 6.
+- **Buchausblick:** Würstchen öffnet das Buch mit Originalton. Auf der rechten Seite erscheint „Sommer“ mit Kringel.
+- **Browserprüfung:** Der bestehende Browserlauf prüft den Einstieg über Abschnitt 5, das Verlassen über die Spielauswahl, das Wiederaufnehmen einer teilweise gelösten Wortaufgabe, das Neuladen der Vorlese- und Buchseite und das Zurücksetzen.

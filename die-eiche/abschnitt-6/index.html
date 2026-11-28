@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Die Eiche · Die Freude der Eiche</title>
+  <link rel="stylesheet" href="../abschnitt-4/abschnitt.css?v=2">
+  <link rel="stylesheet" href="abschnitt.css?v=2">
+  <link rel="stylesheet" href="../../shared/game-selection.css">
+  <script src="../spielstand.js?v=6" defer></script>
+  <script src="../../shared/story-speech.js" defer></script>
+  <script src="abschnitt.js?v=2" defer></script>
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div class="brand"><strong>Die Eiche</strong>Geschichten zum Lesen und Vorlesen</div>
+      <button class="settings-button" id="settingsButton" type="button" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button>
+      <button class="info-button" id="infoButton" type="button" aria-label="Informationen und Kontakt" aria-haspopup="dialog" aria-controls="info">i</button>
+    </header>
+
+    <div class="settings" id="settings" hidden>
+      <label>Schriftgröße <input id="letters" type="range" min="100" max="150" step="5" value="100"><output for="letters">100 %</output></label>
+      <label>Spielfeldgröße <input id="boardSize" type="range" min="75" max="100" step="5" value="100"><output for="boardSize">100 %</output></label>
+    </div>
+
+    <details class="scene-menu">
+      <summary class="game-button"><span>Anderen Abschnitt<br>noch einmal erleben</span></summary>
+      <div class="scene-choices">
+        <a class="game-button" href="../abschnitt-1/?neu=1">Die Eiche</a>
+        <a class="game-button" href="../abschnitt-2/?neu=1">Spuren der Zeit</a>
+        <a class="game-button" href="../abschnitt-3/?neu=1">Winterschlaf</a>
+        <a class="game-button" href="../abschnitt-4/?neu=1">Erste warme Sonnenstrahlen</a>
+        <a class="game-button" href="../abschnitt-5/?neu=1">Der Frühling beginnt</a>
+        <a class="game-button" href="?neu=1">Die Freude der Eiche</a>
+      </div>
+    </details>
+
+    <h1>Die Freude der Eiche</h1>
+    <div class="layout film-layout" id="layout">
+      <figure id="film" class="art">
+        <video id="springVideo" muted playsinline preload="metadata" width="312" height="308"
+          aria-label="Die Eiche lächelt und schaut eines ihrer grünen Blätter an."
+          poster="../../assets/die-eiche/abschnitt-6/eiche-blaetter.webp"
+          src="../../assets/die-eiche/abschnitt-6/eiche-blaetter.mp4"></video>
+        <div class="film-controls" role="group" aria-label="Filmsteuerung">
+          <button id="filmToggle" class="game-button film-toggle" type="button">Abspielen</button>
+          <label><span class="sr-only">Wiedergabeposition</span><input id="filmSeek" type="range" min="0" max="1000" value="0" disabled></label>
+          <output id="filmTime">0:00</output>
+          <button id="filmSound" class="game-button" type="button">Ton an</button>
+        </div>
+      </figure>
+      <section id="screen" aria-labelledby="stepTitle"></section>
+    </div>
+
+    <nav aria-label="Abschnittsseiten">
+      <button class="game-button" id="back" type="button">Zurück</button>
+      <span class="counter" id="counter" aria-live="polite"></span>
+      <button class="game-button" id="next" type="button">Weiter</button>
+    </nav>
+    <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
+  </main>
+
+  <template id="bookTransition">
+    <h2 class="transition-heading" id="stepTitle" tabindex="-1">Und wie geht es jetzt weiter?</h2>
+    <div class="book-stage">
+      <video id="bookClip" playsinline preload="metadata" width="712" height="714"
+        aria-label="Würstchen öffnet das Buch"
+        src="../../assets/die-eiche/abschnitt-2/buchoeffnen.mp4"></video>
+      <img id="bookStill" src="../../assets/die-eiche/abschnitt-2/buch-standbild.jpg"
+        alt="Würstchen hält ein geöffnetes Buch." width="712" height="714" hidden>
+      <h3 class="book-title" id="bookTitle" aria-live="polite" hidden>
+        <span>Sommer</span>
+        <img src="../../assets/die-eiche/abschnitt-2/kringel.png" alt="">
+      </h3>
+    </div>
+    <p class="feedback book-notice" id="bookNotice" hidden>Hier geht die Geschichte bald weiter.</p>
+  </template>
+
+  <template id="Wolkensocken">
+    <figure class="nonsense-reward">
+      <figcaption tabindex="-1"><strong>Wolkensocken</strong><span>So ein toller Quatsch!</span></figcaption>
+      <img src="../../assets/die-eiche/abschnitt-6/wolkensocken.webp"
+        alt="Zwei lachende blaue Socken mit weichen Wolken aus Knete." width="640" height="640">
+    </figure>
+  </template>
+
+  <template id="Sockenwolken">
+    <figure class="nonsense-reward">
+      <figcaption tabindex="-1"><strong>Sockenwolken</strong><span>So ein toller Quatsch!</span></figcaption>
+      <img src="../../assets/die-eiche/abschnitt-6/sockenwolken.webp"
+        alt="Zwei lachende Knetwolken tragen blaue Socken." width="640" height="640">
+    </figure>
+  </template>
+
+  <dialog id="info" aria-labelledby="infoTitle">
+    <h2 id="infoTitle">Informationen &amp; Kontakt</h2>
+    <p>Die Eiche · Heike Amthor</p>
+    <nav class="info-links" aria-label="Informationen zur App">
+      <a href="https://lesespiele.heike-amthor.de/impressum" target="_blank" rel="noopener">Impressum</a>
+      <a href="https://lesespiele.heike-amthor.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+      <a href="https://lesespiele.heike-amthor.de/" target="_blank" rel="noopener">Website der Entwicklerin</a>
+      <a href="mailto:lesespiele.heike.amthor@gmx.de">Nachricht an die Entwicklerin</a>
+    </nav>
+    <form method="dialog"><button class="settings-button" type="submit">Schließen</button></form>
+  </dialog>
+</body>
+</html>

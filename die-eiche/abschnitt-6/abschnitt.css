@@ -1,0 +1,87 @@
+#film { max-width: min(var(--board), 24rem) }
+#film video { clip-path: inset(0 round 9.7%) }
+#filmToggle { min-width: 9rem; padding-inline: 1rem }
+.layout.wide #screen { max-width: 51rem }
+.word-game { width: var(--board); margin: .65rem auto 0 }
+.compound-bank, .compound-results {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .45rem;
+}
+.compound-bank .game-button, .compound-results .game-button, .compound-attempt .game-button {
+  min-height: 64px;
+  padding: .55rem .65rem;
+}
+.compound-part { cursor: grab; touch-action: none; user-select: none }
+.compound-part[aria-pressed="true"], .compound-part.drop-target {
+  outline: 3px solid #42652a;
+  outline-offset: -3px;
+  border-radius: 14px;
+}
+.compound-results { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+.compound-results:not(:empty) { margin-top: .65rem }
+.compound-results .game-button { color: #28502c }
+.compound-bank[inert] { opacity: .55 }
+.compound-attempt {
+  display: grid;
+  justify-items: center;
+  gap: .25rem;
+  margin-top: .65rem;
+}
+.compound-attempt .game-button { width: min(100%, 22rem); padding-inline: 1.5rem }
+.clay-question {
+  color: #6a913b;
+  font: 700 3.8rem/.95 Andika, Verdana, sans-serif;
+  transform: rotate(-8deg);
+  -webkit-text-stroke: 1px #446724;
+  text-shadow: 0 1px #84a954, 0 2px #547630, 0 3px #446226, 1px 4px 3px #314e2859;
+}
+@supports (background-clip: text) {
+  .clay-question {
+    background: linear-gradient(145deg, #b4cf78 15%, #82a74c 47%, #527532 82%);
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: .7px #50732c;
+    text-shadow: none;
+    filter: drop-shadow(0 2px 0 #486a2e) drop-shadow(1px 3px 2px #314e2859);
+  }
+}
+.compound-results .just-joined { animation: join-word .32s ease-out }
+@keyframes join-word {
+  from { opacity: .5; transform: scale(.9) }
+  to { opacity: 1; transform: scale(1) }
+}
+#attemptNotice { text-align: center }
+.nonsense-reward {
+  display: grid;
+  justify-items: center;
+  margin: .75rem auto 0;
+  text-align: center;
+  color: #28502c;
+}
+.nonsense-reward figcaption { font-size: calc(1.2rem * var(--letters)) }
+.nonsense-reward strong {
+  display: grid;
+  place-items: center;
+  min-height: 54px;
+  padding: .5rem 2.1rem;
+  background: var(--clay) center / 100% 100% no-repeat;
+}
+.nonsense-reward span { display: block; margin-top: .25rem; font-weight: 700 }
+.nonsense-reward img {
+  display: block;
+  width: min(100%, 16rem, 30svh);
+  height: auto;
+  margin-top: .3rem;
+  animation: join-word .32s ease-out;
+}
+.story-title { margin-top: .55rem; font-size: calc(1.14rem * var(--letters)) }
+.book-stage { width: min(var(--board), 50svh, 34rem) }
+.book-notice { text-align: center }
+@media (max-width: 620px) {
+  #film { max-width: min(var(--board), 42svh) }
+  .compound-bank { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .compound-results .just-joined, .nonsense-reward img { animation: none }
+}

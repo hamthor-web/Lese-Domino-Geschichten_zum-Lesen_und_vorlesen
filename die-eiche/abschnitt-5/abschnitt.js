@@ -144,7 +144,6 @@ function drawBook() {
     clip.hidden = true;
     byId('bookStill').hidden = false;
     byId('bookTitle').hidden = false;
-    byId('bookNotice').hidden = false;
     next.hidden = false;
   }
 
@@ -193,7 +192,7 @@ function render() {
   back.disabled = page === 0;
   next.hidden = false;
   next.disabled = false;
-  next.textContent = page === lastPage ? 'Abschnitt noch einmal' : 'Weiter';
+  next.textContent = page === lastPage ? 'Weiter zu Die Freude der Eiche' : 'Weiter';
 
   if (page === 0 || clip) screen.innerHTML = paper('Lies selbst', readings[page / 2]);
   else if (questions[page]) drawQuestion(questions[page]);
@@ -246,10 +245,7 @@ filmToggle.addEventListener('click', () => {
 back.addEventListener('click', () => goTo(state.page - 1));
 next.addEventListener('click', () => {
   if (state.page < lastPage) goTo(state.page + 1);
-  else if (window.confirm('Abschnitt noch einmal beginnen?')) {
-    state = {page: 0, answers: [], found: []};
-    goTo(0);
-  }
+  else location.assign('../abschnitt-6/?neu=1');
 });
 addEventListener('pagehide', () => {
   speech.stop();

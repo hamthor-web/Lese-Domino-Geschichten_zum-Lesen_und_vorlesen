@@ -79,12 +79,59 @@ module.exports = async function checkSpring(context, base) {
     await springChoice.click();
     await page.waitForURL(spring);
     assert.equal(await counter.innerText(), '1 / 11');
+
+    const joy = oak + 'abschnitt-6/';
+    await page.evaluate(() => {
+      localStorage.setItem('die-eiche-checkpoint-v1-5', JSON.stringify({page: 10}));
+      localStorage.setItem('die-eiche-checkpoint-v1-6', JSON.stringify({
+        page: 2, pairs: [[1, 5], [3, 7], [9, 2], [8, 0]], nonsenseWord: 'Wolkensocken'
+      }));
+    });
+    await page.goto(spring);
+    await page.getByRole('button', {name: 'Weiter zu Die Freude der Eiche'}).click();
+    await page.waitForURL(joy);
+    assert.equal(await counter.innerText(), '1 / 4');
+    assert.equal(new URL(page.url()).search, '');
+    await next.click();
+    const word = name => page.getByRole('button', {name, exact: true}).and(page.locator('[data-part]'));
+    async function combineWords(first, second) {
+      await word(first).click();
+      await word(second).click();
+    }
+    await combineWords('Liebe', 'Mutter');
+    await page.getByRole('button', {name: 'Liebemutter wieder trennen'}).click();
+    await combineWords('Mutter', 'Liebe');
+    await combineWords('Socken', 'Wolken');
+    await page.getByRole('img', {name: 'Zwei lachende Knetwolken tragen blaue Socken.'}).waitFor();
+
+    await page.getByRole('link', {name: 'Zur Spielauswahl'}).click();
+    await page.getByRole('link', {name: 'Die Eiche', exact: true}).click();
+    await page.getByRole('button', {name: 'Spiel fortsetzen'}).click();
+    await page.waitForURL(joy);
+    assert.equal(await counter.innerText(), '2 / 4');
+    await page.getByRole('button', {name: 'Mutterliebe', exact: true}).waitFor();
+    await page.getByRole('img', {name: 'Zwei lachende Knetwolken tragen blaue Socken.'}).waitFor();
+    assert.ok(await next.isDisabled());
+    for (const [first, second] of [['Eichen', 'Baum'], ['hell', 'grün'], ['Sonnen', 'Schein']]) {
+      await combineWords(first, second);
+    }
+    await next.click();
+    await page.getByRole('heading', {name: 'Jetzt höre der Geschichte zu!'}).waitFor();
+    await page.reload();
+    assert.equal(await counter.innerText(), '3 / 4');
+    await next.click();
+    await page.getByRole('heading', {name: 'Sommer', exact: true}).waitFor();
+    await page.reload();
+    await page.getByRole('heading', {name: 'Sommer', exact: true}).waitFor();
+    assert.equal(await counter.innerText(), '4 / 4');
+
     await page.goto(oak);
     await page.getByRole('button', {name: 'Spiel zurücksetzen'}).click();
     assert.ok(await page.getByRole('button', {name: 'Spiel fortsetzen'}).isDisabled());
     assert.equal(await page.evaluate(() => localStorage.getItem('die-eiche-checkpoint-v1-5')), null);
+    assert.equal(await page.evaluate(() => localStorage.getItem('die-eiche-checkpoint-v1-6')), null);
     assert.deepEqual(errors, []);
-    console.log('PASS: Frühlingsabschnitt, Aufgaben, Spielstand, Abschnittswahl, Info-I und Buchausblick.');
+    console.log('PASS: Frühlingsabschnitt und Die Freude der Eiche, Spielstand, Abschnittswahl, Info-I und Buchausblicke.');
   } finally {
     await page.evaluate(() => EicheProgress.reset()).catch(() => {});
     await page.close();

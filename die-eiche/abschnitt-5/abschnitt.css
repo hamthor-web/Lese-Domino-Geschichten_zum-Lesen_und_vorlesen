@@ -32,7 +32,6 @@
   to { transform: translateY(0); opacity: 1 }
 }
 .book-title { width: 24% }
-.book-notice { text-align: center }
 @media (max-width: 820px) { .image-pair { grid-template-columns: minmax(0, 1fr) } }
 @media (prefers-reduced-motion: reduce) {
   .patch { transition: none }
