@@ -1,5 +1,5 @@
 # Spielakte – Die Eiche
-Stand 22.11.2026 – Dramaturgisches Grundkonzept bestätigt; noch kein neuer Spielcode.
+Stand 28.11.2026. Vier spielbare Abschnitte, beginnend am [Spieleinstieg](../../die-eiche/).
 
 ## Rolle
 Geplante weitere Geschichte in einer künftigen gemeinsamen Lese-Domino-Geschichten-App neben „Das Land der glitzernden Spinnweben“; später sollen weitere Geschichten dazukommen.
@@ -13,6 +13,8 @@ Eigene **handgemachte plastische 3D-Kinderbuchwelt im Stop-Motion-Stil**, angele
 **Unterscheidung:** Heike bestätigte den **Ablauf als Grundkonzept**, nicht alle Einzelaufgaben als fertige Spezifikation. Detaildramaturgie wird abschnittsweise erarbeitet. Keine Programmierung durch diesen Dokumentationsschritt.
 
 ## Gemeinsame Grundlage
+Für weitere Abschnitte gilt der [Gestaltungs- und Bedienstandard der Eiche](GESTALTUNG_UND_BEDIENUNG.md).
+
 Bewährte Lesbarkeit, Bedienung, Buttonmaß-Logik, unabhängige Schrift- und Spielfeldgrößenregler. Die eigentliche Button-Dekoration darf passend zur Eiche gestaltet werden; Spinnwebenmotive gehören zur anderen Geschichte.
 
 ## Offen, nicht als beschlossen behandeln
@@ -143,3 +145,12 @@ Wo ein Herz mit Initialen zu sehen ist, lautet die Gravur „H&A“. In „Spure
 ## Weiter-Navigation beim erneuten Spielen · 25. November 2026
 
 Fehler: Der Übergang zu Abschnitt 2 oder 3 lud den alten Zwischenstand des Zielabschnitts und übersprang dadurch Seiten. Beide Vorwärtsübergänge übergeben nun `?neu=1`, sodass der Zielabschnitt auf seiner ersten Seite beginnt. Freischaltungen bleiben erhalten; „Spiel fortsetzen“ lädt weiterhin den zuletzt gespeicherten Abschnitt und dessen Zwischenstand. Die separate Testfassung mit eigenem Speicherstand wurde von Heike praktisch ausprobiert und am 25.11.2026 zur Veröffentlichung freigegeben. Die beiden getesteten Änderungen sind im Hauptzweig übernommen. Kein vollständiger unabhängiger Geräte- oder Offline-Test dokumentiert. Die Testfassung bleibt erhalten.
+
+## 28. November 2026 · Erste warme Sonnenstrahlen
+
+- **Implementiert:** Der [vierte Abschnitt](../../die-eiche/abschnitt-4/) beginnt nach dem Buchübergang am Ende von „Winterschlaf“ direkt mit „Lies selbst“. Spielstand, Fortsetzen und Zurücksetzen erfassen auch Abschnitt 4.
+- **Eisfrage:** Falsche Antworten behalten ihre Rückmeldungen. „Weil Winter ist“ führt zur Zusatzfrage mit zwei richtigen Sätzen. Nach der direkten richtigen Antwort ist „Darüber sprechen“ freiwillig. Jede der drei anderen Antworten bietet eine offene Gesprächsfrage und einen aufklappbaren Tipp.
+- **Spiele:** Baum–Eiche, Kraft–Stärke, oben–hoch und wach–munter werden auf leeren, freigestellten Dominosteinen gelegt. Danach folgen Knospentext, Satzreihenfolge und „Was passt nicht?“ mit eigener Rückmeldung je Antwort.
+- **Medien:** Der Knospenfilm an der ganzen Eiche startet einmal automatisch und lässt sich über den Wiedergabestreifen wiederholen. Über der Vorleseseite steht „Mach es dir gemütlich und höre der Geschichte zu“. Eine eigene Kapitelaufnahme bleibt offen. Derzeit liest die verfügbare deutsche Browserstimme.
+- **Ausblick:** Würstchen öffnet das Buch mit Originalton. Auf der rechten Seite stehen „Der“, „Frühling“ und „beginnt“ mittig auf drei Zeilen, mit dem Kringel darunter. Abschnitt 5 ist in Vorbereitung.
+- **Geprüft:** Im Browser wurden Kapitelübergang, Eisfrage, Wortpaare per Maus und Touch, Satzreihenfolge, Videowiederholung, Fortschritt und Info-Dialog geprüft. Die Quer- und Hochformatprüfung erfolgte mit simulierten Ansichtsgrößen.

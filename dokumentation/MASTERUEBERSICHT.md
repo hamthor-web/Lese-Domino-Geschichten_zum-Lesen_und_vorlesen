@@ -36,3 +36,5 @@ Geplantes Ziel: eine gemeinsame Geschichten-App mit wiederverwendbaren Bedienreg
 **Die Eiche · Winterschlaf · 25.11.2026:** Die Wortsortierung enthält den Knet-Papierkorb „Nicht im Lesetext“ für „Trauben“. Falsche Karten werden ausgespuckt und bleiben weiter verfügbar. [Spielakte](Die_Eiche/SPIELAKTE.md)
 
 **Die Eiche und gemeinsame Startseite · 25.11.2026:** Lesbare Initialen an den Eichen vereinheitlicht. Die Startansicht mit Würstchen, Titel und Denkblasen ist vertikal zentriert. [Spielakte Die Eiche](Die_Eiche/SPIELAKTE.md) · [Startseite](GEMEINSAME_STARTSEITE_APP_STATUS_2026-11-24.md)
+
+**Die Eiche · 28.11.2026:** [„Erste warme Sonnenstrahlen“](../die-eiche/abschnitt-4/) ist als vierter Abschnitt umgesetzt. „Der Frühling beginnt“ erscheint als Buchausblick auf Abschnitt 5. Die [Gestaltungs- und Bedienregeln](Die_Eiche/GESTALTUNG_UND_BEDIENUNG.md) gelten für die weitere Umsetzung.

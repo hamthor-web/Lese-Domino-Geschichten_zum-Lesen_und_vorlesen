@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Die Eiche · Erste warme Sonnenstrahlen</title>
+  <link rel="stylesheet" href="abschnitt.css">
+  <link rel="stylesheet" href="../../shared/game-selection.css">
+  <script src="../spielstand.js?v=4" defer></script>
+  <script src="abschnitt.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="topbar">
+      <div class="brand"><strong>Die Eiche</strong>Geschichten zum Lesen und Vorlesen</div>
+      <button class="settings-button" id="settingsButton" type="button" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button>
+      <button class="info-button" id="infoButton" type="button" aria-label="Informationen und Kontakt" aria-haspopup="dialog" aria-controls="info">i</button>
+    </header>
+
+    <div class="settings" id="settings" hidden>
+      <label>Schriftgröße <input id="letters" type="range" min="100" max="150" step="5" value="100"><output for="letters">100 %</output></label>
+      <label>Spielfeldgröße <input id="boardSize" type="range" min="75" max="100" step="5" value="100"><output for="boardSize">100 %</output></label>
+    </div>
+
+    <h1>Erste warme Sonnenstrahlen</h1>
+    <div class="layout" id="layout">
+      <figure id="art" class="art">
+        <img src="../../assets/die-eiche/abschnitt-4/eiche.webp" alt="Die knorrige Eiche steht neben einem zugefrorenen See. Ein Sonnenstrahl trifft ihre kahlen Zweige." width="1150" height="863">
+      </figure>
+      <figure id="film" class="art" hidden>
+        <video id="budVideo" controls muted playsinline preload="metadata"
+          aria-label="Eine Knospe an der Eiche öffnet sich, zeigt eine kleine grüne Spitze und schließt sich wieder."
+          poster="../../assets/die-eiche/abschnitt-4/knospe-start.webp"
+          src="../../assets/die-eiche/abschnitt-4/knospe.mp4" width="720" height="720"></video>
+        <div class="film-controls" role="group" aria-label="Filmsteuerung" hidden>
+          <button type="button" id="filmToggle" class="game-button film-toggle">Abspielen</button>
+          <button type="button" id="filmRestart" class="game-button">Noch einmal</button>
+          <label><span class="sr-only">Wiedergabeposition</span><input id="filmSeek" type="range" min="0" max="1000" value="0"></label>
+          <output id="filmTime">0:00</output>
+        </div>
+      </figure>
+      <section id="screen" aria-labelledby="stepTitle"></section>
+    </div>
+
+    <nav aria-label="Abschnittsseiten">
+      <button class="game-button" id="back" type="button">Zurück</button>
+      <span class="counter" id="counter" aria-live="polite"></span>
+      <button class="game-button" id="next" type="button">Weiter</button>
+    </nav>
+    <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
+  </main>
+
+  <template id="bookTransition">
+    <h2 class="transition-heading" id="stepTitle" tabindex="-1">Und wie geht es jetzt weiter?</h2>
+    <div class="book-stage">
+      <video id="bookClip" playsinline preload="metadata" width="712" height="714"
+        aria-label="Würstchen öffnet das Buch"
+        src="../../assets/die-eiche/abschnitt-2/buchoeffnen.mp4"></video>
+      <img id="bookStill" src="../../assets/die-eiche/abschnitt-2/buch-standbild.jpg"
+        alt="Würstchen hält ein geöffnetes Buch." width="712" height="714" hidden>
+      <h3 class="book-title" id="bookTitle" aria-live="polite" hidden>
+        <span>Der</span>
+        <span>Frühling</span>
+        <span>beginnt</span>
+        <img src="../../assets/die-eiche/abschnitt-2/kringel.png" alt="">
+      </h3>
+    </div>
+  </template>
+
+  <dialog id="info" aria-labelledby="infoTitle">
+    <h2 id="infoTitle">Informationen &amp; Kontakt</h2>
+    <p>Die Eiche · Heike Amthor</p>
+    <nav class="info-links" aria-label="Informationen zur App">
+      <a href="https://lesespiele.heike-amthor.de/impressum" target="_blank" rel="noopener">Impressum</a>
+      <a href="https://lesespiele.heike-amthor.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+      <a href="https://lesespiele.heike-amthor.de/" target="_blank" rel="noopener">Website der Entwicklerin</a>
+      <a href="mailto:lesespiele.heike.amthor@gmx.de">Nachricht an die Entwicklerin</a>
+    </nav>
+    <form method="dialog"><button class="settings-button" type="submit">Schließen</button></form>
+  </dialog>
+</body>
+</html>

@@ -1,5 +1,5 @@
 # Gestaltungsrichtlinien
-Stand 22.11.2026.
+Stand 28.11.2026.
 
 ## Für alle Geschichten
 - Den verfügbaren Bildschirm sinnvoll nutzen; Smartphone und Tablet in Hoch- und Querformat berücksichtigen.
@@ -12,7 +12,7 @@ Stand 22.11.2026.
 
 ## Individuelle Bildwelten
 - **Spinnwebenreichtum:** eigene märchenhafte Pastellwelt; Spinnweben-/Pergamentbuttons bleiben Teil dieser Geschichte.
-- **Die Eiche:** eigene plastische, handgemachte Kinderbuchwelt mit Stop-Motion-Charakter. Buttonfunktion und -maße übernehmen, aber Spinnwebenverzierungen nicht automatisch übertragen.
+- **Die Eiche:** eigene plastische, handgemachte Kinderbuchwelt mit Stop-Motion-Charakter. Buttonfunktion und -maße übernehmen, aber Spinnwebenverzierungen nicht automatisch übertragen. Für neue und überarbeitete Abschnitte gilt der [Gestaltungs- und Bedienstandard der Eiche](Die_Eiche/GESTALTUNG_UND_BEDIENUNG.md).
 - Künftige Geschichten dürfen jeweils andere Illustrationsstile erhalten.
 
 Detaillierte bestehende Quellen: [Pastellgestaltung](../GESTALTUNGSNACHTRAG_2026-11-16_PASTELL.md) und [Buttonmaße/Andika](../NACHTRAG_2026-11-16_BUTTONS_UND_LESENSCHRIFT.md).

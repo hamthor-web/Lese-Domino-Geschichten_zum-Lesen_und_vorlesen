@@ -1,4 +1,5 @@
 window.EicheProgress = (() => {
+  const sections = [1, 2, 3, 4];
   const prefix = 'die-eiche-checkpoint-v1-';
   const resetKey = 'die-eiche-reset-v1';
   const latestKey = 'die-eiche-last-section';
@@ -27,8 +28,8 @@ window.EicheProgress = (() => {
   }
   function latest() {
     const section = Number(localStorageValue(latestKey));
-    if ([1, 2, 3].includes(section) && read(section)) return section;
-    return [1, 2, 3].filter(n => read(n)).sort((a,b) => (read(b).updated ?? 0) - (read(a).updated ?? 0))[0] ?? null;
+    if (sections.includes(section) && read(section)) return section;
+    return sections.filter(n => read(n)).sort((a,b) => (read(b).updated ?? 0) - (read(a).updated ?? 0))[0] ?? null;
   }
   function complete(section) {
     if (localStorageValue(resetKey) !== version) return;
@@ -45,7 +46,7 @@ window.EicheProgress = (() => {
   }
   function reset() {
     localStorage.setItem(resetKey, String(Date.now()));
-    for (const section of [1, 2, 3]) {
+    for (const section of sections) {
       localStorage.removeItem(prefix + section);
       localStorage.removeItem(completionKey(section));
     }

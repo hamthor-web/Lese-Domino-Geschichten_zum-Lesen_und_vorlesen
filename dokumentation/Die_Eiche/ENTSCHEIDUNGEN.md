@@ -1,5 +1,5 @@
 # Entscheidungen – Die Eiche
-Stand 22.11.2026.
+Stand 28.11.2026.
 
 - **21.–22.11.2026 – bestätigt:** Die Eiche erhält einen eigenen plastischen, handgemachten Kinderbuch-/Stop-Motion-Stil, wie in der Würstchen-Herbstblätter-Referenz angeregt.
 - **22.11.2026 – bestätigt:** Der Stil gilt nur für Die Eiche. Spinnwebenreichtum behält seine eigene Märchenillustration; spätere Geschichten dürfen wiederum anders aussehen.
@@ -18,3 +18,5 @@ Stand 22.11.2026.
 - **22.11.2026 – bestätigte Korrekturen für Szene-1-Vorschau:** Nicht die serifenbetonte Schrift mit auffälligem „G“ verwenden; gut lesbare kindgerechte Sans-Schrift. In jeder Antwortreihe **gleiche Buttonhöhe und -breite**, bemessen nach dem größten Textbedarf; dekorierte Ränder nicht dehnen. Weiter-Video nur **ein einziges „Weiter“**, keine abgeschnittene Grafik. Keine Regieanweisung „Winterbild und Kamerafahrt“ im Spiel. Großer gut erreichbarer Zurück-Button; Einstellungs-Buttons getrennt von Spielaktionen. **Weiterhin keine Veränderung an bestehendem Spielcode** ohne gesonderte Übernahmeentscheidung.
 
 - **22.11.2026 – neue verbindliche Korrekturen für Szene 1:** Aufgabenfenster wesentlich kleiner halten und das Original-Winterbild nicht großflächig verdecken. Bei „Was träumt die Eiche?“ die richtige Antwort **„Die Eiche steht am See“ nicht an erster Position** anbieten (Vorschau-Reihenfolge: Socken, Bananen, See). Beim Buchstabensalat darf nach gefundener richtiger Lösung **Blitze** freiwillig weitergelegt werden: Rückfrage **„Möchtest du das andere Wort / die anderen Wörter auch noch legen?“** mit „Ja“/„Nein“; danach jederzeit „Weiter“. Der gestaltete **Weiter-Video-Button ist vollständig und ohne Beschnitt** in seinem ursprünglichen Seitenverhältnis zu zeigen. Die neu gebaute lokale HTML-Vorschau ist noch **nicht** im Repository; keine Änderung des produktiven Spielcodes.
+
+- **28.11.2026 – bestätigt:** Der [Gestaltungs- und Bedienstandard der Eiche](GESTALTUNG_UND_BEDIENUNG.md) gilt für neue und überarbeitete Abschnitte. Er legt Lesefelder, Schrift, Rahmen, das Info-I und den Buchübergang fest. Die freigegebene Fassung von „Erste warme Sonnenstrahlen“ dient als Umsetzungsbeispiel.
