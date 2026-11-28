@@ -42,7 +42,8 @@ function localServer() {
   const intro = url => url.pathname === '/vorschau-einfuehrung/' && url.searchParams.get('neu') === '1';
   await page.goto(base);
   assert.equal(await page.locator('h1').textContent(), 'Geschichten zum Lesen und Vorlesen');
-  assert(await selection.getByRole('link', {name: 'Die Eiche', exact: true}).isVisible());
+  // The landing animation can hide both links until the clip finishes.
+  await selection.getByRole('link', {name: 'Die Eiche', exact: true}).waitFor({state: 'visible'});
   await selection.getByRole('link', {name: 'Silvana', exact: true}).click();
   await page.waitForURL(silvana);
   for (const [width, height] of [[320, 640], [844, 390], [768, 1024], [1440, 900]]) {
@@ -56,7 +57,8 @@ function localServer() {
   await page.waitForURL(intro);
 
   const phone = await browser.newPage({
-    hasTouch: true, isMobile: true, viewport: {width: 393, height: 780}, serviceWorkers: 'block',
+    hasTouch: true, isMobile: true, viewport: {width: 393, height: 780},
+    reducedMotion: 'reduce', serviceWorkers: 'block',
     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1'
   });
   await phone.addInitScript(() => {

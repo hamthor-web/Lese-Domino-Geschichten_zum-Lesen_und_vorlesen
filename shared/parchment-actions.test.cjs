@@ -78,9 +78,13 @@ async function checkAppInfo(page, description) {
   const trigger = page.getByRole('button', {name: 'Informationen & Kontakt', exact: true});
   const dialog = page.getByRole('dialog', {name: 'Informationen & Kontakt'});
   const bounds = await trigger.boundingBox();
+  const header = await page.locator('.has-app-info').boundingBox();
   const {width, height} = page.viewportSize();
-  assert.ok(bounds && bounds.x > width / 2 && bounds.x + bounds.width <= width &&
-    bounds.y < 32 && bounds.width >= 44, description + ' i-Button');
+  assert.ok(bounds && header && bounds.x >= header.x + header.width / 2 &&
+    bounds.x + bounds.width <= Math.min(width, header.x + header.width) &&
+    bounds.y >= Math.max(0, header.y) && bounds.y - header.y < 32 &&
+    bounds.y + bounds.height <= height && bounds.width >= 44 && bounds.height >= 44,
+    description + ' i-Button ' + JSON.stringify({bounds, header}));
   const historyState = await page.evaluate(() => history.state);
   await trigger.tap();
   await dialog.waitFor();
