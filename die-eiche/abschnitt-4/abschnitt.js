@@ -3,7 +3,7 @@
 const reading = [
   'Ein warmer Sonnenstrahl trifft die Eiche. Er kommt aus dem Süden. Er sagt: Bald ist Frühling!',
   'Langsam wird der Baum wach. In ihm fließt wieder Wasser nach oben. Das Wasser gibt dem Baum Kraft.',
-  'An den Spitzen der Zweige kitzelt es. Dort sitzen die ersten Knospen. Sie haben feste braune Jacken an. Diese schützen die Blätter vor Kälte. Aber die Knospen werden schon dicker.'
+  'An den Spitzen der Zweige kitzelt es. Dort sitzen kleine Knospen. Sie haben feste braune Jacken an. Diese schützen sie vor Kälte. In den warmen Sonnenstrahlen werden die Knospen dicker.'
 ];
 const original = [
   'Gerade hatte die Eiche einen warmen Sonnenstrahl erhascht. Er kam von Süden und kündigte leise, fast schüchtern, den nahenden Frühling an. Sie spürte, wie sich die Säfte in ihr regten und langsam, aber stetig den Schlafsand aus ihren Adern spülten.',
