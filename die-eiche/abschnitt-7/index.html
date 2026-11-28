@@ -6,17 +6,25 @@
   <title>Die Eiche · Sommer</title>
   <link rel="stylesheet" href="../abschnitt-4/abschnitt.css?v=2">
   <link rel="stylesheet" href="../../shared/game-selection.css">
-  <link rel="stylesheet" href="sommer.css?v=2">
+  <link rel="stylesheet" href="sommer.css?v=3">
   <script src="../spielstand.js?v=7" defer></script>
   <script src="../../shared/story-speech.js" defer></script>
-  <script src="kreuzwortraetsel.js?v=2" defer></script>
+  <script src="sommer-geschichte.js" defer></script>
+  <script src="kreuzwortraetsel.js?v=3" defer></script>
 </head>
 <body class="summer-page">
   <main class="summer">
     <header class="topbar">
       <div class="brand"><strong>Die Eiche</strong>Geschichten zum Lesen und Vorlesen</div>
-      <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
+      <button class="settings-button" id="settingsButton" type="button" aria-expanded="false" aria-controls="settings">Aa · Größe ändern</button>
+      <button class="info-button" id="infoButton" type="button" aria-label="Informationen und Kontakt" aria-haspopup="dialog" aria-controls="info">i</button>
     </header>
+
+    <div class="settings" id="settings" hidden>
+      <label>Schriftgröße <input id="letters" type="range" min="100" max="150" step="5" value="100"><output for="letters">100 %</output></label>
+      <label>Spielfeldgröße <input id="boardSize" type="range" min="75" max="100" step="5" value="100"><output for="boardSize">100 %</output></label>
+    </div>
+
     <details class="scene-menu">
       <summary class="game-button"><span>Anderen Abschnitt<br>noch einmal erleben</span></summary>
       <div class="scene-choices">
@@ -30,7 +38,20 @@
       </div>
     </details>
 
-    <section class="summer-scene" aria-labelledby="summer-title">
+    <h1 id="story-title">Sommer in der Eiche</h1>
+    <div class="layout summer-layout" id="summer-layout">
+      <figure class="art" id="summer-artwork">
+        <div class="oak-stage" id="oak-stage">
+          <img class="oak-background" src="../../assets/die-eiche/abschnitt-7/sommer-eiche.webp"
+            alt="Die Eiche mit leerem Nest, rauer Rinde, Baumhöhle und Sonnenstrahlen." width="1440" height="810">
+          <div id="oak-animals"></div>
+          <div id="oak-targets" role="group" aria-label="Plätze an der Eiche" hidden></div>
+        </div>
+      </figure>
+      <section id="summer-screen" aria-labelledby="summer-step"></section>
+    </div>
+
+    <section class="summer-scene" id="summer-crossword" aria-labelledby="summer-title" hidden>
       <div class="summer-art" aria-hidden="true"></div>
       <div class="summer-content">
         <h1 id="summer-title">Sommer in der Eiche</h1>
@@ -58,9 +79,25 @@
     </section>
 
     <nav class="summer-nav" aria-label="Abschnittsseiten">
-      <a class="game-button" href="../abschnitt-6/">Zurück zu Die Freude der Eiche</a>
+      <a class="game-button" id="summer-previous" href="../abschnitt-6/">Zurück zu Die Freude der Eiche</a>
+      <button class="game-button" id="summer-back" type="button" hidden>Zurück</button>
+      <span class="counter" id="summer-counter" aria-live="polite"></span>
+      <button class="game-button" id="summer-next" type="button">Weiter</button>
       <button class="game-button" id="replay" type="button" hidden>Abschnitt noch einmal</button>
     </nav>
+    <a class="game-selection-link" href="../../">Zur Spielauswahl</a>
   </main>
+
+  <dialog id="info" aria-labelledby="infoTitle">
+    <h2 id="infoTitle">Informationen &amp; Kontakt</h2>
+    <p>Die Eiche · Heike Amthor</p>
+    <nav class="info-links" aria-label="Informationen zur App">
+      <a href="https://lesespiele.heike-amthor.de/impressum" target="_blank" rel="noopener">Impressum</a>
+      <a href="https://lesespiele.heike-amthor.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+      <a href="https://lesespiele.heike-amthor.de/" target="_blank" rel="noopener">Website der Entwicklerin</a>
+      <a href="mailto:lesespiele.heike.amthor@gmx.de">Nachricht an die Entwicklerin</a>
+    </nav>
+    <form method="dialog"><button class="settings-button" type="submit">Schließen</button></form>
+  </dialog>
 </body>
 </html>
